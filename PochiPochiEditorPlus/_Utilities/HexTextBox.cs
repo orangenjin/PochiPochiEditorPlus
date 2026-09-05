@@ -2,11 +2,10 @@
 using System.ComponentModel;
 using System.Windows.Forms;
 using PochiPochiEditorPlus._Helpers;
-using PochiPochiEditorPlus._Utilities;
 
-namespace PochiPochiEditorPlus._CustomControls
+namespace PochiPochiEditorPlus._Utilities
 {
-    public class HexTextBox : TextBox
+    public sealed class HexTextBox : TextBox
     {
         private int _digits = Constants.OffsetDigits;
 
@@ -41,7 +40,7 @@ namespace PochiPochiEditorPlus._CustomControls
             // 入力文字判定
             if (!Uri.IsHexDigit(e.KeyChar))
             {
-                e.Handled = true;
+                e.Handled = true; // 入力をキャンセル
             }
         }
 

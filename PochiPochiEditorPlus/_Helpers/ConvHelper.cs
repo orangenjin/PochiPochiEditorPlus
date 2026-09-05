@@ -30,9 +30,9 @@ namespace PochiPochiEditorPlus._Helpers
             this int val,
             int digits = Constants.OffsetDigits)
         {
-            return val == Constants.InvalidValue
-                ? string.Empty
-                : val.ToString($"X{digits}");
+            return val != Constants.InvalidValue
+                ? val.ToString($"X{digits}")
+                : string.Empty;
         }
     }
 }

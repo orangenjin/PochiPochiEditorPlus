@@ -49,7 +49,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="_CustomControls\HexTextBox.cs">
+    <Compile Include="_Helpers\IoHelper.cs" />
+    <Compile Include="_Utilities\HexTextBox.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="_Helpers\ConvHelper.cs" />
