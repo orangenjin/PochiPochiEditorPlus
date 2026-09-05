@@ -1,8 +1,8 @@
 ﻿using System;
-using System.Globalization;
 using System.Windows.Forms;
+using PochiPochiEditorPlus._Helpers;
 
-namespace PochiPochiEditorPlus.CustomControls
+namespace PochiPochiEditorPlus._CustomControls
 {
     public class HexTextBox : TextBox
     {
@@ -30,18 +30,11 @@ namespace PochiPochiEditorPlus.CustomControls
         {
             base.OnLeave(e);
 
-            // 空白をスキップ
-            if (string.IsNullOrWhiteSpace(Text)) return;
+            // まず数値に変換
+            int val = Text.ParseStringToInt();
 
-            // 16進数に変換できるかチェック
-            if (int.TryParse(Text, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out int value))
-            {
-                Text = value.ToString("X8");
-            }
-            else
-            {
-                Text = string.Empty;
-            }
+            // 再度変換して、文字列を代入
+            Text = val.ParseIntToString();
         }
     }
 }

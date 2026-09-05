@@ -49,7 +49,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CustomControls\HexTextBox.cs">
+    <Compile Include="_CustomControls\HexTextBox.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="_Helpers\ConvHelper.cs" />
