@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.37530.7
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PochiPochiEditorPlus", "PochiPochiEditorPlus\PochiPochiEditorPlus.csproj", "{BC532577-1BC0-45CE-BADE-E14C4984F23B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{BC532577-1BC0-45CE-BADE-E14C4984F23B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BC532577-1BC0-45CE-BADE-E14C4984F23B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BC532577-1BC0-45CE-BADE-E14C4984F23B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BC532577-1BC0-45CE-BADE-E14C4984F23B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {6422BC03-BB42-49CE-921F-EA535E3119E2}
+	EndGlobalSection
+EndGlobal
