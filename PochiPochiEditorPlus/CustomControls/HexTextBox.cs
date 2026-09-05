@@ -30,8 +30,10 @@ namespace PochiPochiEditorPlus.CustomControls
         {
             base.OnLeave(e);
 
+            // 空白をスキップ
             if (string.IsNullOrWhiteSpace(Text)) return;
 
+            // 16進数に変換できるかチェック
             if (int.TryParse(Text, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out int value))
             {
                 Text = value.ToString("X8");
