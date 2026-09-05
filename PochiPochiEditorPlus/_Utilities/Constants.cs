@@ -15,8 +15,8 @@
         public const int UShortSize = 2;
         public const int UIntSize = 4;
         public const uint BaseAddr = 0x8000000U;
+        public const uint EndAddr = 0xFFFFFFFU;
         public const int InvalidValue = -1;
-        public const int DefaultIndex = 0;
         public const int OffsetDigits = UIntSize * CharPerByte;
 
         // プレフィックス
