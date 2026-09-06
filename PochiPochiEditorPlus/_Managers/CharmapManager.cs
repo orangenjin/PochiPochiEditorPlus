@@ -28,14 +28,13 @@ namespace PochiPochiEditorPlus._Managers
             {
                 // 空行とコメント行をスキップ
                 if (string.IsNullOrWhiteSpace(line) ||
-                    line.StartsWith(Constants.CommentChar.ToString())) continue;
+                    line.StartsWith(";")) continue;
 
                 // イコールで分割
-                string[] parts = line.Split(Constants.EqualChar);
+                string[] parts = line.Split('=');
 
                 // 2バイト以上の場合を想定
-                string hexKey = parts[(int)Constants.PartName.Key]
-                    .Replace(Constants.SpaceChar.ToString(), string.Empty);
+                string hexKey = parts[(int)Constants.PartName.Key].Replace(" ", string.Empty);
                 string value = parts[(int)Constants.PartName.Value]; // 文字部分
 
                 // キーをstringからbyteへ

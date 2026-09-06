@@ -374,15 +374,11 @@ namespace PochiPochiEditorPlus._Helpers
                 foreach (string line in File.ReadLines(target.path))
                 {
                     // 空行とコメント行をスキップ
-                    if (string.IsNullOrWhiteSpace(line) ||
-                        line.StartsWith(Constants.CommentChar.ToString())) continue;
+                    if (string.IsNullOrWhiteSpace(line) || line.StartsWith(";")) continue;
 
                     // 行解析、 "["を除外
-                    int closeBracketIndex = line.IndexOf(Constants.CloseBracketChar);
-                    var hex = line.Substring(
-                        Constants.OpenBracketChar.ToString().Length,
-                        closeBracketIndex - 1)
-                        .ParseStringToInt();
+                    int closeBracketIndex = line.IndexOf(']');
+                    var hex = line.Substring(1, closeBracketIndex - 1).ParseStringToInt();
 
                     var entry = new KeyValuePair<byte, string>((byte)hex, line);
                     entries.Add(entry);

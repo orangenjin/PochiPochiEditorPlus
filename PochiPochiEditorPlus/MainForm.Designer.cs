@@ -30,31 +30,20 @@ namespace PochiPochiEditorPlus
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
-            this.mnsMain = new System.Windows.Forms.MenuStrip();
-            this.mnsItemLoad = new System.Windows.Forms.ToolStripMenuItem();
-            this.mnsItemSave = new System.Windows.Forms.ToolStripMenuItem();
-            this.mnsItemTool = new System.Windows.Forms.ToolStripMenuItem();
-            this.mnsItemLoadRom = new System.Windows.Forms.ToolStripMenuItem();
-            this.mnsItemReload = new System.Windows.Forms.ToolStripMenuItem();
-            this.mnsItemSaveOver = new System.Windows.Forms.ToolStripMenuItem();
-            this.mnsItemSaveAs = new System.Windows.Forms.ToolStripMenuItem();
-            this.mnsItemFsf = new System.Windows.Forms.ToolStripMenuItem();
-            this.mnsItemTilesetIndexCalc = new System.Windows.Forms.ToolStripMenuItem();
+            this.msMain = new System.Windows.Forms.MenuStrip();
+            this.tsmiLoad = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiLoadRom = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiClearRom = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiSave = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiSaveOver = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiSaveAs = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiEdit = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiUndo = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiRedo = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiTool = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiFsf = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiTilesetIndexCalc = new System.Windows.Forms.ToolStripMenuItem();
             this.grpEditors = new System.Windows.Forms.GroupBox();
-            this.btnPokeData = new System.Windows.Forms.Button();
-            this.btnDexRegional = new System.Windows.Forms.Button();
-            this.btnDexNational = new System.Windows.Forms.Button();
-            this.btnDexSearch = new System.Windows.Forms.Button();
-            this.btnDexHabitat = new System.Windows.Forms.Button();
-            this.btnEggMove = new System.Windows.Forms.Button();
-            this.btnTmHmTutor = new System.Windows.Forms.Button();
-            this.btnRegionMap = new System.Windows.Forms.Button();
-            this.btnOwSprite = new System.Windows.Forms.Button();
-            this.btnTileset = new System.Windows.Forms.Button();
-            this.btnOwMap = new System.Windows.Forms.Button();
-            this.btnRoaming = new System.Windows.Forms.Button();
-            this.btnSwarm = new System.Windows.Forms.Button();
-            this.btnWildEnc = new System.Windows.Forms.Button();
             this.btnBattleBg = new System.Windows.Forms.Button();
             this.btnInGameTrade = new System.Windows.Forms.Button();
             this.btnTrainerList = new System.Windows.Forms.Button();
@@ -62,108 +51,145 @@ namespace PochiPochiEditorPlus
             this.btnTrainerClass = new System.Windows.Forms.Button();
             this.btnMailData = new System.Windows.Forms.Button();
             this.btnItemData = new System.Windows.Forms.Button();
+            this.btnRegionMap = new System.Windows.Forms.Button();
+            this.btnOwSprite = new System.Windows.Forms.Button();
+            this.btnTileset = new System.Windows.Forms.Button();
+            this.btnOwMap = new System.Windows.Forms.Button();
+            this.btnRoaming = new System.Windows.Forms.Button();
+            this.btnSwarm = new System.Windows.Forms.Button();
+            this.btnWildEnc = new System.Windows.Forms.Button();
+            this.btnEggMove = new System.Windows.Forms.Button();
+            this.btnTmHmTutor = new System.Windows.Forms.Button();
+            this.btnDexSearch = new System.Windows.Forms.Button();
+            this.btnDexHabitat = new System.Windows.Forms.Button();
+            this.btnDexNational = new System.Windows.Forms.Button();
+            this.btnDexRegional = new System.Windows.Forms.Button();
+            this.btnPokeData = new System.Windows.Forms.Button();
             this.grpHistory = new System.Windows.Forms.GroupBox();
-            this.mnsItemEdit = new System.Windows.Forms.ToolStripMenuItem();
-            this.mnsItemUndo = new System.Windows.Forms.ToolStripMenuItem();
-            this.mnsItemRedo = new System.Windows.Forms.ToolStripMenuItem();
             this.lstHistory = new System.Windows.Forms.ListBox();
-            this.mnsMain.SuspendLayout();
+            this.msMain.SuspendLayout();
             this.grpEditors.SuspendLayout();
             this.grpHistory.SuspendLayout();
             this.SuspendLayout();
             // 
-            // mnsMain
+            // msMain
             // 
-            this.mnsMain.GripMargin = new System.Windows.Forms.Padding(0);
-            this.mnsMain.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.mnsItemLoad,
-            this.mnsItemSave,
-            this.mnsItemEdit,
-            this.mnsItemTool});
-            this.mnsMain.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.HorizontalStackWithOverflow;
-            this.mnsMain.Location = new System.Drawing.Point(0, 0);
-            this.mnsMain.Name = "mnsMain";
-            this.mnsMain.Padding = new System.Windows.Forms.Padding(0);
-            this.mnsMain.Size = new System.Drawing.Size(492, 24);
-            this.mnsMain.TabIndex = 0;
-            this.mnsMain.Text = "メニューバー";
+            this.msMain.GripMargin = new System.Windows.Forms.Padding(0);
+            this.msMain.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tsmiLoad,
+            this.tsmiSave,
+            this.tsmiEdit,
+            this.tsmiTool});
+            this.msMain.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.HorizontalStackWithOverflow;
+            this.msMain.Location = new System.Drawing.Point(0, 0);
+            this.msMain.Name = "msMain";
+            this.msMain.Padding = new System.Windows.Forms.Padding(0);
+            this.msMain.Size = new System.Drawing.Size(492, 24);
+            this.msMain.TabIndex = 0;
+            this.msMain.Text = "メニューバー";
             // 
-            // mnsItemLoad
+            // tsmiLoad
             // 
-            this.mnsItemLoad.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.mnsItemLoadRom,
-            this.mnsItemReload});
-            this.mnsItemLoad.Name = "mnsItemLoad";
-            this.mnsItemLoad.Padding = new System.Windows.Forms.Padding(0);
-            this.mnsItemLoad.Size = new System.Drawing.Size(57, 24);
-            this.mnsItemLoad.Text = "読み込み";
+            this.tsmiLoad.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tsmiLoadRom,
+            this.tsmiClearRom});
+            this.tsmiLoad.Name = "tsmiLoad";
+            this.tsmiLoad.Padding = new System.Windows.Forms.Padding(0);
+            this.tsmiLoad.Size = new System.Drawing.Size(57, 24);
+            this.tsmiLoad.Text = "読み込み";
             // 
-            // mnsItemSave
+            // tsmiLoadRom
             // 
-            this.mnsItemSave.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.mnsItemSaveOver,
-            this.mnsItemSaveAs});
-            this.mnsItemSave.Name = "mnsItemSave";
-            this.mnsItemSave.Padding = new System.Windows.Forms.Padding(0);
-            this.mnsItemSave.Size = new System.Drawing.Size(35, 24);
-            this.mnsItemSave.Text = "保存";
+            this.tsmiLoadRom.Name = "tsmiLoadRom";
+            this.tsmiLoadRom.Padding = new System.Windows.Forms.Padding(0);
+            this.tsmiLoadRom.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
+            this.tsmiLoadRom.Size = new System.Drawing.Size(208, 20);
+            this.tsmiLoadRom.Text = "ROMを読み込み";
             // 
-            // mnsItemTool
+            // tsmiClearRom
             // 
-            this.mnsItemTool.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.mnsItemFsf,
-            this.mnsItemTilesetIndexCalc});
-            this.mnsItemTool.Name = "mnsItemTool";
-            this.mnsItemTool.Padding = new System.Windows.Forms.Padding(0);
-            this.mnsItemTool.Size = new System.Drawing.Size(38, 24);
-            this.mnsItemTool.Text = "ツール";
+            this.tsmiClearRom.Name = "tsmiClearRom";
+            this.tsmiClearRom.Padding = new System.Windows.Forms.Padding(0);
+            this.tsmiClearRom.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.R)));
+            this.tsmiClearRom.Size = new System.Drawing.Size(208, 20);
+            this.tsmiClearRom.Text = "ROMを再読み込み";
             // 
-            // mnsItemLoadRom
+            // tsmiSave
             // 
-            this.mnsItemLoadRom.Name = "mnsItemLoadRom";
-            this.mnsItemLoadRom.Padding = new System.Windows.Forms.Padding(0);
-            this.mnsItemLoadRom.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
-            this.mnsItemLoadRom.Size = new System.Drawing.Size(208, 20);
-            this.mnsItemLoadRom.Text = "ROMを読み込み";
+            this.tsmiSave.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tsmiSaveOver,
+            this.tsmiSaveAs});
+            this.tsmiSave.Name = "tsmiSave";
+            this.tsmiSave.Padding = new System.Windows.Forms.Padding(0);
+            this.tsmiSave.Size = new System.Drawing.Size(35, 24);
+            this.tsmiSave.Text = "保存";
             // 
-            // mnsItemReload
+            // tsmiSaveOver
             // 
-            this.mnsItemReload.Name = "mnsItemReload";
-            this.mnsItemReload.Padding = new System.Windows.Forms.Padding(0);
-            this.mnsItemReload.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.R)));
-            this.mnsItemReload.Size = new System.Drawing.Size(208, 20);
-            this.mnsItemReload.Text = "ROMを再読み込み";
+            this.tsmiSaveOver.Name = "tsmiSaveOver";
+            this.tsmiSaveOver.Padding = new System.Windows.Forms.Padding(0);
+            this.tsmiSaveOver.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S)));
+            this.tsmiSaveOver.Size = new System.Drawing.Size(232, 20);
+            this.tsmiSaveOver.Text = "上書き保存";
             // 
-            // mnsItemSaveOver
+            // tsmiSaveAs
             // 
-            this.mnsItemSaveOver.Name = "mnsItemSaveOver";
-            this.mnsItemSaveOver.Padding = new System.Windows.Forms.Padding(0);
-            this.mnsItemSaveOver.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S)));
-            this.mnsItemSaveOver.Size = new System.Drawing.Size(232, 20);
-            this.mnsItemSaveOver.Text = "上書き保存";
-            // 
-            // mnsItemSaveAs
-            // 
-            this.mnsItemSaveAs.Name = "mnsItemSaveAs";
-            this.mnsItemSaveAs.Padding = new System.Windows.Forms.Padding(0);
-            this.mnsItemSaveAs.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
+            this.tsmiSaveAs.Name = "tsmiSaveAs";
+            this.tsmiSaveAs.Padding = new System.Windows.Forms.Padding(0);
+            this.tsmiSaveAs.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
             | System.Windows.Forms.Keys.S)));
-            this.mnsItemSaveAs.Size = new System.Drawing.Size(232, 20);
-            this.mnsItemSaveAs.Text = "名前を付けて保存";
+            this.tsmiSaveAs.Size = new System.Drawing.Size(232, 20);
+            this.tsmiSaveAs.Text = "名前を付けて保存";
             // 
-            // mnsItemFsf
+            // tsmiEdit
             // 
-            this.mnsItemFsf.Name = "mnsItemFsf";
-            this.mnsItemFsf.Padding = new System.Windows.Forms.Padding(0);
-            this.mnsItemFsf.Size = new System.Drawing.Size(180, 20);
-            this.mnsItemFsf.Text = "空き領域検索";
+            this.tsmiEdit.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tsmiUndo,
+            this.tsmiRedo});
+            this.tsmiEdit.Name = "tsmiEdit";
+            this.tsmiEdit.Padding = new System.Windows.Forms.Padding(0);
+            this.tsmiEdit.Size = new System.Drawing.Size(35, 24);
+            this.tsmiEdit.Text = "編集";
             // 
-            // mnsItemTilesetIndexCalc
+            // tsmiUndo
             // 
-            this.mnsItemTilesetIndexCalc.Name = "mnsItemTilesetIndexCalc";
-            this.mnsItemTilesetIndexCalc.Padding = new System.Windows.Forms.Padding(0);
-            this.mnsItemTilesetIndexCalc.Size = new System.Drawing.Size(180, 20);
-            this.mnsItemTilesetIndexCalc.Text = "タイルセット番号計算";
+            this.tsmiUndo.Name = "tsmiUndo";
+            this.tsmiUndo.Padding = new System.Windows.Forms.Padding(0);
+            this.tsmiUndo.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Z)));
+            this.tsmiUndo.Size = new System.Drawing.Size(180, 20);
+            this.tsmiUndo.Text = "元に戻す";
+            // 
+            // tsmiRedo
+            // 
+            this.tsmiRedo.Name = "tsmiRedo";
+            this.tsmiRedo.Padding = new System.Windows.Forms.Padding(0);
+            this.tsmiRedo.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Y)));
+            this.tsmiRedo.Size = new System.Drawing.Size(180, 20);
+            this.tsmiRedo.Text = "やり直す";
+            // 
+            // tsmiTool
+            // 
+            this.tsmiTool.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tsmiFsf,
+            this.tsmiTilesetIndexCalc});
+            this.tsmiTool.Name = "tsmiTool";
+            this.tsmiTool.Padding = new System.Windows.Forms.Padding(0);
+            this.tsmiTool.Size = new System.Drawing.Size(38, 24);
+            this.tsmiTool.Text = "ツール";
+            // 
+            // tsmiFsf
+            // 
+            this.tsmiFsf.Name = "tsmiFsf";
+            this.tsmiFsf.Padding = new System.Windows.Forms.Padding(0);
+            this.tsmiFsf.Size = new System.Drawing.Size(180, 20);
+            this.tsmiFsf.Text = "空き領域検索";
+            // 
+            // tsmiTilesetIndexCalc
+            // 
+            this.tsmiTilesetIndexCalc.Name = "tsmiTilesetIndexCalc";
+            this.tsmiTilesetIndexCalc.Padding = new System.Windows.Forms.Padding(0);
+            this.tsmiTilesetIndexCalc.Size = new System.Drawing.Size(180, 20);
+            this.tsmiTilesetIndexCalc.Text = "タイルセット番号計算";
             // 
             // grpEditors
             // 
@@ -196,146 +222,6 @@ namespace PochiPochiEditorPlus
             this.grpEditors.TabIndex = 1;
             this.grpEditors.TabStop = false;
             this.grpEditors.Text = "編集項目";
-            // 
-            // btnPokeData
-            // 
-            this.btnPokeData.Location = new System.Drawing.Point(20, 28);
-            this.btnPokeData.Margin = new System.Windows.Forms.Padding(0);
-            this.btnPokeData.Name = "btnPokeData";
-            this.btnPokeData.Size = new System.Drawing.Size(128, 23);
-            this.btnPokeData.TabIndex = 0;
-            this.btnPokeData.Text = "ポケモン";
-            this.btnPokeData.UseVisualStyleBackColor = true;
-            // 
-            // btnDexRegional
-            // 
-            this.btnDexRegional.Location = new System.Drawing.Point(20, 58);
-            this.btnDexRegional.Margin = new System.Windows.Forms.Padding(0);
-            this.btnDexRegional.Name = "btnDexRegional";
-            this.btnDexRegional.Size = new System.Drawing.Size(128, 23);
-            this.btnDexRegional.TabIndex = 0;
-            this.btnDexRegional.Text = "図鑑番号(地方)";
-            this.btnDexRegional.UseVisualStyleBackColor = true;
-            // 
-            // btnDexNational
-            // 
-            this.btnDexNational.Location = new System.Drawing.Point(20, 88);
-            this.btnDexNational.Margin = new System.Windows.Forms.Padding(0);
-            this.btnDexNational.Name = "btnDexNational";
-            this.btnDexNational.Size = new System.Drawing.Size(128, 23);
-            this.btnDexNational.TabIndex = 0;
-            this.btnDexNational.Text = "図鑑番号(全国)";
-            this.btnDexNational.UseVisualStyleBackColor = true;
-            // 
-            // btnDexSearch
-            // 
-            this.btnDexSearch.Location = new System.Drawing.Point(20, 148);
-            this.btnDexSearch.Margin = new System.Windows.Forms.Padding(0);
-            this.btnDexSearch.Name = "btnDexSearch";
-            this.btnDexSearch.Size = new System.Drawing.Size(128, 23);
-            this.btnDexSearch.TabIndex = 1;
-            this.btnDexSearch.Text = "図鑑索引";
-            this.btnDexSearch.UseVisualStyleBackColor = true;
-            // 
-            // btnDexHabitat
-            // 
-            this.btnDexHabitat.Location = new System.Drawing.Point(20, 118);
-            this.btnDexHabitat.Margin = new System.Windows.Forms.Padding(0);
-            this.btnDexHabitat.Name = "btnDexHabitat";
-            this.btnDexHabitat.Size = new System.Drawing.Size(128, 23);
-            this.btnDexHabitat.TabIndex = 2;
-            this.btnDexHabitat.Text = "図鑑生息地";
-            this.btnDexHabitat.UseVisualStyleBackColor = true;
-            // 
-            // btnEggMove
-            // 
-            this.btnEggMove.Location = new System.Drawing.Point(20, 238);
-            this.btnEggMove.Margin = new System.Windows.Forms.Padding(0);
-            this.btnEggMove.Name = "btnEggMove";
-            this.btnEggMove.Size = new System.Drawing.Size(128, 23);
-            this.btnEggMove.TabIndex = 4;
-            this.btnEggMove.Text = "タマゴ技";
-            this.btnEggMove.UseVisualStyleBackColor = true;
-            // 
-            // btnTmHmTutor
-            // 
-            this.btnTmHmTutor.Location = new System.Drawing.Point(20, 208);
-            this.btnTmHmTutor.Margin = new System.Windows.Forms.Padding(0);
-            this.btnTmHmTutor.Name = "btnTmHmTutor";
-            this.btnTmHmTutor.Size = new System.Drawing.Size(128, 23);
-            this.btnTmHmTutor.TabIndex = 5;
-            this.btnTmHmTutor.Text = "技マシン / 教え技";
-            this.btnTmHmTutor.UseVisualStyleBackColor = true;
-            // 
-            // btnRegionMap
-            // 
-            this.btnRegionMap.Location = new System.Drawing.Point(160, 238);
-            this.btnRegionMap.Margin = new System.Windows.Forms.Padding(0);
-            this.btnRegionMap.Name = "btnRegionMap";
-            this.btnRegionMap.Size = new System.Drawing.Size(128, 23);
-            this.btnRegionMap.TabIndex = 11;
-            this.btnRegionMap.Text = "タウンマップ";
-            this.btnRegionMap.UseVisualStyleBackColor = true;
-            // 
-            // btnOwSprite
-            // 
-            this.btnOwSprite.Location = new System.Drawing.Point(160, 208);
-            this.btnOwSprite.Margin = new System.Windows.Forms.Padding(0);
-            this.btnOwSprite.Name = "btnOwSprite";
-            this.btnOwSprite.Size = new System.Drawing.Size(128, 23);
-            this.btnOwSprite.TabIndex = 12;
-            this.btnOwSprite.Text = "歩行グラフィック";
-            this.btnOwSprite.UseVisualStyleBackColor = true;
-            // 
-            // btnTileset
-            // 
-            this.btnTileset.Location = new System.Drawing.Point(160, 178);
-            this.btnTileset.Margin = new System.Windows.Forms.Padding(0);
-            this.btnTileset.Name = "btnTileset";
-            this.btnTileset.Size = new System.Drawing.Size(128, 23);
-            this.btnTileset.TabIndex = 9;
-            this.btnTileset.Text = "タイルセット";
-            this.btnTileset.UseVisualStyleBackColor = true;
-            // 
-            // btnOwMap
-            // 
-            this.btnOwMap.Location = new System.Drawing.Point(160, 148);
-            this.btnOwMap.Margin = new System.Windows.Forms.Padding(0);
-            this.btnOwMap.Name = "btnOwMap";
-            this.btnOwMap.Size = new System.Drawing.Size(128, 23);
-            this.btnOwMap.TabIndex = 10;
-            this.btnOwMap.Text = "マップ";
-            this.btnOwMap.UseVisualStyleBackColor = true;
-            // 
-            // btnRoaming
-            // 
-            this.btnRoaming.Location = new System.Drawing.Point(160, 88);
-            this.btnRoaming.Margin = new System.Windows.Forms.Padding(0);
-            this.btnRoaming.Name = "btnRoaming";
-            this.btnRoaming.Size = new System.Drawing.Size(128, 23);
-            this.btnRoaming.TabIndex = 6;
-            this.btnRoaming.Text = "徘徊位置";
-            this.btnRoaming.UseVisualStyleBackColor = true;
-            // 
-            // btnSwarm
-            // 
-            this.btnSwarm.Location = new System.Drawing.Point(160, 58);
-            this.btnSwarm.Margin = new System.Windows.Forms.Padding(0);
-            this.btnSwarm.Name = "btnSwarm";
-            this.btnSwarm.Size = new System.Drawing.Size(128, 23);
-            this.btnSwarm.TabIndex = 7;
-            this.btnSwarm.Text = "大量発生";
-            this.btnSwarm.UseVisualStyleBackColor = true;
-            // 
-            // btnWildEnc
-            // 
-            this.btnWildEnc.Location = new System.Drawing.Point(160, 28);
-            this.btnWildEnc.Margin = new System.Windows.Forms.Padding(0);
-            this.btnWildEnc.Name = "btnWildEnc";
-            this.btnWildEnc.Size = new System.Drawing.Size(128, 23);
-            this.btnWildEnc.TabIndex = 8;
-            this.btnWildEnc.Text = "野生設定";
-            this.btnWildEnc.UseVisualStyleBackColor = true;
             // 
             // btnBattleBg
             // 
@@ -407,6 +293,146 @@ namespace PochiPochiEditorPlus
             this.btnItemData.Text = "アイテム";
             this.btnItemData.UseVisualStyleBackColor = true;
             // 
+            // btnRegionMap
+            // 
+            this.btnRegionMap.Location = new System.Drawing.Point(160, 238);
+            this.btnRegionMap.Margin = new System.Windows.Forms.Padding(0);
+            this.btnRegionMap.Name = "btnRegionMap";
+            this.btnRegionMap.Size = new System.Drawing.Size(128, 23);
+            this.btnRegionMap.TabIndex = 11;
+            this.btnRegionMap.Text = "タウンマップ";
+            this.btnRegionMap.UseVisualStyleBackColor = true;
+            // 
+            // btnOwSprite
+            // 
+            this.btnOwSprite.Location = new System.Drawing.Point(160, 208);
+            this.btnOwSprite.Margin = new System.Windows.Forms.Padding(0);
+            this.btnOwSprite.Name = "btnOwSprite";
+            this.btnOwSprite.Size = new System.Drawing.Size(128, 23);
+            this.btnOwSprite.TabIndex = 12;
+            this.btnOwSprite.Text = "歩行グラフィック";
+            this.btnOwSprite.UseVisualStyleBackColor = true;
+            // 
+            // btnTileset
+            // 
+            this.btnTileset.Location = new System.Drawing.Point(160, 178);
+            this.btnTileset.Margin = new System.Windows.Forms.Padding(0);
+            this.btnTileset.Name = "btnTileset";
+            this.btnTileset.Size = new System.Drawing.Size(128, 23);
+            this.btnTileset.TabIndex = 9;
+            this.btnTileset.Text = "タイルセット";
+            this.btnTileset.UseVisualStyleBackColor = true;
+            // 
+            // btnOwMap
+            // 
+            this.btnOwMap.Location = new System.Drawing.Point(160, 148);
+            this.btnOwMap.Margin = new System.Windows.Forms.Padding(0);
+            this.btnOwMap.Name = "btnOwMap";
+            this.btnOwMap.Size = new System.Drawing.Size(128, 23);
+            this.btnOwMap.TabIndex = 10;
+            this.btnOwMap.Text = "マップ";
+            this.btnOwMap.UseVisualStyleBackColor = true;
+            // 
+            // btnRoaming
+            // 
+            this.btnRoaming.Location = new System.Drawing.Point(160, 88);
+            this.btnRoaming.Margin = new System.Windows.Forms.Padding(0);
+            this.btnRoaming.Name = "btnRoaming";
+            this.btnRoaming.Size = new System.Drawing.Size(128, 23);
+            this.btnRoaming.TabIndex = 6;
+            this.btnRoaming.Text = "徘徊位置";
+            this.btnRoaming.UseVisualStyleBackColor = true;
+            // 
+            // btnSwarm
+            // 
+            this.btnSwarm.Location = new System.Drawing.Point(160, 58);
+            this.btnSwarm.Margin = new System.Windows.Forms.Padding(0);
+            this.btnSwarm.Name = "btnSwarm";
+            this.btnSwarm.Size = new System.Drawing.Size(128, 23);
+            this.btnSwarm.TabIndex = 7;
+            this.btnSwarm.Text = "大量発生";
+            this.btnSwarm.UseVisualStyleBackColor = true;
+            // 
+            // btnWildEnc
+            // 
+            this.btnWildEnc.Location = new System.Drawing.Point(160, 28);
+            this.btnWildEnc.Margin = new System.Windows.Forms.Padding(0);
+            this.btnWildEnc.Name = "btnWildEnc";
+            this.btnWildEnc.Size = new System.Drawing.Size(128, 23);
+            this.btnWildEnc.TabIndex = 8;
+            this.btnWildEnc.Text = "野生設定";
+            this.btnWildEnc.UseVisualStyleBackColor = true;
+            // 
+            // btnEggMove
+            // 
+            this.btnEggMove.Location = new System.Drawing.Point(20, 238);
+            this.btnEggMove.Margin = new System.Windows.Forms.Padding(0);
+            this.btnEggMove.Name = "btnEggMove";
+            this.btnEggMove.Size = new System.Drawing.Size(128, 23);
+            this.btnEggMove.TabIndex = 4;
+            this.btnEggMove.Text = "タマゴ技";
+            this.btnEggMove.UseVisualStyleBackColor = true;
+            // 
+            // btnTmHmTutor
+            // 
+            this.btnTmHmTutor.Location = new System.Drawing.Point(20, 208);
+            this.btnTmHmTutor.Margin = new System.Windows.Forms.Padding(0);
+            this.btnTmHmTutor.Name = "btnTmHmTutor";
+            this.btnTmHmTutor.Size = new System.Drawing.Size(128, 23);
+            this.btnTmHmTutor.TabIndex = 5;
+            this.btnTmHmTutor.Text = "技マシン / 教え技";
+            this.btnTmHmTutor.UseVisualStyleBackColor = true;
+            // 
+            // btnDexSearch
+            // 
+            this.btnDexSearch.Location = new System.Drawing.Point(20, 148);
+            this.btnDexSearch.Margin = new System.Windows.Forms.Padding(0);
+            this.btnDexSearch.Name = "btnDexSearch";
+            this.btnDexSearch.Size = new System.Drawing.Size(128, 23);
+            this.btnDexSearch.TabIndex = 1;
+            this.btnDexSearch.Text = "図鑑索引";
+            this.btnDexSearch.UseVisualStyleBackColor = true;
+            // 
+            // btnDexHabitat
+            // 
+            this.btnDexHabitat.Location = new System.Drawing.Point(20, 118);
+            this.btnDexHabitat.Margin = new System.Windows.Forms.Padding(0);
+            this.btnDexHabitat.Name = "btnDexHabitat";
+            this.btnDexHabitat.Size = new System.Drawing.Size(128, 23);
+            this.btnDexHabitat.TabIndex = 2;
+            this.btnDexHabitat.Text = "図鑑生息地";
+            this.btnDexHabitat.UseVisualStyleBackColor = true;
+            // 
+            // btnDexNational
+            // 
+            this.btnDexNational.Location = new System.Drawing.Point(20, 88);
+            this.btnDexNational.Margin = new System.Windows.Forms.Padding(0);
+            this.btnDexNational.Name = "btnDexNational";
+            this.btnDexNational.Size = new System.Drawing.Size(128, 23);
+            this.btnDexNational.TabIndex = 0;
+            this.btnDexNational.Text = "図鑑番号(全国)";
+            this.btnDexNational.UseVisualStyleBackColor = true;
+            // 
+            // btnDexRegional
+            // 
+            this.btnDexRegional.Location = new System.Drawing.Point(20, 58);
+            this.btnDexRegional.Margin = new System.Windows.Forms.Padding(0);
+            this.btnDexRegional.Name = "btnDexRegional";
+            this.btnDexRegional.Size = new System.Drawing.Size(128, 23);
+            this.btnDexRegional.TabIndex = 0;
+            this.btnDexRegional.Text = "図鑑番号(地方)";
+            this.btnDexRegional.UseVisualStyleBackColor = true;
+            // 
+            // btnPokeData
+            // 
+            this.btnPokeData.Location = new System.Drawing.Point(20, 28);
+            this.btnPokeData.Margin = new System.Windows.Forms.Padding(0);
+            this.btnPokeData.Name = "btnPokeData";
+            this.btnPokeData.Size = new System.Drawing.Size(128, 23);
+            this.btnPokeData.TabIndex = 0;
+            this.btnPokeData.Text = "ポケモン";
+            this.btnPokeData.UseVisualStyleBackColor = true;
+            // 
             // grpHistory
             // 
             this.grpHistory.Controls.Add(this.lstHistory);
@@ -418,32 +444,6 @@ namespace PochiPochiEditorPlus
             this.grpHistory.TabIndex = 2;
             this.grpHistory.TabStop = false;
             this.grpHistory.Text = "変更履歴";
-            // 
-            // mnsItemEdit
-            // 
-            this.mnsItemEdit.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.mnsItemUndo,
-            this.mnsItemRedo});
-            this.mnsItemEdit.Name = "mnsItemEdit";
-            this.mnsItemEdit.Padding = new System.Windows.Forms.Padding(0);
-            this.mnsItemEdit.Size = new System.Drawing.Size(35, 24);
-            this.mnsItemEdit.Text = "編集";
-            // 
-            // mnsItemUndo
-            // 
-            this.mnsItemUndo.Name = "mnsItemUndo";
-            this.mnsItemUndo.Padding = new System.Windows.Forms.Padding(0);
-            this.mnsItemUndo.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Z)));
-            this.mnsItemUndo.Size = new System.Drawing.Size(180, 20);
-            this.mnsItemUndo.Text = "元に戻す";
-            // 
-            // mnsItemRedo
-            // 
-            this.mnsItemRedo.Name = "mnsItemRedo";
-            this.mnsItemRedo.Padding = new System.Windows.Forms.Padding(0);
-            this.mnsItemRedo.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Y)));
-            this.mnsItemRedo.Size = new System.Drawing.Size(180, 20);
-            this.mnsItemRedo.Text = "やり直す";
             // 
             // lstHistory
             // 
@@ -462,16 +462,16 @@ namespace PochiPochiEditorPlus
             this.ClientSize = new System.Drawing.Size(492, 519);
             this.Controls.Add(this.grpHistory);
             this.Controls.Add(this.grpEditors);
-            this.Controls.Add(this.mnsMain);
+            this.Controls.Add(this.msMain);
             this.Font = new System.Drawing.Font("Yu Gothic UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.MainMenuStrip = this.mnsMain;
+            this.MainMenuStrip = this.msMain;
             this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.Name = "MainForm";
             this.Text = "メイン画面";
-            this.mnsMain.ResumeLayout(false);
-            this.mnsMain.PerformLayout();
+            this.msMain.ResumeLayout(false);
+            this.msMain.PerformLayout();
             this.grpEditors.ResumeLayout(false);
             this.grpHistory.ResumeLayout(false);
             this.ResumeLayout(false);
@@ -481,16 +481,16 @@ namespace PochiPochiEditorPlus
 
         #endregion
 
-        private System.Windows.Forms.MenuStrip mnsMain;
-        private System.Windows.Forms.ToolStripMenuItem mnsItemLoad;
-        private System.Windows.Forms.ToolStripMenuItem mnsItemSave;
-        private System.Windows.Forms.ToolStripMenuItem mnsItemTool;
-        private System.Windows.Forms.ToolStripMenuItem mnsItemLoadRom;
-        private System.Windows.Forms.ToolStripMenuItem mnsItemReload;
-        private System.Windows.Forms.ToolStripMenuItem mnsItemSaveOver;
-        private System.Windows.Forms.ToolStripMenuItem mnsItemSaveAs;
-        private System.Windows.Forms.ToolStripMenuItem mnsItemFsf;
-        private System.Windows.Forms.ToolStripMenuItem mnsItemTilesetIndexCalc;
+        private System.Windows.Forms.MenuStrip msMain;
+        private System.Windows.Forms.ToolStripMenuItem tsmiLoad;
+        private System.Windows.Forms.ToolStripMenuItem tsmiSave;
+        private System.Windows.Forms.ToolStripMenuItem tsmiTool;
+        private System.Windows.Forms.ToolStripMenuItem tsmiLoadRom;
+        private System.Windows.Forms.ToolStripMenuItem tsmiClearRom;
+        private System.Windows.Forms.ToolStripMenuItem tsmiSaveOver;
+        private System.Windows.Forms.ToolStripMenuItem tsmiSaveAs;
+        private System.Windows.Forms.ToolStripMenuItem tsmiFsf;
+        private System.Windows.Forms.ToolStripMenuItem tsmiTilesetIndexCalc;
         private System.Windows.Forms.GroupBox grpEditors;
         private System.Windows.Forms.Button btnPokeData;
         private System.Windows.Forms.Button btnDexNational;
@@ -514,9 +514,9 @@ namespace PochiPochiEditorPlus
         private System.Windows.Forms.Button btnMailData;
         private System.Windows.Forms.Button btnItemData;
         private System.Windows.Forms.GroupBox grpHistory;
-        private System.Windows.Forms.ToolStripMenuItem mnsItemEdit;
-        private System.Windows.Forms.ToolStripMenuItem mnsItemUndo;
-        private System.Windows.Forms.ToolStripMenuItem mnsItemRedo;
+        private System.Windows.Forms.ToolStripMenuItem tsmiEdit;
+        private System.Windows.Forms.ToolStripMenuItem tsmiUndo;
+        private System.Windows.Forms.ToolStripMenuItem tsmiRedo;
         private System.Windows.Forms.ListBox lstHistory;
     }
 }

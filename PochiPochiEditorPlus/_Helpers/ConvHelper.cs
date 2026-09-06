@@ -14,7 +14,7 @@ namespace PochiPochiEditorPlus._Helpers
             if (string.IsNullOrWhiteSpace(str)) return Constants.InvalidValue;
 
             // 字詰め
-            var trimStr = str.Replace(Constants.SpaceChar.ToString(), string.Empty);
+            var trimStr = str.Replace(" ", string.Empty);
 
             // 変換テスト
             return int.TryParse(trimStr, NumberStyles.HexNumber, null, out int value)

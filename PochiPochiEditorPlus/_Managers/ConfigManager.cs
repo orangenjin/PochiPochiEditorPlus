@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Text;
-using System.Windows.Forms;
 using PochiPochiEditorPlus._Helpers;
 using PochiPochiEditorPlus._Utilities;
 
@@ -11,30 +10,21 @@ namespace PochiPochiEditorPlus._Managers
     {
         // 設定名からパスを取得
         private Dictionary<string, string> _configs = new Dictionary<string, string>();
+        public Dictionary<string, string> Configs => _configs;
 
         /// <summary>
         /// 設定ファイル名とパスを格納する。
         /// </summary>
-        public ConfigManager(string folderPath, ComboBox targetCmb)
+        public ConfigManager(string folderPath)
         {
             if (!Directory.Exists(folderPath)) return;
 
-            var ext = Path.ChangeExtension(Constants.AsteriskChar.ToString(), Constants.IniExt);
+            var searchPattern = $"*.{Constants.IniExt}";
 
-            foreach (string filePath in Directory.EnumerateFiles(folderPath, ext))
+            foreach (string filePath in Directory.EnumerateFiles(folderPath, searchPattern))
             {
                 string name = Path.GetFileNameWithoutExtension(filePath);
-
-                // 辞書へ
                 _configs[name] = filePath;
-                // コンボボックスへ
-                targetCmb.Items.Add(name);
-            }
-
-            // 初期選択
-            if (targetCmb.Items.Count > 0)
-            {
-                targetCmb.SelectedIndex = 0;
             }
         }
 
@@ -63,10 +53,9 @@ namespace PochiPochiEditorPlus._Managers
                 }
 
                 // ポインタかどうか
-                var asteStr = Constants.AsteriskChar.ToString();
-                if (rawString.StartsWith(asteStr))
+                if (rawString.StartsWith("*"))
                 {
-                    if (TryParseNumber(rawString.Substring(asteStr.Length), out int ptrOffset))
+                    if (TryParseNumber(rawString.Substring(1), out int ptrOffset))
                     {
                         // ポインタとして読み取る
                         if (IoHelper.TryReadPtr(data, ptrOffset, out int resultOffset))
@@ -94,11 +83,10 @@ namespace PochiPochiEditorPlus._Managers
             rawValue = string.Empty;
 
             // 除外行チェック
-            if (string.IsNullOrWhiteSpace(line) 
-                || line.StartsWith(Constants.CommentChar.ToString())) return false;
+            if (string.IsNullOrWhiteSpace(line) || line.StartsWith(";")) return false;
 
             // イコールで分割
-            string[] parts = line.Split(Constants.EqualChar);
+            string[] parts = line.Split('=');
 
             key = parts[(int)Constants.PartName.Key].Trim();
             rawValue = parts[(int)Constants.PartName.Value].Trim();

@@ -22,18 +22,8 @@
         // プレフィックス
         public const string HexPrefix = "0x";
         public const string ButtonPrefix = "btn";
-        // char
-        public const char CommentChar = ';';
-        public const char OpenBracketChar = '[';
-        public const char CloseBracketChar = ']';
-        public const char OpenParenChar = '(';
-        public const char CloseParenChar = ')';
-        public const char CommaChar = ',';
-        public const char ColonChar = ':';
-        public const char EqualChar = '=';
-        public const char SpaceChar = ' ';
-        public const char AsteriskChar = '*';
         // 拡張子
+        public const string GbaExt = "gba";
         public const string BmpExt = "bmp";
         public const string DefExt = "def";
         public const string IniExt = "ini";

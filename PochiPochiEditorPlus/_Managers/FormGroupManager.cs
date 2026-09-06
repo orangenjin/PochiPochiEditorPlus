@@ -125,7 +125,6 @@ namespace PochiPochiEditorPlus._Managers
     /// </summary>
     public enum FormGroup
     {
-
         Map,
         Tileset,
 
