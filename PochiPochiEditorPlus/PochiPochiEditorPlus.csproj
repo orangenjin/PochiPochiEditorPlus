@@ -78,9 +78,6 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="_Utilities\SharedData.cs" />
-    <Compile Include="_Utilities\_CustomCtrl\StrTextBox.cs">
-      <SubType>Component</SubType>
-    </Compile>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
