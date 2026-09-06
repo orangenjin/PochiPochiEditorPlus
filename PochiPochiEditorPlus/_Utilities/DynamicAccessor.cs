@@ -6,17 +6,25 @@ namespace PochiPochiEditorPlus._Utilities
     /// <summary>
     /// ドット記法によるアクセスを可能にする。
     /// </summary>
-    public sealed class DynamicAccessor<T> : DynamicObject
+    public abstract class DynamicAccessor<T> : DynamicObject
     {
-        private Dictionary<string, T> _values = new Dictionary<string, T>();
+        protected Dictionary<string, T> _values = new Dictionary<string, T>();
 
         /// <summary>
         /// 値を登録する。
         /// 辞書のAddの仕様を利用して、上書きを拒否する。
         /// </summary>
-        public void Register(string key, T value)
+        public virtual void Register(string key, T value)
         {
             _values.Add(key, value);
+        }
+
+        /// <summary>
+        /// 登録された値を初期化する。
+        /// </summary>
+        public virtual void ClearDict()
+        {
+            _values.Clear();
         }
 
         /// <summary>
