@@ -60,8 +60,11 @@
     <Compile Include="_Helpers\IoHelper.cs" />
     <Compile Include="_Managers\CharmapManager.cs" />
     <Compile Include="_Managers\ConfigManager.cs" />
+    <Compile Include="_Managers\_EntryManager\FieldDefinitions.cs" />
     <Compile Include="_Managers\FormGroupManager.cs" />
     <Compile Include="_Managers\UndoManager.cs" />
+    <Compile Include="_Managers\_EntryManager\FieldExtensions.cs" />
+    <Compile Include="_Managers\_EntryManager\FieldMetaDataReader.cs" />
     <Compile Include="_Utilities\DynamicAccessor.cs" />
     <Compile Include="_Utilities\EventBinder.cs" />
     <Compile Include="_Helpers\ConvHelper.cs" />
