@@ -40,10 +40,27 @@ namespace PochiPochiEditorPlus._Forms
             _undoManager = undoManager;
 
             // InitializeEntries();
-            // InitializeControls();
+            InitializeControls();
             // InitializeEventHandlers();
 
             // LoadDataToUI(_currentClassIndex);
         }
+
+
+
+
+
+
+
+
+
+        private void InitializeControls()
+        {
+            // 肩書き名のテキストボックス設定
+            txtClassName.CharmapManager = _sharedData.Charmap;
+            txtClassName.AllowedLength = 8;
+            txtClassName.NeedTerminator = false;
+        }
+
     }
 }
