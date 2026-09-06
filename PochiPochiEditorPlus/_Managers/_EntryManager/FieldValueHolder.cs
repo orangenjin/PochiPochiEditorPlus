@@ -3,8 +3,9 @@ using PochiPochiEditorPlus._Utilities;
 
 namespace PochiPochiEditorPlus._Managers._EntryManager
 {
-    public sealed class FieldValueManager
+    public sealed class FieldValueHolder
     {
+        public string FieldName { get; }
         public int Offset { get; set; }
         public FieldLength Lengths { get; }
         public StateValue State { get; }
@@ -45,17 +46,19 @@ namespace PochiPochiEditorPlus._Managers._EntryManager
             Pointer
         }
 
+        // 共有データを保持する
         private SharedData _sharedData = null;
-        private string _fieldName = null;
 
         /// <summary>
-        /// DefReaderで読み込んだ定義情報からコンテナを作成する。(ループ処理前提)
+        /// FieldMetaDataReaderで読み込んだ定義情報からコンテナを作成する。(ループ処理前提)
         /// </summary>
-        public FieldValueManager(FieldMetaData metaData, SharedData sharedData)
+        public FieldValueHolder(FieldMetaData metaData, SharedData sharedData)
         {
             // 後で使用するので保持
             _sharedData = sharedData;
-            _fieldName = metaData.Name;
+
+            // フィールド名を代入
+            FieldName = metaData.Name;
 
             // 長さを仮置きする
             Lengths = new FieldLength();
@@ -114,7 +117,7 @@ namespace PochiPochiEditorPlus._Managers._EntryManager
         /// </summary>
         public T GetData<T>(
             int argIndex = 0,
-            Func<FieldValueManager, int, CharmapManager, T> converter = null)
+            Func<FieldValueHolder, int, CharmapManager, T> converter = null)
         {
             // 通常の型Tで対応できない特殊処理があれば渡す
             return converter != null
@@ -128,7 +131,7 @@ namespace PochiPochiEditorPlus._Managers._EntryManager
         public void SetData<T>(
             T rawData,
             int argIndex = 0,
-            Func<T, FieldValueManager, int, CharmapManager, byte[]> converter = null)
+            Func<T, FieldValueHolder, int, CharmapManager, byte[]> converter = null)
         {
             // 通常の型Tで対応できない特殊処理があれば渡す
             byte[] newBytes = converter != null

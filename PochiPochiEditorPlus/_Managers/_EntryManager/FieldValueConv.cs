@@ -10,7 +10,7 @@ namespace PochiPochiEditorPlus._Managers._EntryManager
         /// byte[](FieldValue.BinaryData)を型Tとして変換する。
         /// </summary>
         public static T BytesToModelConv<T>(
-            FieldValueManager fieldValue,
+            FieldValueHolder fieldValue,
             int argIndex,
             CharmapManager charmap)
         {
@@ -26,8 +26,8 @@ namespace PochiPochiEditorPlus._Managers._EntryManager
             }
 
             // StateValueから読み取り方法を取得
-            bool isSigned = fieldValue.State == FieldValueManager.StateValue.Signed;
-            bool isPointer = fieldValue.State == FieldValueManager.StateValue.Pointer;
+            bool isSigned = fieldValue.State == FieldValueHolder.StateValue.Signed;
+            bool isPointer = fieldValue.State == FieldValueHolder.StateValue.Pointer;
 
             long rawValue;
             switch (entryLength)
@@ -82,12 +82,12 @@ namespace PochiPochiEditorPlus._Managers._EntryManager
         /// </summary>
         public static byte[] ModelToBytesConv<T>(
            T value,
-           FieldValueManager fieldValue,
+           FieldValueHolder fieldValue,
            int argIndex,
            CharmapManager charmap)
         {
             int entryLength = fieldValue.Lengths.EntryLength;
-            bool isPointer = fieldValue.State == FieldValueManager.StateValue.Pointer;
+            bool isPointer = fieldValue.State == FieldValueHolder.StateValue.Pointer;
 
             // 戻り値・マージ用
             byte[] result = new byte[entryLength];
