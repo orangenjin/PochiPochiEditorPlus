@@ -255,15 +255,15 @@ namespace PochiPochiEditor2.Helpers
                 int temp = (paletteData[byteIndex + 1] << Constants.BitsPerByte) | paletteData[byteIndex];
 
                 // 5ビット(0-31)を8ビット(0-255)にするため8倍する
-                int red = ((temp & Constants.RedMask) >> Constants.RedShift) * Constants.ColorChannelMulti;
-                int green = ((temp & Constants.GreenMask) >> Constants.GreenShift) * Constants.ColorChannelMulti;
-                int blue = ((temp & Constants.BlueMask) >> Constants.BlueShift) * Constants.ColorChannelMulti;
+                int r = ((temp & Constants.RedMask) >> Constants.RedShift) * Constants.ColorChannelMulti;
+                int g = ((temp & Constants.GreenMask) >> Constants.GreenShift) * Constants.ColorChannelMulti;
+                int b = ((temp & Constants.BlueMask) >> Constants.BlueShift) * Constants.ColorChannelMulti;
 
                 // インデックス0は背景色
                 // showBackColorがfalseならアルファを0にする
                 bmpPalette.Entries[i] = (i == 0 && !showBackColor)
-                    ? Color.FromArgb(0, red, green, blue)
-                    : Color.FromArgb(255, red, green, blue);
+                    ? Color.FromArgb(0, r, g, b)
+                    : Color.FromArgb(255, r, g, b);
             }
 
             // 余ったパレットは適当に黒で埋める
