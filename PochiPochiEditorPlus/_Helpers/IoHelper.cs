@@ -170,15 +170,15 @@ namespace PochiPochiEditorPlus._Helpers
         }
 
         /// <summary>
-        /// 4の倍数サイズでないバイト配列（画像など）を、アライメント調整して書き込む。
+        /// 4の倍数サイズでないバイト配列を、アライメント調整して書き込む。
         /// </summary>
         public static void WriteBytesToData(
-            byte[] data,
+            byte[] buffer,
             int offset,
             byte[] bytes,
             byte alignPaddingByte = Constants.PaddingByte)
         {
-            Array.Copy(bytes, 0, data, offset, bytes.Length);
+            Array.Copy(bytes, 0, buffer, offset, bytes.Length);
 
             int endOffset = offset + bytes.Length;
             int paddingCount =
@@ -187,7 +187,7 @@ namespace PochiPochiEditorPlus._Helpers
 
             for (int i = 0; i < paddingCount; i++)
             {
-                data[endOffset + i] = alignPaddingByte;
+                buffer[endOffset + i] = alignPaddingByte;
             }
         }
     }
