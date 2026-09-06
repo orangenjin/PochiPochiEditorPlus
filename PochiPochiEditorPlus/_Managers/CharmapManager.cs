@@ -7,7 +7,7 @@ using PochiPochiEditorPlus._Utilities;
 
 namespace PochiPochiEditorPlus._Managers
 {
-    public class CharmapManager
+    public sealed class CharmapManager
     {
         // 対応探索用
         private ByteTrieNode _byteTrieRoot = null;

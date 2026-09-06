@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace PochiPochiEditorPlus._Managers
 {
-    public class UndoManager
+    public sealed class UndoManager
     {
         private List<ICommand> _history = new List<ICommand>();
         private int _currentIndex = 0;

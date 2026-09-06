@@ -7,7 +7,7 @@ using PochiPochiEditorPlus._Utilities;
 
 namespace PochiPochiEditorPlus._Managers
 {
-    public class FormGroupManager
+    public sealed class FormGroupManager
     {
         private Form _ownerForm = null;
         private List<Form> _forms = null;

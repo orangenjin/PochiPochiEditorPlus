@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace PochiPochiEditorPlus._Utilities
 {
-    public class EventBinder
+    public sealed class EventBinder
     {
         // イベント解除用
         private List<Action> _detachActions = new List<Action>();
