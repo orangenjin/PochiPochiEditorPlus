@@ -4,7 +4,7 @@ using System.Dynamic;
 namespace PochiPochiEditorPlus._Utilities
 {
     /// <summary>
-    /// ドット記法によるアクセスを可能にする。
+    /// ドット記法によるアクセスを可能にして、キーの二重定義を防ぐ。
     /// </summary>
     public abstract class DynamicAccessor<T> : DynamicObject
     {

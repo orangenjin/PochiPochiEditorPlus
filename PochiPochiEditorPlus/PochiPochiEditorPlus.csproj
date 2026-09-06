@@ -52,6 +52,7 @@
     <Compile Include="_Helpers\CtrlHelper.cs" />
     <Compile Include="_Helpers\ImageHelper.cs" />
     <Compile Include="_Helpers\IoHelper.cs" />
+    <Compile Include="_Manager\CharmapManager.cs" />
     <Compile Include="_Manager\ConfigManager.cs" />
     <Compile Include="_Utilities\DynamicAccessor.cs" />
     <Compile Include="_Utilities\HexTextBox.cs">

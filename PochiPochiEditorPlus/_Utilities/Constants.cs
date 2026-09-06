@@ -67,5 +67,8 @@
         public const string ImageImportFilter = "画像ファイル (*.png;*.bmp)|*.png;*.bmp";
         public const string ImageExportFilter = "PNG画像 (*.png)|*.png|BMP画像 (*.bmp)|*.bmp";
         public const string BinImportExportFilter = "BINファイル (*.bin)|*.bin";
+
+        // その他
+        public enum PartName{ Key, Value }
     }
 }

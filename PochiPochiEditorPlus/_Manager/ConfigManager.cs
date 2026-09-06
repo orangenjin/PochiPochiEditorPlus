@@ -100,8 +100,8 @@ namespace PochiPochiEditorPlus._Manager
             // イコールで分割
             string[] parts = line.Split(Constants.EqualChar);
 
-            key = parts[0].Trim();
-            rawValue = parts[1].Trim();
+            key = parts[(int)Constants.PartName.Key].Trim();
+            rawValue = parts[(int)Constants.PartName.Value].Trim();
             return true;
         }
 
