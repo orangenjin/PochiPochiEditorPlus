@@ -183,6 +183,10 @@ namespace PochiPochiEditorPlus
             CtrlHelper.SetControlsEnabled(grpHistory, isRomLoaded);
             tsmiEdit.Enabled = canOpenEditor;
             tsmiTool.Enabled = canOpenEditor;
+
+            // Undo/Redoの状態を更新
+            tsmiUndo.Enabled = _undoManager.CanUndo;
+            tsmiRedo.Enabled = _undoManager.CanRedo;
         }
 
         private void EditorButton_Click(object sender, EventArgs e)

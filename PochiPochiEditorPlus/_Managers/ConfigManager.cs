@@ -9,8 +9,8 @@ namespace PochiPochiEditorPlus._Managers
     public sealed class ConfigManager : DynamicAccessor<object>
     {
         // 設定名からパスを取得
-        private Dictionary<string, string> _configs = new Dictionary<string, string>();
         public Dictionary<string, string> Configs => _configs;
+        private Dictionary<string, string> _configs = new Dictionary<string, string>();
 
         /// <summary>
         /// 設定ファイル名とパスを格納する。
