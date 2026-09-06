@@ -20,11 +20,23 @@ namespace PochiPochiEditorPlus
         // 共有データ用
         private SharedData _sharedData = null;
         // 変更履歴管理用
-        // private UndoManager _undoManager = new UndoManager();
+        private UndoManager _undoManager = new UndoManager();
 
         public MainForm()
         {
             InitializeComponent();
+
+            // 設定名のコンボボックスの初期化が必要
+            var config = new IniManager(_iniFolder, cmbConfig);
+            // 現在言語変更できない
+            var charmap = new TblManager(_tblPath);
+            _sharedData = new SharedData(config, charmap);
+
+            InitializeControls();
+            InitializeEventHandlers();
+
+            // UI状態の更新
+            MainFormUIUpdate();
         }
     }
 }

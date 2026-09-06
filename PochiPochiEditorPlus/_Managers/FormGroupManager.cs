@@ -5,7 +5,7 @@ using System.Reflection;
 using System.Windows.Forms;
 using PochiPochiEditorPlus._Utilities;
 
-namespace PochiPochiEditorPlus._Manager
+namespace PochiPochiEditorPlus._Managers
 {
     public class FormGroupManager
     {
