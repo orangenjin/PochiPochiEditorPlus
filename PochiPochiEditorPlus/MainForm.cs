@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Windows.Forms;
-
 using PochiPochiEditorPlus._Helpers;
 using PochiPochiEditorPlus._Managers;
 using PochiPochiEditorPlus._Utilities;
@@ -50,7 +47,7 @@ namespace PochiPochiEditorPlus
             InitializeEventHandlers();
 
             // UI状態の更新
-            MainFormUIUpdate();
+            UpdateMainFormUI();
         }
 
         private void InitializeEventHandlers()
@@ -84,7 +81,7 @@ namespace PochiPochiEditorPlus
                         _sharedData.Config.LoadConfig(selectedKey, _sharedData.RomData);
 
                         // UI更新
-                        MainFormUIUpdate();
+                        UpdateMainFormUI();
                     }
                 });
             _eventBinder.BindCtrl(
@@ -100,18 +97,18 @@ namespace PochiPochiEditorPlus
                     _undoManager.Clear();
 
                     // UIの状態を更新
-                    MainFormUIUpdate();
+                    UpdateMainFormUI();
                 });
 
             // 保存関連
             _eventBinder.BindCtrl(
                 h => tsmiSaveOver.Click += h,
                 h => tsmiSaveOver.Click -= h,
-                SaveButton_Click);
+                SaveRom);
             _eventBinder.BindCtrl(
                 h => tsmiSaveAs.Click += h,
                 h => tsmiSaveAs.Click -= h,
-                SaveButton_Click);
+                SaveRom);
 
             // 各エディタ用
             foreach (Button btn in grpEditors.Controls)
@@ -128,7 +125,7 @@ namespace PochiPochiEditorPlus
                 h => _undoManager.StateChanged -= h,
                 (_, __) =>
                 {
-                    MainFormUIUpdate();
+                    UpdateMainFormUI();
                     UpdateHistoryList();
                     _formGroupManager?.RefreshForms();
                 });
@@ -150,8 +147,8 @@ namespace PochiPochiEditorPlus
                 () => lstHistory.DrawItem += lstHistory_DrawItem,
                 () => lstHistory.DrawItem -= lstHistory_DrawItem);
             _eventBinder.BindCtrl(
-                h => lstHistory.Click += h,
-                h => lstHistory.Click -= h,
+                h => lstHistory.SelectedIndexChanged += h,
+                h => lstHistory.SelectedIndexChanged -= h,
                 (_, __) =>
                 {
                     int index = lstHistory.SelectedIndex;
@@ -166,7 +163,7 @@ namespace PochiPochiEditorPlus
                 h => this.Disposed -= h);
         }
 
-        private void MainFormUIUpdate()
+        private void UpdateMainFormUI()
         {
             // 現在の状態を整理
             bool isRomLoaded = _sharedData.IsRomLoaded;
@@ -203,16 +200,16 @@ namespace PochiPochiEditorPlus
             _formGroupManager.Closed += (_, __) =>
             {
                 _formGroupManager = null;
-                MainFormUIUpdate();
+                UpdateMainFormUI();
             };
             _formGroupManager.ShowFormGroup();
 
-            MainFormUIUpdate();
+            UpdateMainFormUI();
         }
 
-        private void SaveButton_Click(object sender, EventArgs e)
+        private void SaveRom(object sender, EventArgs e)
         {
-            if (!((sender as ToolStripMenuItem).Tag is SaveMode mode)) return;
+            if (!(sender is ToolStripMenuItem item) || !(item.Tag is SaveMode mode)) return;
 
             if (mode == SaveMode.SaveOver) // 上書き保存
             {
