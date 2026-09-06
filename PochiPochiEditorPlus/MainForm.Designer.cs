@@ -156,7 +156,7 @@ namespace PochiPochiEditorPlus
             this.tsmiUndo.Name = "tsmiUndo";
             this.tsmiUndo.Padding = new System.Windows.Forms.Padding(0);
             this.tsmiUndo.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Z)));
-            this.tsmiUndo.Size = new System.Drawing.Size(180, 20);
+            this.tsmiUndo.Size = new System.Drawing.Size(157, 20);
             this.tsmiUndo.Text = "元に戻す";
             // 
             // tsmiRedo
@@ -164,7 +164,7 @@ namespace PochiPochiEditorPlus
             this.tsmiRedo.Name = "tsmiRedo";
             this.tsmiRedo.Padding = new System.Windows.Forms.Padding(0);
             this.tsmiRedo.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Y)));
-            this.tsmiRedo.Size = new System.Drawing.Size(180, 20);
+            this.tsmiRedo.Size = new System.Drawing.Size(157, 20);
             this.tsmiRedo.Text = "やり直す";
             // 
             // tsmiTool
@@ -181,14 +181,14 @@ namespace PochiPochiEditorPlus
             // 
             this.tsmiFsf.Name = "tsmiFsf";
             this.tsmiFsf.Padding = new System.Windows.Forms.Padding(0);
-            this.tsmiFsf.Size = new System.Drawing.Size(180, 20);
+            this.tsmiFsf.Size = new System.Drawing.Size(176, 20);
             this.tsmiFsf.Text = "空き領域検索";
             // 
             // tsmiTilesetIndexCalc
             // 
             this.tsmiTilesetIndexCalc.Name = "tsmiTilesetIndexCalc";
             this.tsmiTilesetIndexCalc.Padding = new System.Windows.Forms.Padding(0);
-            this.tsmiTilesetIndexCalc.Size = new System.Drawing.Size(180, 20);
+            this.tsmiTilesetIndexCalc.Size = new System.Drawing.Size(176, 20);
             this.tsmiTilesetIndexCalc.Text = "タイルセット番号計算";
             // 
             // grpEditors
@@ -447,6 +447,7 @@ namespace PochiPochiEditorPlus
             // 
             // lstHistory
             // 
+            this.lstHistory.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
             this.lstHistory.FormattingEnabled = true;
             this.lstHistory.ItemHeight = 15;
             this.lstHistory.Location = new System.Drawing.Point(20, 28);

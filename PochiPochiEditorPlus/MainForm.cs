@@ -21,12 +21,10 @@ namespace PochiPochiEditorPlus
         private CharmapManager _charmapManager = null;
         // 変更履歴管理用
         private UndoManager _undoManager = new UndoManager();
-
         // パス用
         private string _romPath = string.Empty;
         private string _iniFolder = Path.Combine(Application.StartupPath, Constants.IniExt);
         private string _tblPath = Path.Combine(Application.StartupPath, "charmap.tbl");
-
         // 保存形式識別用
         private enum SaveMode{ SaveOver, SaveAs }
 
@@ -181,8 +179,8 @@ namespace PochiPochiEditorPlus
 
             // 読み込み後、エディタ起動後
             CtrlHelper.SetControlsEnabled(grpHistory, isRomLoaded);
-            tsmiEdit.Enabled = canOpenEditor;
-            tsmiTool.Enabled = canOpenEditor;
+            tsmiEdit.Enabled = isRomLoaded;
+            tsmiTool.Enabled = isRomLoaded;
 
             // Undo/Redoの状態を更新
             tsmiUndo.Enabled = _undoManager.CanUndo;
