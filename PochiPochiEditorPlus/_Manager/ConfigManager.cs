@@ -5,7 +5,7 @@ using System.Windows.Forms;
 using PochiPochiEditorPlus._Helpers;
 using PochiPochiEditorPlus._Utilities;
 
-namespace PochiPochiEditorPlus._Manager
+namespace PochiPochiEditorPlus._Managers
 {
     public sealed class ConfigManager : DynamicAccessor<object>
     {
