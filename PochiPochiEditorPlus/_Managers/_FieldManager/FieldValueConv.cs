@@ -2,7 +2,7 @@
 using PochiPochiEditorPlus._Helpers;
 using PochiPochiEditorPlus._Utilities;
 
-namespace PochiPochiEditorPlus._Managers._EntryManager
+namespace PochiPochiEditorPlus._Managers._FieldManager
 {
     public static class FieldValueConv
     {

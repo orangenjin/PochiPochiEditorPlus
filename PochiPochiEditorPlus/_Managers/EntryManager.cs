@@ -1,8 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using PochiPochiEditorPlus._Managers._FieldManager;
 using PochiPochiEditorPlus._Utilities;
 
-namespace PochiPochiEditorPlus._Managers._EntryManager
+namespace PochiPochiEditorPlus._Managers
 {
     /// <summary>
     /// 典型的なエントリーテーブルを作成する。

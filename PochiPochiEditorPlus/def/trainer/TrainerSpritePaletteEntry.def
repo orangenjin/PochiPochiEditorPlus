@@ -1,0 +1,5 @@
+PaletteOffset: Pointer
+PaletteIndex: Byte
+PaletteUnk1: Byte
+PaletteUnk2: Byte
+PaletteUnk3: Byte

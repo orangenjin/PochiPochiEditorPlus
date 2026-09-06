@@ -41,5 +41,23 @@ namespace PochiPochiEditorPlus._Utilities
             result = null;
             return false;
         }
+
+        /// <summary>
+        /// インデクサによるアクセスを可能にする。
+        /// </summary>
+        public override bool TryGetIndex(
+            GetIndexBinder binder, 
+            object[] indexes, 
+            out object result)
+        {
+            if (indexes[0] is string key && _values.TryGetValue(key, out T value))
+            {
+                result = value;
+                return true;
+            }
+
+            result = null;
+            return false;
+        }
     }
 }

@@ -60,14 +60,14 @@
     <Compile Include="_Helpers\IoHelper.cs" />
     <Compile Include="_Managers\CharmapManager.cs" />
     <Compile Include="_Managers\ConfigManager.cs" />
-    <Compile Include="_Managers\_EntryManager\EntryManager.cs" />
-    <Compile Include="_Managers\_EntryManager\FieldDefinitions.cs" />
+    <Compile Include="_Managers\EntryManager.cs" />
+    <Compile Include="_Managers\_FieldManager\FieldDefinitions.cs" />
     <Compile Include="_Managers\FormGroupManager.cs" />
     <Compile Include="_Managers\UndoManager.cs" />
-    <Compile Include="_Managers\_EntryManager\FieldExtensions.cs" />
-    <Compile Include="_Managers\_EntryManager\FieldMetaDataReader.cs" />
-    <Compile Include="_Managers\_EntryManager\FieldValueHolder.cs" />
-    <Compile Include="_Managers\_EntryManager\FieldValueConv.cs" />
+    <Compile Include="_Managers\_FieldManager\FieldExtensions.cs" />
+    <Compile Include="_Managers\_FieldManager\FieldMetaDataReader.cs" />
+    <Compile Include="_Managers\_FieldManager\FieldValueHolder.cs" />
+    <Compile Include="_Managers\_FieldManager\FieldValueConv.cs" />
     <Compile Include="_Utilities\DynamicAccessor.cs" />
     <Compile Include="_Utilities\EventBinder.cs" />
     <Compile Include="_Helpers\ConvHelper.cs" />
@@ -125,6 +125,36 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="def\trainer\TrainerClassBaseIVEntry.def">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="def\trainer\TrainerClassBattleMusicEntry.def">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="def\trainer\TrainerClassEncMusicEntry.def">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="def\trainer\TrainerClassNameEntry.def">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="def\trainer\TrainerClassPokeBallEntry.def">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="def\trainer\TrainerClassPrizeMultiEntry.def">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="def\trainer\TrainerSpriteAnimationPointerEntry.def">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="def\trainer\TrainerSpriteImageEntry.def">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="def\trainer\TrainerSpritePaletteEntry.def">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="def\trainer\TrainerSpriteYPosEntry.def">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="img\poochyena.ico">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

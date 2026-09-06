@@ -18,13 +18,13 @@ namespace PochiPochiEditorPlus._Forms
         private UndoManager _undoManager = null;
         // イベント登録・解除用
         private EventBinder _eventBinder = null;
-        // 各テーブル用
-        // private EntryManager _classNameEntry = null;
-        // private EntryManager _prizeMultiEntry = null;
-        // private EntryManager _encMusicEntry = null;
-        // private EntryManager _battleMusicEntry = null;
-        // private EntryManager _pokeBallEntry = null;
-        // private EntryManager _baseIvEntry = null;
+        // 各エントリーテーブル用
+        private dynamic _classNameEntry = null;
+        private dynamic _prizeMultiEntry = null;
+        private dynamic _encMusicEntry = null;
+        private dynamic _battleMusicEntry = null;
+        private dynamic _pokeBallEntry = null;
+        private dynamic _baseIvEntry = null;
         // UI制御用
         private int _currentClassIndex = 0;
         // 追加データ判定用
@@ -39,14 +39,31 @@ namespace PochiPochiEditorPlus._Forms
             _sharedData = sharedData;
             _undoManager = undoManager;
 
-            // InitializeEntries();
+            InitializeEntries();
             InitializeControls();
             // InitializeEventHandlers();
 
             // LoadDataToUI(_currentClassIndex);
         }
 
+        private void InitializeEntries()
+        {
+            dynamic config = _sharedData.Config;
 
+            // 肩書名テーブルを作成
+            int tableOffset = config.TrainerClassNameTableOffset;
+            int entrycount = config.TrainerClassNameCount;
+            _classNameEntry = new EntryManager("TrainerClassNameEntry", tableOffset, entrycount, _sharedData);
+
+            // 賞金倍率テーブルを作成
+            tableOffset = config.TrainerClassPrizeMultiTableOffset;
+            entrycount = config.TrainerClassPrizeMultiCount;
+            _prizeMultiEntry = new EntryManager("TrainerClassPrizeMultiEntry", tableOffset, entrycount, _sharedData);
+
+            nudClassPrizeMultiValue.Value = _prizeMultiEntry.Entries[3].PrizeMultiValue.GetData<int>();
+
+            txtClassNameStr.Text = _classNameEntry.Entries[0].ClassNameStr.GetData<string>();
+        }
 
 
 
@@ -57,9 +74,9 @@ namespace PochiPochiEditorPlus._Forms
         private void InitializeControls()
         {
             // 肩書き名のテキストボックス設定
-            txtClassName.CharmapManager = _sharedData.Charmap;
-            txtClassName.AllowedLength = 8;
-            txtClassName.NeedTerminator = false;
+            // txtClassNameStr.CharmapManager = _sharedData.Charmap;
+            // txtClassNameStr.AllowedLength = 8;
+            // txtClassNameStr.NeedTerminator = false;
         }
 
     }

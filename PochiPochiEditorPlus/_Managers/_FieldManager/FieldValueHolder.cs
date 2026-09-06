@@ -1,7 +1,7 @@
 ﻿using System;
 using PochiPochiEditorPlus._Utilities;
 
-namespace PochiPochiEditorPlus._Managers._EntryManager
+namespace PochiPochiEditorPlus._Managers._FieldManager
 {
     public sealed class FieldValueHolder
     {
@@ -82,7 +82,7 @@ namespace PochiPochiEditorPlus._Managers._EntryManager
                         for (int i = 0; i < ArgCount; i++)
                         {
                             // 属性引数名はiniで定義名と同じ
-                            lengths[i] = config.attr.Args[i];
+                            lengths[i] = (int)config[attr.Args[i]];
                         }
 
                         // AllowedLengthArgが存在しない場合、同値を入れる

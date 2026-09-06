@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace PochiPochiEditorPlus._Managers._EntryManager
+namespace PochiPochiEditorPlus._Managers._FieldManager
 {
     /// <summary>
     /// defファイルの各行において、コロンで区切られる順番を定義する。

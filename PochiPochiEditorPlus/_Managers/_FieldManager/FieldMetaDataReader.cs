@@ -5,7 +5,7 @@ using System.Linq;
 using System.Windows.Forms;
 using PochiPochiEditorPlus._Utilities;
 
-namespace PochiPochiEditorPlus._Managers._EntryManager
+namespace PochiPochiEditorPlus._Managers._FieldManager
 {
     public static class FieldMetaDataReader
     {

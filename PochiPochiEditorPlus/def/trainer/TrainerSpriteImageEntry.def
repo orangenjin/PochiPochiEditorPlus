@@ -1,0 +1,4 @@
+ImageOffset: Pointer
+ImageDecompSize: UInt16
+ImageIndex: Byte
+ImageUnk1: Byte
