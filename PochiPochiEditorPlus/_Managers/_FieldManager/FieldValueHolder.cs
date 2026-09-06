@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Linq;
+using PochiPochiEditorPlus._Managers._CommandManager;
 using PochiPochiEditorPlus._Utilities;
 
 namespace PochiPochiEditorPlus._Managers._FieldManager
@@ -21,7 +23,7 @@ namespace PochiPochiEditorPlus._Managers._FieldManager
                 Array.Copy(_sharedData.RomData, Offset, data, 0, length);
                 return data;
             }
-            private set
+            set
             {
                 Array.Copy(value, 0, _sharedData.RomData, Offset, Lengths.EntryLength);
             }
@@ -140,6 +142,51 @@ namespace PochiPochiEditorPlus._Managers._FieldManager
 
             // 新しいbyte[]を代入
             BinaryData = newBytes;
+        }
+
+        /// <summary>
+        /// 簡易的に値(通常)を更新する。
+        /// </summary>
+        public void UpdateData<T>(
+            UndoManager undoManager,
+            T data,
+            string desc,
+            int argIndex = 0)
+        {
+            var command = CreateUpdateCommand(
+                data,
+                desc,
+                argIndex);
+
+            if (command != null)
+            {
+                undoManager.PushCommand(command);
+            }
+        }
+
+        /// <summary>
+        /// コマンドを生成する。
+        /// </summary>
+        public ICommand CreateUpdateCommand<T>(
+            T data,
+            string desc,
+            int argIndex = 0)
+        {
+            // 変更前のバイナリデータ
+            byte[] oldBinary = BinaryData;
+            // データ更新
+            SetData(data, argIndex);
+            // 変更後のバイナリデータ
+            byte[] newBinary = BinaryData;
+
+            // 同じなら無視
+            if (oldBinary.SequenceEqual(newBinary)) return null;
+
+            return new FieldValueChangeCommand(
+                this,
+                oldBinary,
+                newBinary,
+                desc);
         }
     }
 }
