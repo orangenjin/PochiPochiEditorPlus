@@ -55,6 +55,7 @@
     <Compile Include="_Manager\CharmapManager.cs" />
     <Compile Include="_Manager\ConfigManager.cs" />
     <Compile Include="_Utilities\DynamicAccessor.cs" />
+    <Compile Include="_Utilities\EventBinder.cs" />
     <Compile Include="_Utilities\HexTextBox.cs">
       <SubType>Component</SubType>
     </Compile>
