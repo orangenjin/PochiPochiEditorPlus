@@ -185,6 +185,7 @@ namespace PochiPochiEditorPlus._Forms
             this.txtSpriteAnimDataOffset.Location = new System.Drawing.Point(116, 58);
             this.txtSpriteAnimDataOffset.Margin = new System.Windows.Forms.Padding(0);
             this.txtSpriteAnimDataOffset.Name = "txtSpriteAnimDataOffset";
+            this.txtSpriteAnimDataOffset.ReadOnly = true;
             this.txtSpriteAnimDataOffset.Size = new System.Drawing.Size(80, 23);
             this.txtSpriteAnimDataOffset.TabIndex = 11;
             // 
@@ -203,6 +204,7 @@ namespace PochiPochiEditorPlus._Forms
             this.txtSpriteAnimPointerOffset.Location = new System.Drawing.Point(116, 28);
             this.txtSpriteAnimPointerOffset.Margin = new System.Windows.Forms.Padding(0);
             this.txtSpriteAnimPointerOffset.Name = "txtSpriteAnimPointerOffset";
+            this.txtSpriteAnimPointerOffset.ReadOnly = true;
             this.txtSpriteAnimPointerOffset.Size = new System.Drawing.Size(80, 23);
             this.txtSpriteAnimPointerOffset.TabIndex = 9;
             // 

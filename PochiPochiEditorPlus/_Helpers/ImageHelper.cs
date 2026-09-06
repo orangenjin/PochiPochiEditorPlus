@@ -9,7 +9,7 @@ using System.Windows.Forms;
 using PochiPochiEditorPlus._Helpers;
 using PochiPochiEditorPlus._Utilities;
 
-namespace PochiPochiEditor2._Helpers
+namespace PochiPochiEditorPlus._Helpers
 {
     public static class ImageHelper
     {

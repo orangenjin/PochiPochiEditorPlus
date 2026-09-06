@@ -54,8 +54,8 @@
 
         // ダイアログフィルター
         public const string RomFileFilter = "ROMファイル|*.gba";
-        public const string ImageImportFilter = "画像ファイル (*.png;*.bmp)|*.png;*.bmp";
-        public const string ImageExportFilter = "PNG画像 (*.png)|*.png|BMP画像 (*.bmp)|*.bmp";
+        public const string SpriteImportFilter = "画像ファイル (*.png;*.bmp)|*.png;*.bmp";
+        public const string SpriteExportFilter = "PNG画像 (*.png)|*.png|BMP画像 (*.bmp)|*.bmp";
         public const string BinImportExportFilter = "BINファイル (*.bin)|*.bin";
 
         // その他
