@@ -43,7 +43,7 @@ namespace PochiPochiEditorPlus._Utilities
         }
 
         /// <summary>
-        /// インデクサによるアクセスを可能にする。
+        /// インデクサで値へアクセスする。
         /// </summary>
         public override bool TryGetIndex(
             GetIndexBinder binder, 

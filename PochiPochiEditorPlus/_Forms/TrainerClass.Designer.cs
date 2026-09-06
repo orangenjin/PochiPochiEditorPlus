@@ -44,7 +44,7 @@ namespace PochiPochiEditorPlus._Forms
             this.lblPokeBallIndex = new System.Windows.Forms.Label();
             this.nudBattleMusicIndex = new System.Windows.Forms.NumericUpDown();
             this.nudEncMusicIndex = new System.Windows.Forms.NumericUpDown();
-            this.lblBaltteMusicIndex = new System.Windows.Forms.Label();
+            this.lblBattleMusicIndex = new System.Windows.Forms.Label();
             this.lblEncMusicIndex = new System.Windows.Forms.Label();
             this.txtClassNameStr = new PochiPochiEditorPlus._Utilities._CustomCtrls.StrTextBox();
             ((System.ComponentModel.ISupportInitialize)(this.nudClassNameIndex)).BeginInit();
@@ -151,7 +151,7 @@ namespace PochiPochiEditorPlus._Forms
             this.grpExtraData.Controls.Add(this.lblPokeBallIndex);
             this.grpExtraData.Controls.Add(this.nudBattleMusicIndex);
             this.grpExtraData.Controls.Add(this.nudEncMusicIndex);
-            this.grpExtraData.Controls.Add(this.lblBaltteMusicIndex);
+            this.grpExtraData.Controls.Add(this.lblBattleMusicIndex);
             this.grpExtraData.Controls.Add(this.lblEncMusicIndex);
             this.grpExtraData.Location = new System.Drawing.Point(20, 168);
             this.grpExtraData.Margin = new System.Windows.Forms.Padding(0);
@@ -234,15 +234,15 @@ namespace PochiPochiEditorPlus._Forms
             this.nudEncMusicIndex.Size = new System.Drawing.Size(72, 23);
             this.nudEncMusicIndex.TabIndex = 3;
             // 
-            // lblBaltteMusicIndex
+            // lblBattleMusicIndex
             // 
-            this.lblBaltteMusicIndex.AutoSize = true;
-            this.lblBaltteMusicIndex.Location = new System.Drawing.Point(20, 62);
-            this.lblBaltteMusicIndex.Margin = new System.Windows.Forms.Padding(0);
-            this.lblBaltteMusicIndex.Name = "lblBaltteMusicIndex";
-            this.lblBaltteMusicIndex.Size = new System.Drawing.Size(75, 15);
-            this.lblBaltteMusicIndex.TabIndex = 2;
-            this.lblBaltteMusicIndex.Text = "戦闘中BGM :";
+            this.lblBattleMusicIndex.AutoSize = true;
+            this.lblBattleMusicIndex.Location = new System.Drawing.Point(20, 62);
+            this.lblBattleMusicIndex.Margin = new System.Windows.Forms.Padding(0);
+            this.lblBattleMusicIndex.Name = "lblBattleMusicIndex";
+            this.lblBattleMusicIndex.Size = new System.Drawing.Size(75, 15);
+            this.lblBattleMusicIndex.TabIndex = 2;
+            this.lblBattleMusicIndex.Text = "戦闘中BGM :";
             // 
             // lblEncMusicIndex
             // 
@@ -305,7 +305,7 @@ namespace PochiPochiEditorPlus._Forms
         private System.Windows.Forms.GroupBox grpExtraData;
         private System.Windows.Forms.NumericUpDown nudBattleMusicIndex;
         private System.Windows.Forms.NumericUpDown nudEncMusicIndex;
-        private System.Windows.Forms.Label lblBaltteMusicIndex;
+        private System.Windows.Forms.Label lblBattleMusicIndex;
         private System.Windows.Forms.Label lblEncMusicIndex;
         private System.Windows.Forms.NumericUpDown nudBaseIvValue;
         private System.Windows.Forms.NumericUpDown nudPokeBallIndex;

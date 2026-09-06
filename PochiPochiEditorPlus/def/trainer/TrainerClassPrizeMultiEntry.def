@@ -1,4 +1,4 @@
 ClassNameIndex: Byte
-PrizeMultiValue: Byte
-PrizeMultiUnk1: Byte
-PrizeMultiUnk2: Byte
+ClassPrizeMultiValue: Byte
+ClassPrizeMultiUnk1: Byte
+ClassPrizeMultiUnk2: Byte
