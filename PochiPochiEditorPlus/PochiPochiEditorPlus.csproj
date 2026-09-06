@@ -55,6 +55,12 @@
     <Compile Include="_Forms\TrainerClass.Designer.cs">
       <DependentUpon>TrainerClass.cs</DependentUpon>
     </Compile>
+    <Compile Include="_Forms\TrainerSprite.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="_Forms\TrainerSprite.Designer.cs">
+      <DependentUpon>TrainerSprite.cs</DependentUpon>
+    </Compile>
     <Compile Include="_Helpers\CtrlHelper.cs" />
     <Compile Include="_Helpers\ImageHelper.cs" />
     <Compile Include="_Helpers\IoHelper.cs" />
@@ -102,6 +108,9 @@
     </Compile>
     <EmbeddedResource Include="_Forms\TrainerClass.resx">
       <DependentUpon>TrainerClass.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="_Forms\TrainerSprite.resx">
+      <DependentUpon>TrainerSprite.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="charmap.tbl">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

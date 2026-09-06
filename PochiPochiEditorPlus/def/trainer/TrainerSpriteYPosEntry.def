@@ -1,4 +1,4 @@
-YPosTileCount: Byte
-YPosValue: Byte
-YPosUnk1: Byte
-YPosUnk2: Byte
+SpriteYPosTileCount: Byte
+SpriteYPosValue: Byte
+SpriteYPosUnk1: Byte
+SpriteYPosUnk2: Byte

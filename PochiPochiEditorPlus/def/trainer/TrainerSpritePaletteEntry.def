@@ -1,5 +1,5 @@
-PaletteOffset: Pointer
-PaletteIndex: Byte
-PaletteUnk1: Byte
-PaletteUnk2: Byte
-PaletteUnk3: Byte
+SpritePaletteOffset: Pointer
+SpritePaletteIndex: Byte
+SpritePaletteUnk1: Byte
+SpritePaletteUnk2: Byte
+SpritePaletteUnk3: Byte
