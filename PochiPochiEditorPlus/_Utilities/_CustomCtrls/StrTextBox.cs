@@ -68,6 +68,8 @@ namespace PochiPochiEditorPlus._Utilities._CustomCtrls
         /// </summary>
         private void ValidateTextLength()
         {
+            if (CharmapManager == null || string.IsNullOrEmpty(Text)) return;
+
             // 文字列の検証と切り詰め
             Text = CharmapManager.TextLengthValidate(Text, AllowedLength, NeedTerminator);
 

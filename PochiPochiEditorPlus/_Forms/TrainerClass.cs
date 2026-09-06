@@ -57,9 +57,9 @@ namespace PochiPochiEditorPlus._Forms
         private void InitializeControls()
         {
             // 肩書き名のテキストボックス設定
-            // txtClassName.CharmapManager = _sharedData.Charmap;
-            // txtClassName.AllowedLength = 8;
-            // txtClassName.NeedTerminator = false;
+            txtClassName.CharmapManager = _sharedData.Charmap;
+            txtClassName.AllowedLength = 8;
+            txtClassName.NeedTerminator = false;
         }
 
     }

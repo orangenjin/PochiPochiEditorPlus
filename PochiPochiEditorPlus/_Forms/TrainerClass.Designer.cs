@@ -46,6 +46,7 @@ namespace PochiPochiEditorPlus._Forms
             this.nudEncMusic = new System.Windows.Forms.NumericUpDown();
             this.lblBaltteMusic = new System.Windows.Forms.Label();
             this.lblEncMusic = new System.Windows.Forms.Label();
+            this.txtClassName = new PochiPochiEditorPlus._Utilities._CustomCtrls.StrTextBox();
             ((System.ComponentModel.ISupportInitialize)(this.nudClassNameIndex)).BeginInit();
             this.grpClassData.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudClassPrizeMulti)).BeginInit();
@@ -86,6 +87,7 @@ namespace PochiPochiEditorPlus._Forms
             // 
             // grpClassData
             // 
+            this.grpClassData.Controls.Add(this.txtClassName);
             this.grpClassData.Controls.Add(this.nudClassPrizeMulti);
             this.grpClassData.Controls.Add(this.lblClassPrizeMulti);
             this.grpClassData.Controls.Add(this.lblClassName);
@@ -252,6 +254,14 @@ namespace PochiPochiEditorPlus._Forms
             this.lblEncMusic.TabIndex = 2;
             this.lblEncMusic.Text = "戦闘前BGM :";
             // 
+            // txtClassName
+            // 
+            this.txtClassName.Location = new System.Drawing.Point(104, 28);
+            this.txtClassName.Margin = new System.Windows.Forms.Padding(0);
+            this.txtClassName.Name = "txtClassName";
+            this.txtClassName.Size = new System.Drawing.Size(144, 23);
+            this.txtClassName.TabIndex = 2;
+            // 
             // TrainerClass
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -301,5 +311,6 @@ namespace PochiPochiEditorPlus._Forms
         private System.Windows.Forms.NumericUpDown nudPokeBall;
         private System.Windows.Forms.Label lblBaseIv;
         private System.Windows.Forms.Label lblPokeBall;
+        private _Utilities._CustomCtrls.StrTextBox txtClassName;
     }
 }
