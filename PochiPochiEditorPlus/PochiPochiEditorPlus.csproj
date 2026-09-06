@@ -49,6 +49,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="_Forms\TrainerClass.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="_Forms\TrainerClass.Designer.cs">
+      <DependentUpon>TrainerClass.cs</DependentUpon>
+    </Compile>
     <Compile Include="_Helpers\CtrlHelper.cs" />
     <Compile Include="_Helpers\ImageHelper.cs" />
     <Compile Include="_Helpers\IoHelper.cs" />
@@ -84,6 +90,9 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="_Forms\TrainerClass.resx">
+      <DependentUpon>TrainerClass.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="charmap.tbl">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -111,5 +120,6 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -104,11 +104,11 @@ namespace PochiPochiEditorPlus
             _eventBinder.BindCtrl(
                 h => tsmiSaveOver.Click += h,
                 h => tsmiSaveOver.Click -= h,
-                ItemSave_Click);
+                SaveFunc_Click);
             _eventBinder.BindCtrl(
                 h => tsmiSaveAs.Click += h,
                 h => tsmiSaveAs.Click -= h,
-                ItemSave_Click);
+                SaveFunc_Click);
 
             // 各エディタ用
             foreach (Button btn in grpEditors.Controls)
@@ -211,7 +211,7 @@ namespace PochiPochiEditorPlus
             UpdateMainFormUI();
         }
 
-        private void ItemSave_Click(object sender, EventArgs e)
+        private void SaveFunc_Click(object sender, EventArgs e)
         {
             if (!(sender is ToolStripMenuItem item) || !(item.Tag is SaveMode mode)) return;
 
