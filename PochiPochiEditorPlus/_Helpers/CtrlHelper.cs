@@ -390,21 +390,5 @@ namespace PochiPochiEditorPlus._Helpers
                 target.cmb.DataSource = entries;
             }
         }
-
-        /// <summary>
-        /// テキストボックスのカーソルを末尾に移動する。
-        /// </summary>
-        public static void MoveCursorToEnd(this TextBox textBox)
-        {
-            // 念のため
-            textBox.Focus();
-
-            // カーソルを末尾へ移動
-            textBox.SelectionStart = textBox.Text.Length;
-            textBox.SelectionLength = 0;
-
-            // Multilineの場合
-            textBox.ScrollToCaret();
-        }
     }
 }

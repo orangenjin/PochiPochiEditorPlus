@@ -24,8 +24,8 @@ namespace PochiPochiEditorPlus._Forms
         private dynamic _yPosEntry = null;
         private dynamic _animPointerEntry = null;
         // 可変長データ管理用
-        private RefData _tileData = null;
-        private RefData _paletteData = null;
+        private RefDataManager _tileData = null;
+        private RefDataManager _paletteData = null;
         // UI制御用
         private int _currentSpriteIndex = default;
         // データ識別タグ用
@@ -270,7 +270,7 @@ namespace PochiPochiEditorPlus._Forms
                     imageOffsetValue);
                 // RefDataとして保持する
                 var imageDataLz77 = ImageHelper.CompressLZ77(imageData);
-                _tileData = new RefData(
+                _tileData = new RefDataManager(
                     SpriteData.Tile,
                     imageOffsetValue,
                     imageDataLz77,
@@ -283,7 +283,7 @@ namespace PochiPochiEditorPlus._Forms
                     paletteOffsetValue);
                 // RefDataとして保持する
                 var paletteDataLz77 = ImageHelper.CompressPalette(paletteData);
-                _paletteData = new RefData(
+                _paletteData = new RefDataManager(
                     SpriteData.Palette,
                     paletteOffsetValue,
                     paletteDataLz77,
@@ -340,7 +340,7 @@ namespace PochiPochiEditorPlus._Forms
                         string desc = $"[{this.Text}]画像インポート(ID:{_currentSpriteIndex:D4})";
 
                         // コマンドを統合するため準備
-                        var combine = new CombineCommand(desc);
+                        var combine = new CombineCommands(desc);
 
                         // FieldValueの変更コマンド
                         combine.Add(
@@ -366,7 +366,7 @@ namespace PochiPochiEditorPlus._Forms
                         var desc = $"[{this.Text}]パレットインポート(ID:{_currentSpriteIndex:D4})";
 
                         // コマンドを統合するため準備
-                        var combine = new CombineCommand(desc);
+                        var combine = new CombineCommands(desc);
 
                         // FieldValueの変更コマンド
                         combine.Add(

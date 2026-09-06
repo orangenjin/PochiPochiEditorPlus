@@ -2,7 +2,7 @@
 
 namespace PochiPochiEditorPlus._Managers._CommandManager
 {
-    class FieldValueChangeCommand : ICommand
+    public sealed class FieldValueChangeCommand : ICommand
     {
         private FieldValueHolder _target = null;
         private byte[] _oldData = null;

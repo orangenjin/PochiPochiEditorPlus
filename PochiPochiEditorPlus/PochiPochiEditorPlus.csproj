@@ -67,7 +67,10 @@
     <Compile Include="_Managers\CharmapManager.cs" />
     <Compile Include="_Managers\ConfigManager.cs" />
     <Compile Include="_Managers\EntryManager.cs" />
+    <Compile Include="_Managers\RefDataManager.cs" />
+    <Compile Include="_Managers\_CommandManager\CombineCommands.cs" />
     <Compile Include="_Managers\_CommandManager\FieldValueChangeCommand.cs" />
+    <Compile Include="_Managers\_CommandManager\RefDataChangeCommand.cs" />
     <Compile Include="_Managers\_FieldManager\FieldDefinitions.cs" />
     <Compile Include="_Managers\FormGroupManager.cs" />
     <Compile Include="_Managers\UndoManager.cs" />

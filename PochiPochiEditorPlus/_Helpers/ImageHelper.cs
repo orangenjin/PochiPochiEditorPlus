@@ -6,7 +6,6 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
-using PochiPochiEditorPlus._Helpers;
 using PochiPochiEditorPlus._Utilities;
 
 namespace PochiPochiEditorPlus._Helpers
