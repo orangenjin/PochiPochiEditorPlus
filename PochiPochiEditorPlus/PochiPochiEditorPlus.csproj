@@ -97,7 +97,14 @@
     <Compile Include="_Utilities\_CustomCtrls\StrTextBox.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="_Utilities\_QuickInput\InputDefinitions.cs" />
+    <Compile Include="_Utilities\_QuickInput\QuickInputDefinitions.cs" />
+    <Compile Include="_Utilities\_QuickInput\QuickInputBuilder.cs" />
+    <Compile Include="_Utilities\_QuickInput\QuickInputForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="_Utilities\_QuickInput\QuickInputForm.Designer.cs">
+      <DependentUpon>QuickInputForm.cs</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -115,6 +122,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="_Forms\TrainerSprite.resx">
       <DependentUpon>TrainerSprite.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="_Utilities\_QuickInput\QuickInputForm.resx">
+      <DependentUpon>QuickInputForm.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="charmap.tbl">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

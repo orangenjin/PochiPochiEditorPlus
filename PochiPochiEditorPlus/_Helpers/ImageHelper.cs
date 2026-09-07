@@ -373,8 +373,8 @@ namespace PochiPochiEditorPlus._Helpers
                 IoHelper.WriteIntAsBytes(
                     paletteData,
                     i * Constants.BytesPerColor,
-                    Constants.BytesPerColor,
-                    gbaColor);
+                    gbaColor,
+                    Constants.BytesPerColor);
             }
 
             // タイル変換(8x8)

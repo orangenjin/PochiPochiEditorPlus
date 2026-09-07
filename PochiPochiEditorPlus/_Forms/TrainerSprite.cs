@@ -311,82 +311,55 @@ namespace PochiPochiEditorPlus._Forms
         {
             if (!(sender is Button btn) || !(btn.Tag is SpriteData importKind)) return;
 
-            var inputs = new List<InputField>
+            var inputResult = new QuickInputBuilder()
+                .WithOffset(0x0)
+                .WithFile(Constants.SpriteImportFilter)
+                .ShowDialog();
+            if (inputResult == null) return;
+
+            // 入力値
+            int newOffset = inputResult.Offset;
+            string filePath = inputResult.Path;
+
+            using (Bitmap bmp = new Bitmap(filePath))
             {
-                new InputField("書き込み先オフセット", InputType.Offset),
-                new InputField("ファイルパス", InputType.File, fileFilter: Constants.SpriteImportFilter)
-            };
+                // バイト配列を抽出
+                if (!ImageHelper.ExtractTileAndPalette(
+                    bmp,
+                    Constants.SpriteSize,
+                    Constants.SpriteSize,
+                    out byte[] imageData,
+                    out byte[] paletteData)) return;
 
-            using (var popup = new QuickInputForm(inputs))
-            {
-                if (popup.ShowDialog() != DialogResult.OK) return;
+                // タグを識別して、表示stringを設定
+                bool isTile = importKind == SpriteData.Tile;
+                string targetName = isTile 
+                    ? "画像" 
+                    : "パレット";
+                string desc = 
+                    $"[{this.Text}]{targetName}インポート(ID:{_currentSpriteIndex:D4})";
 
-                // 入力値
-                int newOffset = 0;
-                string filePath = default;
+                // データを圧縮
+                byte[] compressedData = isTile
+                    ? ImageHelper.CompressLZ77(imageData)
+                    : ImageHelper.CompressPalette(paletteData);
 
-                using (Bitmap bmp = new Bitmap(filePath))
+                // 更新対象を特定
+                var targetEntry = isTile
+                    ? _tileEntry.Entries[_currentSpriteIndex].SpriteTileOffset
+                    : _paletteEntry.Entries[_currentSpriteIndex].SpritePaletteOffset;
+                var targetData = isTile 
+                    ? _tileData 
+                    : _paletteData;
+
+                // コマンドの作成と登録
+                var combine = new CombineCommands(desc);
+                combine.Add(targetEntry.CreateUpdateCommand(newOffset, desc));
+                combine.Add(targetData.CreateUpdateCommand(newOffset, compressedData, desc));
+
+                if (combine.HasCommands)
                 {
-                    // バイト配列を抽出
-                    if (!ImageHelper.ExtractTileAndPalette(
-                        bmp,
-                        Constants.SpriteSize,
-                        Constants.SpriteSize,
-                        out byte[] imageData,
-                        out byte[] paletteData)) return;
-
-                    if (importKind == SpriteData.Tile)
-                    {
-                        // LZ77圧縮を適用
-                        var compressedData = ImageHelper.CompressLZ77(imageData);
-                        // コマンド表示名
-                        string desc = $"[{this.Text}]画像インポート(ID:{_currentSpriteIndex:D4})";
-
-                        // コマンドを統合するため準備
-                        var combine = new CombineCommands(desc);
-
-                        // FieldValueの変更コマンド
-                        combine.Add(
-                            _tileEntry.Entries[_currentSpriteIndex].SpriteTileOffset
-                                .CreateUpdateCommand(newOffset, desc));
-                        // RefDataの変更コマンド
-                        combine.Add(
-                            _tileData.CreateUpdateCommand(
-                                newOffset,
-                                compressedData,
-                                desc));
-                        // 要素数が0より大きければ
-                        if (combine.HasCommands)
-                        {
-                            _undoManager.PushCommand(combine);
-                        }
-                    }
-                    else
-                    {
-                        // LZ77圧縮を適用
-                        var compressedData = ImageHelper.CompressPalette(paletteData);
-                        // コマンド表示名
-                        var desc = $"[{this.Text}]パレットインポート(ID:{_currentSpriteIndex:D4})";
-
-                        // コマンドを統合するため準備
-                        var combine = new CombineCommands(desc);
-
-                        // FieldValueの変更コマンド
-                        combine.Add(
-                            _paletteEntry.Entries[_currentSpriteIndex].SpritePaletteOffset
-                                .CreateUpdateCommand(newOffset, desc));
-                        // RefDataの変更コマンド
-                        combine.Add(
-                            _paletteData.CreateUpdateCommand(
-                                newOffset,
-                                compressedData,
-                                desc));
-                        // 要素数が0より大きければ
-                        if (combine.HasCommands)
-                        {
-                            _undoManager.PushCommand(combine);
-                        }
-                    }
+                    _undoManager.PushCommand(combine);
                 }
             }
         }

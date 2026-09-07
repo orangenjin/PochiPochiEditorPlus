@@ -171,12 +171,7 @@ namespace PochiPochiEditorPlus._Managers._FieldManager
                 rawValue = Convert.ToInt64(value);
             }
 
-            IoHelper.WriteIntAsBytes(
-                buffer: result,
-                offset: 0,
-                value: rawValue,
-                length: entryLength);
-
+            IoHelper.WriteIntAsBytes(result, 0, rawValue, entryLength);
             return result;
         }
 
