@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 using PochiPochiEditorPlus._Helpers;
 using PochiPochiEditorPlus._Managers;
 using PochiPochiEditorPlus._Managers._CommandManager;
 using PochiPochiEditorPlus._Utilities;
+using PochiPochiEditorPlus._Utilities._QuickInput;
 
 namespace PochiPochiEditorPlus._Forms
 {
@@ -214,23 +216,20 @@ namespace PochiPochiEditorPlus._Forms
 
             // 画像アドレス
             txtSpriteTileOffset.Text =
-                _tileEntry.Entries[index].SpriteTileOffset
-                    .GetData<int>()
-                    .ParseIntToString();
+                ConvHelper.ParseIntToString(
+                    _tileEntry.Entries[index].SpriteTileOffset.GetData<int>());
             // パレットアドレス
             txtSpritePaletteOffset.Text =
-                _paletteEntry.Entries[index].SpritePaletteOffset
-                    .GetData<int>()
-                    .ParseIntToString();
+                ConvHelper.ParseIntToString(
+                    _paletteEntry.Entries[index].SpritePaletteOffset.GetData<int>());
             // Y座標位置
             nudSpriteYPosValue.Value =
                 _yPosEntry.Entries[index].SpriteYPosValue.GetData<int>();
 
             // アニメーションポインタアドレス
             txtSpriteAnimPointerOffset.Text =
-                _animPointerEntry.Entries[index].SpriteAnimPointerOffset
-                    .GetData<int>()
-                    .ParseIntToString();
+                ConvHelper.ParseIntToString(
+                    _animPointerEntry.Entries[index].SpriteAnimPointerOffset.GetData<int>());
             // アニメーションデータアドレス
             int targetOffset =
                 _animPointerEntry.Entries[index].SpriteAnimPointerOffset.GetData<int>();
@@ -312,15 +311,19 @@ namespace PochiPochiEditorPlus._Forms
         {
             if (!(sender is Button btn) || !(btn.Tag is SpriteData importKind)) return;
 
-            using (var popup = new QuickInput(
-                defaultOffset: 0,
-                fileFilter: Constants.SpriteImportFilter))
+            var inputs = new List<InputField>
+            {
+                new InputField("書き込み先オフセット", InputType.Offset),
+                new InputField("ファイルパス", InputType.File, fileFilter: Constants.SpriteImportFilter)
+            };
+
+            using (var popup = new QuickInputForm(inputs))
             {
                 if (popup.ShowDialog() != DialogResult.OK) return;
 
                 // 入力値
-                int newOffset = popup.Offset;
-                string filePath = popup.FilePath;
+                int newOffset = 0;
+                string filePath = default;
 
                 using (Bitmap bmp = new Bitmap(filePath))
                 {

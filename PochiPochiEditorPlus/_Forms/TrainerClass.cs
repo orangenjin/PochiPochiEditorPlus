@@ -1,9 +1,4 @@
-﻿using System;
-using System.Data;
-using System.Linq;
-using System.Windows.Forms;
-
-using PochiPochiEditorPlus._Helpers;
+﻿using System.Windows.Forms;
 using PochiPochiEditorPlus._Managers;
 using PochiPochiEditorPlus._Utilities;
 
