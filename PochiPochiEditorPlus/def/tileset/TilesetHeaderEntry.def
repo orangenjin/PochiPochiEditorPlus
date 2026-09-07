@@ -1,0 +1,9 @@
+ImageCompType: Byte
+PaletteType: Byte
+TilesetHeaderUnk1: Byte
+TilesetHeaderUnk2: Byte
+ImageOffset: Pointer
+PaletteOffset: Pointer
+BlockDataTableOffset: Pointer
+AnimHeaderOffset: Pointer
+BlockAttrTableOffset: Pointer

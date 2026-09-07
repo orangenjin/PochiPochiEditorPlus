@@ -1,4 +1,4 @@
-SpriteTileOffset: Pointer
-SpriteTileDecompSize: UInt16
-SpriteTileIndex: Byte
-SpriteTileUnk1: Byte
+SpriteImageOffset: Pointer
+SpriteImageDecompSize: UInt16
+SpriteImageIndex: Byte
+SpriteImageUnk1: Byte

@@ -1,0 +1,8 @@
+LowerTopLeft: UInt16
+LowerTopRight: UInt16
+LowerBottomLeft: UInt16
+LowerBottomRight: UInt16
+UpperTopLeft: UInt16
+UpperTopRight: UInt16
+UpperBottomLeft: UInt16
+UpperBottomRight: UInt16

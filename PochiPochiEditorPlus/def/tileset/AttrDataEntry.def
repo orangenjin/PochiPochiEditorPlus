@@ -1,0 +1,4 @@
+ActionAttr: Byte
+TypeAttr: Byte
+UnkAttr: Byte
+LayerAttr: Byte

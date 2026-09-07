@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 using PochiPochiEditorPlus._Helpers;
@@ -21,17 +20,17 @@ namespace PochiPochiEditorPlus._Forms
         // イベント登録・解除用
         private EventBinder _eventBinder = null;
         // 各テーブル用
-        private dynamic _tileEntry = null;
+        private dynamic _imageEntry = null;
         private dynamic _paletteEntry = null;
         private dynamic _yPosEntry = null;
         private dynamic _animPointerEntry = null;
         // 可変長データ管理用
-        private RefDataManager _tileData = null;
+        private RefDataManager _imageData = null;
         private RefDataManager _paletteData = null;
         // UI制御用
         private int _currentSpriteIndex = default;
         // データ識別タグ用
-        private enum SpriteData { Tile, Palette }
+        private enum SpriteData { Image, Palette }
 
         public TrainerSprite(SharedData sharedData, UndoManager undoManager)
         {
@@ -53,7 +52,7 @@ namespace PochiPochiEditorPlus._Forms
             // 画像テーブルを作成
             int tableOffset = _dynamicConfig.TrainerSpriteImageTableOffset;
             int entrycount = _dynamicConfig.TrainerSpriteCount;
-            _tileEntry = 
+            _imageEntry = 
                 new EntryManager("TrainerSpriteImageEntry", tableOffset, entrycount, _sharedData);
 
             // パレットテーブルを作成
@@ -79,7 +78,7 @@ namespace PochiPochiEditorPlus._Forms
             nudSpriteIndex.Maximum = spriteCount - 1;
 
             // タグ設定
-            btnImportSpriteTile.Tag = SpriteData.Tile;
+            btnImportSpriteImage.Tag = SpriteData.Image;
             btnImportSpritePalette.Tag = SpriteData.Palette;
         }
 
@@ -102,8 +101,8 @@ namespace PochiPochiEditorPlus._Forms
 
             // 画像アドレス
             _eventBinder.BindCtrl(
-                h => txtSpriteTileOffset.Validated += h,
-                h => txtSpriteTileOffset.Validated -= h,
+                h => txtSpriteImageOffset.Validated += h,
+                h => txtSpriteImageOffset.Validated -= h,
                 (sender, e) =>
                 {
                     // 入力されたアドレスを取得
@@ -114,7 +113,7 @@ namespace PochiPochiEditorPlus._Forms
                     var offsetValue = ConvHelper.ParseStringToInt(text);
                     var desc = $"[{this.Text}]画像アドレス(ID:{_currentSpriteIndex:D4})";
 
-                    _tileEntry.Entries[_currentSpriteIndex].SpriteTileOffset
+                    _imageEntry.Entries[_currentSpriteIndex].SpriteImageOffset
                         .UpdateData(_undoManager, offsetValue, desc);
                 });
             // パレットアドレス
@@ -178,7 +177,7 @@ namespace PochiPochiEditorPlus._Forms
                         {
                             // RefDataから生成
                             var imageData = ImageHelper.DecompressLZ77(
-                                _tileData.BinaryData);
+                                _imageData.BinaryData);
                             var paletteData = ImageHelper.DecompressPalette(
                                 _paletteData.BinaryData);
                             var sprite = ImageHelper.CreateBitmap(
@@ -196,8 +195,8 @@ namespace PochiPochiEditorPlus._Forms
                 });
             // インポート
             _eventBinder.BindCtrl(
-                h => btnImportSpriteTile.Click += h,
-                h => btnImportSpriteTile.Click -= h,
+                h => btnImportSpriteImage.Click += h,
+                h => btnImportSpriteImage.Click -= h,
                 SpriteImport_Click);
             _eventBinder.BindCtrl(
                 h => btnImportSpritePalette.Click += h,
@@ -215,9 +214,9 @@ namespace PochiPochiEditorPlus._Forms
             _currentSpriteIndex = index;
 
             // 画像アドレス
-            txtSpriteTileOffset.Text =
+            txtSpriteImageOffset.Text =
                 ConvHelper.ParseIntToString(
-                    _tileEntry.Entries[index].SpriteTileOffset.GetData<int>());
+                    _imageEntry.Entries[index].SpriteImageOffset.GetData<int>());
             // パレットアドレス
             txtSpritePaletteOffset.Text =
                 ConvHelper.ParseIntToString(
@@ -247,7 +246,7 @@ namespace PochiPochiEditorPlus._Forms
 
         private void DisplayTrainerSprite()
         {
-            var imageOffsetStr = txtSpriteTileOffset.Text;
+            var imageOffsetStr = txtSpriteImageOffset.Text;
             var paletteOffsetStr = txtSpritePaletteOffset.Text;
             var isImageInvalid = string.IsNullOrWhiteSpace(imageOffsetStr);
             var isPaletteInValid = string.IsNullOrWhiteSpace(paletteOffsetStr);
@@ -269,8 +268,8 @@ namespace PochiPochiEditorPlus._Forms
                     imageOffsetValue);
                 // RefDataとして保持する
                 var imageDataLz77 = ImageHelper.CompressLZ77(imageData);
-                _tileData = new RefDataManager(
-                    SpriteData.Tile,
+                _imageData = new RefDataManager(
+                    SpriteData.Image,
                     imageOffsetValue,
                     imageDataLz77,
                     _sharedData);
@@ -324,7 +323,7 @@ namespace PochiPochiEditorPlus._Forms
             using (Bitmap bmp = new Bitmap(filePath))
             {
                 // バイト配列を抽出
-                if (!ImageHelper.ExtractTileAndPalette(
+                if (!ImageHelper.ExtractImageAndPalette(
                     bmp,
                     Constants.SpriteSize,
                     Constants.SpriteSize,
@@ -332,24 +331,24 @@ namespace PochiPochiEditorPlus._Forms
                     out byte[] paletteData)) return;
 
                 // タグを識別して、表示stringを設定
-                bool isTile = importKind == SpriteData.Tile;
-                string targetName = isTile 
+                bool isImage = importKind == SpriteData.Image;
+                string targetName = isImage
                     ? "画像" 
                     : "パレット";
                 string desc = 
                     $"[{this.Text}]{targetName}インポート(ID:{_currentSpriteIndex:D4})";
 
                 // データを圧縮
-                byte[] compressedData = isTile
+                byte[] compressedData = isImage
                     ? ImageHelper.CompressLZ77(imageData)
                     : ImageHelper.CompressPalette(paletteData);
 
                 // 更新対象を特定
-                var targetEntry = isTile
-                    ? _tileEntry.Entries[_currentSpriteIndex].SpriteTileOffset
+                var targetEntry = isImage
+                    ? _imageEntry.Entries[_currentSpriteIndex].SpriteImageOffset
                     : _paletteEntry.Entries[_currentSpriteIndex].SpritePaletteOffset;
-                var targetData = isTile 
-                    ? _tileData 
+                var targetData = isImage
+                    ? _imageData 
                     : _paletteData;
 
                 // コマンドの作成と登録

@@ -35,8 +35,8 @@ namespace PochiPochiEditorPlus._Forms
             this.btnSpriteIndexNext = new System.Windows.Forms.Button();
             this.nudSpriteIndex = new System.Windows.Forms.NumericUpDown();
             this.btnExportSprite = new System.Windows.Forms.Button();
-            this.lblSpriteTileOffset = new System.Windows.Forms.Label();
-            this.txtSpriteTileOffset = new PochiPochiEditorPlus._Utilities._CustomCtrls.HexTextBox();
+            this.lblSpriteImageOffset = new System.Windows.Forms.Label();
+            this.txtSpriteImageOffset = new PochiPochiEditorPlus._Utilities._CustomCtrls.HexTextBox();
             this.txtSpritePaletteOffset = new PochiPochiEditorPlus._Utilities._CustomCtrls.HexTextBox();
             this.lblSpritePaletteOffset = new System.Windows.Forms.Label();
             this.lblSpriteYPosValue = new System.Windows.Forms.Label();
@@ -46,7 +46,7 @@ namespace PochiPochiEditorPlus._Forms
             this.lblSpriteAnimDataOffset = new System.Windows.Forms.Label();
             this.txtSpriteAnimPointerOffset = new PochiPochiEditorPlus._Utilities._CustomCtrls.HexTextBox();
             this.lblSpriteAnimPointerOffset = new System.Windows.Forms.Label();
-            this.btnImportSpriteTile = new System.Windows.Forms.Button();
+            this.btnImportSpriteImage = new System.Windows.Forms.Button();
             this.btnImportSpritePalette = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.picSpriteBmp)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudSpriteIndex)).BeginInit();
@@ -106,23 +106,23 @@ namespace PochiPochiEditorPlus._Forms
             this.btnExportSprite.Text = "画像をエクスポート";
             this.btnExportSprite.UseVisualStyleBackColor = true;
             // 
-            // lblSpriteTileOffset
+            // lblSpriteImageOffset
             // 
-            this.lblSpriteTileOffset.AutoSize = true;
-            this.lblSpriteTileOffset.Location = new System.Drawing.Point(172, 24);
-            this.lblSpriteTileOffset.Margin = new System.Windows.Forms.Padding(0);
-            this.lblSpriteTileOffset.Name = "lblSpriteTileOffset";
-            this.lblSpriteTileOffset.Size = new System.Drawing.Size(72, 15);
-            this.lblSpriteTileOffset.TabIndex = 4;
-            this.lblSpriteTileOffset.Text = "画像アドレス :";
+            this.lblSpriteImageOffset.AutoSize = true;
+            this.lblSpriteImageOffset.Location = new System.Drawing.Point(172, 24);
+            this.lblSpriteImageOffset.Margin = new System.Windows.Forms.Padding(0);
+            this.lblSpriteImageOffset.Name = "lblSpriteImageOffset";
+            this.lblSpriteImageOffset.Size = new System.Drawing.Size(72, 15);
+            this.lblSpriteImageOffset.TabIndex = 4;
+            this.lblSpriteImageOffset.Text = "画像アドレス :";
             // 
-            // txtSpriteTileOffset
+            // txtSpriteImageOffset
             // 
-            this.txtSpriteTileOffset.Location = new System.Drawing.Point(268, 20);
-            this.txtSpriteTileOffset.Margin = new System.Windows.Forms.Padding(0);
-            this.txtSpriteTileOffset.Name = "txtSpriteTileOffset";
-            this.txtSpriteTileOffset.Size = new System.Drawing.Size(80, 23);
-            this.txtSpriteTileOffset.TabIndex = 5;
+            this.txtSpriteImageOffset.Location = new System.Drawing.Point(268, 20);
+            this.txtSpriteImageOffset.Margin = new System.Windows.Forms.Padding(0);
+            this.txtSpriteImageOffset.Name = "txtSpriteImageOffset";
+            this.txtSpriteImageOffset.Size = new System.Drawing.Size(80, 23);
+            this.txtSpriteImageOffset.TabIndex = 5;
             // 
             // txtSpritePaletteOffset
             // 
@@ -218,15 +218,15 @@ namespace PochiPochiEditorPlus._Forms
             this.lblSpriteAnimPointerOffset.TabIndex = 8;
             this.lblSpriteAnimPointerOffset.Text = "ポインタアドレス :";
             // 
-            // btnImportSpriteTile
+            // btnImportSpriteImage
             // 
-            this.btnImportSpriteTile.Location = new System.Drawing.Point(362, 20);
-            this.btnImportSpriteTile.Margin = new System.Windows.Forms.Padding(0);
-            this.btnImportSpriteTile.Name = "btnImportSpriteTile";
-            this.btnImportSpriteTile.Size = new System.Drawing.Size(128, 23);
-            this.btnImportSpriteTile.TabIndex = 11;
-            this.btnImportSpriteTile.Text = "画像をインポート";
-            this.btnImportSpriteTile.UseVisualStyleBackColor = true;
+            this.btnImportSpriteImage.Location = new System.Drawing.Point(362, 20);
+            this.btnImportSpriteImage.Margin = new System.Windows.Forms.Padding(0);
+            this.btnImportSpriteImage.Name = "btnImportSpriteImage";
+            this.btnImportSpriteImage.Size = new System.Drawing.Size(128, 23);
+            this.btnImportSpriteImage.TabIndex = 11;
+            this.btnImportSpriteImage.Text = "画像をインポート";
+            this.btnImportSpriteImage.UseVisualStyleBackColor = true;
             // 
             // btnImportSpritePalette
             // 
@@ -244,14 +244,14 @@ namespace PochiPochiEditorPlus._Forms
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(512, 235);
             this.Controls.Add(this.btnImportSpritePalette);
-            this.Controls.Add(this.btnImportSpriteTile);
+            this.Controls.Add(this.btnImportSpriteImage);
             this.Controls.Add(this.grpAnimData);
             this.Controls.Add(this.nudSpriteYPosValue);
             this.Controls.Add(this.lblSpriteYPosValue);
             this.Controls.Add(this.txtSpritePaletteOffset);
             this.Controls.Add(this.lblSpritePaletteOffset);
-            this.Controls.Add(this.txtSpriteTileOffset);
-            this.Controls.Add(this.lblSpriteTileOffset);
+            this.Controls.Add(this.txtSpriteImageOffset);
+            this.Controls.Add(this.lblSpriteImageOffset);
             this.Controls.Add(this.btnExportSprite);
             this.Controls.Add(this.nudSpriteIndex);
             this.Controls.Add(this.btnSpriteIndexNext);
@@ -280,8 +280,8 @@ namespace PochiPochiEditorPlus._Forms
         private System.Windows.Forms.Button btnSpriteIndexNext;
         private System.Windows.Forms.NumericUpDown nudSpriteIndex;
         private System.Windows.Forms.Button btnExportSprite;
-        private System.Windows.Forms.Label lblSpriteTileOffset;
-        private _Utilities._CustomCtrls.HexTextBox txtSpriteTileOffset;
+        private System.Windows.Forms.Label lblSpriteImageOffset;
+        private _Utilities._CustomCtrls.HexTextBox txtSpriteImageOffset;
         private _Utilities._CustomCtrls.HexTextBox txtSpritePaletteOffset;
         private System.Windows.Forms.Label lblSpritePaletteOffset;
         private System.Windows.Forms.Label lblSpriteYPosValue;
@@ -291,7 +291,7 @@ namespace PochiPochiEditorPlus._Forms
         private System.Windows.Forms.Label lblSpriteAnimDataOffset;
         private _Utilities._CustomCtrls.HexTextBox txtSpriteAnimPointerOffset;
         private System.Windows.Forms.Label lblSpriteAnimPointerOffset;
-        private System.Windows.Forms.Button btnImportSpriteTile;
+        private System.Windows.Forms.Button btnImportSpriteImage;
         private System.Windows.Forms.Button btnImportSpritePalette;
     }
 }

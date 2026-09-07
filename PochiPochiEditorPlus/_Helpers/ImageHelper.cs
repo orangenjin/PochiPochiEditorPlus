@@ -232,7 +232,7 @@ namespace PochiPochiEditorPlus._Helpers
         /// タイルデータとパレットデータからBitmap(4bppインデックスカラー)を生成する。
         /// </summary>
         public static Bitmap CreateBitmap(
-            byte[] tileData,
+            byte[] imageData,
             byte[] paletteData,
             int width,
             int height,
@@ -293,9 +293,9 @@ namespace PochiPochiEditorPlus._Helpers
                         // 4bppの場合、1バイトで2ピクセル分
                         for (int xPixel = 0; xPixel < Constants.TileSize; xPixel += Constants.PixelsPerByte4Bpp)
                         {
-                            if (dataIndex >= tileData.Length) break;
+                            if (dataIndex >= imageData.Length) break;
 
-                            byte temp = tileData[dataIndex++];
+                            byte temp = imageData[dataIndex++];
 
                             // 1バイトのデータからパレットインデックスを取得
                             int leftIndex = temp & Constants.NibbleMask;
@@ -318,14 +318,14 @@ namespace PochiPochiEditorPlus._Helpers
         /// <summary>
         /// Bitmapからタイルデータとパレットデータを抽出する。
         /// </summary>
-        public static bool ExtractTileAndPalette(
+        public static bool ExtractImageAndPalette(
             Bitmap bmp,
             int expectedWidth,
             int expectedHeight,
-            out byte[] tileData,
+            out byte[] imageData,
             out byte[] paletteData)
         {
-            tileData = null;
+            imageData = null;
             paletteData = null;
 
             if (bmp.Width != expectedWidth || bmp.Height != expectedHeight)
@@ -413,7 +413,7 @@ namespace PochiPochiEditorPlus._Helpers
                 }
             }
 
-            tileData = dataList.ToArray();
+            imageData = dataList.ToArray();
             return true;
         }
 

@@ -68,6 +68,7 @@
     <Compile Include="_Managers\ConfigManager.cs" />
     <Compile Include="_Managers\EntryManager.cs" />
     <Compile Include="_Managers\RefDataManager.cs" />
+    <Compile Include="_Managers\TilesetManager.cs" />
     <Compile Include="_Managers\_CommandManager\CombineCommands.cs" />
     <Compile Include="_Managers\_CommandManager\FieldValueChangeCommand.cs" />
     <Compile Include="_Managers\_CommandManager\RefDataChangeCommand.cs" />
@@ -149,6 +150,15 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="def\tileset\AttrDataEntry.def">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="def\tileset\BlockDataEntry.def">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="def\tileset\TilesetHeaderEntry.def">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="def\trainer\TrainerClassBaseIVEntry.def">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
