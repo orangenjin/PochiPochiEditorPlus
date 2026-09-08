@@ -5,7 +5,7 @@ using PochiPochiEditorPlus._Utilities;
 namespace PochiPochiEditorPlus._Forms
 {
     [FormGroup(FormGroup.TrainerClass)]
-    public partial class TrainerClass : Form, IEditorRefresh
+    public partial class TrainerClassEditor : Form, IEditorRefresh
     {
         // 共有データ用
         private SharedData _sharedData = null;
@@ -29,7 +29,7 @@ namespace PochiPochiEditorPlus._Forms
         private bool _isPokeBallEnabled = false;
         private bool _isBaseIvEnabled = false;
 
-        public TrainerClass(SharedData sharedData, UndoManager undoManager)
+        public TrainerClassEditor(SharedData sharedData, UndoManager undoManager)
         {
             InitializeComponent();
             _sharedData = sharedData;

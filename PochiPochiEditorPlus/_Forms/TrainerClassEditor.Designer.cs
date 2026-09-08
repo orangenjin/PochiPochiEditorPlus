@@ -1,7 +1,7 @@
 ﻿
 namespace PochiPochiEditorPlus._Forms
 {
-    partial class TrainerClass
+    partial class TrainerClassEditor
     {
         /// <summary>
         /// Required designer variable.
@@ -29,7 +29,7 @@ namespace PochiPochiEditorPlus._Forms
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(TrainerClass));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(TrainerClassEditor));
             this.nudClassNameIndex = new System.Windows.Forms.NumericUpDown();
             this.cmbClassNameIndex = new System.Windows.Forms.ComboBox();
             this.grpClassData = new System.Windows.Forms.GroupBox();

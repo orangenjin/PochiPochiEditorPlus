@@ -24,13 +24,6 @@ namespace PochiPochiEditorPlus._Managers
         private int _headerEntryLength = 0;
         private int _blockDataEntryLength = 0;
         private int _blockAttrEntryLength = 0;
-        // 計算用
-        private const int TilesetImageWidth = 128;
-        private const int Tileset1ImageHeight = 320;
-        private const int Tileset2ImageMaxHeight = 192;
-        private const int Tileset1BlockAmount = Tileset1ImageHeight * Constants.PixelsPerByte4Bpp;
-        private const int Tileset2BlockMaxAmount = Tileset2ImageMaxHeight * Constants.PixelsPerByte4Bpp;
-        private const int PaletteEntryCount = 16;
         // 簡易アクセス用
         dynamic _dynamicHeaderEntry = null;
 
@@ -110,8 +103,8 @@ namespace PochiPochiEditorPlus._Managers
                 // 非圧縮の場合
                 var maxPixelCount = 
                     (_dynamicHeaderEntry.PaletteType.GetData<int>() == (int)PaletteKind.Palette0to6)
-                        ? TilesetImageWidth * Tileset1ImageHeight
-                        : TilesetImageWidth * Tileset2ImageMaxHeight;
+                        ? Constants.TilesetImageWidth * Constants.Tileset1ImageHeight
+                        : Constants.TilesetImageWidth * Constants.Tileset2ImageMaxHeight;
                 var maxByteLength = maxPixelCount / Constants.PixelsPerByte4Bpp;
 
                 // バイト数を確定させる
@@ -147,7 +140,7 @@ namespace PochiPochiEditorPlus._Managers
             try
             {
                 var basePaletteOffset = _dynamicHeaderEntry.PaletteOffset.GetData<int>();
-                for (int i = 0; i < PaletteEntryCount; i++)
+                for (int i = 0; i < Constants.PaletteEntryCount; i++)
                 {
                     var currentPos = basePaletteOffset + i * paletteDataLength;
                     var paletteData = ImageHelper.DecompressPalette(
@@ -181,7 +174,7 @@ namespace PochiPochiEditorPlus._Managers
             {
                 if (_dynamicHeaderEntry.PaletteType.GetData<int>() == (int)PaletteKind.Palette0to6)
                 {
-                    return Tileset1BlockAmount;
+                    return Constants.Tileset1BlockAmount;
                 }
                 else
                 {
@@ -189,7 +182,7 @@ namespace PochiPochiEditorPlus._Managers
                     var blockDataTableOffset = _dynamicHeaderEntry.BlockDataTableOffset.GetData<int>();
                     var blockAttrTableOffset = _dynamicHeaderEntry.BlockAttrTableOffset.GetData<int>();
                     var expectedCount = (blockAttrTableOffset - blockDataTableOffset) / _blockDataEntryLength;
-                    return Math.Min(expectedCount, Tileset2BlockMaxAmount);
+                    return Math.Min(expectedCount, Constants.Tileset2BlockMaxAmount);
                 }
             }
         }

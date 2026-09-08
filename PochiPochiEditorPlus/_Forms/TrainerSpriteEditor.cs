@@ -10,7 +10,7 @@ using PochiPochiEditorPlus._Utilities._QuickInput;
 namespace PochiPochiEditorPlus._Forms
 {
     [FormGroup(FormGroup.TrainerSprite)]
-    public partial class TrainerSprite : Form, IEditorRefresh
+    public partial class TrainerSpriteEditor : Form, IEditorRefresh
     {
         // 共有データ用
         private SharedData _sharedData = null;
@@ -32,7 +32,7 @@ namespace PochiPochiEditorPlus._Forms
         // データ識別タグ用
         private enum SpriteData { Image, Palette }
 
-        public TrainerSprite(SharedData sharedData, UndoManager undoManager)
+        public TrainerSpriteEditor(SharedData sharedData, UndoManager undoManager)
         {
             InitializeComponent();
             _sharedData = sharedData;

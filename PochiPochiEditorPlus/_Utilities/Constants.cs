@@ -46,12 +46,20 @@
         public const int GreenMask = 0x3E0;
         public const int BlueMask = 0x7C00;
 
-        // タイル
+        // 画像
         public const int TileSize = 8;
         public const int Bpp4 = 4;
         public const int PixelsPerByte4Bpp = BitsPerByte / Bpp4;
         public const int SpriteSize = 64;
         public const int DefaultScale = 2;
+
+        // タイルセット
+        public const int TilesetImageWidth = 128;
+        public const int Tileset1ImageHeight = 320;
+        public const int Tileset2ImageMaxHeight = 192;
+        public const int Tileset1BlockAmount = Tileset1ImageHeight * Constants.PixelsPerByte4Bpp;
+        public const int Tileset2BlockMaxAmount = Tileset2ImageMaxHeight * Constants.PixelsPerByte4Bpp;
+        public const int PaletteEntryCount = 16;
 
         // ダイアログフィルター
         public const string RomFileFilter = "ROMファイル|*.gba";

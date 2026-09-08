@@ -1,7 +1,7 @@
 ﻿
 namespace PochiPochiEditorPlus._Forms
 {
-    partial class TrainerSprite
+    partial class TrainerSpriteEditor
     {
         /// <summary>
         /// Required designer variable.
@@ -29,7 +29,7 @@ namespace PochiPochiEditorPlus._Forms
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(TrainerSprite));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(TrainerSpriteEditor));
             this.picSpriteBmp = new System.Windows.Forms.PictureBox();
             this.btnSpriteIndexPrev = new System.Windows.Forms.Button();
             this.btnSpriteIndexNext = new System.Windows.Forms.Button();
