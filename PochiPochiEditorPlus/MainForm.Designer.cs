@@ -41,8 +41,8 @@ namespace PochiPochiEditorPlus
             this.tsmiUndo = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiRedo = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiTool = new System.Windows.Forms.ToolStripMenuItem();
-            this.tsmiFsf = new System.Windows.Forms.ToolStripMenuItem();
-            this.tsmiTilesetIndexCalc = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiFreeSpaceFinder = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiTilesetNoCalc = new System.Windows.Forms.ToolStripMenuItem();
             this.grpEditors = new System.Windows.Forms.GroupBox();
             this.btnBattleBg = new System.Windows.Forms.Button();
             this.btnInGameTrade = new System.Windows.Forms.Button();
@@ -156,7 +156,7 @@ namespace PochiPochiEditorPlus
             this.tsmiUndo.Name = "tsmiUndo";
             this.tsmiUndo.Padding = new System.Windows.Forms.Padding(0);
             this.tsmiUndo.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Z)));
-            this.tsmiUndo.Size = new System.Drawing.Size(157, 20);
+            this.tsmiUndo.Size = new System.Drawing.Size(180, 20);
             this.tsmiUndo.Text = "元に戻す";
             // 
             // tsmiRedo
@@ -164,32 +164,32 @@ namespace PochiPochiEditorPlus
             this.tsmiRedo.Name = "tsmiRedo";
             this.tsmiRedo.Padding = new System.Windows.Forms.Padding(0);
             this.tsmiRedo.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Y)));
-            this.tsmiRedo.Size = new System.Drawing.Size(157, 20);
+            this.tsmiRedo.Size = new System.Drawing.Size(180, 20);
             this.tsmiRedo.Text = "やり直す";
             // 
             // tsmiTool
             // 
             this.tsmiTool.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.tsmiFsf,
-            this.tsmiTilesetIndexCalc});
+            this.tsmiFreeSpaceFinder,
+            this.tsmiTilesetNoCalc});
             this.tsmiTool.Name = "tsmiTool";
             this.tsmiTool.Padding = new System.Windows.Forms.Padding(0);
             this.tsmiTool.Size = new System.Drawing.Size(38, 24);
             this.tsmiTool.Text = "ツール";
             // 
-            // tsmiFsf
+            // tsmiFreeSpaceFinder
             // 
-            this.tsmiFsf.Name = "tsmiFsf";
-            this.tsmiFsf.Padding = new System.Windows.Forms.Padding(0);
-            this.tsmiFsf.Size = new System.Drawing.Size(176, 20);
-            this.tsmiFsf.Text = "空き領域検索";
+            this.tsmiFreeSpaceFinder.Name = "tsmiFreeSpaceFinder";
+            this.tsmiFreeSpaceFinder.Padding = new System.Windows.Forms.Padding(0);
+            this.tsmiFreeSpaceFinder.Size = new System.Drawing.Size(180, 20);
+            this.tsmiFreeSpaceFinder.Text = "空き領域検索";
             // 
-            // tsmiTilesetIndexCalc
+            // tsmiTilesetNoCalc
             // 
-            this.tsmiTilesetIndexCalc.Name = "tsmiTilesetIndexCalc";
-            this.tsmiTilesetIndexCalc.Padding = new System.Windows.Forms.Padding(0);
-            this.tsmiTilesetIndexCalc.Size = new System.Drawing.Size(176, 20);
-            this.tsmiTilesetIndexCalc.Text = "タイルセット番号計算";
+            this.tsmiTilesetNoCalc.Name = "tsmiTilesetNoCalc";
+            this.tsmiTilesetNoCalc.Padding = new System.Windows.Forms.Padding(0);
+            this.tsmiTilesetNoCalc.Size = new System.Drawing.Size(180, 20);
+            this.tsmiTilesetNoCalc.Text = "タイルセット番号計算";
             // 
             // grpEditors
             // 
@@ -490,8 +490,8 @@ namespace PochiPochiEditorPlus
         private System.Windows.Forms.ToolStripMenuItem tsmiClearRom;
         private System.Windows.Forms.ToolStripMenuItem tsmiSaveOver;
         private System.Windows.Forms.ToolStripMenuItem tsmiSaveAs;
-        private System.Windows.Forms.ToolStripMenuItem tsmiFsf;
-        private System.Windows.Forms.ToolStripMenuItem tsmiTilesetIndexCalc;
+        private System.Windows.Forms.ToolStripMenuItem tsmiFreeSpaceFinder;
+        private System.Windows.Forms.ToolStripMenuItem tsmiTilesetNoCalc;
         private System.Windows.Forms.GroupBox grpEditors;
         private System.Windows.Forms.Button btnPokeData;
         private System.Windows.Forms.Button btnDexNational;

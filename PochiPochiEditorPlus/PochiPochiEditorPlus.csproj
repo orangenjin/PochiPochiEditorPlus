@@ -61,6 +61,12 @@
     <Compile Include="_Forms\TrainerSprite.Designer.cs">
       <DependentUpon>TrainerSprite.cs</DependentUpon>
     </Compile>
+    <Compile Include="_Forms\_Tools\TilesetNoCalc.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="_Forms\_Tools\TilesetNoCalc.Designer.cs">
+      <DependentUpon>TilesetNoCalc.cs</DependentUpon>
+    </Compile>
     <Compile Include="_Helpers\CtrlHelper.cs" />
     <Compile Include="_Helpers\ImageHelper.cs" />
     <Compile Include="_Helpers\IoHelper.cs" />
@@ -123,6 +129,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="_Forms\TrainerSprite.resx">
       <DependentUpon>TrainerSprite.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="_Forms\_Tools\TilesetNoCalc.resx">
+      <DependentUpon>TilesetNoCalc.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="_Utilities\_QuickInput\QuickInputForm.resx">
       <DependentUpon>QuickInputForm.cs</DependentUpon>

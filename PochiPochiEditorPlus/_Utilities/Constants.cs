@@ -22,6 +22,7 @@
         // プレフィックス
         public const string HexPrefix = "0x";
         public const string ButtonPrefix = "btn";
+        public const string MenuItemPrefix = "tsmi";
         // 拡張子
         public const string GbaExt = "gba";
         public const string BmpExt = "bmp";

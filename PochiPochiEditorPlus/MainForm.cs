@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Windows.Forms;
 using PochiPochiEditorPlus._Helpers;
 using PochiPochiEditorPlus._Managers;
@@ -14,13 +16,15 @@ namespace PochiPochiEditorPlus
         // フォーム同時起動用
         private FormGroupManager _formGroupManager = null;
         // イベント登録・解除用
-        private EventBinder _eventBinder = new EventBinder();
+        private EventBinder _eventBinder = null;
         // 共有データ用
         private SharedData _sharedData = null;
         private ConfigManager _configManager = null;
         private CharmapManager _charmapManager = null;
         // 変更履歴管理用
-        private UndoManager _undoManager = new UndoManager();
+        private UndoManager _undoManager = null;
+        // 補助ツール管理用
+        private Dictionary<ToolStripMenuItem, Form> _openToolForms = null;
         // パス用
         private string _romPath = string.Empty;
         private string _iniFolder = Path.Combine(Application.StartupPath, Constants.IniExt);
@@ -36,6 +40,11 @@ namespace PochiPochiEditorPlus
             _configManager = new ConfigManager(_iniFolder);
             _charmapManager = new CharmapManager(_tblPath);
             _sharedData = new SharedData(_configManager, _charmapManager);
+
+            // その他のデータを初期化
+            _eventBinder = new EventBinder();
+            _undoManager = new UndoManager();
+            _openToolForms = new Dictionary<ToolStripMenuItem, Form>();
 
             // タグ付加
             tsmiSaveOver.Tag = SaveMode.SaveOver;
@@ -154,6 +163,18 @@ namespace PochiPochiEditorPlus
                     if (index < 0) return;
                     _undoManager.MoveTo(index + 1);
                 });
+
+            // 補助ツール
+            foreach (ToolStripItem item in tsmiTool.DropDownItems)
+            {
+                if (item is ToolStripMenuItem menuItem)
+                {
+                    _eventBinder.BindCtrl(
+                        h => menuItem.Click += h,
+                        h => menuItem.Click -= h,
+                        ToolMenuItem_Click);
+                }
+            }
 
             // 解除タイミング指定
             _eventBinder.BindCtrl(
@@ -309,6 +330,48 @@ namespace PochiPochiEditorPlus
                     (baseColor.G + backColor.G) / 2,
                     (baseColor.B + backColor.B) / 2);
             }
+        }
+
+        private void ToolMenuItem_Click(object sender, EventArgs e)
+        {
+            if (!(sender is ToolStripMenuItem item)) return;
+
+            // 既に起動している場合
+            if (_openToolForms.TryGetValue(item, out Form existingForm))
+            {
+                // 最小化を解除する
+                if (existingForm.WindowState == FormWindowState.Minimized)
+                {
+                    existingForm.WindowState = FormWindowState.Normal;
+                }
+                    
+                existingForm.Activate();
+                return;
+            }
+
+            // "tsmi" を外す
+            string toolName = item.Name.Substring(Constants.MenuItemPrefix.Length);
+            // フォームを生成
+            Type formType = Assembly
+                .GetExecutingAssembly()
+                .GetTypes()
+                .FirstOrDefault(t => t.Name == toolName);
+            if (formType == null) return;
+            var toolForm = (Form)Activator.CreateInstance(formType, _sharedData);
+
+            // 辞書に登録する
+            _openToolForms[item] = toolForm;
+            item.Checked = true;
+
+            // フォームを閉じた時チェックを外す処理
+            toolForm.FormClosed += (_, __) =>
+            {
+                _openToolForms.Remove(item);
+                item.Checked = false;
+            };
+
+            // フォームを表示
+            toolForm.Show(this);
         }
     }
 }

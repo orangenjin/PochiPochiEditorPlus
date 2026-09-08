@@ -229,13 +229,13 @@ namespace PochiPochiEditorPlus._Managers
 
         /// <summary>
         /// 指定されたオフセットに近いタイルセット番号を取得する。
-        /// 失敗時は番号-1を返す。
+        /// 失敗時は番号0を返す。
         /// </summary>
         public int CalcNearestTilesetNo(int offset)
         {
             int diff = offset - _baseHeaderOffset;
             return diff < 0
-                ? Constants.InvalidValue
+                ? 0
                 : (diff / _headerEntryLength) + 1;
         }
     }
