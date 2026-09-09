@@ -112,7 +112,7 @@ namespace PochiPochiEditorPlus._Forms
             this.tbcMain.Margin = new System.Windows.Forms.Padding(0);
             this.tbcMain.Name = "tbcMain";
             this.tbcMain.SelectedIndex = 0;
-            this.tbcMain.Size = new System.Drawing.Size(468, 439);
+            this.tbcMain.Size = new System.Drawing.Size(468, 496);
             this.tbcMain.TabIndex = 3;
             // 
             // tbpHeader
@@ -139,7 +139,7 @@ namespace PochiPochiEditorPlus._Forms
             this.tbpHeader.Location = new System.Drawing.Point(4, 24);
             this.tbpHeader.Margin = new System.Windows.Forms.Padding(0);
             this.tbpHeader.Name = "tbpHeader";
-            this.tbpHeader.Size = new System.Drawing.Size(460, 411);
+            this.tbpHeader.Size = new System.Drawing.Size(460, 468);
             this.tbpHeader.TabIndex = 0;
             this.tbpHeader.Text = "ヘッダー";
             this.tbpHeader.UseVisualStyleBackColor = true;
