@@ -158,6 +158,23 @@ namespace PochiPochiEditorPlus._Forms
                 entry.UpdateData(_undoManager, value, desc);
             }
 
+            // パレット切り替え
+            _eventBinder.BindCtrl(
+                h => cmbViewPalette.SelectedIndexChanged += h,
+                h => cmbViewPalette.SelectedIndexChanged -= h,
+                (_, __) =>
+                {
+                    if (!(pnlViewImage.BackgroundImage is Bitmap bmp)) return;
+
+                    int palIndex = cmbViewPalette.SelectedIndex;
+                    if (palIndex < 0) return;
+                    byte[] palData = _tilesetManager.PaletteData[palIndex];
+
+                    // パレットのみを書き換えて再描画
+                    ImageHelper.ApplyPalette(bmp, palData, showBackColor: true);
+                    pnlViewImage.Invalidate();
+                });
+
             // 解除タイミング指定
             _eventBinder.BindCtrl(
                 h => this.Disposed += h,
@@ -191,6 +208,67 @@ namespace PochiPochiEditorPlus._Forms
                     _tilesetManager.HeaderEntry.AnimHeaderOffset.GetData<int>());
 
             // grpView
+            cmbViewPalette.SelectedIndex = 0;
+            UpdateViewImage();
+        }
+
+        /// <summary>
+        /// 画像とパレットからBitmapを生成して表示する
+        /// </summary>
+        private void UpdateViewImage()
+        {
+            if (_tilesetManager.ImageData == null || _tilesetManager.ImageData.Length == 0) return;
+            if (_tilesetManager.PaletteData == null || _tilesetManager.PaletteData.Count == 0) return;
+
+            // 選択中のパレットを取得
+            int palIndex = cmbViewPalette.SelectedIndex;
+            if (palIndex < 0) return;
+            byte[] palData = _tilesetManager.PaletteData[palIndex];
+
+            // サイズを計算
+            int width = Constants.TilesetImageWidth;
+            int height = (_tilesetManager.ImageData.Length * Constants.PixelsPerByte4Bpp) / width;
+
+            // 前の画像を破棄
+            pnlViewImage.BackgroundImage?.Dispose();
+            pnlViewImage.BackgroundImage = null;
+
+            // Bitmapを生成
+            pnlViewImage.BackgroundImage = ImageHelper.CreateBitmap(
+                _tilesetManager.ImageData,
+                palData,
+                width,
+                height,
+                showBackColor: true);
+        }
+
+        private void UpdateTabPageState(bool state)
+        {
+            // grpView
+            CtrlHelper.SetControlsEnabled(grpView, state);
+            CtrlHelper.ResetControls(grpView);
+
+            // pnlViewImage
+            if (!state)
+            {
+                pnlViewImage.BackgroundImage?.Dispose();
+                pnlViewImage.BackgroundImage = null;
+            }
+
+            // tbcMain
+            CtrlHelper.SetControlsEnabled(tbcMain, state);
+            CtrlHelper.ResetControls(tbcMain);
+
+            // btnReloadTileset
+            btnReloadTileset.Enabled = state;
+        }
+
+        private void UpdateLoadUIState(bool state)
+        {
+            btnLoadTileset.Enabled = state;
+            lblTilesetNo.Enabled = state;
+            nudTilesetNo.ReadOnly = !state;
+            nudTilesetNo.Increment = Convert.ToInt32(state);
         }
 
         private bool ValidateHeader(int tilesetNo)
@@ -215,33 +293,6 @@ namespace PochiPochiEditorPlus._Forms
                 _tilesetManager.CalcOffset(tilesetNo),
                 allowNullPointer: true); // nullポインタを許容する
         }
-
-        private void UpdateTabPageState(bool state)
-        {
-            // grpView
-            CtrlHelper.SetControlsEnabled(grpView, state);
-            CtrlHelper.ResetControls(grpView);
-
-            // pnlViewImage
-            // pnlViewImage.BackgroundImage?.Dispose();
-            // pnlViewImage.BackgroundImage = null;
-
-            // tbcMain
-            CtrlHelper.SetControlsEnabled(tbcMain, state);
-            CtrlHelper.ResetControls(tbcMain);
-
-            // btnReloadTileset
-            btnReloadTileset.Enabled = state;
-        }
-
-        private void UpdateLoadUIState(bool state)
-        {
-            btnLoadTileset.Enabled = state;
-            lblTilesetNo.Enabled = state;
-            nudTilesetNo.ReadOnly = !state;
-            nudTilesetNo.Increment = Convert.ToInt32(state);
-        }
-
 
 
 

@@ -240,38 +240,8 @@ namespace PochiPochiEditorPlus._Helpers
         {
             var bmp = new Bitmap(width, height, PixelFormat.Format4bppIndexed);
 
-            ColorPalette bmpPalette = bmp.Palette;
-            int paletteCount = Math.Min(paletteData.Length / Constants.BytesPerColor, Constants.PalColorCount);
-
-            // パレット変換処理
-            // GBA15ビット(RGB各5ビット)からARGB
-            for (int i = 0; i < paletteCount; i++)
-            {
-                int byteIndex = i * Constants.BytesPerColor;
-                if (byteIndex + 1 >= paletteData.Length) break;
-
-                // 2バイトから1つの色データ(15bit)を合成
-                int temp = (paletteData[byteIndex + 1] << Constants.BitsPerByte) | paletteData[byteIndex];
-
-                // 5ビット(0-31)を8ビット(0-255)にするため8倍する
-                int r = ((temp & Constants.RedMask) >> Constants.RedShift) * Constants.ColorChannelMulti;
-                int g = ((temp & Constants.GreenMask) >> Constants.GreenShift) * Constants.ColorChannelMulti;
-                int b = ((temp & Constants.BlueMask) >> Constants.BlueShift) * Constants.ColorChannelMulti;
-
-                // インデックス0は背景色
-                // showBackColorがfalseならアルファを0にする
-                bmpPalette.Entries[i] = (i == 0 && !showBackColor)
-                    ? Color.FromArgb(0, r, g, b)
-                    : Color.FromArgb(255, r, g, b);
-            }
-
-            // 余ったパレットは適当に黒で埋める
-            for (int i = paletteCount; i < Constants.PalColorCount; i++)
-            {
-                bmpPalette.Entries[i] = Color.Black;
-            }
-
-            bmp.Palette = bmpPalette;
+            // まずパレットを適用する
+            ApplyPalette(bmp, paletteData, showBackColor);
 
             BitmapData bmpData = bmp.LockBits(
                 new Rectangle(0, 0, width, height),
@@ -313,6 +283,49 @@ namespace PochiPochiEditorPlus._Helpers
             bmp.UnlockBits(bmpData);
 
             return bmp;
+        }
+
+        /// <summary>
+        /// Bitmapにパレットデータを適用・更新する。
+        /// </summary>
+        public static void ApplyPalette(
+            Bitmap bmp,
+            byte[] paletteData,
+            bool showBackColor = true)
+        {
+            ColorPalette bmpPalette = bmp.Palette;
+            int paletteCount = Math.Min(paletteData.Length / Constants.BytesPerColor, Constants.PalColorCount);
+
+            // パレット変換処理
+            // GBA15ビット(RGB各5ビット)からARGB
+            for (int i = 0; i < paletteCount; i++)
+            {
+                int byteIndex = i * Constants.BytesPerColor;
+                if (byteIndex + 1 >= paletteData.Length) break;
+
+                // 2バイトから1つの色データ(15bit)を合成
+                int temp = (paletteData[byteIndex + 1] << Constants.BitsPerByte) | paletteData[byteIndex];
+
+                // 5ビット(0-31)を8ビット(0-255)にするため8倍する
+                int r = ((temp & Constants.RedMask) >> Constants.RedShift) * Constants.ColorChannelMulti;
+                int g = ((temp & Constants.GreenMask) >> Constants.GreenShift) * Constants.ColorChannelMulti;
+                int b = ((temp & Constants.BlueMask) >> Constants.BlueShift) * Constants.ColorChannelMulti;
+
+                // インデックス0は背景色
+                // showBackColorがfalseならアルファを0にする
+                bmpPalette.Entries[i] = (i == 0 && !showBackColor)
+                    ? Color.FromArgb(0, r, g, b)
+                    : Color.FromArgb(255, r, g, b);
+            }
+
+            // 余ったパレットは適当に黒で埋める
+            for (int i = paletteCount; i < Constants.PalColorCount; i++)
+            {
+                bmpPalette.Entries[i] = Color.Black;
+            }
+
+            // 更新したパレットをBitmapに戻す
+            bmp.Palette = bmpPalette;
         }
 
         /// <summary>
