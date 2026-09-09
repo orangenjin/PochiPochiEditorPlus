@@ -101,18 +101,6 @@ namespace PochiPochiEditorPlus._Forms
                     UpdateLoadUIState(true);
                 });
 
-            // 画像圧縮設定
-            _eventBinder.BindCtrl(
-                h => cmbImageCompType.SelectionChangeCommitted += h,
-                h => cmbImageCompType.SelectionChangeCommitted -= h,
-                (sender, e) => UpdateFromComboBox(
-                    sender, _tilesetManager.HeaderEntry.ImageCompType, "画像圧縮設定"));
-            // パレット読み込み設定
-            _eventBinder.BindCtrl(
-                h => cmbPaletteType.SelectionChangeCommitted += h,
-                h => cmbPaletteType.SelectionChangeCommitted -= h,
-                (sender, e) => UpdateFromComboBox(
-                    sender, _tilesetManager.HeaderEntry.PaletteType, "パレット読み込み設定"));
             // 画像アドレス
             _eventBinder.BindCtrl(
                 h => txtImageOffset.Validated += h,
@@ -304,7 +292,12 @@ namespace PochiPochiEditorPlus._Forms
             }
 
             // tbcMain
-            CtrlHelper.SetControlsEnabled(tbcMain, state);
+            CtrlHelper.SetControlsEnabled(
+                tbcMain, 
+                state,
+                includeSelf: true,
+                new[] { nameof(cmbImageCompType), nameof(cmbPaletteType) },
+                null);
             CtrlHelper.ResetControls(tbcMain);
 
             // btnReloadTileset
