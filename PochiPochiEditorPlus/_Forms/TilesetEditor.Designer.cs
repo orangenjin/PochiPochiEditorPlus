@@ -35,30 +35,33 @@ namespace PochiPochiEditorPlus._Forms
             this.btnLoadTileset = new System.Windows.Forms.Button();
             this.tbcMain = new System.Windows.Forms.TabControl();
             this.tbpHeader = new System.Windows.Forms.TabPage();
-            this.tbpAnim = new System.Windows.Forms.TabPage();
-            this.lblImageCompType = new System.Windows.Forms.Label();
-            this.cmbPaletteType = new System.Windows.Forms.ComboBox();
-            this.lblPaletteType = new System.Windows.Forms.Label();
-            this.cmbImageCompType = new System.Windows.Forms.ComboBox();
-            this.grpTilesetView = new System.Windows.Forms.GroupBox();
-            this.lblPaletteOffset = new System.Windows.Forms.Label();
-            this.lblImageOffset = new System.Windows.Forms.Label();
-            this.txtImageOffset = new PochiPochiEditorPlus._Utilities._CustomCtrls.HexTextBox();
-            this.txtPaletteOffset = new PochiPochiEditorPlus._Utilities._CustomCtrls.HexTextBox();
-            this.txtBlockAttrTableOffset = new PochiPochiEditorPlus._Utilities._CustomCtrls.HexTextBox();
-            this.txtBlockDataTableOffset = new PochiPochiEditorPlus._Utilities._CustomCtrls.HexTextBox();
+            this.btnEditAnimEntry = new System.Windows.Forms.Button();
+            this.btnImportPalette = new System.Windows.Forms.Button();
+            this.btnImportImage = new System.Windows.Forms.Button();
+            this.btnEditBlockCount = new System.Windows.Forms.Button();
+            this.btnCreateNewHeader = new System.Windows.Forms.Button();
+            this.lblAnimHeaderOffset = new System.Windows.Forms.Label();
             this.lblBlockAttrTableOffset = new System.Windows.Forms.Label();
             this.lblBlockDataTableOffset = new System.Windows.Forms.Label();
+            this.lblPaletteOffset = new System.Windows.Forms.Label();
+            this.lblImageOffset = new System.Windows.Forms.Label();
+            this.cmbImageCompType = new System.Windows.Forms.ComboBox();
+            this.cmbPaletteType = new System.Windows.Forms.ComboBox();
+            this.lblPaletteType = new System.Windows.Forms.Label();
+            this.lblImageCompType = new System.Windows.Forms.Label();
+            this.tbpAnim = new System.Windows.Forms.TabPage();
+            this.grpTilesetView = new System.Windows.Forms.GroupBox();
             this.txtAnimHeaderOffset = new PochiPochiEditorPlus._Utilities._CustomCtrls.HexTextBox();
-            this.lblAnimHeaderOffset = new System.Windows.Forms.Label();
-            this.btnCreateNewHeader = new System.Windows.Forms.Button();
-            this.btnEditBlockCount = new System.Windows.Forms.Button();
-            this.btnImportImage = new System.Windows.Forms.Button();
-            this.btnImportPalette = new System.Windows.Forms.Button();
-            this.btnEditAnimEntry = new System.Windows.Forms.Button();
+            this.txtBlockAttrTableOffset = new PochiPochiEditorPlus._Utilities._CustomCtrls.HexTextBox();
+            this.txtBlockDataTableOffset = new PochiPochiEditorPlus._Utilities._CustomCtrls.HexTextBox();
+            this.txtPaletteOffset = new PochiPochiEditorPlus._Utilities._CustomCtrls.HexTextBox();
+            this.txtImageOffset = new PochiPochiEditorPlus._Utilities._CustomCtrls.HexTextBox();
+            this.cmbTilesetViewPalette = new System.Windows.Forms.ComboBox();
+            this.pnlTilesetViewImage = new System.Windows.Forms.Panel();
             ((System.ComponentModel.ISupportInitialize)(this.nudTilesetNo)).BeginInit();
             this.tbcMain.SuspendLayout();
             this.tbpHeader.SuspendLayout();
+            this.grpTilesetView.SuspendLayout();
             this.SuspendLayout();
             // 
             // lblTilesetNo
@@ -134,118 +137,65 @@ namespace PochiPochiEditorPlus._Forms
             this.tbpHeader.Text = "ヘッダー";
             this.tbpHeader.UseVisualStyleBackColor = true;
             // 
-            // tbpAnim
+            // btnEditAnimEntry
             // 
-            this.tbpAnim.Location = new System.Drawing.Point(4, 24);
-            this.tbpAnim.Margin = new System.Windows.Forms.Padding(0);
-            this.tbpAnim.Name = "tbpAnim";
-            this.tbpAnim.Size = new System.Drawing.Size(697, 411);
-            this.tbpAnim.TabIndex = 1;
-            this.tbpAnim.Text = "タイルアニメ";
-            this.tbpAnim.UseVisualStyleBackColor = true;
+            this.btnEditAnimEntry.Location = new System.Drawing.Point(284, 200);
+            this.btnEditAnimEntry.Margin = new System.Windows.Forms.Padding(0);
+            this.btnEditAnimEntry.Name = "btnEditAnimEntry";
+            this.btnEditAnimEntry.Size = new System.Drawing.Size(112, 23);
+            this.btnEditAnimEntry.TabIndex = 14;
+            this.btnEditAnimEntry.Text = "エントリー数を変更";
+            this.btnEditAnimEntry.UseVisualStyleBackColor = true;
             // 
-            // lblImageCompType
+            // btnImportPalette
             // 
-            this.lblImageCompType.AutoSize = true;
-            this.lblImageCompType.Location = new System.Drawing.Point(20, 24);
-            this.lblImageCompType.Margin = new System.Windows.Forms.Padding(0);
-            this.lblImageCompType.Name = "lblImageCompType";
-            this.lblImageCompType.Size = new System.Drawing.Size(85, 15);
-            this.lblImageCompType.TabIndex = 0;
-            this.lblImageCompType.Text = "画像圧縮設定 :";
+            this.btnImportPalette.Location = new System.Drawing.Point(284, 110);
+            this.btnImportPalette.Margin = new System.Windows.Forms.Padding(0);
+            this.btnImportPalette.Name = "btnImportPalette";
+            this.btnImportPalette.Size = new System.Drawing.Size(112, 23);
+            this.btnImportPalette.TabIndex = 13;
+            this.btnImportPalette.Text = "パレットをインポート";
+            this.btnImportPalette.UseVisualStyleBackColor = true;
             // 
-            // cmbPaletteType
+            // btnImportImage
             // 
-            this.cmbPaletteType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbPaletteType.FormattingEnabled = true;
-            this.cmbPaletteType.Location = new System.Drawing.Point(152, 50);
-            this.cmbPaletteType.Margin = new System.Windows.Forms.Padding(0);
-            this.cmbPaletteType.Name = "cmbPaletteType";
-            this.cmbPaletteType.Size = new System.Drawing.Size(120, 23);
-            this.cmbPaletteType.TabIndex = 1;
+            this.btnImportImage.Location = new System.Drawing.Point(284, 80);
+            this.btnImportImage.Margin = new System.Windows.Forms.Padding(0);
+            this.btnImportImage.Name = "btnImportImage";
+            this.btnImportImage.Size = new System.Drawing.Size(112, 23);
+            this.btnImportImage.TabIndex = 13;
+            this.btnImportImage.Text = "画像をインポート";
+            this.btnImportImage.UseVisualStyleBackColor = true;
             // 
-            // lblPaletteType
+            // btnEditBlockCount
             // 
-            this.lblPaletteType.AutoSize = true;
-            this.lblPaletteType.Location = new System.Drawing.Point(20, 54);
-            this.lblPaletteType.Margin = new System.Windows.Forms.Padding(0);
-            this.lblPaletteType.Name = "lblPaletteType";
-            this.lblPaletteType.Size = new System.Drawing.Size(118, 15);
-            this.lblPaletteType.TabIndex = 0;
-            this.lblPaletteType.Text = "パレット読み込み設定 :";
+            this.btnEditBlockCount.Location = new System.Drawing.Point(284, 140);
+            this.btnEditBlockCount.Margin = new System.Windows.Forms.Padding(0);
+            this.btnEditBlockCount.Name = "btnEditBlockCount";
+            this.btnEditBlockCount.Size = new System.Drawing.Size(112, 53);
+            this.btnEditBlockCount.TabIndex = 12;
+            this.btnEditBlockCount.Text = "ブロック数を変更";
+            this.btnEditBlockCount.UseVisualStyleBackColor = true;
             // 
-            // cmbImageCompType
+            // btnCreateNewHeader
             // 
-            this.cmbImageCompType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbImageCompType.FormattingEnabled = true;
-            this.cmbImageCompType.Location = new System.Drawing.Point(152, 20);
-            this.cmbImageCompType.Margin = new System.Windows.Forms.Padding(0);
-            this.cmbImageCompType.Name = "cmbImageCompType";
-            this.cmbImageCompType.Size = new System.Drawing.Size(120, 23);
-            this.cmbImageCompType.TabIndex = 1;
+            this.btnCreateNewHeader.Location = new System.Drawing.Point(20, 230);
+            this.btnCreateNewHeader.Margin = new System.Windows.Forms.Padding(0);
+            this.btnCreateNewHeader.Name = "btnCreateNewHeader";
+            this.btnCreateNewHeader.Size = new System.Drawing.Size(252, 23);
+            this.btnCreateNewHeader.TabIndex = 11;
+            this.btnCreateNewHeader.Text = "新規ヘッダーを作成";
+            this.btnCreateNewHeader.UseVisualStyleBackColor = true;
             // 
-            // grpTilesetView
+            // lblAnimHeaderOffset
             // 
-            this.grpTilesetView.Location = new System.Drawing.Point(20, 56);
-            this.grpTilesetView.Margin = new System.Windows.Forms.Padding(0);
-            this.grpTilesetView.Name = "grpTilesetView";
-            this.grpTilesetView.Padding = new System.Windows.Forms.Padding(0);
-            this.grpTilesetView.Size = new System.Drawing.Size(320, 439);
-            this.grpTilesetView.TabIndex = 4;
-            this.grpTilesetView.TabStop = false;
-            this.grpTilesetView.Text = "閲覧用";
-            // 
-            // lblPaletteOffset
-            // 
-            this.lblPaletteOffset.AutoSize = true;
-            this.lblPaletteOffset.Location = new System.Drawing.Point(20, 114);
-            this.lblPaletteOffset.Margin = new System.Windows.Forms.Padding(0);
-            this.lblPaletteOffset.Name = "lblPaletteOffset";
-            this.lblPaletteOffset.Size = new System.Drawing.Size(83, 15);
-            this.lblPaletteOffset.TabIndex = 2;
-            this.lblPaletteOffset.Text = "パレットアドレス :";
-            // 
-            // lblImageOffset
-            // 
-            this.lblImageOffset.AutoSize = true;
-            this.lblImageOffset.Location = new System.Drawing.Point(20, 84);
-            this.lblImageOffset.Margin = new System.Windows.Forms.Padding(0);
-            this.lblImageOffset.Name = "lblImageOffset";
-            this.lblImageOffset.Size = new System.Drawing.Size(72, 15);
-            this.lblImageOffset.TabIndex = 3;
-            this.lblImageOffset.Text = "画像アドレス :";
-            // 
-            // txtImageOffset
-            // 
-            this.txtImageOffset.Location = new System.Drawing.Point(152, 80);
-            this.txtImageOffset.Margin = new System.Windows.Forms.Padding(0);
-            this.txtImageOffset.Name = "txtImageOffset";
-            this.txtImageOffset.Size = new System.Drawing.Size(120, 23);
-            this.txtImageOffset.TabIndex = 4;
-            // 
-            // txtPaletteOffset
-            // 
-            this.txtPaletteOffset.Location = new System.Drawing.Point(152, 110);
-            this.txtPaletteOffset.Margin = new System.Windows.Forms.Padding(0);
-            this.txtPaletteOffset.Name = "txtPaletteOffset";
-            this.txtPaletteOffset.Size = new System.Drawing.Size(120, 23);
-            this.txtPaletteOffset.TabIndex = 4;
-            // 
-            // txtBlockAttrTableOffset
-            // 
-            this.txtBlockAttrTableOffset.Location = new System.Drawing.Point(152, 170);
-            this.txtBlockAttrTableOffset.Margin = new System.Windows.Forms.Padding(0);
-            this.txtBlockAttrTableOffset.Name = "txtBlockAttrTableOffset";
-            this.txtBlockAttrTableOffset.Size = new System.Drawing.Size(120, 23);
-            this.txtBlockAttrTableOffset.TabIndex = 7;
-            // 
-            // txtBlockDataTableOffset
-            // 
-            this.txtBlockDataTableOffset.Location = new System.Drawing.Point(152, 140);
-            this.txtBlockDataTableOffset.Margin = new System.Windows.Forms.Padding(0);
-            this.txtBlockDataTableOffset.Name = "txtBlockDataTableOffset";
-            this.txtBlockDataTableOffset.Size = new System.Drawing.Size(120, 23);
-            this.txtBlockDataTableOffset.TabIndex = 8;
+            this.lblAnimHeaderOffset.AutoSize = true;
+            this.lblAnimHeaderOffset.Location = new System.Drawing.Point(20, 204);
+            this.lblAnimHeaderOffset.Margin = new System.Windows.Forms.Padding(0);
+            this.lblAnimHeaderOffset.Name = "lblAnimHeaderOffset";
+            this.lblAnimHeaderOffset.Size = new System.Drawing.Size(109, 15);
+            this.lblAnimHeaderOffset.TabIndex = 9;
+            this.lblAnimHeaderOffset.Text = "アニメヘッダーアドレス :";
             // 
             // lblBlockAttrTableOffset
             // 
@@ -267,6 +217,89 @@ namespace PochiPochiEditorPlus._Forms
             this.lblBlockDataTableOffset.TabIndex = 6;
             this.lblBlockDataTableOffset.Text = "ブロックデータテーブル :";
             // 
+            // lblPaletteOffset
+            // 
+            this.lblPaletteOffset.AutoSize = true;
+            this.lblPaletteOffset.Location = new System.Drawing.Point(20, 114);
+            this.lblPaletteOffset.Margin = new System.Windows.Forms.Padding(0);
+            this.lblPaletteOffset.Name = "lblPaletteOffset";
+            this.lblPaletteOffset.Size = new System.Drawing.Size(83, 15);
+            this.lblPaletteOffset.TabIndex = 2;
+            this.lblPaletteOffset.Text = "パレットアドレス :";
+            // 
+            // lblImageOffset
+            // 
+            this.lblImageOffset.AutoSize = true;
+            this.lblImageOffset.Location = new System.Drawing.Point(20, 84);
+            this.lblImageOffset.Margin = new System.Windows.Forms.Padding(0);
+            this.lblImageOffset.Name = "lblImageOffset";
+            this.lblImageOffset.Size = new System.Drawing.Size(72, 15);
+            this.lblImageOffset.TabIndex = 3;
+            this.lblImageOffset.Text = "画像アドレス :";
+            // 
+            // cmbImageCompType
+            // 
+            this.cmbImageCompType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbImageCompType.FormattingEnabled = true;
+            this.cmbImageCompType.Location = new System.Drawing.Point(152, 20);
+            this.cmbImageCompType.Margin = new System.Windows.Forms.Padding(0);
+            this.cmbImageCompType.Name = "cmbImageCompType";
+            this.cmbImageCompType.Size = new System.Drawing.Size(120, 23);
+            this.cmbImageCompType.TabIndex = 1;
+            // 
+            // cmbPaletteType
+            // 
+            this.cmbPaletteType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbPaletteType.FormattingEnabled = true;
+            this.cmbPaletteType.Location = new System.Drawing.Point(152, 50);
+            this.cmbPaletteType.Margin = new System.Windows.Forms.Padding(0);
+            this.cmbPaletteType.Name = "cmbPaletteType";
+            this.cmbPaletteType.Size = new System.Drawing.Size(120, 23);
+            this.cmbPaletteType.TabIndex = 1;
+            // 
+            // lblPaletteType
+            // 
+            this.lblPaletteType.AutoSize = true;
+            this.lblPaletteType.Location = new System.Drawing.Point(20, 54);
+            this.lblPaletteType.Margin = new System.Windows.Forms.Padding(0);
+            this.lblPaletteType.Name = "lblPaletteType";
+            this.lblPaletteType.Size = new System.Drawing.Size(118, 15);
+            this.lblPaletteType.TabIndex = 0;
+            this.lblPaletteType.Text = "パレット読み込み設定 :";
+            // 
+            // lblImageCompType
+            // 
+            this.lblImageCompType.AutoSize = true;
+            this.lblImageCompType.Location = new System.Drawing.Point(20, 24);
+            this.lblImageCompType.Margin = new System.Windows.Forms.Padding(0);
+            this.lblImageCompType.Name = "lblImageCompType";
+            this.lblImageCompType.Size = new System.Drawing.Size(85, 15);
+            this.lblImageCompType.TabIndex = 0;
+            this.lblImageCompType.Text = "画像圧縮設定 :";
+            // 
+            // tbpAnim
+            // 
+            this.tbpAnim.Location = new System.Drawing.Point(4, 24);
+            this.tbpAnim.Margin = new System.Windows.Forms.Padding(0);
+            this.tbpAnim.Name = "tbpAnim";
+            this.tbpAnim.Size = new System.Drawing.Size(460, 411);
+            this.tbpAnim.TabIndex = 1;
+            this.tbpAnim.Text = "タイルアニメ";
+            this.tbpAnim.UseVisualStyleBackColor = true;
+            // 
+            // grpTilesetView
+            // 
+            this.grpTilesetView.Controls.Add(this.pnlTilesetViewImage);
+            this.grpTilesetView.Controls.Add(this.cmbTilesetViewPalette);
+            this.grpTilesetView.Location = new System.Drawing.Point(20, 56);
+            this.grpTilesetView.Margin = new System.Windows.Forms.Padding(0);
+            this.grpTilesetView.Name = "grpTilesetView";
+            this.grpTilesetView.Padding = new System.Windows.Forms.Padding(0);
+            this.grpTilesetView.Size = new System.Drawing.Size(320, 439);
+            this.grpTilesetView.TabIndex = 4;
+            this.grpTilesetView.TabStop = false;
+            this.grpTilesetView.Text = "閲覧用";
+            // 
             // txtAnimHeaderOffset
             // 
             this.txtAnimHeaderOffset.Location = new System.Drawing.Point(152, 200);
@@ -275,65 +308,55 @@ namespace PochiPochiEditorPlus._Forms
             this.txtAnimHeaderOffset.Size = new System.Drawing.Size(120, 23);
             this.txtAnimHeaderOffset.TabIndex = 10;
             // 
-            // lblAnimHeaderOffset
+            // txtBlockAttrTableOffset
             // 
-            this.lblAnimHeaderOffset.AutoSize = true;
-            this.lblAnimHeaderOffset.Location = new System.Drawing.Point(20, 204);
-            this.lblAnimHeaderOffset.Margin = new System.Windows.Forms.Padding(0);
-            this.lblAnimHeaderOffset.Name = "lblAnimHeaderOffset";
-            this.lblAnimHeaderOffset.Size = new System.Drawing.Size(109, 15);
-            this.lblAnimHeaderOffset.TabIndex = 9;
-            this.lblAnimHeaderOffset.Text = "アニメヘッダーアドレス :";
+            this.txtBlockAttrTableOffset.Location = new System.Drawing.Point(152, 170);
+            this.txtBlockAttrTableOffset.Margin = new System.Windows.Forms.Padding(0);
+            this.txtBlockAttrTableOffset.Name = "txtBlockAttrTableOffset";
+            this.txtBlockAttrTableOffset.Size = new System.Drawing.Size(120, 23);
+            this.txtBlockAttrTableOffset.TabIndex = 7;
             // 
-            // btnCreateNewHeader
+            // txtBlockDataTableOffset
             // 
-            this.btnCreateNewHeader.Location = new System.Drawing.Point(20, 230);
-            this.btnCreateNewHeader.Margin = new System.Windows.Forms.Padding(0);
-            this.btnCreateNewHeader.Name = "btnCreateNewHeader";
-            this.btnCreateNewHeader.Size = new System.Drawing.Size(252, 23);
-            this.btnCreateNewHeader.TabIndex = 11;
-            this.btnCreateNewHeader.Text = "新規ヘッダーを作成";
-            this.btnCreateNewHeader.UseVisualStyleBackColor = true;
+            this.txtBlockDataTableOffset.Location = new System.Drawing.Point(152, 140);
+            this.txtBlockDataTableOffset.Margin = new System.Windows.Forms.Padding(0);
+            this.txtBlockDataTableOffset.Name = "txtBlockDataTableOffset";
+            this.txtBlockDataTableOffset.Size = new System.Drawing.Size(120, 23);
+            this.txtBlockDataTableOffset.TabIndex = 8;
             // 
-            // btnEditBlockCount
+            // txtPaletteOffset
             // 
-            this.btnEditBlockCount.Location = new System.Drawing.Point(284, 140);
-            this.btnEditBlockCount.Margin = new System.Windows.Forms.Padding(0);
-            this.btnEditBlockCount.Name = "btnEditBlockCount";
-            this.btnEditBlockCount.Size = new System.Drawing.Size(112, 53);
-            this.btnEditBlockCount.TabIndex = 12;
-            this.btnEditBlockCount.Text = "ブロック数を変更";
-            this.btnEditBlockCount.UseVisualStyleBackColor = true;
+            this.txtPaletteOffset.Location = new System.Drawing.Point(152, 110);
+            this.txtPaletteOffset.Margin = new System.Windows.Forms.Padding(0);
+            this.txtPaletteOffset.Name = "txtPaletteOffset";
+            this.txtPaletteOffset.Size = new System.Drawing.Size(120, 23);
+            this.txtPaletteOffset.TabIndex = 4;
             // 
-            // btnImportImage
+            // txtImageOffset
             // 
-            this.btnImportImage.Location = new System.Drawing.Point(284, 80);
-            this.btnImportImage.Margin = new System.Windows.Forms.Padding(0);
-            this.btnImportImage.Name = "btnImportImage";
-            this.btnImportImage.Size = new System.Drawing.Size(112, 23);
-            this.btnImportImage.TabIndex = 13;
-            this.btnImportImage.Text = "画像をインポート";
-            this.btnImportImage.UseVisualStyleBackColor = true;
+            this.txtImageOffset.Location = new System.Drawing.Point(152, 80);
+            this.txtImageOffset.Margin = new System.Windows.Forms.Padding(0);
+            this.txtImageOffset.Name = "txtImageOffset";
+            this.txtImageOffset.Size = new System.Drawing.Size(120, 23);
+            this.txtImageOffset.TabIndex = 4;
             // 
-            // btnImportPalette
+            // cmbTilesetViewPalette
             // 
-            this.btnImportPalette.Location = new System.Drawing.Point(284, 110);
-            this.btnImportPalette.Margin = new System.Windows.Forms.Padding(0);
-            this.btnImportPalette.Name = "btnImportPalette";
-            this.btnImportPalette.Size = new System.Drawing.Size(112, 23);
-            this.btnImportPalette.TabIndex = 13;
-            this.btnImportPalette.Text = "パレットをインポート";
-            this.btnImportPalette.UseVisualStyleBackColor = true;
+            this.cmbTilesetViewPalette.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbTilesetViewPalette.FormattingEnabled = true;
+            this.cmbTilesetViewPalette.Location = new System.Drawing.Point(78, 317);
+            this.cmbTilesetViewPalette.Margin = new System.Windows.Forms.Padding(0);
+            this.cmbTilesetViewPalette.Name = "cmbTilesetViewPalette";
+            this.cmbTilesetViewPalette.Size = new System.Drawing.Size(120, 23);
+            this.cmbTilesetViewPalette.TabIndex = 0;
             // 
-            // btnEditAnimEntry
+            // pnlTilesetViewImage
             // 
-            this.btnEditAnimEntry.Location = new System.Drawing.Point(284, 200);
-            this.btnEditAnimEntry.Margin = new System.Windows.Forms.Padding(0);
-            this.btnEditAnimEntry.Name = "btnEditAnimEntry";
-            this.btnEditAnimEntry.Size = new System.Drawing.Size(112, 23);
-            this.btnEditAnimEntry.TabIndex = 14;
-            this.btnEditAnimEntry.Text = "エントリー数を変更";
-            this.btnEditAnimEntry.UseVisualStyleBackColor = true;
+            this.pnlTilesetViewImage.Location = new System.Drawing.Point(53, 74);
+            this.pnlTilesetViewImage.Margin = new System.Windows.Forms.Padding(0);
+            this.pnlTilesetViewImage.Name = "pnlTilesetViewImage";
+            this.pnlTilesetViewImage.Size = new System.Drawing.Size(200, 100);
+            this.pnlTilesetViewImage.TabIndex = 1;
             // 
             // TilesetEditor
             // 
@@ -355,6 +378,7 @@ namespace PochiPochiEditorPlus._Forms
             this.tbcMain.ResumeLayout(false);
             this.tbpHeader.ResumeLayout(false);
             this.tbpHeader.PerformLayout();
+            this.grpTilesetView.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -388,5 +412,7 @@ namespace PochiPochiEditorPlus._Forms
         private System.Windows.Forms.Button btnImportImage;
         private System.Windows.Forms.Button btnEditBlockCount;
         private System.Windows.Forms.Button btnEditAnimEntry;
+        private System.Windows.Forms.ComboBox cmbTilesetViewPalette;
+        private System.Windows.Forms.Panel pnlTilesetViewImage;
     }
 }
