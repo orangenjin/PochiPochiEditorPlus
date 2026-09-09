@@ -14,7 +14,6 @@ namespace PochiPochiEditorPlus._Forms
     {
         // 共有データ用
         private SharedData _sharedData = null;
-        private dynamic _dynamicConfig = null;
         // 変更履歴用
         private UndoManager _undoManager = null;
         // イベント登録・解除用
@@ -30,7 +29,6 @@ namespace PochiPochiEditorPlus._Forms
         {
             InitializeComponent();
             _sharedData = sharedData;
-            _dynamicConfig = _sharedData.Config;
             _undoManager = undoManager;
             _eventBinder = new EventBinder();
             _tilesetManager = new TilesetManager(_sharedData);
