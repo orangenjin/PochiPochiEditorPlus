@@ -25,6 +25,9 @@ namespace PochiPochiEditorPlus._Helpers._MatchHelper
                 // 占有するバイト数
                 int length = token.GetLength();
 
+                // 範囲内かどうかの判定
+                if (currentPos + length > data.Length) return false;
+
                 // 対象となるバイト配列を取得
                 token.Value = new byte[length];
                 Array.Copy(
