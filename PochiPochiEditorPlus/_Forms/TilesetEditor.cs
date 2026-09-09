@@ -23,6 +23,7 @@ namespace PochiPochiEditorPlus._Forms
         private dynamic _tilesetManager = null;
         // UI制御用
         private int _currentTilesetNo = 0;
+        private int _selectedTileIndex = 0;
         private Bitmap _viewBmp = null;
 
         public TilesetEditor(SharedData sharedData, UndoManager undoManager)
@@ -97,7 +98,6 @@ namespace PochiPochiEditorPlus._Forms
                         UpdateLoadUIState(true);
                     }
                 });
-            // タイルセット番号
             _eventBinder.BindCtrl(
                 h => btnReloadTileset.Click += h,
                 h => btnReloadTileset.Click -= h,
@@ -157,8 +157,8 @@ namespace PochiPochiEditorPlus._Forms
                     if (palIndex < 0) return;
                     byte[] palData = _tilesetManager.PaletteData[palIndex];
 
-                // パレットのみを書き換えて再描画
-                ImageHelper.ApplyPalette(_viewBmp, palData, showBackColor: true);
+                    // パレットのみを書き換えて再描画
+                    ImageHelper.ApplyPalette(_viewBmp, palData, showBackColor: true);
                     pnlViewImage.Invalidate();
                 });
             // スクロールバー操作時の再描画
@@ -170,6 +170,22 @@ namespace PochiPochiEditorPlus._Forms
             _eventBinder.BindCustom(
                 () => pnlViewImage.MouseWheel += pnlViewImage_MouseWheel,
                 () => pnlViewImage.MouseWheel -= pnlViewImage_MouseWheel);
+            // クリックでタイル選択
+            _eventBinder.BindCustom(
+                () => pnlViewImage.MouseDown += pnlViewImage_MouseDown,
+                () => pnlViewImage.MouseDown -= pnlViewImage_MouseDown);
+            // タイルインデックス数値
+            _eventBinder.BindCtrl(
+                h => nudViewTileIndex.ValueChanged += h,
+                h => nudViewTileIndex.ValueChanged -= h,
+                (_, __) =>
+                {
+                    _selectedTileIndex = (int)nudViewTileIndex.Value;
+                    txtViewTileIndex.Text =
+                        _selectedTileIndex.ParseIntToString(txtViewTileIndex.Digits);
+                    EnsureTileVisible(_selectedTileIndex);
+                    pnlViewImage.Invalidate();
+                });
             // pnlViewImageの描画処理
             _eventBinder.BindCustom(
                 () => pnlViewImage.Paint += pnlViewImage_Paint,
@@ -227,7 +243,6 @@ namespace PochiPochiEditorPlus._Forms
 
             // 横幅は128固定
             int width = Constants.TilesetImageWidth;
-
             // 1行に対するバイト数
             int bytesPerTileRow = (width * Constants.TileSize) / Constants.PixelsPerByte4Bpp;
             // 必要なタイル行数を計算（端数は切り上げ）
@@ -266,6 +281,18 @@ namespace PochiPochiEditorPlus._Forms
                     vsbViewImage.Enabled = false;
                     vsbViewImage.Value = 0;
                 }
+
+                // 有効なタイル数に基づいて上限を設定
+                int totalTiles = GetTotalTileCount();
+                if (totalTiles > 0)
+                {
+                    nudViewTileIndex.Maximum = totalTiles - 1;
+                    nudViewTileIndex.Minimum = 0;
+                    _selectedTileIndex = Math.Min(_selectedTileIndex, totalTiles - 1);
+                    nudViewTileIndex.Value = _selectedTileIndex;
+                    txtViewTileIndex.Text = 
+                        _selectedTileIndex.ParseIntToString(txtViewTileIndex.Digits);
+                }
             }
             catch
             {
@@ -292,6 +319,7 @@ namespace PochiPochiEditorPlus._Forms
             {
                 _viewBmp?.Dispose();
                 _viewBmp = null;
+                _selectedTileIndex = 0;
                 pnlViewImage.Invalidate();
             }
 
@@ -356,23 +384,124 @@ namespace PochiPochiEditorPlus._Forms
         }
 
         /// <summary>
-        /// パネルの描画を更新する。
+        /// パネルの描画(枠を含む)を更新する。
         /// </summary>
         private void pnlViewImage_Paint(object sender, PaintEventArgs e)
         {
             if (_viewBmp != null)
             {
-                // 描画時に2倍に拡大する
+                // 2倍に拡大する
                 e.Graphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
                 e.Graphics.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.Half;
 
-                // スクロール値を考慮
+                // タイル画像を描画
                 Rectangle destRect = new Rectangle(
-                    0, 
-                    -vsbViewImage.Value, 
-                    _viewBmp.Width * Constants.DefaultScale, 
+                    0,
+                    -vsbViewImage.Value,
+                    _viewBmp.Width * Constants.DefaultScale,
                     _viewBmp.Height * Constants.DefaultScale);
                 e.Graphics.DrawImage(_viewBmp, destRect);
+
+                int scaledTileSize = Constants.TileSize * Constants.DefaultScale;
+                int tilesPerRow = Constants.TilesetImageWidth / Constants.TileSize;
+                int totalTiles = GetTotalTileCount();
+
+                // 無効な領域をグレーに描画
+                int totalDisplayTiles = 
+                    (_viewBmp.Width / Constants.TileSize) * (_viewBmp.Height / Constants.TileSize);
+                if (totalTiles < totalDisplayTiles)
+                {
+                    using (Brush invalidBrush = new SolidBrush(Color.FromArgb(160, 64, 64, 64)))
+                    {
+                        for (int i = totalTiles; i < totalDisplayTiles; i++)
+                        {
+                            int col = i % tilesPerRow;
+                            int row = i / tilesPerRow;
+                            Rectangle invalidRect = new Rectangle(
+                                col * scaledTileSize,
+                                row * scaledTileSize - vsbViewImage.Value,
+                                scaledTileSize,
+                                scaledTileSize);
+
+                            if (invalidRect.Bottom > 0 && invalidRect.Top < pnlViewImage.Height)
+                            {
+                                e.Graphics.FillRectangle(invalidBrush, invalidRect);
+                            }
+                        }
+                    }
+                }
+
+                // 選択中タイルに枠を描画
+                if (_selectedTileIndex >= 0 && _selectedTileIndex < totalTiles)
+                {
+                    int selCol = _selectedTileIndex % tilesPerRow;
+                    int selRow = _selectedTileIndex / tilesPerRow;
+                    Rectangle selRect = new Rectangle(
+                        selCol * scaledTileSize,
+                        selRow * scaledTileSize - vsbViewImage.Value,
+                        scaledTileSize - 1,
+                        scaledTileSize - 1);
+
+                    using (Pen redPen = new Pen(Color.Red, 1))
+                    {
+                        e.Graphics.DrawRectangle(redPen, selRect);
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// タイルクリックによるインデックス取得処理。
+        /// </summary>
+        private void pnlViewImage_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (_viewBmp == null || e.Button != MouseButtons.Left) return;
+
+            int scaledTileSize = Constants.TileSize * Constants.DefaultScale;
+            int tilesPerRow = Constants.TilesetImageWidth / Constants.TileSize;
+
+            int mouseX = e.X;
+            int mouseY = e.Y + vsbViewImage.Value;
+
+            if (mouseX < 0 || mouseX >= Constants.TilesetImageWidth * Constants.DefaultScale) return;
+
+            int col = mouseX / scaledTileSize;
+            int row = mouseY / scaledTileSize;
+            int clickedIndex = row * tilesPerRow + col;
+
+            int totalTiles = GetTotalTileCount();
+            if (clickedIndex >= 0 && clickedIndex < totalTiles)
+            {
+                _selectedTileIndex = clickedIndex;
+                if (nudViewTileIndex.Value != clickedIndex)
+                {
+                    nudViewTileIndex.Value = clickedIndex;
+                }
+                pnlViewImage.Invalidate();
+            }
+        }
+
+        /// <summary>
+        /// 選択中のタイルが表示領域に入るようにスクロール位置を調整する。
+        /// </summary>
+        private void EnsureTileVisible(int tileIndex)
+        {
+            if (!vsbViewImage.Enabled) return;
+
+            int scaledTileSize = Constants.TileSize * Constants.DefaultScale;
+            int tilesPerRow = Constants.TilesetImageWidth / Constants.TileSize;
+            int row = tileIndex / tilesPerRow;
+            int tileY = row * scaledTileSize;
+
+            if (tileY < vsbViewImage.Value)
+            {
+                vsbViewImage.Value = Math.Max(vsbViewImage.Minimum, tileY);
+            }
+            else if (tileY + scaledTileSize > vsbViewImage.Value + pnlViewImage.Height)
+            {
+                vsbViewImage.Value = Math.Min(
+                    vsbViewImage.Maximum - vsbViewImage.LargeChange + 1,
+                    tileY + scaledTileSize - pnlViewImage.Height);
             }
         }
 
@@ -382,6 +511,17 @@ namespace PochiPochiEditorPlus._Forms
         public void RefreshFromData()
         {
             LoadDataToUI(_currentTilesetNo);
+        }
+
+        /// <summary>
+        /// 有効なタイル総数を計算する。
+        /// </summary>
+        private int GetTotalTileCount()
+        {
+            if (_tilesetManager?.ImageData == null) return 0;
+            int bytesPerTile = 
+                (Constants.TileSize * Constants.TileSize) / Constants.PixelsPerByte4Bpp;
+            return _tilesetManager.ImageData.Length / bytesPerTile;
         }
     }
 }

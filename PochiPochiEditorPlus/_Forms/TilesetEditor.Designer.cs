@@ -40,14 +40,9 @@ namespace PochiPochiEditorPlus._Forms
             this.btnImportImage = new System.Windows.Forms.Button();
             this.btnEditBlockCount = new System.Windows.Forms.Button();
             this.btnCreateNewHeader = new System.Windows.Forms.Button();
-            this.txtAnimHeaderOffset = new PochiPochiEditorPlus._Utilities._CustomCtrls.HexTextBox();
             this.lblAnimHeaderOffset = new System.Windows.Forms.Label();
-            this.txtBlockAttrTableOffset = new PochiPochiEditorPlus._Utilities._CustomCtrls.HexTextBox();
-            this.txtBlockDataTableOffset = new PochiPochiEditorPlus._Utilities._CustomCtrls.HexTextBox();
             this.lblBlockAttrTableOffset = new System.Windows.Forms.Label();
             this.lblBlockDataTableOffset = new System.Windows.Forms.Label();
-            this.txtPaletteOffset = new PochiPochiEditorPlus._Utilities._CustomCtrls.HexTextBox();
-            this.txtImageOffset = new PochiPochiEditorPlus._Utilities._CustomCtrls.HexTextBox();
             this.lblPaletteOffset = new System.Windows.Forms.Label();
             this.lblImageOffset = new System.Windows.Forms.Label();
             this.cmbImageCompType = new System.Windows.Forms.ComboBox();
@@ -59,11 +54,16 @@ namespace PochiPochiEditorPlus._Forms
             this.vsbViewImage = new System.Windows.Forms.VScrollBar();
             this.lblViewPalette = new System.Windows.Forms.Label();
             this.cmbViewPalette = new System.Windows.Forms.ComboBox();
-            this.txtViewTileIndex = new PochiPochiEditorPlus._Utilities._CustomCtrls.HexTextBox();
             this.nudViewTileIndex = new System.Windows.Forms.NumericUpDown();
             this.lblViewTileIndex = new System.Windows.Forms.Label();
             this.pnlViewImage = new System.Windows.Forms.Panel();
             this.btnReloadTileset = new System.Windows.Forms.Button();
+            this.txtViewTileIndex = new PochiPochiEditorPlus._Utilities._CustomCtrls.HexTextBox();
+            this.txtAnimHeaderOffset = new PochiPochiEditorPlus._Utilities._CustomCtrls.HexTextBox();
+            this.txtBlockAttrTableOffset = new PochiPochiEditorPlus._Utilities._CustomCtrls.HexTextBox();
+            this.txtBlockDataTableOffset = new PochiPochiEditorPlus._Utilities._CustomCtrls.HexTextBox();
+            this.txtPaletteOffset = new PochiPochiEditorPlus._Utilities._CustomCtrls.HexTextBox();
+            this.txtImageOffset = new PochiPochiEditorPlus._Utilities._CustomCtrls.HexTextBox();
             ((System.ComponentModel.ISupportInitialize)(this.nudTilesetNo)).BeginInit();
             this.tbcMain.SuspendLayout();
             this.tbpHeader.SuspendLayout();
@@ -194,14 +194,6 @@ namespace PochiPochiEditorPlus._Forms
             this.btnCreateNewHeader.Text = "新規ヘッダーを作成";
             this.btnCreateNewHeader.UseVisualStyleBackColor = true;
             // 
-            // txtAnimHeaderOffset
-            // 
-            this.txtAnimHeaderOffset.Location = new System.Drawing.Point(152, 200);
-            this.txtAnimHeaderOffset.Margin = new System.Windows.Forms.Padding(0);
-            this.txtAnimHeaderOffset.Name = "txtAnimHeaderOffset";
-            this.txtAnimHeaderOffset.Size = new System.Drawing.Size(120, 23);
-            this.txtAnimHeaderOffset.TabIndex = 10;
-            // 
             // lblAnimHeaderOffset
             // 
             this.lblAnimHeaderOffset.AutoSize = true;
@@ -211,22 +203,6 @@ namespace PochiPochiEditorPlus._Forms
             this.lblAnimHeaderOffset.Size = new System.Drawing.Size(109, 15);
             this.lblAnimHeaderOffset.TabIndex = 9;
             this.lblAnimHeaderOffset.Text = "アニメヘッダーアドレス :";
-            // 
-            // txtBlockAttrTableOffset
-            // 
-            this.txtBlockAttrTableOffset.Location = new System.Drawing.Point(152, 170);
-            this.txtBlockAttrTableOffset.Margin = new System.Windows.Forms.Padding(0);
-            this.txtBlockAttrTableOffset.Name = "txtBlockAttrTableOffset";
-            this.txtBlockAttrTableOffset.Size = new System.Drawing.Size(120, 23);
-            this.txtBlockAttrTableOffset.TabIndex = 7;
-            // 
-            // txtBlockDataTableOffset
-            // 
-            this.txtBlockDataTableOffset.Location = new System.Drawing.Point(152, 140);
-            this.txtBlockDataTableOffset.Margin = new System.Windows.Forms.Padding(0);
-            this.txtBlockDataTableOffset.Name = "txtBlockDataTableOffset";
-            this.txtBlockDataTableOffset.Size = new System.Drawing.Size(120, 23);
-            this.txtBlockDataTableOffset.TabIndex = 8;
             // 
             // lblBlockAttrTableOffset
             // 
@@ -247,22 +223,6 @@ namespace PochiPochiEditorPlus._Forms
             this.lblBlockDataTableOffset.Size = new System.Drawing.Size(110, 15);
             this.lblBlockDataTableOffset.TabIndex = 6;
             this.lblBlockDataTableOffset.Text = "ブロックデータテーブル :";
-            // 
-            // txtPaletteOffset
-            // 
-            this.txtPaletteOffset.Location = new System.Drawing.Point(152, 110);
-            this.txtPaletteOffset.Margin = new System.Windows.Forms.Padding(0);
-            this.txtPaletteOffset.Name = "txtPaletteOffset";
-            this.txtPaletteOffset.Size = new System.Drawing.Size(120, 23);
-            this.txtPaletteOffset.TabIndex = 4;
-            // 
-            // txtImageOffset
-            // 
-            this.txtImageOffset.Location = new System.Drawing.Point(152, 80);
-            this.txtImageOffset.Margin = new System.Windows.Forms.Padding(0);
-            this.txtImageOffset.Name = "txtImageOffset";
-            this.txtImageOffset.Size = new System.Drawing.Size(120, 23);
-            this.txtImageOffset.TabIndex = 4;
             // 
             // lblPaletteOffset
             // 
@@ -381,23 +341,8 @@ namespace PochiPochiEditorPlus._Forms
             this.cmbViewPalette.Size = new System.Drawing.Size(152, 23);
             this.cmbViewPalette.TabIndex = 0;
             // 
-            // txtViewTileIndex
-            // 
-            this.txtViewTileIndex.Digits = 4;
-            this.txtViewTileIndex.Location = new System.Drawing.Point(176, 28);
-            this.txtViewTileIndex.Margin = new System.Windows.Forms.Padding(0);
-            this.txtViewTileIndex.Name = "txtViewTileIndex";
-            this.txtViewTileIndex.ReadOnly = true;
-            this.txtViewTileIndex.Size = new System.Drawing.Size(72, 23);
-            this.txtViewTileIndex.TabIndex = 4;
-            // 
             // nudViewTileIndex
             // 
-            this.nudViewTileIndex.Increment = new decimal(new int[] {
-            0,
-            0,
-            0,
-            0});
             this.nudViewTileIndex.Location = new System.Drawing.Point(96, 28);
             this.nudViewTileIndex.Margin = new System.Windows.Forms.Padding(0);
             this.nudViewTileIndex.Maximum = new decimal(new int[] {
@@ -406,7 +351,6 @@ namespace PochiPochiEditorPlus._Forms
             0,
             0});
             this.nudViewTileIndex.Name = "nudViewTileIndex";
-            this.nudViewTileIndex.ReadOnly = true;
             this.nudViewTileIndex.Size = new System.Drawing.Size(72, 23);
             this.nudViewTileIndex.TabIndex = 3;
             // 
@@ -437,6 +381,56 @@ namespace PochiPochiEditorPlus._Forms
             this.btnReloadTileset.TabIndex = 5;
             this.btnReloadTileset.Text = "再読み込み";
             this.btnReloadTileset.UseVisualStyleBackColor = true;
+            // 
+            // txtViewTileIndex
+            // 
+            this.txtViewTileIndex.Digits = 4;
+            this.txtViewTileIndex.Location = new System.Drawing.Point(176, 28);
+            this.txtViewTileIndex.Margin = new System.Windows.Forms.Padding(0);
+            this.txtViewTileIndex.Name = "txtViewTileIndex";
+            this.txtViewTileIndex.ReadOnly = true;
+            this.txtViewTileIndex.Size = new System.Drawing.Size(72, 23);
+            this.txtViewTileIndex.TabIndex = 4;
+            // 
+            // txtAnimHeaderOffset
+            // 
+            this.txtAnimHeaderOffset.Location = new System.Drawing.Point(152, 200);
+            this.txtAnimHeaderOffset.Margin = new System.Windows.Forms.Padding(0);
+            this.txtAnimHeaderOffset.Name = "txtAnimHeaderOffset";
+            this.txtAnimHeaderOffset.Size = new System.Drawing.Size(120, 23);
+            this.txtAnimHeaderOffset.TabIndex = 10;
+            // 
+            // txtBlockAttrTableOffset
+            // 
+            this.txtBlockAttrTableOffset.Location = new System.Drawing.Point(152, 170);
+            this.txtBlockAttrTableOffset.Margin = new System.Windows.Forms.Padding(0);
+            this.txtBlockAttrTableOffset.Name = "txtBlockAttrTableOffset";
+            this.txtBlockAttrTableOffset.Size = new System.Drawing.Size(120, 23);
+            this.txtBlockAttrTableOffset.TabIndex = 7;
+            // 
+            // txtBlockDataTableOffset
+            // 
+            this.txtBlockDataTableOffset.Location = new System.Drawing.Point(152, 140);
+            this.txtBlockDataTableOffset.Margin = new System.Windows.Forms.Padding(0);
+            this.txtBlockDataTableOffset.Name = "txtBlockDataTableOffset";
+            this.txtBlockDataTableOffset.Size = new System.Drawing.Size(120, 23);
+            this.txtBlockDataTableOffset.TabIndex = 8;
+            // 
+            // txtPaletteOffset
+            // 
+            this.txtPaletteOffset.Location = new System.Drawing.Point(152, 110);
+            this.txtPaletteOffset.Margin = new System.Windows.Forms.Padding(0);
+            this.txtPaletteOffset.Name = "txtPaletteOffset";
+            this.txtPaletteOffset.Size = new System.Drawing.Size(120, 23);
+            this.txtPaletteOffset.TabIndex = 4;
+            // 
+            // txtImageOffset
+            // 
+            this.txtImageOffset.Location = new System.Drawing.Point(152, 80);
+            this.txtImageOffset.Margin = new System.Windows.Forms.Padding(0);
+            this.txtImageOffset.Name = "txtImageOffset";
+            this.txtImageOffset.Size = new System.Drawing.Size(120, 23);
+            this.txtImageOffset.TabIndex = 4;
             // 
             // TilesetEditor
             // 
