@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 using PochiPochiEditorPlus._Helpers;
+using PochiPochiEditorPlus._Helpers._MatchHelper;
 using PochiPochiEditorPlus._Managers;
 using PochiPochiEditorPlus._Utilities;
 
@@ -33,8 +35,8 @@ namespace PochiPochiEditorPlus._Forms
             InitializeControls();
             InitializeEventHandlers();
 
+            // 初期化
             _tilesetManager = new TilesetManager(_sharedData);
-            LoadDataToUI(_currentTilesetNo);
         }
 
         private void InitializeControls()
@@ -45,18 +47,8 @@ namespace PochiPochiEditorPlus._Forms
                 (cmbPaletteType, "txt/tileset/TilesetPaletteype.txt"),
                 (cmbTilesetViewPalette, "txt/tileset/TilesetPaletteIndex.txt"));
 
-            // 一時的に全コントロールを無効化
+            // 一時的にタブコントロールを無効化
             UpdateTabPageState(false);
-        }
-
-        private void UpdateTabPageState(bool state)
-        {
-            // pnlのクリア処理が必要
-            //
-
-            // tbcMain
-            CtrlHelper.SetControlsEnabled(tbcMain, state);
-            CtrlHelper.ResetControls(tbcMain);
         }
 
         private void InitializeEventHandlers()
@@ -72,8 +64,41 @@ namespace PochiPochiEditorPlus._Forms
                 h => btnLoadTileset.Click -= h,
                 (_, __) =>
                 {
+                    // 現在のタイルセット番号を更新
                     _currentTilesetNo = (int)nudTilesetNo.Value;
-                    LoadDataToUI(_currentTilesetNo);
+
+                    if (ValidateHeader(_currentTilesetNo))
+                    {
+                        // UIを有効化
+                        UpdateTabPageState(true);
+                        // マッチングに成功したら読み込む
+                        LoadDataToUI(_currentTilesetNo);
+                        // btnLoadTilesetを更新
+                        UpdateLoadButtonState(false);
+                    }
+                    else
+                    {
+                        // 失敗メッセージの表示
+                        MessageBox.Show(
+                            "ヘッダーの読み込みに失敗しました。",
+                            "読み込みエラー",
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Error);
+
+                        // 失敗したらUIを無効化・リセット
+                        UpdateTabPageState(false);
+                        // btnLoadTilesetを更新
+                        UpdateLoadButtonState(true);
+                    }
+                });
+            // タイルセット番号
+            _eventBinder.BindCtrl(
+                h => btnReloadTileset.Click += h,
+                h => btnReloadTileset.Click -= h,
+                (_, __) =>
+                {
+                    UpdateTabPageState(false);
+                    UpdateLoadButtonState(true);
                 });
 
             // 画像圧縮設定
@@ -144,9 +169,6 @@ namespace PochiPochiEditorPlus._Forms
             // ヘッダーを再読み込み
             _tilesetManager.ReadHeader(tilsetNo, _sharedData);
 
-            // UIを有効化
-            UpdateTabPageState(true);
-
             // ヘッダーデータをUIに反映
             cmbImageCompType.SelectedValue =
                 _tilesetManager.HeaderEntry.ImageCompType.GetData<byte>();
@@ -171,9 +193,48 @@ namespace PochiPochiEditorPlus._Forms
 
         }
 
+        private bool ValidateHeader(int tilesetNo)
+        {
+            // マッチングパターン
+            var headerPattern = new List<TokenData>()
+            {
+                TokenData.Range(byte.MinValue, (byte)cmbImageCompType.Items.Count, Constants.ByteSize),
+                TokenData.Range(byte.MinValue, (byte)cmbPaletteType.Items.Count, Constants.ByteSize),
+                TokenData.Exact(0x0),
+                TokenData.Exact(0x0),
+                TokenData.Pointer(),
+                TokenData.Pointer(),
+                TokenData.Pointer(),
+                TokenData.Pointer(),
+                TokenData.Pointer()
+            };
 
+            return PatternMatcher.TryMatch(
+                headerPattern,
+                _sharedData.RomData,
+                _tilesetManager.CalcOffset(tilesetNo),
+                allowNullPointer: true); // nullポインタを許容する
+        }
 
+        private void UpdateTabPageState(bool state)
+        {
+            // pnlのクリア処理が必要
+            //
 
+            // tbcMain
+            CtrlHelper.SetControlsEnabled(tbcMain, state);
+            CtrlHelper.ResetControls(tbcMain);
+
+            btnReloadTileset.Enabled = state;
+        }
+
+        private void UpdateLoadButtonState(bool state)
+        {
+            btnLoadTileset.Enabled = state;
+            lblTilesetNo.Enabled = state;
+            nudTilesetNo.ReadOnly = !state;
+            nudTilesetNo.Increment = Convert.ToInt32(state);
+        }
 
 
 

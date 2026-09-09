@@ -51,13 +51,14 @@ namespace PochiPochiEditorPlus._Forms
             this.lblImageCompType = new System.Windows.Forms.Label();
             this.tbpAnim = new System.Windows.Forms.TabPage();
             this.grpTilesetView = new System.Windows.Forms.GroupBox();
+            this.pnlTilesetViewImage = new System.Windows.Forms.Panel();
+            this.cmbTilesetViewPalette = new System.Windows.Forms.ComboBox();
             this.txtAnimHeaderOffset = new PochiPochiEditorPlus._Utilities._CustomCtrls.HexTextBox();
             this.txtBlockAttrTableOffset = new PochiPochiEditorPlus._Utilities._CustomCtrls.HexTextBox();
             this.txtBlockDataTableOffset = new PochiPochiEditorPlus._Utilities._CustomCtrls.HexTextBox();
             this.txtPaletteOffset = new PochiPochiEditorPlus._Utilities._CustomCtrls.HexTextBox();
             this.txtImageOffset = new PochiPochiEditorPlus._Utilities._CustomCtrls.HexTextBox();
-            this.cmbTilesetViewPalette = new System.Windows.Forms.ComboBox();
-            this.pnlTilesetViewImage = new System.Windows.Forms.Panel();
+            this.btnReloadTileset = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.nudTilesetNo)).BeginInit();
             this.tbcMain.SuspendLayout();
             this.tbpHeader.SuspendLayout();
@@ -300,6 +301,24 @@ namespace PochiPochiEditorPlus._Forms
             this.grpTilesetView.TabStop = false;
             this.grpTilesetView.Text = "閲覧用";
             // 
+            // pnlTilesetViewImage
+            // 
+            this.pnlTilesetViewImage.Location = new System.Drawing.Point(53, 74);
+            this.pnlTilesetViewImage.Margin = new System.Windows.Forms.Padding(0);
+            this.pnlTilesetViewImage.Name = "pnlTilesetViewImage";
+            this.pnlTilesetViewImage.Size = new System.Drawing.Size(200, 100);
+            this.pnlTilesetViewImage.TabIndex = 1;
+            // 
+            // cmbTilesetViewPalette
+            // 
+            this.cmbTilesetViewPalette.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbTilesetViewPalette.FormattingEnabled = true;
+            this.cmbTilesetViewPalette.Location = new System.Drawing.Point(78, 317);
+            this.cmbTilesetViewPalette.Margin = new System.Windows.Forms.Padding(0);
+            this.cmbTilesetViewPalette.Name = "cmbTilesetViewPalette";
+            this.cmbTilesetViewPalette.Size = new System.Drawing.Size(120, 23);
+            this.cmbTilesetViewPalette.TabIndex = 0;
+            // 
             // txtAnimHeaderOffset
             // 
             this.txtAnimHeaderOffset.Location = new System.Drawing.Point(152, 200);
@@ -340,29 +359,22 @@ namespace PochiPochiEditorPlus._Forms
             this.txtImageOffset.Size = new System.Drawing.Size(120, 23);
             this.txtImageOffset.TabIndex = 4;
             // 
-            // cmbTilesetViewPalette
+            // btnReloadTileset
             // 
-            this.cmbTilesetViewPalette.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbTilesetViewPalette.FormattingEnabled = true;
-            this.cmbTilesetViewPalette.Location = new System.Drawing.Point(78, 317);
-            this.cmbTilesetViewPalette.Margin = new System.Windows.Forms.Padding(0);
-            this.cmbTilesetViewPalette.Name = "cmbTilesetViewPalette";
-            this.cmbTilesetViewPalette.Size = new System.Drawing.Size(120, 23);
-            this.cmbTilesetViewPalette.TabIndex = 0;
-            // 
-            // pnlTilesetViewImage
-            // 
-            this.pnlTilesetViewImage.Location = new System.Drawing.Point(53, 74);
-            this.pnlTilesetViewImage.Margin = new System.Windows.Forms.Padding(0);
-            this.pnlTilesetViewImage.Name = "pnlTilesetViewImage";
-            this.pnlTilesetViewImage.Size = new System.Drawing.Size(200, 100);
-            this.pnlTilesetViewImage.TabIndex = 1;
+            this.btnReloadTileset.Location = new System.Drawing.Point(332, 20);
+            this.btnReloadTileset.Margin = new System.Windows.Forms.Padding(0);
+            this.btnReloadTileset.Name = "btnReloadTileset";
+            this.btnReloadTileset.Size = new System.Drawing.Size(96, 23);
+            this.btnReloadTileset.TabIndex = 5;
+            this.btnReloadTileset.Text = "再読み込み";
+            this.btnReloadTileset.UseVisualStyleBackColor = true;
             // 
             // TilesetEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1137, 562);
+            this.Controls.Add(this.btnReloadTileset);
             this.Controls.Add(this.grpTilesetView);
             this.Controls.Add(this.tbcMain);
             this.Controls.Add(this.btnLoadTileset);
@@ -414,5 +426,6 @@ namespace PochiPochiEditorPlus._Forms
         private System.Windows.Forms.Button btnEditAnimEntry;
         private System.Windows.Forms.ComboBox cmbTilesetViewPalette;
         private System.Windows.Forms.Panel pnlTilesetViewImage;
+        private System.Windows.Forms.Button btnReloadTileset;
     }
 }
