@@ -45,7 +45,7 @@ namespace PochiPochiEditorPlus._Forms
             CtrlHelper.LoadComboBoxFromFile(
                 (cmbImageCompType, "txt/tileset/TilesetImageCompType.txt"),
                 (cmbPaletteType, "txt/tileset/TilesetPaletteype.txt"),
-                (cmbTilesetViewPalette, "txt/tileset/TilesetPaletteIndex.txt"));
+                (cmbViewPalette, "txt/tileset/TilesetPaletteIndex.txt"));
 
             // 一時的にタブコントロールを無効化
             UpdateTabPageState(false);
@@ -55,8 +55,8 @@ namespace PochiPochiEditorPlus._Forms
         {
             // 枠描画
             _eventBinder.BindCustom(
-                () => CtrlHelper.AttachBorder(grpTilesetView, pnlTilesetViewImage),
-                () => CtrlHelper.DetachBorder(grpTilesetView));
+                () => CtrlHelper.AttachBorder(grpView, pnlViewImage),
+                () => CtrlHelper.DetachBorder(grpView));
 
             // タイルセット番号
             _eventBinder.BindCtrl(
@@ -74,7 +74,7 @@ namespace PochiPochiEditorPlus._Forms
                         // マッチングに成功したら読み込む
                         LoadDataToUI(_currentTilesetNo);
                         // btnLoadTilesetを更新
-                        UpdateLoadButtonState(false);
+                        UpdateLoadUIState(false);
                     }
                     else
                     {
@@ -88,7 +88,7 @@ namespace PochiPochiEditorPlus._Forms
                         // 失敗したらUIを無効化・リセット
                         UpdateTabPageState(false);
                         // btnLoadTilesetを更新
-                        UpdateLoadButtonState(true);
+                        UpdateLoadUIState(true);
                     }
                 });
             // タイルセット番号
@@ -98,7 +98,7 @@ namespace PochiPochiEditorPlus._Forms
                 (_, __) =>
                 {
                     UpdateTabPageState(false);
-                    UpdateLoadButtonState(true);
+                    UpdateLoadUIState(true);
                 });
 
             // 画像圧縮設定
@@ -190,7 +190,7 @@ namespace PochiPochiEditorPlus._Forms
                 ConvHelper.ParseIntToString(
                     _tilesetManager.HeaderEntry.AnimHeaderOffset.GetData<int>());
 
-
+            // grpView
         }
 
         private bool ValidateHeader(int tilesetNo)
@@ -218,17 +218,23 @@ namespace PochiPochiEditorPlus._Forms
 
         private void UpdateTabPageState(bool state)
         {
-            // pnlのクリア処理が必要
-            //
+            // grpView
+            CtrlHelper.SetControlsEnabled(grpView, state);
+            CtrlHelper.ResetControls(grpView);
+
+            // pnlViewImage
+            // pnlViewImage.BackgroundImage?.Dispose();
+            // pnlViewImage.BackgroundImage = null;
 
             // tbcMain
             CtrlHelper.SetControlsEnabled(tbcMain, state);
             CtrlHelper.ResetControls(tbcMain);
 
+            // btnReloadTileset
             btnReloadTileset.Enabled = state;
         }
 
-        private void UpdateLoadButtonState(bool state)
+        private void UpdateLoadUIState(bool state)
         {
             btnLoadTileset.Enabled = state;
             lblTilesetNo.Enabled = state;
