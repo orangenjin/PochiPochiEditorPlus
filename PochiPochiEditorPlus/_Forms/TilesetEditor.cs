@@ -23,6 +23,8 @@ namespace PochiPochiEditorPlus._Forms
         private dynamic _tilesetManager = null;
         // UI制御用
         private int _currentTilesetNo = 0;
+        private Bitmap _viewBmpOriginal = null;
+        private Bitmap _viewBmpScale = null;
 
         public TilesetEditor(SharedData sharedData, UndoManager undoManager)
         {
@@ -31,12 +33,10 @@ namespace PochiPochiEditorPlus._Forms
             _dynamicConfig = _sharedData.Config;
             _undoManager = undoManager;
             _eventBinder = new EventBinder();
+            _tilesetManager = new TilesetManager(_sharedData);
 
             InitializeControls();
             InitializeEventHandlers();
-
-            // 初期化
-            _tilesetManager = new TilesetManager(_sharedData);
         }
 
         private void InitializeControls()
@@ -164,16 +164,35 @@ namespace PochiPochiEditorPlus._Forms
                 h => cmbViewPalette.SelectedIndexChanged -= h,
                 (_, __) =>
                 {
-                    if (!(pnlViewImage.BackgroundImage is Bitmap bmp)) return;
+                    if (_viewBmpOriginal == null || _viewBmpScale == null) return;
 
                     int palIndex = cmbViewPalette.SelectedIndex;
                     if (palIndex < 0) return;
                     byte[] palData = _tilesetManager.PaletteData[palIndex];
 
                     // パレットのみを書き換えて再描画
-                    ImageHelper.ApplyPalette(bmp, palData, showBackColor: true);
+                    ImageHelper.ApplyPalette(_viewBmpOriginal, palData, showBackColor: true);
+                    using (Graphics g = Graphics.FromImage(_viewBmpScale))
+                    {
+                        g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
+                        g.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.Half;
+                        g.DrawImage(_viewBmpOriginal, new Rectangle(0, 0, _viewBmpScale.Width, _viewBmpScale.Height));
+                    }
                     pnlViewImage.Invalidate();
                 });
+            // スクロールバー操作時の再描画
+            _eventBinder.BindCtrl(
+                h => vsbViewImage.ValueChanged += h,
+                h => vsbViewImage.ValueChanged -= h,
+                (_, __) => pnlViewImage.Invalidate());
+            // マウスホイールでのスクロール
+            _eventBinder.BindCustom(
+                () => pnlViewImage.MouseWheel += pnlViewImage_MouseWheel,
+                () => pnlViewImage.MouseWheel -= pnlViewImage_MouseWheel);
+            // pnlViewImageの描画処理
+            _eventBinder.BindCustom(
+                () => pnlViewImage.Paint += pnlViewImage_Paint,
+                () => pnlViewImage.Paint -= pnlViewImage_Paint);
 
             // 解除タイミング指定
             _eventBinder.BindCtrl(
@@ -238,17 +257,34 @@ namespace PochiPochiEditorPlus._Forms
             // 必要な高さを求める
             int height = tileRows * Constants.TileSize;
 
-            // 前の画像を破棄
-            pnlViewImage.BackgroundImage?.Dispose();
-            pnlViewImage.BackgroundImage = null;
-
             // Bitmapを生成
-            pnlViewImage.BackgroundImage = ImageHelper.CreateBitmap(
+            _viewBmpOriginal = ImageHelper.CreateBitmap(
                 _tilesetManager.ImageData,
                 palData,
                 width,
                 height,
                 showBackColor: true);
+            // 2倍にスケール
+            _viewBmpScale = ImageHelper.ScaleBitmap(_viewBmpOriginal);
+
+            // スクロールバーの設定
+            if (_viewBmpScale.Height > pnlViewImage.Height)
+            {
+                vsbViewImage.Enabled = true;
+                vsbViewImage.Minimum = 0;
+                vsbViewImage.LargeChange = Constants.TileSize * 4;
+                vsbViewImage.SmallChange = Constants.TileSize * 2;
+                vsbViewImage.Maximum = (_viewBmpScale.Height - pnlViewImage.Height) + vsbViewImage.LargeChange - 1;
+                vsbViewImage.Value = 0;
+            }
+            else
+            {
+                vsbViewImage.Enabled = false;
+                vsbViewImage.Value = 0;
+            }
+
+            // パネルの再描画
+            pnlViewImage.Invalidate();
         }
 
         private void UpdateTabPageState(bool state)
@@ -260,8 +296,11 @@ namespace PochiPochiEditorPlus._Forms
             // pnlViewImage
             if (!state)
             {
-                pnlViewImage.BackgroundImage?.Dispose();
-                pnlViewImage.BackgroundImage = null;
+                _viewBmpOriginal?.Dispose();
+                _viewBmpOriginal = null;
+                _viewBmpScale?.Dispose();
+                _viewBmpScale = null;
+                pnlViewImage.Invalidate();
             }
 
             // tbcMain
@@ -303,7 +342,33 @@ namespace PochiPochiEditorPlus._Forms
                 allowNullPointer: true); // nullポインタを許容する
         }
 
+        /// <summary>
+        /// パネルでのマウスホイールでスクロールさせる。
+        /// </summary>
+        private void pnlViewImage_MouseWheel(object sender, MouseEventArgs e)
+        {
+            if (vsbViewImage.Enabled)
+            {
+                int change = e.Delta > 0 
+                    ? -vsbViewImage.LargeChange 
+                    : vsbViewImage.LargeChange;
+                int newValue = vsbViewImage.Value + change;
+                vsbViewImage.Value = Math.Max(vsbViewImage.Minimum,
+                    Math.Min(newValue, vsbViewImage.Maximum - vsbViewImage.LargeChange + 1));
+            }
+        }
 
+        /// <summary>
+        /// パネルの描画を更新する。
+        /// </summary>
+        private void pnlViewImage_Paint(object sender, PaintEventArgs e)
+        {
+            if (_viewBmpScale != null)
+            {
+                // スクロールバーの値をマイナスのY座標にして描画することでスクロールを表現
+                e.Graphics.DrawImage(_viewBmpScale, 0, -vsbViewImage.Value);
+            }
+        }
 
         /// <summary>
         /// FormGroupManagerからのUI再描画用の処理。
