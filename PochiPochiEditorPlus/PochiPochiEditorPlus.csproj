@@ -76,6 +76,9 @@
     <Compile Include="_Helpers\CtrlHelper.cs" />
     <Compile Include="_Helpers\ImageHelper.cs" />
     <Compile Include="_Helpers\IoHelper.cs" />
+    <Compile Include="_Helpers\_MatchHelper\PatternMatcher.cs" />
+    <Compile Include="_Helpers\_MatchHelper\TokenData.cs" />
+    <Compile Include="_Helpers\_MatchHelper\TokenDefinitions.cs" />
     <Compile Include="_Managers\CharmapManager.cs" />
     <Compile Include="_Managers\ConfigManager.cs" />
     <Compile Include="_Managers\EntryManager.cs" />
