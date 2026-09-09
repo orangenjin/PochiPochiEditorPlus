@@ -246,23 +246,10 @@ namespace PochiPochiEditorPlus._Forms
 
         private void DisplayTrainerSprite()
         {
-            var imageOffsetStr = txtSpriteImageOffset.Text;
-            var paletteOffsetStr = txtSpritePaletteOffset.Text;
-            var isImageInvalid = string.IsNullOrWhiteSpace(imageOffsetStr);
-            var isPaletteInValid = string.IsNullOrWhiteSpace(paletteOffsetStr);
-
-            // 無効なアドレスの場合は何も描画しない
-            if (isImageInvalid || isPaletteInValid)
-            {
-                picSpriteBmp.Image?.Dispose();
-                picSpriteBmp.Image = null;
-                return;
-            }
-
             try
             {
                 // 画像アドレスを取得
-                var imageOffsetValue = imageOffsetStr.ParseStringToInt();
+                var imageOffsetValue = txtSpriteImageOffset.Text.ParseStringToInt();
                 var imageData = ImageHelper.DecompressLZ77(
                     _sharedData.RomData,
                     imageOffsetValue);
@@ -275,7 +262,7 @@ namespace PochiPochiEditorPlus._Forms
                     _sharedData);
 
                 // パレットアドレスを取得
-                var paletteOffsetValue = paletteOffsetStr.ParseStringToInt();
+                var paletteOffsetValue = txtSpritePaletteOffset.Text.ParseStringToInt();
                 var paletteData = ImageHelper.DecompressPalette(
                     _sharedData.RomData,
                     paletteOffsetValue);
