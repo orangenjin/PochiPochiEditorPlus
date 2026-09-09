@@ -228,9 +228,15 @@ namespace PochiPochiEditorPlus._Forms
             if (palIndex < 0) return;
             byte[] palData = _tilesetManager.PaletteData[palIndex];
 
-            // サイズを計算
+            // 横幅は128固定
             int width = Constants.TilesetImageWidth;
-            int height = (_tilesetManager.ImageData.Length * Constants.PixelsPerByte4Bpp) / width;
+
+            // 1行に対するバイト数
+            int bytesPerTileRow = (width * Constants.TileSize) / Constants.PixelsPerByte4Bpp;
+            // 必要なタイル行数を計算（端数は切り上げ）
+            int tileRows = (_tilesetManager.ImageData.Length + bytesPerTileRow - 1) / bytesPerTileRow;
+            // 必要な高さを求める
+            int height = tileRows * Constants.TileSize;
 
             // 前の画像を破棄
             pnlViewImage.BackgroundImage?.Dispose();
