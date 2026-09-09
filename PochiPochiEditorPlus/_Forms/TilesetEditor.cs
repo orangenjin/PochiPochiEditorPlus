@@ -208,7 +208,10 @@ namespace PochiPochiEditorPlus._Forms
                     _tilesetManager.HeaderEntry.AnimHeaderOffset.GetData<int>());
 
             // grpView
-            cmbViewPalette.SelectedIndex = 0;
+            cmbViewPalette.SelectedIndex =
+                Convert.ToBoolean(_tilesetManager.HeaderEntry.PaletteType.GetData<int>())
+                    ? 7
+                    : 0;
             UpdateViewImage();
         }
 
