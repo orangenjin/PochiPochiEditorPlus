@@ -13,8 +13,7 @@ namespace PochiPochiEditorPlus._Forms
     public partial class TrainerSpriteEditor : Form, IEditorRefresh
     {
         // 共有データ用
-        private SharedData _sharedData = null;
-        private dynamic _dynamicConfig = null;
+        private dynamic _sharedData = null;
         // 変更履歴用
         private UndoManager _undoManager = null;
         // イベント登録・解除用
@@ -36,7 +35,6 @@ namespace PochiPochiEditorPlus._Forms
         {
             InitializeComponent();
             _sharedData = sharedData;
-            _dynamicConfig = _sharedData.Config;
             _undoManager = undoManager;
             _eventBinder = new EventBinder();
 
@@ -50,23 +48,23 @@ namespace PochiPochiEditorPlus._Forms
         private void InitializeEntries()
         {
             // 画像テーブルを作成
-            int tableOffset = _dynamicConfig.TrainerSpriteImageTableOffset;
-            int entrycount = _dynamicConfig.TrainerSpriteCount;
+            int tableOffset = _sharedData.Config.TrainerSpriteImageTableOffset;
+            int entrycount = _sharedData.Config.TrainerSpriteCount;
             _imageEntry = 
                 new EntryManager("TrainerSpriteImageEntry", tableOffset, entrycount, _sharedData);
 
             // パレットテーブルを作成
-            tableOffset = _dynamicConfig.TrainerSpritePaletteTableOffset;
+            tableOffset = _sharedData.Config.TrainerSpritePaletteTableOffset;
             _paletteEntry = 
                 new EntryManager("TrainerSpritePaletteEntry", tableOffset, entrycount, _sharedData);
 
             // Y座標位置テーブルを作成
-            tableOffset = _dynamicConfig.TrainerSpriteYPosTableOffset;
+            tableOffset = _sharedData.Config.TrainerSpriteYPosTableOffset;
             _yPosEntry = 
                 new EntryManager("TrainerSpriteYPosEntry", tableOffset, entrycount, _sharedData);
 
             // アニメポインタテーブルを作成
-            tableOffset = _dynamicConfig.TrainerSpriteAnimPointerTableOffset;
+            tableOffset = _sharedData.Config.TrainerSpriteAnimPointerTableOffset;
             _animPointerEntry = 
                 new EntryManager("TrainerSpriteAnimationPointerEntry", tableOffset, entrycount, _sharedData);
         }
@@ -74,7 +72,7 @@ namespace PochiPochiEditorPlus._Forms
         private void InitializeControls()
         {
             // nudSpriteIndexの最大値
-            int spriteCount = _dynamicConfig.TrainerSpriteCount;
+            int spriteCount = _sharedData.Config.TrainerSpriteCount;
             nudSpriteIndex.Maximum = spriteCount - 1;
 
             // タグ設定

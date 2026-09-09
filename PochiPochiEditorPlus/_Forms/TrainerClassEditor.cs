@@ -8,8 +8,7 @@ namespace PochiPochiEditorPlus._Forms
     public partial class TrainerClassEditor : Form, IEditorRefresh
     {
         // 共有データ用
-        private SharedData _sharedData = null;
-        private dynamic _dynamicConfig = null;
+        private dynamic _sharedData = null;
         // 変更履歴用
         private UndoManager _undoManager = null;
         // イベント登録・解除用
@@ -33,7 +32,6 @@ namespace PochiPochiEditorPlus._Forms
         {
             InitializeComponent();
             _sharedData = sharedData;
-            _dynamicConfig = _sharedData.Config;
             _undoManager = undoManager;
             _eventBinder = new EventBinder();
 
@@ -47,21 +45,21 @@ namespace PochiPochiEditorPlus._Forms
         private void InitializeEntries()
         {
             // 肩書名テーブルを作成
-            int tableOffset = (int)_dynamicConfig.TrainerClassNameTableOffset;
-            int entrycount = (int)_dynamicConfig.TrainerClassNameCount;
+            int tableOffset = (int)_sharedData.Config.TrainerClassNameTableOffset;
+            int entrycount = (int)_sharedData.Config.TrainerClassNameCount;
             _classNameEntry = 
                 new EntryManager("TrainerClassNameEntry", tableOffset, entrycount, _sharedData);
 
             // 追加データのbool判定
-            _isEncounterMusicEnabled = (bool)_dynamicConfig.EnableTrainerClassEncMusic;
-            _isBattleMusicEnabled = (bool)_dynamicConfig.EnableTrainerClassBattleMusic;
-            _isPokeBallEnabled = (bool)_dynamicConfig.EnableTrainerClassPokeBall;
-            _isBaseIvEnabled = (bool)_dynamicConfig.EnableTrainerClassBaseIV;
+            _isEncounterMusicEnabled = (bool)_sharedData.Config.EnableTrainerClassEncMusic;
+            _isBattleMusicEnabled = (bool)_sharedData.Config.EnableTrainerClassBattleMusic;
+            _isPokeBallEnabled = (bool)_sharedData.Config.EnableTrainerClassPokeBall;
+            _isBaseIvEnabled = (bool)_sharedData.Config.EnableTrainerClassBaseIV;
 
             if (_isEncounterMusicEnabled)
             {
                 // 戦闘前BGMテーブルを作成
-                tableOffset = (int)_dynamicConfig.TrainerClassEncMusicTableOffset;
+                tableOffset = (int)_sharedData.Config.TrainerClassEncMusicTableOffset;
                 _encMusicEntry = 
                     new EntryManager("TrainerClassEncMusicEntry", tableOffset, entrycount, _sharedData);
             }
@@ -69,7 +67,7 @@ namespace PochiPochiEditorPlus._Forms
             if (_isBattleMusicEnabled)
             {
                 // 戦闘中BGMテーブルを作成
-                tableOffset = (int)_dynamicConfig.TrainerClassBattleMusicTableOffset;
+                tableOffset = (int)_sharedData.Config.TrainerClassBattleMusicTableOffset;
                 _battleMusicEntry = 
                     new EntryManager("TrainerClassBattleMusicEntry", tableOffset, entrycount, _sharedData);
             }
@@ -77,7 +75,7 @@ namespace PochiPochiEditorPlus._Forms
             if (_isPokeBallEnabled)
             {
                 // 使用ボールIDテーブルを作成
-                tableOffset = (int)_dynamicConfig.TrainerClassPokeBallTableOffset;
+                tableOffset = (int)_sharedData.Config.TrainerClassPokeBallTableOffset;
                 _pokeBallEntry = 
                     new EntryManager("TrainerClassPokeBallEntry", tableOffset, entrycount, _sharedData);
             }
@@ -85,14 +83,14 @@ namespace PochiPochiEditorPlus._Forms
             if (_isBaseIvEnabled)
             {
                 // 基礎個体値テーブルを作成
-                tableOffset = (int)_dynamicConfig.TrainerClassBaseIVTableOffset;
+                tableOffset = (int)_sharedData.Config.TrainerClassBaseIVTableOffset;
                 _baseIvEntry = 
                     new EntryManager("TrainerClassBaseIvEntry", tableOffset, entrycount, _sharedData);
             }
 
             // 賞金倍率テーブルを作成
-            tableOffset = (int)_dynamicConfig.TrainerClassPrizeMultiTableOffset;
-            entrycount = (int)_dynamicConfig.TrainerClassPrizeMultiCount;
+            tableOffset = (int)_sharedData.Config.TrainerClassPrizeMultiTableOffset;
+            entrycount = (int)_sharedData.Config.TrainerClassPrizeMultiCount;
             _prizeMultiEntry = 
                 new EntryManager("TrainerClassPrizeMultiEntry", tableOffset, entrycount, _sharedData);
         }
@@ -128,7 +126,7 @@ namespace PochiPochiEditorPlus._Forms
 
             // txtClassNameStr
             txtClassNameStr.CharmapManager = _sharedData.Charmap;
-            txtClassNameStr.AllowedLength = (int)_dynamicConfig.TrainerClassNameEntryLength;
+            txtClassNameStr.AllowedLength = (int)_sharedData.Config.TrainerClassNameEntryLength;
             txtClassNameStr.NeedTerminator = true;
         }
 

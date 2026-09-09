@@ -25,7 +25,8 @@ namespace PochiPochiEditorPlus._Managers
         private int _blockDataEntryLength = 0;
         private int _blockAttrEntryLength = 0;
         // 簡易アクセス用
-        dynamic _dynamicHeaderEntry = null;
+        // 一応プロパティはdynamicにしないようにする
+        private dynamic _dynamicHeaderEntry = null;
 
         public enum PaletteKind
         {
