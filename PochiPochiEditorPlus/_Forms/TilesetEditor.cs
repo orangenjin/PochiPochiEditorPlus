@@ -220,9 +220,6 @@ namespace PochiPochiEditorPlus._Forms
         /// </summary>
         private void UpdateViewImage()
         {
-            if (_tilesetManager.ImageData == null || _tilesetManager.ImageData.Length == 0) return;
-            if (_tilesetManager.PaletteData == null || _tilesetManager.PaletteData.Count == 0) return;
-
             // 選択中のパレットを取得
             int palIndex = cmbViewPalette.SelectedIndex;
             if (palIndex < 0) return;
@@ -238,35 +235,50 @@ namespace PochiPochiEditorPlus._Forms
             // 必要な高さを求める
             int height = tileRows * Constants.TileSize;
 
-            // Bitmapを生成
-            _viewBmp = ImageHelper.CreateBitmap(
-                    _tilesetManager.ImageData,
-                    palData,
-                    width,
-                    height,
-                    showBackColor: true);
-
-            // スケール後の高さを計算
-            int scaledHeight = _viewBmp.Height * Constants.DefaultScale;
-
-            // スクロールバーの設定
-            if (scaledHeight > pnlViewImage.Height)
+            try
             {
-                vsbViewImage.Enabled = true;
-                vsbViewImage.Minimum = 0;
-                vsbViewImage.LargeChange = Constants.TileSize * Constants.DefaultScale;
-                vsbViewImage.SmallChange = Constants.TileSize * Constants.DefaultScale;
-                vsbViewImage.Maximum = (scaledHeight - pnlViewImage.Height) + vsbViewImage.LargeChange - 1;
-                vsbViewImage.Value = 0;
+                // 既存のBitmapがあれば解放
+                _viewBmp?.Dispose();
+
+                // Bitmapを生成
+                _viewBmp = ImageHelper.CreateBitmap(
+                        _tilesetManager.ImageData,
+                        palData,
+                        width,
+                        height,
+                        showBackColor: true);
+
+                // スケール後の高さを計算
+                int scaledHeight = _viewBmp.Height * Constants.DefaultScale;
+
+                // スクロールバーの設定
+                if (scaledHeight > pnlViewImage.Height)
+                {
+                    vsbViewImage.Enabled = true;
+                    vsbViewImage.Minimum = 0;
+                    vsbViewImage.LargeChange = Constants.TileSize * Constants.DefaultScale;
+                    vsbViewImage.SmallChange = Constants.TileSize * Constants.DefaultScale;
+                    vsbViewImage.Maximum = (scaledHeight - pnlViewImage.Height) + vsbViewImage.LargeChange - 1;
+                    vsbViewImage.Value = 0;
+                }
+                else
+                {
+                    vsbViewImage.Enabled = false;
+                    vsbViewImage.Value = 0;
+                }
             }
-            else
+            catch
             {
+                _viewBmp?.Dispose();
+                _viewBmp = null;
+
                 vsbViewImage.Enabled = false;
                 vsbViewImage.Value = 0;
             }
-
-            // パネルの再描画
-            pnlViewImage.Invalidate();
+            finally
+            {
+                pnlViewImage.Invalidate();
+            }
         }
 
         private void UpdateTabPageState(bool state)
