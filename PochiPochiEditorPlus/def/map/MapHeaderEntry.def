@@ -1,0 +1,14 @@
+MapFooterOffset: Pointer
+EventScriptHeaderOffset: Pointer
+LevelScriptOffset: Pointer
+ConnHeaderOffset: Pointer
+BgmIndex: UInt16
+MapTerrainIndex: UInt16
+MapNameIndex: Byte
+MapSight: Byte
+MapWthr: Byte
+MapType: Byte
+MapBike: Byte
+MapNameType: Byte
+MapRelLayer: SByte
+MapSpBg: Byte

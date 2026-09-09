@@ -1,0 +1,14 @@
+MapWidth: Byte
+MapFooterUnk1: Byte
+MapFooterUnk2: Byte
+MapFooterUnk3: Byte
+MapHeight: Byte
+MapFooterUnk4: Byte
+MapFooterUnk5: Byte
+MapFooterUnk6: Byte
+MapDataOffset: Pointer
+BorderDataOffset: Pointer
+Tileset1HeaderOffset: Pointer
+Tileset2HeaderOffset: Pointer
+BorderWidth: Byte
+BorderHeight: Byte
