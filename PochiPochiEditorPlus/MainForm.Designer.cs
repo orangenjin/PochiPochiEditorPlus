@@ -156,7 +156,7 @@ namespace PochiPochiEditorPlus
             this.tsmiUndo.Name = "tsmiUndo";
             this.tsmiUndo.Padding = new System.Windows.Forms.Padding(0);
             this.tsmiUndo.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Z)));
-            this.tsmiUndo.Size = new System.Drawing.Size(180, 20);
+            this.tsmiUndo.Size = new System.Drawing.Size(157, 20);
             this.tsmiUndo.Text = "元に戻す";
             // 
             // tsmiRedo
@@ -164,7 +164,7 @@ namespace PochiPochiEditorPlus
             this.tsmiRedo.Name = "tsmiRedo";
             this.tsmiRedo.Padding = new System.Windows.Forms.Padding(0);
             this.tsmiRedo.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Y)));
-            this.tsmiRedo.Size = new System.Drawing.Size(180, 20);
+            this.tsmiRedo.Size = new System.Drawing.Size(157, 20);
             this.tsmiRedo.Text = "やり直す";
             // 
             // tsmiTool
@@ -181,14 +181,14 @@ namespace PochiPochiEditorPlus
             // 
             this.tsmiFreeSpaceFinder.Name = "tsmiFreeSpaceFinder";
             this.tsmiFreeSpaceFinder.Padding = new System.Windows.Forms.Padding(0);
-            this.tsmiFreeSpaceFinder.Size = new System.Drawing.Size(180, 20);
+            this.tsmiFreeSpaceFinder.Size = new System.Drawing.Size(176, 20);
             this.tsmiFreeSpaceFinder.Text = "空き領域検索";
             // 
             // tsmiTilesetNoCalc
             // 
             this.tsmiTilesetNoCalc.Name = "tsmiTilesetNoCalc";
             this.tsmiTilesetNoCalc.Padding = new System.Windows.Forms.Padding(0);
-            this.tsmiTilesetNoCalc.Size = new System.Drawing.Size(180, 20);
+            this.tsmiTilesetNoCalc.Size = new System.Drawing.Size(176, 20);
             this.tsmiTilesetNoCalc.Text = "タイルセット番号計算";
             // 
             // grpEditors
@@ -453,6 +453,7 @@ namespace PochiPochiEditorPlus
             this.lstHistory.Location = new System.Drawing.Point(20, 28);
             this.lstHistory.Margin = new System.Windows.Forms.Padding(0);
             this.lstHistory.Name = "lstHistory";
+            this.lstHistory.ScrollAlwaysVisible = true;
             this.lstHistory.Size = new System.Drawing.Size(408, 124);
             this.lstHistory.TabIndex = 0;
             // 
