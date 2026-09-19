@@ -5,9 +5,9 @@ using System.Reflection;
 using System.Windows.Forms;
 using PochiPochiEditorPlus._Utilities;
 
-namespace PochiPochiEditorPlus._Managers
+namespace PochiPochiEditorPlus._Managers._FormGroupManager
 {
-    public sealed class FormGroupManager
+    public sealed class FormGroupRegister
     {
         private Form _ownerForm = null;
         private List<Form> _forms = null;
@@ -15,7 +15,7 @@ namespace PochiPochiEditorPlus._Managers
         // メイン画面のUI状態更新用
         public EventHandler Closed = null;
 
-        public FormGroupManager(
+        public FormGroupRegister(
             Form ownerForm,
             FormGroup group,
             SharedData sharedData,

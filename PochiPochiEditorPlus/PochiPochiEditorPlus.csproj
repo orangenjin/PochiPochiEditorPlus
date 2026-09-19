@@ -88,7 +88,7 @@
     <Compile Include="_Managers\_CommandManager\FieldValueChangeCommand.cs" />
     <Compile Include="_Managers\_CommandManager\RefDataChangeCommand.cs" />
     <Compile Include="_Managers\_FieldManager\FieldDefinitions.cs" />
-    <Compile Include="_Managers\FormGroupManager.cs" />
+    <Compile Include="_Managers\_FormGroupManager\FormGroupRegister.cs" />
     <Compile Include="_Managers\UndoManager.cs" />
     <Compile Include="_Managers\_FieldManager\FieldExtensions.cs" />
     <Compile Include="_Managers\_FieldManager\FieldMetaDataReader.cs" />

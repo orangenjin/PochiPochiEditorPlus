@@ -7,6 +7,7 @@ using System.Reflection;
 using System.Windows.Forms;
 using PochiPochiEditorPlus._Helpers;
 using PochiPochiEditorPlus._Managers;
+using PochiPochiEditorPlus._Managers._FormGroupManager;
 using PochiPochiEditorPlus._Utilities;
 
 namespace PochiPochiEditorPlus
@@ -14,7 +15,7 @@ namespace PochiPochiEditorPlus
     public partial class MainForm : Form
     {
         // フォーム同時起動用
-        private FormGroupManager _formGroupManager = null;
+        private FormGroupRegister _formGroupManager = null;
         // イベント登録・解除用
         private EventBinder _eventBinder = null;
         // 共有データ用
@@ -219,7 +220,7 @@ namespace PochiPochiEditorPlus
             if (!Enum.TryParse(groupName, out FormGroup group)) return;
 
             // フォーム生成
-            _formGroupManager = new FormGroupManager(this, group, _sharedData, _undoManager);
+            _formGroupManager = new FormGroupRegister(this, group, _sharedData, _undoManager);
             _formGroupManager.Closed += (_, __) =>
             {
                 _formGroupManager = null;

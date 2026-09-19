@@ -1,5 +1,6 @@
 ﻿using System.Windows.Forms;
 using PochiPochiEditorPlus._Managers;
+using PochiPochiEditorPlus._Managers._FormGroupManager;
 using PochiPochiEditorPlus._Utilities;
 
 namespace PochiPochiEditorPlus._Forms

@@ -4,6 +4,7 @@ using System.Windows.Forms;
 using PochiPochiEditorPlus._Helpers;
 using PochiPochiEditorPlus._Managers;
 using PochiPochiEditorPlus._Managers._CommandManager;
+using PochiPochiEditorPlus._Managers._FormGroupManager;
 using PochiPochiEditorPlus._Utilities;
 using PochiPochiEditorPlus._Utilities._QuickInput;
 
