@@ -32,7 +32,7 @@ namespace PochiPochiEditorPlus._Managers._FormGroupManager
     /// </summary>
     public enum FormGroup
     {
-        Map,
+        OwMap,
         Tileset,
 
         TrainerClass,
