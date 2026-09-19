@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Dynamic;
 using System.Linq.Expressions;
 using System.Reflection;
 using PochiPochiEditorPlus._Utilities;
@@ -14,6 +15,28 @@ namespace PochiPochiEditorPlus._Managers._FormGroupManager
                 var binding = new FieldBinding(targetInstance, fieldInfo);
                 _values.Add(fieldInfo.Name, binding);
             }
+        }
+
+        public override bool TryGetMember(GetMemberBinder binder, out object result)
+        {
+            if (_values.TryGetValue(binder.Name, out FieldBinding binding)) 
+            {
+                result = binding.GetValue();
+                return true;
+            }
+
+            return base.TryGetMember(binder, out result);
+        }
+
+        public override bool TrySetMember(SetMemberBinder binder, object value)
+        {
+            if (_values.TryGetValue(binder.Name, out FieldBinding binding))
+            {
+                binding.SetValue(value);
+                return true;
+            }
+
+            return base.TrySetMember(binder, value);
         }
     }
 
