@@ -9,11 +9,13 @@ namespace PochiPochiEditorPlus._Managers._FormGroupManager
 {
     public sealed class FormGroupRegister
     {
+        // フォームグループ内でのデータのやり取り用
+        public FormGroupData GroupData { get; set; }
+        // メイン画面のUI状態更新用
+        public EventHandler Closed { get; set; }
+
         private Form _ownerForm = null;
         private List<Form> _forms = null;
-
-        // メイン画面のUI状態更新用
-        public EventHandler Closed = null;
 
         public FormGroupRegister(
             Form ownerForm,
@@ -24,8 +26,8 @@ namespace PochiPochiEditorPlus._Managers._FormGroupManager
             _ownerForm = ownerForm;
             _forms = new List<Form>();
 
-            // グループと順番判定
-            var formTypes = Assembly.GetExecutingAssembly()
+            // グループと順番を判定
+            var formInfos = Assembly.GetExecutingAssembly()
                 .GetTypes()
                 .Where(t => typeof(Form).IsAssignableFrom(t))
                 .Select(t => new
@@ -35,12 +37,20 @@ namespace PochiPochiEditorPlus._Managers._FormGroupManager
                 })
                 .Where(x => x.Attribute?.Group == group)
                 .OrderBy(x => x.Attribute.Order)
-                .Select(x => x.Type);
+                .ToList();
+
+            // グループ内に複数のフォームがある場合
+            if (formInfos.Any(x => x.Attribute.Order >= 0))
+            {
+                GroupData = new FormGroupData();
+            }
 
             // フォーム作成
-            foreach (var type in formTypes)
+            foreach (var info in formInfos)
             {
-                var form = (Form)Activator.CreateInstance(type, sharedData, undoManager);
+                var form = GroupData != null
+                    ? (Form)Activator.CreateInstance(info.Type, sharedData, undoManager, GroupData)
+                    : (Form)Activator.CreateInstance(info.Type, sharedData, undoManager);
 
                 form.FormClosed += SingleForm_FormClosed;
                 _forms.Add(form);
@@ -71,6 +81,9 @@ namespace PochiPochiEditorPlus._Managers._FormGroupManager
                 }
             }
             _forms.Clear();
+            _forms = null;
+            GroupData?.ClearDict();
+            GroupData = null;
 
             // 呼び出し元フォームを前に出す
             _ownerForm.BringToFront();

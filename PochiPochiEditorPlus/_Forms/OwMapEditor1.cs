@@ -23,17 +23,31 @@ namespace PochiPochiEditorPlus._Forms
     {
         // 共有データ用
         private dynamic _sharedData = null;
+        private dynamic _groupData = null;
         // 変更履歴用
         private UndoManager _undoManager = null;
         // イベント登録・解除用
         private EventBinder _eventBinder = null;
 
-        public OwMapEditor1(SharedData sharedData, UndoManager undoManager)
+        public OwMapEditor1(
+            SharedData sharedData,
+            UndoManager undoManager,
+            FormGroupData groupData)
         {
             InitializeComponent();
             _sharedData = sharedData;
             _undoManager = undoManager;
+            _groupData = groupData;
             _eventBinder = new EventBinder();
+
+            test();
+
+        }
+
+        private void test()
+        {
+            var entry = _groupData._mapHeaderEntry.GetValue()[3][0];
+            textBox1.Text = entry.MapFooterOffset.GetData<int>().ToString("X8");
         }
 
         /// <summary>

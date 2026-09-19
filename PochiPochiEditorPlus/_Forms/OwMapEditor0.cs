@@ -23,6 +23,7 @@ namespace PochiPochiEditorPlus._Forms
     {
         // 共有データ用
         private dynamic _sharedData = null;
+        private dynamic _groupData = null;
         // 変更履歴用
         private UndoManager _undoManager = null;
         // イベント登録・解除用
@@ -54,12 +55,19 @@ namespace PochiPochiEditorPlus._Forms
             int MapNumberIndex { get; }
         }
 
-        public OwMapEditor0(SharedData sharedData, UndoManager undoManager)
+        public OwMapEditor0(
+            SharedData sharedData,
+            UndoManager undoManager,
+            FormGroupData groupData)
         {
             InitializeComponent();
             _sharedData = sharedData;
             _undoManager = undoManager;
+            _groupData = groupData;
             _eventBinder = new EventBinder();
+
+            // グループデータを登録
+            RegisterFormGroupData(_groupData);
 
             InitializeMapNameEntry(); // 先に処理
             InitializeControls();
@@ -73,6 +81,11 @@ namespace PochiPochiEditorPlus._Forms
 
             // 初期選択
             rbOrderByAsc.Checked = true;
+        }
+
+        private void RegisterFormGroupData(FormGroupData groupData)
+        {
+            groupData.Register(this, () => _mapHeaderEntry);
         }
 
         private void InitializeMapNameEntry()

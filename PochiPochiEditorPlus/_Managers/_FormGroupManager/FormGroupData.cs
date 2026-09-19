@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Linq.Expressions;
 using System.Reflection;
+using PochiPochiEditorPlus._Utilities;
 
-namespace PochiPochiEditorPlus._Utilities._FormGroupManager
+namespace PochiPochiEditorPlus._Managers._FormGroupManager
 {
     public sealed class FormGroupData : DynamicAccessor<FieldBinding>
     {

@@ -34,7 +34,9 @@ namespace PochiPochiEditorPlus._Forms
             this.tbpBlock = new System.Windows.Forms.TabPage();
             this.tbpColl = new System.Windows.Forms.TabPage();
             this.tbpEvent = new System.Windows.Forms.TabPage();
+            this.textBox1 = new System.Windows.Forms.TextBox();
             this.tbcMain.SuspendLayout();
+            this.tbpBlock.SuspendLayout();
             this.SuspendLayout();
             // 
             // tbcMain
@@ -51,6 +53,7 @@ namespace PochiPochiEditorPlus._Forms
             // 
             // tbpBlock
             // 
+            this.tbpBlock.Controls.Add(this.textBox1);
             this.tbpBlock.Location = new System.Drawing.Point(4, 24);
             this.tbpBlock.Margin = new System.Windows.Forms.Padding(0);
             this.tbpBlock.Name = "tbpBlock";
@@ -79,6 +82,13 @@ namespace PochiPochiEditorPlus._Forms
             this.tbpEvent.Text = "イベント";
             this.tbpEvent.UseVisualStyleBackColor = true;
             // 
+            // textBox1
+            // 
+            this.textBox1.Location = new System.Drawing.Point(129, 159);
+            this.textBox1.Name = "textBox1";
+            this.textBox1.Size = new System.Drawing.Size(100, 23);
+            this.textBox1.TabIndex = 0;
+            // 
             // OwMapEditor1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -92,6 +102,8 @@ namespace PochiPochiEditorPlus._Forms
             this.Name = "OwMapEditor1";
             this.Text = "マップ";
             this.tbcMain.ResumeLayout(false);
+            this.tbpBlock.ResumeLayout(false);
+            this.tbpBlock.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -102,5 +114,6 @@ namespace PochiPochiEditorPlus._Forms
         private System.Windows.Forms.TabPage tbpBlock;
         private System.Windows.Forms.TabPage tbpColl;
         private System.Windows.Forms.TabPage tbpEvent;
+        private System.Windows.Forms.TextBox textBox1;
     }
 }
