@@ -1,7 +1,7 @@
 ﻿
 namespace PochiPochiEditorPlus._Forms
 {
-    partial class OwMapEditor
+    partial class OwMapEditor0
     {
         /// <summary>
         /// Required designer variable.
@@ -29,7 +29,7 @@ namespace PochiPochiEditorPlus._Forms
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(OwMapEditor));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(OwMapEditor0));
             this.grpMapSelector = new System.Windows.Forms.GroupBox();
             this.rbOrderByAsc = new System.Windows.Forms.RadioButton();
             this.rbOrderByName = new System.Windows.Forms.RadioButton();

@@ -19,7 +19,7 @@ using PochiPochiEditorPlus._Utilities._QuickInput;
 namespace PochiPochiEditorPlus._Forms
 {
     [FormGroup(FormGroup.OwMap, 0)]
-    public partial class OwMapEditor : Form, IEditorRefresh
+    public partial class OwMapEditor0 : Form, IEditorRefresh
     {
         // 共有データ用
         private dynamic _sharedData = null;
@@ -54,7 +54,7 @@ namespace PochiPochiEditorPlus._Forms
             int MapNumberIndex { get; }
         }
 
-        public OwMapEditor(SharedData sharedData, UndoManager undoManager)
+        public OwMapEditor0(SharedData sharedData, UndoManager undoManager)
         {
             InitializeComponent();
             _sharedData = sharedData;
