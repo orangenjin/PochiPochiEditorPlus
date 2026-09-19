@@ -45,10 +45,6 @@ namespace PochiPochiEditorPlus._Forms
             this.btnEditLevelScript = new System.Windows.Forms.Button();
             this.lblLevelScriptOffset = new System.Windows.Forms.Label();
             this.nudMapTerrainIndex = new System.Windows.Forms.NumericUpDown();
-            this.txtConnHeaderOffset = new PochiPochiEditorPlus._Utilities._CustomCtrls.HexTextBox();
-            this.txtLevelScriptOffset = new PochiPochiEditorPlus._Utilities._CustomCtrls.HexTextBox();
-            this.txtEventScriptHeaderOffset = new PochiPochiEditorPlus._Utilities._CustomCtrls.HexTextBox();
-            this.txtMapFooterOffset = new PochiPochiEditorPlus._Utilities._CustomCtrls.HexTextBox();
             this.cmbMapType = new System.Windows.Forms.ComboBox();
             this.lblMapType = new System.Windows.Forms.Label();
             this.lblMapTerrainIndex = new System.Windows.Forms.Label();
@@ -70,6 +66,10 @@ namespace PochiPochiEditorPlus._Forms
             this.nudBgmIndex = new System.Windows.Forms.NumericUpDown();
             this.grpMapView = new System.Windows.Forms.GroupBox();
             this.pnlMapDraw = new System.Windows.Forms.Panel();
+            this.txtConnHeaderOffset = new PochiPochiEditorPlus._Utilities._CustomCtrls.HexTextBox();
+            this.txtLevelScriptOffset = new PochiPochiEditorPlus._Utilities._CustomCtrls.HexTextBox();
+            this.txtEventScriptHeaderOffset = new PochiPochiEditorPlus._Utilities._CustomCtrls.HexTextBox();
+            this.txtMapFooterOffset = new PochiPochiEditorPlus._Utilities._CustomCtrls.HexTextBox();
             this.grpMapSelector.SuspendLayout();
             this.grpMapHeader.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudMapTerrainIndex)).BeginInit();
@@ -271,38 +271,6 @@ namespace PochiPochiEditorPlus._Forms
             this.nudMapTerrainIndex.Name = "nudMapTerrainIndex";
             this.nudMapTerrainIndex.Size = new System.Drawing.Size(100, 23);
             this.nudMapTerrainIndex.TabIndex = 12;
-            // 
-            // txtConnHeaderOffset
-            // 
-            this.txtConnHeaderOffset.Location = new System.Drawing.Point(156, 118);
-            this.txtConnHeaderOffset.Margin = new System.Windows.Forms.Padding(0);
-            this.txtConnHeaderOffset.Name = "txtConnHeaderOffset";
-            this.txtConnHeaderOffset.Size = new System.Drawing.Size(80, 23);
-            this.txtConnHeaderOffset.TabIndex = 10;
-            // 
-            // txtLevelScriptOffset
-            // 
-            this.txtLevelScriptOffset.Location = new System.Drawing.Point(156, 88);
-            this.txtLevelScriptOffset.Margin = new System.Windows.Forms.Padding(0);
-            this.txtLevelScriptOffset.Name = "txtLevelScriptOffset";
-            this.txtLevelScriptOffset.Size = new System.Drawing.Size(80, 23);
-            this.txtLevelScriptOffset.TabIndex = 7;
-            // 
-            // txtEventScriptHeaderOffset
-            // 
-            this.txtEventScriptHeaderOffset.Location = new System.Drawing.Point(156, 58);
-            this.txtEventScriptHeaderOffset.Margin = new System.Windows.Forms.Padding(0);
-            this.txtEventScriptHeaderOffset.Name = "txtEventScriptHeaderOffset";
-            this.txtEventScriptHeaderOffset.Size = new System.Drawing.Size(80, 23);
-            this.txtEventScriptHeaderOffset.TabIndex = 4;
-            // 
-            // txtMapFooterOffset
-            // 
-            this.txtMapFooterOffset.Location = new System.Drawing.Point(156, 28);
-            this.txtMapFooterOffset.Margin = new System.Windows.Forms.Padding(0);
-            this.txtMapFooterOffset.Name = "txtMapFooterOffset";
-            this.txtMapFooterOffset.Size = new System.Drawing.Size(80, 23);
-            this.txtMapFooterOffset.TabIndex = 1;
             // 
             // cmbMapType
             // 
@@ -524,11 +492,43 @@ namespace PochiPochiEditorPlus._Forms
             this.pnlMapDraw.Size = new System.Drawing.Size(608, 448);
             this.pnlMapDraw.TabIndex = 0;
             // 
+            // txtConnHeaderOffset
+            // 
+            this.txtConnHeaderOffset.Location = new System.Drawing.Point(156, 118);
+            this.txtConnHeaderOffset.Margin = new System.Windows.Forms.Padding(0);
+            this.txtConnHeaderOffset.Name = "txtConnHeaderOffset";
+            this.txtConnHeaderOffset.Size = new System.Drawing.Size(80, 23);
+            this.txtConnHeaderOffset.TabIndex = 10;
+            // 
+            // txtLevelScriptOffset
+            // 
+            this.txtLevelScriptOffset.Location = new System.Drawing.Point(156, 88);
+            this.txtLevelScriptOffset.Margin = new System.Windows.Forms.Padding(0);
+            this.txtLevelScriptOffset.Name = "txtLevelScriptOffset";
+            this.txtLevelScriptOffset.Size = new System.Drawing.Size(80, 23);
+            this.txtLevelScriptOffset.TabIndex = 7;
+            // 
+            // txtEventScriptHeaderOffset
+            // 
+            this.txtEventScriptHeaderOffset.Location = new System.Drawing.Point(156, 58);
+            this.txtEventScriptHeaderOffset.Margin = new System.Windows.Forms.Padding(0);
+            this.txtEventScriptHeaderOffset.Name = "txtEventScriptHeaderOffset";
+            this.txtEventScriptHeaderOffset.Size = new System.Drawing.Size(80, 23);
+            this.txtEventScriptHeaderOffset.TabIndex = 4;
+            // 
+            // txtMapFooterOffset
+            // 
+            this.txtMapFooterOffset.Location = new System.Drawing.Point(156, 28);
+            this.txtMapFooterOffset.Margin = new System.Windows.Forms.Padding(0);
+            this.txtMapFooterOffset.Name = "txtMapFooterOffset";
+            this.txtMapFooterOffset.Size = new System.Drawing.Size(80, 23);
+            this.txtMapFooterOffset.TabIndex = 1;
+            // 
             // OwMapEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1208, 769);
+            this.ClientSize = new System.Drawing.Size(1208, 771);
             this.Controls.Add(this.grpMapView);
             this.Controls.Add(this.grpMapHeader);
             this.Controls.Add(this.grpMapSelector);

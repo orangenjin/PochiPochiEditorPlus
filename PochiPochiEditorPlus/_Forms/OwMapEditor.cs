@@ -37,7 +37,7 @@ namespace PochiPochiEditorPlus._Forms
         private Dictionary<int, string> _mapNameCache = new Dictionary<int, string>();
 
         // ノードからエントリーインデックスを取得するため
-        public class MapTreeNode : TreeNode, IMapNode
+        public sealed class MapTreeNode : TreeNode, IMapNode
         {
             public int MapBankIndex { get; }
             public int MapNumberIndex { get; }
