@@ -14,7 +14,7 @@ namespace PochiPochiEditorPlus._Managers._FormGroupManager
     /// 属するフォームグループと、表示の順番を指定する。
     /// </summary>
     [AttributeUsage(AttributeTargets.Class)]
-    public class FormGroupAttribute : Attribute
+    public sealed class FormGroupAttribute : Attribute
     {
         public FormGroup Group { get; }
         public int Order { get; }

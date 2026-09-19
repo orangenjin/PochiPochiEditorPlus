@@ -4,7 +4,7 @@ using System.Reflection;
 
 namespace PochiPochiEditorPlus._Utilities._FormGroupManager
 {
-    public class FormGroupData : DynamicAccessor<FieldBinding>
+    public sealed class FormGroupData : DynamicAccessor<FieldBinding>
     {
         public void Register<TValue>(object targetInstance, Expression<Func<TValue>> fieldExpression)
         {
@@ -19,7 +19,7 @@ namespace PochiPochiEditorPlus._Utilities._FormGroupManager
     /// <summary>
     /// 格納するフィールドを整理するクラスを定義する。
     /// </summary>
-    public class FieldBinding
+    public sealed class FieldBinding
     {
         public object Instance { get; set; }
         public FieldInfo Field { get; set; }
