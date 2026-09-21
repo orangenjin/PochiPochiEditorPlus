@@ -90,12 +90,34 @@ namespace PochiPochiEditorPlus._Helpers._MatchHelper
         }
 
         /// <summary>
+        /// 終端文字とパディング文字があるかどうかを判定する。
+        /// </summary>
+        public static bool TryCheckTerminator(
+            byte[] data,
+            int entryLength,
+            byte terminatorByte,
+            byte paddingByte,
+            int offset = 0)
+        {
+            // 探索開始位置を計算
+            int endPos = offset + entryLength - 1;
+            int currentPos = endPos;
+
+            while (offset <= currentPos && data[currentPos] == paddingByte)
+            {
+                currentPos--;
+            }
+
+            // それがterminatorByteであれば成功
+            return currentPos >= offset && data[currentPos] == terminatorByte;
+        }
+
+        /// <summary>
         /// TokenDataの長さを計算する。
         /// </summary>
-        private static int GetPatternLength(List<TokenData> tokens)
+        public static int GetPatternLength(List<TokenData> tokens)
         {
             int length = 0;
-
             for (int i = 0; i < tokens.Count; i++)
             {
                 length += tokens[i].GetLength();

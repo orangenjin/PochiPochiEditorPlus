@@ -17,7 +17,7 @@
         // 1, 2, 4バイトしか想定していない
         public static TokenData Exact(
             int length, 
-            bool isSigned, 
+            bool isSigned = false, 
             params long[] exactValues)
         {
             var tokenDef = 
