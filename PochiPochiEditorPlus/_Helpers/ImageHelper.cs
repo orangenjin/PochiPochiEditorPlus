@@ -459,25 +459,25 @@ namespace PochiPochiEditorPlus._Helpers
         }
 
         /// <summary>
-        /// Bitmapを拡大常表示する。
+        /// Bitmapをぼやかさずに拡大描画する。
         /// </summary>
-        public static Bitmap ScaleBitmap(
-            Bitmap originalBmp,
+        public static void ScaleBitmap(
+            Graphics gfx,
+            Bitmap bmp,
+            int xOffset = 0,
+            int yOffset = 0,
             int scaleFactor = Constants.DefaultScale)
         {
-            int newWidth = originalBmp.Width * scaleFactor;
-            int newHeight = originalBmp.Height * scaleFactor;
-            var scaledBmp = new Bitmap(newWidth, newHeight);
+            if (bmp == null || gfx == null) return;
 
-            using (Graphics g = Graphics.FromImage(scaledBmp))
-            {
-                // ぼやかさずに拡大する設定
-                g.InterpolationMode = InterpolationMode.NearestNeighbor;
-                g.PixelOffsetMode = PixelOffsetMode.Half;
-                g.DrawImage(originalBmp, new Rectangle(0, 0, newWidth, newHeight));
-            }
+            // ぼやかさずに拡大する設定
+            gfx.InterpolationMode = InterpolationMode.NearestNeighbor;
+            gfx.PixelOffsetMode = PixelOffsetMode.Half;
 
-            return scaledBmp;
+            int newWidth = bmp.Width * scaleFactor;
+            int newHeight = bmp.Height * scaleFactor;
+
+            gfx.DrawImage(bmp, new Rectangle(xOffset, yOffset, newWidth, newHeight));
         }
     }
 }

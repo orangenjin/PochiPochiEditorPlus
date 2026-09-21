@@ -390,16 +390,7 @@ namespace PochiPochiEditorPlus._Forms
             if (_viewBmp != null)
             {
                 // 2倍に拡大する
-                e.Graphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
-                e.Graphics.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.Half;
-
-                // タイル画像を描画
-                Rectangle destRect = new Rectangle(
-                    0,
-                    -vsbViewImage.Value,
-                    _viewBmp.Width * Constants.DefaultScale,
-                    _viewBmp.Height * Constants.DefaultScale);
-                e.Graphics.DrawImage(_viewBmp, destRect);
+                ImageHelper.ScaleBitmap(e.Graphics, _viewBmp, 0, -vsbViewImage.Value);
 
                 int scaledTileSize = Constants.TileSize * Constants.DefaultScale;
                 int tilesPerRow = Constants.TilesetImageWidth / Constants.TileSize;

@@ -273,17 +273,25 @@ namespace PochiPochiEditorPlus._Forms
                     paletteDataLz77,
                     _sharedData);
 
-                var sprite = ImageHelper.CreateBitmap(
+                // 画像を生成
+                using (var sprite = ImageHelper.CreateBitmap(
                     imageData,
                     paletteData,
                     Constants.SpriteSize,
                     Constants.SpriteSize,
-                    showBackColor: true);
-                var scaled = ImageHelper.ScaleBitmap(sprite);
+                    showBackColor: true))
+                {
+                    // サイズを計算
+                    int newWidth = sprite.Width * Constants.DefaultScale;
+                    int newHeight = sprite.Height * Constants.DefaultScale;
+                    var scaled = new Bitmap(newWidth, newHeight);
+                    // 2倍に拡大
+                    ImageHelper.ScaleBitmap(Graphics.FromImage(scaled), sprite);
 
-                picSpriteBmp.Image?.Dispose();
-                picSpriteBmp.Image = scaled;
-                picSpriteBmp.Refresh();
+                    picSpriteBmp.Image?.Dispose();
+                    picSpriteBmp.Image = scaled;
+                    picSpriteBmp.Refresh();
+                }
             }
             catch
             {
