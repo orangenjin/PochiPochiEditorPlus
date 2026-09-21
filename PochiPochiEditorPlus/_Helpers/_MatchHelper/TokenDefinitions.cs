@@ -67,7 +67,10 @@ namespace PochiPochiEditorPlus._Helpers._MatchHelper
         public bool IsValid(byte[] data, int offset)
         {
             // ポインタとして読み取る
-            var result = IoHelper.TryReadPtr(data, offset, out int resultOffset);
+            var result = IoHelper.TryReadPtr(
+                data, 
+                offset, 
+                out int resultOffset);
 
             // 結果を格納
             Offset = resultOffset;
@@ -102,11 +105,11 @@ namespace PochiPochiEditorPlus._Helpers._MatchHelper
             IsSigned = isSigned;
         }
 
-        public bool IsValid(byte[] bytes, int offset)
+        public bool IsValid(byte[] data, int offset)
         {
             // リトルエンディアンで読み取る
             long value = IoHelper.ReadBytesAsInt(
-                bytes,
+                data,
                 offset,
                 Length,
                 isLittleEndian: true,
