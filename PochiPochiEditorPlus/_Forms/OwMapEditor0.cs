@@ -117,7 +117,7 @@ namespace PochiPochiEditorPlus._Forms
             // エントリー数を仮カウント（誤って含まれている可能性あり）
             var pointerPattern = new List<TokenData>(){ TokenData.Pointer() };
             int tableOffset = _sharedData.Config.MapBankTableOffset;
-            var bankEntrycount = PatternMatcher.TryCount(
+            var bankEntrycount = PatternMatcher.TryCountByPattern(
                 pointerPattern,
                 _sharedData.RomData,
                 tableOffset,
@@ -170,7 +170,7 @@ namespace PochiPochiEditorPlus._Forms
             for (int i = 0; i < mapBankEntry.Entries.Count; i++)
             {
                 // そのテーブルのエントリー数を仮カウント
-                var numberEntrycount = PatternMatcher.TryCount(
+                var numberEntrycount = PatternMatcher.TryCountByPattern(
                     pointerPattern, // ポインタパターン
                     _sharedData.RomData,
                     mapNumberTableOffsets[i],

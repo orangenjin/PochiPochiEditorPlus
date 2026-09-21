@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using PochiPochiEditorPlus._Utilities;
 
 namespace PochiPochiEditorPlus._Helpers._MatchHelper
 {
@@ -65,7 +66,7 @@ namespace PochiPochiEditorPlus._Helpers._MatchHelper
         /// <summary>
         /// パターンマッチングが連続する個数を取得する。
         /// </summary>
-        public static int TryCount(
+        public static int TryCountByPattern(
             List<TokenData> tokens,
             byte[] data,
             int baseOffset = 0,
@@ -92,11 +93,11 @@ namespace PochiPochiEditorPlus._Helpers._MatchHelper
         /// <summary>
         /// 終端文字とパディング文字があるかどうかを判定する。
         /// </summary>
-        public static bool TryCheckTerminator(
+        public static bool TryCheck(
             byte[] data,
             int entryLength,
-            byte terminatorByte,
-            byte paddingByte,
+            byte terminatorByte = Constants.StrTerminatorByte,
+            byte paddingByte = Constants.PaddingByte,
             int offset = 0)
         {
             // 探索開始位置を計算
@@ -108,8 +109,41 @@ namespace PochiPochiEditorPlus._Helpers._MatchHelper
                 currentPos--;
             }
 
-            // それがterminatorByteであれば成功
-            return currentPos >= offset && data[currentPos] == terminatorByte;
+            // 現在の位置が有効且つ終端文字であるかを判定
+            if (currentPos < offset || data[currentPos] != terminatorByte) return false;
+
+            // 終端文字の位置が探索範囲の先頭である場合成功
+            if (currentPos == offset) return true;
+
+            // 終端文字の一つ前が特定の文字である場合失敗
+            if (InvalidBytes.Contains(data[currentPos - 1])) return false;
+
+            return true;
+        }
+
+        /// <summary>
+        /// 終端文字とパディング文字で終わるエントリが連続する個数を取得する。
+        /// </summary>
+        public static int TryCheckByTerminator(
+            byte[] data,
+            int entryLength,
+            int baseOffset = 0,
+            byte terminatorByte = Constants.StrTerminatorByte,
+            byte paddingByte = Constants.PaddingByte)
+        {
+            int count = 0;
+            int currentPos = baseOffset;
+
+            while (currentPos + entryLength <= data.Length)
+            {
+                // falseが戻るまで続ける
+                if (!TryCheck(data, entryLength, terminatorByte, paddingByte, currentPos)) break;
+
+                count++;
+                currentPos += entryLength;
+            }
+
+            return count;
         }
 
         /// <summary>
@@ -125,5 +159,15 @@ namespace PochiPochiEditorPlus._Helpers._MatchHelper
 
             return length;
         }
+
+        /// <summary>
+        /// 無効なバイト文字を定義する。
+        /// </summary>
+        private static HashSet<byte> InvalidBytes = new HashSet<byte>()
+        {
+            Constants.StrTerminatorByte,
+            Constants.PaddingByte,
+            Constants.StrNewlineByte
+        };
     }
 }
