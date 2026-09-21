@@ -14,9 +14,14 @@
             Def = def;
         }
 
-        public static TokenData Exact(int exactValue)
+        // 1, 2, 4バイトしか想定していない
+        public static TokenData Exact(
+            int length, 
+            bool isSigned, 
+            params long[] exactValues)
         {
-            var tokenDef = new ExactToken(exactValue);
+            var tokenDef = 
+                new ExactToken(length, isSigned, exactValues);
             return new TokenData(TokenType.Exact, tokenDef);
         }
 
@@ -27,9 +32,14 @@
         }
 
         // 1, 2, 4バイトしか想定していない
-        public static TokenData Range(byte min, byte max, int length)
+        public static TokenData Range(
+            long min,
+            long max,
+            int length,
+            bool isSigned = false)
         {
-            var tokenDef = new RangeToken(min, max, length);
+            var tokenDef =
+                new RangeToken(min, max, length, isSigned);
             return new TokenData(TokenType.Range, tokenDef);
         }
 
@@ -42,7 +52,8 @@
         /// <summary>
         /// トークンの設定値に合致するかどうかを判定する。
         /// </summary>
-        public bool IsMatch() => Def.IsValid(Value);
+        public bool IsMatch(byte[] data, int offset) 
+            => Def.IsValid(data, offset);
 
         /// <summary>
         /// トークンの長さを取得する。

@@ -17,7 +17,7 @@ namespace PochiPochiEditorPlus._Helpers._MatchHelper
             // カーソル用
             int currentPos = offset;
 
-            // Listの要素数に対して
+            // Listの各要素に対して
             for (int i = 0; i < tokens.Count; i++)
             {
                 var token = tokens[i];
@@ -28,7 +28,26 @@ namespace PochiPochiEditorPlus._Helpers._MatchHelper
                 // 範囲内かどうかの判定
                 if (currentPos + length > data.Length) return false;
 
-                // 対象となるバイト配列を取得
+                // トークン判定
+                if (!token.IsMatch(data, currentPos)) return false;
+
+                // nullポインタを許容せず、ポインタトークンの時
+                if (!allowNullPointer && token.Def is PointerToken pToken)
+                {
+                    if (pToken.IsNullPointer) return false;
+                }
+
+                // 次のトークンへ
+                currentPos += length;
+            }
+
+            // 判定成功時の場合
+            currentPos = offset;
+            for (int i = 0; i < tokens.Count; i++)
+            {
+                var token = tokens[i];
+                int length = token.GetLength();
+
                 token.Value = new byte[length];
                 Array.Copy(
                     data,
@@ -37,16 +56,6 @@ namespace PochiPochiEditorPlus._Helpers._MatchHelper
                     0,
                     length);
 
-                // トークン判定、メソッドを抜ける
-                if (!token.IsMatch()) return false;
-
-                // nullポインタを許容せず、ポインタトークンの時
-                if (!allowNullPointer && token.Def is PointerToken pToken)
-                {
-                    if (pToken.IsSus) return false;
-                }
-
-                // 次のトークンへ
                 currentPos += length;
             }
 
