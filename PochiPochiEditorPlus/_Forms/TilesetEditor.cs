@@ -350,8 +350,8 @@ namespace PochiPochiEditorPlus._Forms
             {
                 TokenData.Range(byte.MinValue, (byte)cmbImageCompType.Items.Count, Constants.ByteSize),
                 TokenData.Range(byte.MinValue, (byte)cmbPaletteType.Items.Count, Constants.ByteSize),
-                TokenData.Exact(0x0),
-                TokenData.Exact(0x0),
+                TokenData.Exact(Constants.ByteSize, false, 0x0),
+                TokenData.Exact(Constants.ByteSize, false, 0x0),
                 TokenData.Pointer(),
                 TokenData.Pointer(),
                 TokenData.Pointer(),
