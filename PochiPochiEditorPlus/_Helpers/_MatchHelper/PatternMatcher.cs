@@ -147,6 +147,54 @@ namespace PochiPochiEditorPlus._Helpers._MatchHelper
         }
 
         /// <summary>
+        /// 特定のバイト配列が指定した個数分存在するかを検証する。
+        /// </summary>
+        public static bool TrySearch(
+            byte[] data,
+            byte[] pattern,
+            int offset,
+            int length,
+            int expectedCount)
+        {
+            // 探索の終了位置を計算
+            int endPos = offset + length;
+
+            int count = 0;
+            int currentPos = offset;
+
+            // 探索開始
+            while (currentPos + pattern.Length <= endPos)
+            {
+                bool isMatch = true;
+
+                // 特定のバイト配列と一致するか検証
+                for (int i = 0; i < pattern.Length; i++)
+                {
+                    if (data[currentPos + i] != pattern[i])
+                    {
+                        isMatch = false;
+                        break;
+                    }
+                }
+
+                if (isMatch)
+                {
+                    // カウントを増加
+                    count++;
+                    // 範囲が被らないように位置を更新
+                    currentPos += pattern.Length;
+                }
+                else
+                {
+                    currentPos++;
+                }
+            }
+
+            // カウントが引数以上かを判定
+            return count >= expectedCount;
+        }
+
+        /// <summary>
         /// TokenDataの長さを計算する。
         /// </summary>
         public static int GetPatternLength(List<TokenData> tokens)

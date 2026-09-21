@@ -31,51 +31,64 @@ namespace PochiPochiEditorPlus._Forms
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(OwMapEditor0));
             this.grpMapSelector = new System.Windows.Forms.GroupBox();
-            this.rbOrderByAsc = new System.Windows.Forms.RadioButton();
-            this.rbOrderByName = new System.Windows.Forms.RadioButton();
-            this.chkOrderByTerrain = new System.Windows.Forms.CheckBox();
             this.tvwMapSelector = new System.Windows.Forms.TreeView();
+            this.chkOrderByTerrain = new System.Windows.Forms.CheckBox();
+            this.rbOrderByName = new System.Windows.Forms.RadioButton();
+            this.rbOrderByAsc = new System.Windows.Forms.RadioButton();
             this.grpMapHeader = new System.Windows.Forms.GroupBox();
-            this.lblMapFooterOffset = new System.Windows.Forms.Label();
-            this.btnEditMapFooter = new System.Windows.Forms.Button();
-            this.btnEditEventScriptHeader = new System.Windows.Forms.Button();
-            this.lblEventScriptHeaderOffset = new System.Windows.Forms.Label();
-            this.btnEditConnHeader = new System.Windows.Forms.Button();
-            this.lblConnHeaderOffset = new System.Windows.Forms.Label();
-            this.btnEditLevelScript = new System.Windows.Forms.Button();
-            this.lblLevelScriptOffset = new System.Windows.Forms.Label();
-            this.nudMapTerrainIndex = new System.Windows.Forms.NumericUpDown();
-            this.cmbMapType = new System.Windows.Forms.ComboBox();
-            this.lblMapType = new System.Windows.Forms.Label();
-            this.lblMapTerrainIndex = new System.Windows.Forms.Label();
-            this.lblMapRelLayer = new System.Windows.Forms.Label();
-            this.nudMapRelLayer = new System.Windows.Forms.NumericUpDown();
-            this.lblMapWthr = new System.Windows.Forms.Label();
-            this.cmbMapWthr = new System.Windows.Forms.ComboBox();
-            this.lblMapSight = new System.Windows.Forms.Label();
-            this.cmbMapSight = new System.Windows.Forms.ComboBox();
-            this.lblMapSpBg = new System.Windows.Forms.Label();
-            this.cmbMapSpBg = new System.Windows.Forms.ComboBox();
-            this.lblMapBike = new System.Windows.Forms.Label();
-            this.cmbMapBike = new System.Windows.Forms.ComboBox();
+            this.lblBgmIndex = new System.Windows.Forms.Label();
+            this.nudBgmIndex = new System.Windows.Forms.NumericUpDown();
             this.lblMapNameType = new System.Windows.Forms.Label();
             this.cmbMapNameType = new System.Windows.Forms.ComboBox();
             this.lblMapNameIndex = new System.Windows.Forms.Label();
             this.cmbMapNameIndex = new System.Windows.Forms.ComboBox();
-            this.lblBgmIndex = new System.Windows.Forms.Label();
-            this.nudBgmIndex = new System.Windows.Forms.NumericUpDown();
+            this.lblMapSpBg = new System.Windows.Forms.Label();
+            this.cmbMapSpBg = new System.Windows.Forms.ComboBox();
+            this.lblMapBike = new System.Windows.Forms.Label();
+            this.cmbMapBike = new System.Windows.Forms.ComboBox();
+            this.lblMapSight = new System.Windows.Forms.Label();
+            this.cmbMapSight = new System.Windows.Forms.ComboBox();
+            this.lblMapWthr = new System.Windows.Forms.Label();
+            this.cmbMapWthr = new System.Windows.Forms.ComboBox();
+            this.lblMapRelLayer = new System.Windows.Forms.Label();
+            this.nudMapRelLayer = new System.Windows.Forms.NumericUpDown();
+            this.lblMapType = new System.Windows.Forms.Label();
+            this.lblMapTerrainIndex = new System.Windows.Forms.Label();
+            this.cmbMapType = new System.Windows.Forms.ComboBox();
+            this.nudMapTerrainIndex = new System.Windows.Forms.NumericUpDown();
+            this.btnEditConnHeader = new System.Windows.Forms.Button();
+            this.txtConnHeaderOffset = new PochiPochiEditorPlus._Utilities._CustomCtrls.HexTextBox();
+            this.lblConnHeaderOffset = new System.Windows.Forms.Label();
+            this.btnEditLevelScript = new System.Windows.Forms.Button();
+            this.txtLevelScriptOffset = new PochiPochiEditorPlus._Utilities._CustomCtrls.HexTextBox();
+            this.lblLevelScriptOffset = new System.Windows.Forms.Label();
+            this.btnEditEventScriptHeader = new System.Windows.Forms.Button();
+            this.txtEventScriptHeaderOffset = new PochiPochiEditorPlus._Utilities._CustomCtrls.HexTextBox();
+            this.lblEventScriptHeaderOffset = new System.Windows.Forms.Label();
+            this.btnEditMapFooter = new System.Windows.Forms.Button();
+            this.txtMapFooterOffset = new PochiPochiEditorPlus._Utilities._CustomCtrls.HexTextBox();
+            this.lblMapFooterOffset = new System.Windows.Forms.Label();
             this.grpMapView = new System.Windows.Forms.GroupBox();
             this.pnlMapDraw = new System.Windows.Forms.Panel();
-            this.txtConnHeaderOffset = new PochiPochiEditorPlus._Utilities._CustomCtrls.HexTextBox();
-            this.txtLevelScriptOffset = new PochiPochiEditorPlus._Utilities._CustomCtrls.HexTextBox();
-            this.txtEventScriptHeaderOffset = new PochiPochiEditorPlus._Utilities._CustomCtrls.HexTextBox();
-            this.txtMapFooterOffset = new PochiPochiEditorPlus._Utilities._CustomCtrls.HexTextBox();
+            this.menuMain = new System.Windows.Forms.MenuStrip();
+            this.tsmiSaveSettings = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiShowSettngs = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiSaveSettingsTerrain = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiShowSettingsOwSprite = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiShowSettingsSign = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiShowSettingsTrap = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiShowSettingsWarp = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiShowSettingsPlayer = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiDrawSettings = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiDrawSettingsGrid = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiDrawSettingsScale = new System.Windows.Forms.ToolStripMenuItem();
             this.grpMapSelector.SuspendLayout();
             this.grpMapHeader.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudMapTerrainIndex)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudMapRelLayer)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudBgmIndex)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudMapRelLayer)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudMapTerrainIndex)).BeginInit();
             this.grpMapView.SuspendLayout();
+            this.menuMain.SuspendLayout();
             this.SuspendLayout();
             // 
             // grpMapSelector
@@ -84,7 +97,7 @@ namespace PochiPochiEditorPlus._Forms
             this.grpMapSelector.Controls.Add(this.chkOrderByTerrain);
             this.grpMapSelector.Controls.Add(this.rbOrderByName);
             this.grpMapSelector.Controls.Add(this.rbOrderByAsc);
-            this.grpMapSelector.Location = new System.Drawing.Point(20, 16);
+            this.grpMapSelector.Location = new System.Drawing.Point(20, 30);
             this.grpMapSelector.Margin = new System.Windows.Forms.Padding(0);
             this.grpMapSelector.Name = "grpMapSelector";
             this.grpMapSelector.Padding = new System.Windows.Forms.Padding(0);
@@ -93,17 +106,24 @@ namespace PochiPochiEditorPlus._Forms
             this.grpMapSelector.TabStop = false;
             this.grpMapSelector.Text = "マップを選択";
             // 
-            // rbOrderByAsc
+            // tvwMapSelector
             // 
-            this.rbOrderByAsc.AutoSize = true;
-            this.rbOrderByAsc.Location = new System.Drawing.Point(20, 28);
-            this.rbOrderByAsc.Margin = new System.Windows.Forms.Padding(0);
-            this.rbOrderByAsc.Name = "rbOrderByAsc";
-            this.rbOrderByAsc.Size = new System.Drawing.Size(61, 19);
-            this.rbOrderByAsc.TabIndex = 0;
-            this.rbOrderByAsc.TabStop = true;
-            this.rbOrderByAsc.Text = "番号順";
-            this.rbOrderByAsc.UseVisualStyleBackColor = true;
+            this.tvwMapSelector.Location = new System.Drawing.Point(20, 56);
+            this.tvwMapSelector.Margin = new System.Windows.Forms.Padding(0);
+            this.tvwMapSelector.Name = "tvwMapSelector";
+            this.tvwMapSelector.Size = new System.Drawing.Size(284, 186);
+            this.tvwMapSelector.TabIndex = 2;
+            // 
+            // chkOrderByTerrain
+            // 
+            this.chkOrderByTerrain.AutoSize = true;
+            this.chkOrderByTerrain.Location = new System.Drawing.Point(171, 29);
+            this.chkOrderByTerrain.Margin = new System.Windows.Forms.Padding(0);
+            this.chkOrderByTerrain.Name = "chkOrderByTerrain";
+            this.chkOrderByTerrain.Size = new System.Drawing.Size(99, 19);
+            this.chkOrderByTerrain.TabIndex = 1;
+            this.chkOrderByTerrain.Text = "マップ地形ID順";
+            this.chkOrderByTerrain.UseVisualStyleBackColor = true;
             // 
             // rbOrderByName
             // 
@@ -117,24 +137,17 @@ namespace PochiPochiEditorPlus._Forms
             this.rbOrderByName.Text = "マップ名順";
             this.rbOrderByName.UseVisualStyleBackColor = true;
             // 
-            // chkOrderByTerrain
+            // rbOrderByAsc
             // 
-            this.chkOrderByTerrain.AutoSize = true;
-            this.chkOrderByTerrain.Location = new System.Drawing.Point(171, 29);
-            this.chkOrderByTerrain.Margin = new System.Windows.Forms.Padding(0);
-            this.chkOrderByTerrain.Name = "chkOrderByTerrain";
-            this.chkOrderByTerrain.Size = new System.Drawing.Size(99, 19);
-            this.chkOrderByTerrain.TabIndex = 1;
-            this.chkOrderByTerrain.Text = "マップ地形ID順";
-            this.chkOrderByTerrain.UseVisualStyleBackColor = true;
-            // 
-            // tvwMapSelector
-            // 
-            this.tvwMapSelector.Location = new System.Drawing.Point(20, 56);
-            this.tvwMapSelector.Margin = new System.Windows.Forms.Padding(0);
-            this.tvwMapSelector.Name = "tvwMapSelector";
-            this.tvwMapSelector.Size = new System.Drawing.Size(284, 186);
-            this.tvwMapSelector.TabIndex = 2;
+            this.rbOrderByAsc.AutoSize = true;
+            this.rbOrderByAsc.Location = new System.Drawing.Point(20, 28);
+            this.rbOrderByAsc.Margin = new System.Windows.Forms.Padding(0);
+            this.rbOrderByAsc.Name = "rbOrderByAsc";
+            this.rbOrderByAsc.Size = new System.Drawing.Size(61, 19);
+            this.rbOrderByAsc.TabIndex = 0;
+            this.rbOrderByAsc.TabStop = true;
+            this.rbOrderByAsc.Text = "番号順";
+            this.rbOrderByAsc.UseVisualStyleBackColor = true;
             // 
             // grpMapHeader
             // 
@@ -170,7 +183,7 @@ namespace PochiPochiEditorPlus._Forms
             this.grpMapHeader.Controls.Add(this.btnEditMapFooter);
             this.grpMapHeader.Controls.Add(this.txtMapFooterOffset);
             this.grpMapHeader.Controls.Add(this.lblMapFooterOffset);
-            this.grpMapHeader.Location = new System.Drawing.Point(20, 292);
+            this.grpMapHeader.Location = new System.Drawing.Point(20, 306);
             this.grpMapHeader.Margin = new System.Windows.Forms.Padding(0);
             this.grpMapHeader.Name = "grpMapHeader";
             this.grpMapHeader.Padding = new System.Windows.Forms.Padding(0);
@@ -179,196 +192,67 @@ namespace PochiPochiEditorPlus._Forms
             this.grpMapHeader.TabStop = false;
             this.grpMapHeader.Text = "マップヘッダー";
             // 
-            // lblMapFooterOffset
+            // lblBgmIndex
             // 
-            this.lblMapFooterOffset.AutoSize = true;
-            this.lblMapFooterOffset.Location = new System.Drawing.Point(20, 32);
-            this.lblMapFooterOffset.Margin = new System.Windows.Forms.Padding(0);
-            this.lblMapFooterOffset.Name = "lblMapFooterOffset";
-            this.lblMapFooterOffset.Size = new System.Drawing.Size(107, 15);
-            this.lblMapFooterOffset.TabIndex = 0;
-            this.lblMapFooterOffset.Text = "マップフッターアドレス :";
+            this.lblBgmIndex.AutoSize = true;
+            this.lblBgmIndex.Location = new System.Drawing.Point(20, 422);
+            this.lblBgmIndex.Margin = new System.Windows.Forms.Padding(0);
+            this.lblBgmIndex.Name = "lblBgmIndex";
+            this.lblBgmIndex.Size = new System.Drawing.Size(61, 15);
+            this.lblBgmIndex.TabIndex = 31;
+            this.lblBgmIndex.Text = "BGM No. :";
             // 
-            // btnEditMapFooter
+            // nudBgmIndex
             // 
-            this.btnEditMapFooter.Location = new System.Drawing.Point(246, 28);
-            this.btnEditMapFooter.Margin = new System.Windows.Forms.Padding(0);
-            this.btnEditMapFooter.Name = "btnEditMapFooter";
-            this.btnEditMapFooter.Size = new System.Drawing.Size(58, 23);
-            this.btnEditMapFooter.TabIndex = 2;
-            this.btnEditMapFooter.Text = "編集";
-            this.btnEditMapFooter.UseVisualStyleBackColor = true;
-            // 
-            // btnEditEventScriptHeader
-            // 
-            this.btnEditEventScriptHeader.Location = new System.Drawing.Point(246, 58);
-            this.btnEditEventScriptHeader.Margin = new System.Windows.Forms.Padding(0);
-            this.btnEditEventScriptHeader.Name = "btnEditEventScriptHeader";
-            this.btnEditEventScriptHeader.Size = new System.Drawing.Size(58, 23);
-            this.btnEditEventScriptHeader.TabIndex = 5;
-            this.btnEditEventScriptHeader.Text = "編集";
-            this.btnEditEventScriptHeader.UseVisualStyleBackColor = true;
-            // 
-            // lblEventScriptHeaderOffset
-            // 
-            this.lblEventScriptHeaderOffset.AutoSize = true;
-            this.lblEventScriptHeaderOffset.Location = new System.Drawing.Point(20, 62);
-            this.lblEventScriptHeaderOffset.Margin = new System.Windows.Forms.Padding(0);
-            this.lblEventScriptHeaderOffset.Name = "lblEventScriptHeaderOffset";
-            this.lblEventScriptHeaderOffset.Size = new System.Drawing.Size(119, 15);
-            this.lblEventScriptHeaderOffset.TabIndex = 3;
-            this.lblEventScriptHeaderOffset.Text = "イベントヘッダーアドレス :";
-            // 
-            // btnEditConnHeader
-            // 
-            this.btnEditConnHeader.Location = new System.Drawing.Point(246, 118);
-            this.btnEditConnHeader.Margin = new System.Windows.Forms.Padding(0);
-            this.btnEditConnHeader.Name = "btnEditConnHeader";
-            this.btnEditConnHeader.Size = new System.Drawing.Size(58, 23);
-            this.btnEditConnHeader.TabIndex = 11;
-            this.btnEditConnHeader.Text = "編集";
-            this.btnEditConnHeader.UseVisualStyleBackColor = true;
-            // 
-            // lblConnHeaderOffset
-            // 
-            this.lblConnHeaderOffset.AutoSize = true;
-            this.lblConnHeaderOffset.Location = new System.Drawing.Point(20, 122);
-            this.lblConnHeaderOffset.Margin = new System.Windows.Forms.Padding(0);
-            this.lblConnHeaderOffset.Name = "lblConnHeaderOffset";
-            this.lblConnHeaderOffset.Size = new System.Drawing.Size(107, 15);
-            this.lblConnHeaderOffset.TabIndex = 9;
-            this.lblConnHeaderOffset.Text = "接続ヘッダーアドレス :";
-            // 
-            // btnEditLevelScript
-            // 
-            this.btnEditLevelScript.Location = new System.Drawing.Point(246, 88);
-            this.btnEditLevelScript.Margin = new System.Windows.Forms.Padding(0);
-            this.btnEditLevelScript.Name = "btnEditLevelScript";
-            this.btnEditLevelScript.Size = new System.Drawing.Size(58, 23);
-            this.btnEditLevelScript.TabIndex = 8;
-            this.btnEditLevelScript.Text = "編集";
-            this.btnEditLevelScript.UseVisualStyleBackColor = true;
-            // 
-            // lblLevelScriptOffset
-            // 
-            this.lblLevelScriptOffset.AutoSize = true;
-            this.lblLevelScriptOffset.Location = new System.Drawing.Point(20, 92);
-            this.lblLevelScriptOffset.Margin = new System.Windows.Forms.Padding(0);
-            this.lblLevelScriptOffset.Name = "lblLevelScriptOffset";
-            this.lblLevelScriptOffset.Size = new System.Drawing.Size(117, 15);
-            this.lblLevelScriptOffset.TabIndex = 6;
-            this.lblLevelScriptOffset.Text = "マップスクリプトアドレス :";
-            // 
-            // nudMapTerrainIndex
-            // 
-            this.nudMapTerrainIndex.Location = new System.Drawing.Point(136, 148);
-            this.nudMapTerrainIndex.Margin = new System.Windows.Forms.Padding(0);
-            this.nudMapTerrainIndex.Maximum = new decimal(new int[] {
+            this.nudBgmIndex.Location = new System.Drawing.Point(136, 418);
+            this.nudBgmIndex.Margin = new System.Windows.Forms.Padding(0);
+            this.nudBgmIndex.Maximum = new decimal(new int[] {
             65535,
             0,
             0,
             0});
-            this.nudMapTerrainIndex.Name = "nudMapTerrainIndex";
-            this.nudMapTerrainIndex.Size = new System.Drawing.Size(100, 23);
-            this.nudMapTerrainIndex.TabIndex = 12;
+            this.nudBgmIndex.Name = "nudBgmIndex";
+            this.nudBgmIndex.Size = new System.Drawing.Size(100, 23);
+            this.nudBgmIndex.TabIndex = 30;
             // 
-            // cmbMapType
+            // lblMapNameType
             // 
-            this.cmbMapType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbMapType.FormattingEnabled = true;
-            this.cmbMapType.Location = new System.Drawing.Point(136, 178);
-            this.cmbMapType.Margin = new System.Windows.Forms.Padding(0);
-            this.cmbMapType.Name = "cmbMapType";
-            this.cmbMapType.Size = new System.Drawing.Size(168, 23);
-            this.cmbMapType.TabIndex = 13;
+            this.lblMapNameType.AutoSize = true;
+            this.lblMapNameType.Location = new System.Drawing.Point(20, 392);
+            this.lblMapNameType.Margin = new System.Windows.Forms.Padding(0);
+            this.lblMapNameType.Name = "lblMapNameType";
+            this.lblMapNameType.Size = new System.Drawing.Size(99, 15);
+            this.lblMapNameType.TabIndex = 29;
+            this.lblMapNameType.Text = "マップ名表示設定 :";
             // 
-            // lblMapType
+            // cmbMapNameType
             // 
-            this.lblMapType.AutoSize = true;
-            this.lblMapType.Location = new System.Drawing.Point(20, 182);
-            this.lblMapType.Margin = new System.Windows.Forms.Padding(0);
-            this.lblMapType.Name = "lblMapType";
-            this.lblMapType.Size = new System.Drawing.Size(66, 15);
-            this.lblMapType.TabIndex = 15;
-            this.lblMapType.Text = "マップタイプ :";
+            this.cmbMapNameType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbMapNameType.FormattingEnabled = true;
+            this.cmbMapNameType.Location = new System.Drawing.Point(136, 388);
+            this.cmbMapNameType.Margin = new System.Windows.Forms.Padding(0);
+            this.cmbMapNameType.Name = "cmbMapNameType";
+            this.cmbMapNameType.Size = new System.Drawing.Size(168, 23);
+            this.cmbMapNameType.TabIndex = 28;
             // 
-            // lblMapTerrainIndex
+            // lblMapNameIndex
             // 
-            this.lblMapTerrainIndex.AutoSize = true;
-            this.lblMapTerrainIndex.Location = new System.Drawing.Point(20, 152);
-            this.lblMapTerrainIndex.Margin = new System.Windows.Forms.Padding(0);
-            this.lblMapTerrainIndex.Name = "lblMapTerrainIndex";
-            this.lblMapTerrainIndex.Size = new System.Drawing.Size(74, 15);
-            this.lblMapTerrainIndex.TabIndex = 14;
-            this.lblMapTerrainIndex.Text = "マップ地形ID :";
+            this.lblMapNameIndex.AutoSize = true;
+            this.lblMapNameIndex.Location = new System.Drawing.Point(20, 362);
+            this.lblMapNameIndex.Margin = new System.Windows.Forms.Padding(0);
+            this.lblMapNameIndex.Name = "lblMapNameIndex";
+            this.lblMapNameIndex.Size = new System.Drawing.Size(62, 15);
+            this.lblMapNameIndex.TabIndex = 27;
+            this.lblMapNameIndex.Text = "マップ名ID :";
             // 
-            // lblMapRelLayer
+            // cmbMapNameIndex
             // 
-            this.lblMapRelLayer.AutoSize = true;
-            this.lblMapRelLayer.Location = new System.Drawing.Point(20, 212);
-            this.lblMapRelLayer.Margin = new System.Windows.Forms.Padding(0);
-            this.lblMapRelLayer.Name = "lblMapRelLayer";
-            this.lblMapRelLayer.Size = new System.Drawing.Size(61, 15);
-            this.lblMapRelLayer.TabIndex = 17;
-            this.lblMapRelLayer.Text = "相対階層 :";
-            // 
-            // nudMapRelLayer
-            // 
-            this.nudMapRelLayer.Location = new System.Drawing.Point(136, 208);
-            this.nudMapRelLayer.Margin = new System.Windows.Forms.Padding(0);
-            this.nudMapRelLayer.Maximum = new decimal(new int[] {
-            127,
-            0,
-            0,
-            0});
-            this.nudMapRelLayer.Minimum = new decimal(new int[] {
-            128,
-            0,
-            0,
-            -2147483648});
-            this.nudMapRelLayer.Name = "nudMapRelLayer";
-            this.nudMapRelLayer.Size = new System.Drawing.Size(100, 23);
-            this.nudMapRelLayer.TabIndex = 16;
-            // 
-            // lblMapWthr
-            // 
-            this.lblMapWthr.AutoSize = true;
-            this.lblMapWthr.Location = new System.Drawing.Point(20, 242);
-            this.lblMapWthr.Margin = new System.Windows.Forms.Padding(0);
-            this.lblMapWthr.Name = "lblMapWthr";
-            this.lblMapWthr.Size = new System.Drawing.Size(37, 15);
-            this.lblMapWthr.TabIndex = 19;
-            this.lblMapWthr.Text = "天候 :";
-            // 
-            // cmbMapWthr
-            // 
-            this.cmbMapWthr.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbMapWthr.FormattingEnabled = true;
-            this.cmbMapWthr.Location = new System.Drawing.Point(136, 238);
-            this.cmbMapWthr.Margin = new System.Windows.Forms.Padding(0);
-            this.cmbMapWthr.Name = "cmbMapWthr";
-            this.cmbMapWthr.Size = new System.Drawing.Size(168, 23);
-            this.cmbMapWthr.TabIndex = 18;
-            // 
-            // lblMapSight
-            // 
-            this.lblMapSight.AutoSize = true;
-            this.lblMapSight.Location = new System.Drawing.Point(20, 272);
-            this.lblMapSight.Margin = new System.Windows.Forms.Padding(0);
-            this.lblMapSight.Name = "lblMapSight";
-            this.lblMapSight.Size = new System.Drawing.Size(61, 15);
-            this.lblMapSight.TabIndex = 21;
-            this.lblMapSight.Text = "視界状況 :";
-            // 
-            // cmbMapSight
-            // 
-            this.cmbMapSight.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbMapSight.FormattingEnabled = true;
-            this.cmbMapSight.Location = new System.Drawing.Point(136, 268);
-            this.cmbMapSight.Margin = new System.Windows.Forms.Padding(0);
-            this.cmbMapSight.Name = "cmbMapSight";
-            this.cmbMapSight.Size = new System.Drawing.Size(168, 23);
-            this.cmbMapSight.TabIndex = 20;
+            this.cmbMapNameIndex.FormattingEnabled = true;
+            this.cmbMapNameIndex.Location = new System.Drawing.Point(136, 358);
+            this.cmbMapNameIndex.Margin = new System.Windows.Forms.Padding(0);
+            this.cmbMapNameIndex.Name = "cmbMapNameIndex";
+            this.cmbMapNameIndex.Size = new System.Drawing.Size(168, 23);
+            this.cmbMapNameIndex.TabIndex = 26;
             // 
             // lblMapSpBg
             // 
@@ -410,72 +294,233 @@ namespace PochiPochiEditorPlus._Forms
             this.cmbMapBike.Size = new System.Drawing.Size(168, 23);
             this.cmbMapBike.TabIndex = 22;
             // 
-            // lblMapNameType
+            // lblMapSight
             // 
-            this.lblMapNameType.AutoSize = true;
-            this.lblMapNameType.Location = new System.Drawing.Point(20, 392);
-            this.lblMapNameType.Margin = new System.Windows.Forms.Padding(0);
-            this.lblMapNameType.Name = "lblMapNameType";
-            this.lblMapNameType.Size = new System.Drawing.Size(99, 15);
-            this.lblMapNameType.TabIndex = 29;
-            this.lblMapNameType.Text = "マップ名表示設定 :";
+            this.lblMapSight.AutoSize = true;
+            this.lblMapSight.Location = new System.Drawing.Point(20, 272);
+            this.lblMapSight.Margin = new System.Windows.Forms.Padding(0);
+            this.lblMapSight.Name = "lblMapSight";
+            this.lblMapSight.Size = new System.Drawing.Size(61, 15);
+            this.lblMapSight.TabIndex = 21;
+            this.lblMapSight.Text = "視界状況 :";
             // 
-            // cmbMapNameType
+            // cmbMapSight
             // 
-            this.cmbMapNameType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbMapNameType.FormattingEnabled = true;
-            this.cmbMapNameType.Location = new System.Drawing.Point(136, 388);
-            this.cmbMapNameType.Margin = new System.Windows.Forms.Padding(0);
-            this.cmbMapNameType.Name = "cmbMapNameType";
-            this.cmbMapNameType.Size = new System.Drawing.Size(168, 23);
-            this.cmbMapNameType.TabIndex = 28;
+            this.cmbMapSight.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbMapSight.FormattingEnabled = true;
+            this.cmbMapSight.Location = new System.Drawing.Point(136, 268);
+            this.cmbMapSight.Margin = new System.Windows.Forms.Padding(0);
+            this.cmbMapSight.Name = "cmbMapSight";
+            this.cmbMapSight.Size = new System.Drawing.Size(168, 23);
+            this.cmbMapSight.TabIndex = 20;
             // 
-            // lblMapNameIndex
+            // lblMapWthr
             // 
-            this.lblMapNameIndex.AutoSize = true;
-            this.lblMapNameIndex.Location = new System.Drawing.Point(20, 362);
-            this.lblMapNameIndex.Margin = new System.Windows.Forms.Padding(0);
-            this.lblMapNameIndex.Name = "lblMapNameIndex";
-            this.lblMapNameIndex.Size = new System.Drawing.Size(62, 15);
-            this.lblMapNameIndex.TabIndex = 27;
-            this.lblMapNameIndex.Text = "マップ名ID :";
+            this.lblMapWthr.AutoSize = true;
+            this.lblMapWthr.Location = new System.Drawing.Point(20, 242);
+            this.lblMapWthr.Margin = new System.Windows.Forms.Padding(0);
+            this.lblMapWthr.Name = "lblMapWthr";
+            this.lblMapWthr.Size = new System.Drawing.Size(37, 15);
+            this.lblMapWthr.TabIndex = 19;
+            this.lblMapWthr.Text = "天候 :";
             // 
-            // cmbMapNameIndex
+            // cmbMapWthr
             // 
-            this.cmbMapNameIndex.FormattingEnabled = true;
-            this.cmbMapNameIndex.Location = new System.Drawing.Point(136, 358);
-            this.cmbMapNameIndex.Margin = new System.Windows.Forms.Padding(0);
-            this.cmbMapNameIndex.Name = "cmbMapNameIndex";
-            this.cmbMapNameIndex.Size = new System.Drawing.Size(168, 23);
-            this.cmbMapNameIndex.TabIndex = 26;
+            this.cmbMapWthr.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbMapWthr.FormattingEnabled = true;
+            this.cmbMapWthr.Location = new System.Drawing.Point(136, 238);
+            this.cmbMapWthr.Margin = new System.Windows.Forms.Padding(0);
+            this.cmbMapWthr.Name = "cmbMapWthr";
+            this.cmbMapWthr.Size = new System.Drawing.Size(168, 23);
+            this.cmbMapWthr.TabIndex = 18;
             // 
-            // lblBgmIndex
+            // lblMapRelLayer
             // 
-            this.lblBgmIndex.AutoSize = true;
-            this.lblBgmIndex.Location = new System.Drawing.Point(20, 422);
-            this.lblBgmIndex.Margin = new System.Windows.Forms.Padding(0);
-            this.lblBgmIndex.Name = "lblBgmIndex";
-            this.lblBgmIndex.Size = new System.Drawing.Size(61, 15);
-            this.lblBgmIndex.TabIndex = 31;
-            this.lblBgmIndex.Text = "BGM No. :";
+            this.lblMapRelLayer.AutoSize = true;
+            this.lblMapRelLayer.Location = new System.Drawing.Point(20, 212);
+            this.lblMapRelLayer.Margin = new System.Windows.Forms.Padding(0);
+            this.lblMapRelLayer.Name = "lblMapRelLayer";
+            this.lblMapRelLayer.Size = new System.Drawing.Size(61, 15);
+            this.lblMapRelLayer.TabIndex = 17;
+            this.lblMapRelLayer.Text = "相対階層 :";
             // 
-            // nudBgmIndex
+            // nudMapRelLayer
             // 
-            this.nudBgmIndex.Location = new System.Drawing.Point(136, 418);
-            this.nudBgmIndex.Margin = new System.Windows.Forms.Padding(0);
-            this.nudBgmIndex.Maximum = new decimal(new int[] {
+            this.nudMapRelLayer.Location = new System.Drawing.Point(136, 208);
+            this.nudMapRelLayer.Margin = new System.Windows.Forms.Padding(0);
+            this.nudMapRelLayer.Maximum = new decimal(new int[] {
+            127,
+            0,
+            0,
+            0});
+            this.nudMapRelLayer.Minimum = new decimal(new int[] {
+            128,
+            0,
+            0,
+            -2147483648});
+            this.nudMapRelLayer.Name = "nudMapRelLayer";
+            this.nudMapRelLayer.Size = new System.Drawing.Size(100, 23);
+            this.nudMapRelLayer.TabIndex = 16;
+            // 
+            // lblMapType
+            // 
+            this.lblMapType.AutoSize = true;
+            this.lblMapType.Location = new System.Drawing.Point(20, 182);
+            this.lblMapType.Margin = new System.Windows.Forms.Padding(0);
+            this.lblMapType.Name = "lblMapType";
+            this.lblMapType.Size = new System.Drawing.Size(66, 15);
+            this.lblMapType.TabIndex = 15;
+            this.lblMapType.Text = "マップタイプ :";
+            // 
+            // lblMapTerrainIndex
+            // 
+            this.lblMapTerrainIndex.AutoSize = true;
+            this.lblMapTerrainIndex.Location = new System.Drawing.Point(20, 152);
+            this.lblMapTerrainIndex.Margin = new System.Windows.Forms.Padding(0);
+            this.lblMapTerrainIndex.Name = "lblMapTerrainIndex";
+            this.lblMapTerrainIndex.Size = new System.Drawing.Size(74, 15);
+            this.lblMapTerrainIndex.TabIndex = 14;
+            this.lblMapTerrainIndex.Text = "マップ地形ID :";
+            // 
+            // cmbMapType
+            // 
+            this.cmbMapType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbMapType.FormattingEnabled = true;
+            this.cmbMapType.Location = new System.Drawing.Point(136, 178);
+            this.cmbMapType.Margin = new System.Windows.Forms.Padding(0);
+            this.cmbMapType.Name = "cmbMapType";
+            this.cmbMapType.Size = new System.Drawing.Size(168, 23);
+            this.cmbMapType.TabIndex = 13;
+            // 
+            // nudMapTerrainIndex
+            // 
+            this.nudMapTerrainIndex.Location = new System.Drawing.Point(136, 148);
+            this.nudMapTerrainIndex.Margin = new System.Windows.Forms.Padding(0);
+            this.nudMapTerrainIndex.Maximum = new decimal(new int[] {
             65535,
             0,
             0,
             0});
-            this.nudBgmIndex.Name = "nudBgmIndex";
-            this.nudBgmIndex.Size = new System.Drawing.Size(100, 23);
-            this.nudBgmIndex.TabIndex = 30;
+            this.nudMapTerrainIndex.Name = "nudMapTerrainIndex";
+            this.nudMapTerrainIndex.Size = new System.Drawing.Size(100, 23);
+            this.nudMapTerrainIndex.TabIndex = 12;
+            // 
+            // btnEditConnHeader
+            // 
+            this.btnEditConnHeader.Location = new System.Drawing.Point(246, 118);
+            this.btnEditConnHeader.Margin = new System.Windows.Forms.Padding(0);
+            this.btnEditConnHeader.Name = "btnEditConnHeader";
+            this.btnEditConnHeader.Size = new System.Drawing.Size(58, 23);
+            this.btnEditConnHeader.TabIndex = 11;
+            this.btnEditConnHeader.Text = "編集";
+            this.btnEditConnHeader.UseVisualStyleBackColor = true;
+            // 
+            // txtConnHeaderOffset
+            // 
+            this.txtConnHeaderOffset.Location = new System.Drawing.Point(156, 118);
+            this.txtConnHeaderOffset.Margin = new System.Windows.Forms.Padding(0);
+            this.txtConnHeaderOffset.Name = "txtConnHeaderOffset";
+            this.txtConnHeaderOffset.Size = new System.Drawing.Size(80, 23);
+            this.txtConnHeaderOffset.TabIndex = 10;
+            // 
+            // lblConnHeaderOffset
+            // 
+            this.lblConnHeaderOffset.AutoSize = true;
+            this.lblConnHeaderOffset.Location = new System.Drawing.Point(20, 122);
+            this.lblConnHeaderOffset.Margin = new System.Windows.Forms.Padding(0);
+            this.lblConnHeaderOffset.Name = "lblConnHeaderOffset";
+            this.lblConnHeaderOffset.Size = new System.Drawing.Size(107, 15);
+            this.lblConnHeaderOffset.TabIndex = 9;
+            this.lblConnHeaderOffset.Text = "接続ヘッダーアドレス :";
+            // 
+            // btnEditLevelScript
+            // 
+            this.btnEditLevelScript.Location = new System.Drawing.Point(246, 88);
+            this.btnEditLevelScript.Margin = new System.Windows.Forms.Padding(0);
+            this.btnEditLevelScript.Name = "btnEditLevelScript";
+            this.btnEditLevelScript.Size = new System.Drawing.Size(58, 23);
+            this.btnEditLevelScript.TabIndex = 8;
+            this.btnEditLevelScript.Text = "編集";
+            this.btnEditLevelScript.UseVisualStyleBackColor = true;
+            // 
+            // txtLevelScriptOffset
+            // 
+            this.txtLevelScriptOffset.Location = new System.Drawing.Point(156, 88);
+            this.txtLevelScriptOffset.Margin = new System.Windows.Forms.Padding(0);
+            this.txtLevelScriptOffset.Name = "txtLevelScriptOffset";
+            this.txtLevelScriptOffset.Size = new System.Drawing.Size(80, 23);
+            this.txtLevelScriptOffset.TabIndex = 7;
+            // 
+            // lblLevelScriptOffset
+            // 
+            this.lblLevelScriptOffset.AutoSize = true;
+            this.lblLevelScriptOffset.Location = new System.Drawing.Point(20, 92);
+            this.lblLevelScriptOffset.Margin = new System.Windows.Forms.Padding(0);
+            this.lblLevelScriptOffset.Name = "lblLevelScriptOffset";
+            this.lblLevelScriptOffset.Size = new System.Drawing.Size(117, 15);
+            this.lblLevelScriptOffset.TabIndex = 6;
+            this.lblLevelScriptOffset.Text = "マップスクリプトアドレス :";
+            // 
+            // btnEditEventScriptHeader
+            // 
+            this.btnEditEventScriptHeader.Location = new System.Drawing.Point(246, 58);
+            this.btnEditEventScriptHeader.Margin = new System.Windows.Forms.Padding(0);
+            this.btnEditEventScriptHeader.Name = "btnEditEventScriptHeader";
+            this.btnEditEventScriptHeader.Size = new System.Drawing.Size(58, 23);
+            this.btnEditEventScriptHeader.TabIndex = 5;
+            this.btnEditEventScriptHeader.Text = "編集";
+            this.btnEditEventScriptHeader.UseVisualStyleBackColor = true;
+            // 
+            // txtEventScriptHeaderOffset
+            // 
+            this.txtEventScriptHeaderOffset.Location = new System.Drawing.Point(156, 58);
+            this.txtEventScriptHeaderOffset.Margin = new System.Windows.Forms.Padding(0);
+            this.txtEventScriptHeaderOffset.Name = "txtEventScriptHeaderOffset";
+            this.txtEventScriptHeaderOffset.Size = new System.Drawing.Size(80, 23);
+            this.txtEventScriptHeaderOffset.TabIndex = 4;
+            // 
+            // lblEventScriptHeaderOffset
+            // 
+            this.lblEventScriptHeaderOffset.AutoSize = true;
+            this.lblEventScriptHeaderOffset.Location = new System.Drawing.Point(20, 62);
+            this.lblEventScriptHeaderOffset.Margin = new System.Windows.Forms.Padding(0);
+            this.lblEventScriptHeaderOffset.Name = "lblEventScriptHeaderOffset";
+            this.lblEventScriptHeaderOffset.Size = new System.Drawing.Size(119, 15);
+            this.lblEventScriptHeaderOffset.TabIndex = 3;
+            this.lblEventScriptHeaderOffset.Text = "イベントヘッダーアドレス :";
+            // 
+            // btnEditMapFooter
+            // 
+            this.btnEditMapFooter.Location = new System.Drawing.Point(246, 28);
+            this.btnEditMapFooter.Margin = new System.Windows.Forms.Padding(0);
+            this.btnEditMapFooter.Name = "btnEditMapFooter";
+            this.btnEditMapFooter.Size = new System.Drawing.Size(58, 23);
+            this.btnEditMapFooter.TabIndex = 2;
+            this.btnEditMapFooter.Text = "編集";
+            this.btnEditMapFooter.UseVisualStyleBackColor = true;
+            // 
+            // txtMapFooterOffset
+            // 
+            this.txtMapFooterOffset.Location = new System.Drawing.Point(156, 28);
+            this.txtMapFooterOffset.Margin = new System.Windows.Forms.Padding(0);
+            this.txtMapFooterOffset.Name = "txtMapFooterOffset";
+            this.txtMapFooterOffset.Size = new System.Drawing.Size(80, 23);
+            this.txtMapFooterOffset.TabIndex = 1;
+            // 
+            // lblMapFooterOffset
+            // 
+            this.lblMapFooterOffset.AutoSize = true;
+            this.lblMapFooterOffset.Location = new System.Drawing.Point(20, 32);
+            this.lblMapFooterOffset.Margin = new System.Windows.Forms.Padding(0);
+            this.lblMapFooterOffset.Name = "lblMapFooterOffset";
+            this.lblMapFooterOffset.Size = new System.Drawing.Size(107, 15);
+            this.lblMapFooterOffset.TabIndex = 0;
+            this.lblMapFooterOffset.Text = "マップフッターアドレス :";
             // 
             // grpMapView
             // 
             this.grpMapView.Controls.Add(this.pnlMapDraw);
-            this.grpMapView.Location = new System.Drawing.Point(366, 16);
+            this.grpMapView.Location = new System.Drawing.Point(366, 30);
             this.grpMapView.Margin = new System.Windows.Forms.Padding(0);
             this.grpMapView.Name = "grpMapView";
             this.grpMapView.Padding = new System.Windows.Forms.Padding(0);
@@ -492,61 +537,136 @@ namespace PochiPochiEditorPlus._Forms
             this.pnlMapDraw.Size = new System.Drawing.Size(608, 448);
             this.pnlMapDraw.TabIndex = 0;
             // 
-            // txtConnHeaderOffset
+            // menuMain
             // 
-            this.txtConnHeaderOffset.Location = new System.Drawing.Point(156, 118);
-            this.txtConnHeaderOffset.Margin = new System.Windows.Forms.Padding(0);
-            this.txtConnHeaderOffset.Name = "txtConnHeaderOffset";
-            this.txtConnHeaderOffset.Size = new System.Drawing.Size(80, 23);
-            this.txtConnHeaderOffset.TabIndex = 10;
+            this.menuMain.GripMargin = new System.Windows.Forms.Padding(0);
+            this.menuMain.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tsmiSaveSettings,
+            this.tsmiShowSettngs,
+            this.tsmiDrawSettings});
+            this.menuMain.Location = new System.Drawing.Point(0, 0);
+            this.menuMain.Name = "menuMain";
+            this.menuMain.Padding = new System.Windows.Forms.Padding(0);
+            this.menuMain.Size = new System.Drawing.Size(1208, 24);
+            this.menuMain.TabIndex = 3;
+            this.menuMain.Text = "メニューバー";
             // 
-            // txtLevelScriptOffset
+            // tsmiSaveSettings
             // 
-            this.txtLevelScriptOffset.Location = new System.Drawing.Point(156, 88);
-            this.txtLevelScriptOffset.Margin = new System.Windows.Forms.Padding(0);
-            this.txtLevelScriptOffset.Name = "txtLevelScriptOffset";
-            this.txtLevelScriptOffset.Size = new System.Drawing.Size(80, 23);
-            this.txtLevelScriptOffset.TabIndex = 7;
+            this.tsmiSaveSettings.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tsmiSaveSettingsTerrain});
+            this.tsmiSaveSettings.Name = "tsmiSaveSettings";
+            this.tsmiSaveSettings.Padding = new System.Windows.Forms.Padding(0);
+            this.tsmiSaveSettings.Size = new System.Drawing.Size(59, 24);
+            this.tsmiSaveSettings.Text = "保存設定";
             // 
-            // txtEventScriptHeaderOffset
+            // tsmiShowSettngs
             // 
-            this.txtEventScriptHeaderOffset.Location = new System.Drawing.Point(156, 58);
-            this.txtEventScriptHeaderOffset.Margin = new System.Windows.Forms.Padding(0);
-            this.txtEventScriptHeaderOffset.Name = "txtEventScriptHeaderOffset";
-            this.txtEventScriptHeaderOffset.Size = new System.Drawing.Size(80, 23);
-            this.txtEventScriptHeaderOffset.TabIndex = 4;
+            this.tsmiShowSettngs.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tsmiShowSettingsOwSprite,
+            this.tsmiShowSettingsSign,
+            this.tsmiShowSettingsTrap,
+            this.tsmiShowSettingsWarp,
+            this.tsmiShowSettingsPlayer});
+            this.tsmiShowSettngs.Name = "tsmiShowSettngs";
+            this.tsmiShowSettngs.Padding = new System.Windows.Forms.Padding(0);
+            this.tsmiShowSettngs.Size = new System.Drawing.Size(59, 24);
+            this.tsmiShowSettngs.Text = "表示設定";
             // 
-            // txtMapFooterOffset
+            // tsmiSaveSettingsTerrain
             // 
-            this.txtMapFooterOffset.Location = new System.Drawing.Point(156, 28);
-            this.txtMapFooterOffset.Margin = new System.Windows.Forms.Padding(0);
-            this.txtMapFooterOffset.Name = "txtMapFooterOffset";
-            this.txtMapFooterOffset.Size = new System.Drawing.Size(80, 23);
-            this.txtMapFooterOffset.TabIndex = 1;
+            this.tsmiSaveSettingsTerrain.Name = "tsmiSaveSettingsTerrain";
+            this.tsmiSaveSettingsTerrain.Padding = new System.Windows.Forms.Padding(0);
+            this.tsmiSaveSettingsTerrain.Size = new System.Drawing.Size(183, 20);
+            this.tsmiSaveSettingsTerrain.Text = "マップ地形ID同期保存";
             // 
-            // OwMapEditor
+            // tsmiShowSettingsOwSprite
+            // 
+            this.tsmiShowSettingsOwSprite.Name = "tsmiShowSettingsOwSprite";
+            this.tsmiShowSettingsOwSprite.Padding = new System.Windows.Forms.Padding(0);
+            this.tsmiShowSettingsOwSprite.Size = new System.Drawing.Size(180, 20);
+            this.tsmiShowSettingsOwSprite.Text = "歩行グラフィック";
+            // 
+            // tsmiShowSettingsSign
+            // 
+            this.tsmiShowSettingsSign.Name = "tsmiShowSettingsSign";
+            this.tsmiShowSettingsSign.Padding = new System.Windows.Forms.Padding(0);
+            this.tsmiShowSettingsSign.Size = new System.Drawing.Size(180, 20);
+            this.tsmiShowSettingsSign.Text = "看板";
+            // 
+            // tsmiShowSettingsTrap
+            // 
+            this.tsmiShowSettingsTrap.Name = "tsmiShowSettingsTrap";
+            this.tsmiShowSettingsTrap.Padding = new System.Windows.Forms.Padding(0);
+            this.tsmiShowSettingsTrap.Size = new System.Drawing.Size(180, 20);
+            this.tsmiShowSettingsTrap.Text = "踏むスクリプト";
+            // 
+            // tsmiShowSettingsWarp
+            // 
+            this.tsmiShowSettingsWarp.Name = "tsmiShowSettingsWarp";
+            this.tsmiShowSettingsWarp.Padding = new System.Windows.Forms.Padding(0);
+            this.tsmiShowSettingsWarp.Size = new System.Drawing.Size(180, 20);
+            this.tsmiShowSettingsWarp.Text = "ワープ";
+            // 
+            // tsmiShowSettingsPlayer
+            // 
+            this.tsmiShowSettingsPlayer.Name = "tsmiShowSettingsPlayer";
+            this.tsmiShowSettingsPlayer.Padding = new System.Windows.Forms.Padding(0);
+            this.tsmiShowSettingsPlayer.Size = new System.Drawing.Size(180, 20);
+            this.tsmiShowSettingsPlayer.Text = "プレイヤー(仮)";
+            // 
+            // tsmiDrawSettings
+            // 
+            this.tsmiDrawSettings.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tsmiDrawSettingsGrid,
+            this.tsmiDrawSettingsScale});
+            this.tsmiDrawSettings.Name = "tsmiDrawSettings";
+            this.tsmiDrawSettings.Padding = new System.Windows.Forms.Padding(0);
+            this.tsmiDrawSettings.Size = new System.Drawing.Size(59, 24);
+            this.tsmiDrawSettings.Text = "描画設定";
+            // 
+            // tsmiDrawSettingsGrid
+            // 
+            this.tsmiDrawSettingsGrid.Name = "tsmiDrawSettingsGrid";
+            this.tsmiDrawSettingsGrid.Padding = new System.Windows.Forms.Padding(0);
+            this.tsmiDrawSettingsGrid.Size = new System.Drawing.Size(180, 20);
+            this.tsmiDrawSettingsGrid.Text = "グリット表示";
+            // 
+            // tsmiDrawSettingsScale
+            // 
+            this.tsmiDrawSettingsScale.Name = "tsmiDrawSettingsScale";
+            this.tsmiDrawSettingsScale.Padding = new System.Windows.Forms.Padding(0);
+            this.tsmiDrawSettingsScale.Size = new System.Drawing.Size(180, 20);
+            this.tsmiDrawSettingsScale.Text = "拡大表示";
+            // 
+            // OwMapEditor0
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1208, 771);
+            this.ClientSize = new System.Drawing.Size(1208, 785);
             this.Controls.Add(this.grpMapView);
             this.Controls.Add(this.grpMapHeader);
             this.Controls.Add(this.grpMapSelector);
+            this.Controls.Add(this.menuMain);
             this.Font = new System.Drawing.Font("Yu Gothic UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MainMenuStrip = this.menuMain;
             this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.Name = "OwMapEditor";
+            this.Name = "OwMapEditor0";
             this.Text = "マップ";
             this.grpMapSelector.ResumeLayout(false);
             this.grpMapSelector.PerformLayout();
             this.grpMapHeader.ResumeLayout(false);
             this.grpMapHeader.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudMapTerrainIndex)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudMapRelLayer)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudBgmIndex)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudMapRelLayer)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudMapTerrainIndex)).EndInit();
             this.grpMapView.ResumeLayout(false);
+            this.menuMain.ResumeLayout(false);
+            this.menuMain.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -592,5 +712,17 @@ namespace PochiPochiEditorPlus._Forms
         private System.Windows.Forms.NumericUpDown nudBgmIndex;
         private System.Windows.Forms.GroupBox grpMapView;
         private System.Windows.Forms.Panel pnlMapDraw;
+        private System.Windows.Forms.MenuStrip menuMain;
+        private System.Windows.Forms.ToolStripMenuItem tsmiSaveSettings;
+        private System.Windows.Forms.ToolStripMenuItem tsmiShowSettngs;
+        private System.Windows.Forms.ToolStripMenuItem tsmiSaveSettingsTerrain;
+        private System.Windows.Forms.ToolStripMenuItem tsmiShowSettingsOwSprite;
+        private System.Windows.Forms.ToolStripMenuItem tsmiShowSettingsSign;
+        private System.Windows.Forms.ToolStripMenuItem tsmiShowSettingsTrap;
+        private System.Windows.Forms.ToolStripMenuItem tsmiShowSettingsWarp;
+        private System.Windows.Forms.ToolStripMenuItem tsmiShowSettingsPlayer;
+        private System.Windows.Forms.ToolStripMenuItem tsmiDrawSettings;
+        private System.Windows.Forms.ToolStripMenuItem tsmiDrawSettingsGrid;
+        private System.Windows.Forms.ToolStripMenuItem tsmiDrawSettingsScale;
     }
 }

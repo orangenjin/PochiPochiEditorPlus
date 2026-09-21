@@ -27,6 +27,8 @@ namespace PochiPochiEditorPlus._Forms
         private dynamic _mapHeaderEntry = null;
         private dynamic _mapFooterEntry = null;
 
+        // 定義情報を事前に計算するため
+        private List<FieldMetaData> _mapFooterDef = null;
         // 基準インデックスの計算を省略するため
         private int _mapNameFirstIndex = 0;
         private Dictionary<int, string> _mapNameCache = null;
@@ -60,6 +62,9 @@ namespace PochiPochiEditorPlus._Forms
             _groupData = groupData;
             _eventBinder = new EventBinder();
 
+            // 定義情報を事前に計算
+            _mapFooterDef = FieldMetaDataReader.Create("MapFooterEntry");
+
             // グループデータを登録
             RegisterFormGroupData(_groupData);
 
@@ -86,9 +91,41 @@ namespace PochiPochiEditorPlus._Forms
         {
             // マップ名テーブルを作成
             int tableOffset = _sharedData.Config.MapNameTableOffset;
-            int entrycount = _sharedData.Config.MapNameCount;
+
+            // ポインタエントリー数を仮カウント（誤って含まれている可能性あり）
+            var pointerPattern = new List<TokenData>() { TokenData.Pointer() };
+            var pointerCount = PatternMatcher.TryCountByPattern(
+                pointerPattern,
+                _sharedData.RomData,
+                tableOffset,
+                allowNullPointer: false); // nullポインタを許容しない
+
+            // マップ名ポインタのオフセットをすべて取得
+            var mapNameCount = 0;
+            var mapNameAllowedLength = _sharedData.Config.MapNameAllowedLength;
+            for (int i = 0; i < pointerCount; i++)
+            {
+                IoHelper.TryReadPtr(
+                    _sharedData.RomData,
+                    tableOffset + i * Constants.UIntSize,
+                    out int mapNameOffset);
+
+                // 終端文字が１つ以上あるか判定
+                var IsValid = PatternMatcher.TrySearch(
+                    _sharedData.RomData,
+                    new byte[] { Constants.StrTerminatorByte },
+                    mapNameOffset,
+                    mapNameAllowedLength,
+                    1);
+
+                // 終端文字が無ければ終了
+                if (!IsValid) break;
+
+                mapNameCount++;
+            }
+
             _mapNameEntry = 
-                new EntryManager("MapNamePointerEntry", tableOffset, entrycount, _sharedData);
+                new EntryManager("MapNamePointerEntry", tableOffset, mapNameCount, _sharedData);
         }
 
         private void InitializeControls()
@@ -246,20 +283,25 @@ namespace PochiPochiEditorPlus._Forms
             // キャッシュを最新化
             LoadMapNames();
 
-            cmbMapNameIndex.BeginUpdate();
-            var entries = new List<KeyValuePair<int, string>>();
-
-            // キャッシュから
-            foreach (var kvp in _mapNameCache)
+            try
             {
-                entries.Add(new KeyValuePair<int, string>(kvp.Key, $"[{kvp.Key:X2}]{kvp.Value}"));
+                cmbMapNameIndex.BeginUpdate();
+                var entries = new List<KeyValuePair<int, string>>();
+
+                // キャッシュから
+                foreach (var kvp in _mapNameCache)
+                {
+                    entries.Add(new KeyValuePair<int, string>(kvp.Key, $"[{kvp.Key:X2}]{kvp.Value}"));
+                }
+
+                cmbMapNameIndex.DisplayMember = nameof(KeyValuePair<int, string>.Value);
+                cmbMapNameIndex.ValueMember = nameof(KeyValuePair<int, string>.Key);
+                cmbMapNameIndex.DataSource = entries;
             }
-
-            cmbMapNameIndex.DisplayMember = nameof(KeyValuePair<int, string>.Value);
-            cmbMapNameIndex.ValueMember = nameof(KeyValuePair<int, string>.Key);
-            cmbMapNameIndex.DataSource = entries;
-
-            cmbMapNameIndex.EndUpdate();
+            finally
+            {
+                cmbMapNameIndex.EndUpdate();
+            }
         }
 
         private void LoadMapNames()
@@ -468,15 +510,12 @@ namespace PochiPochiEditorPlus._Forms
         {
             if (offset != Constants.InvalidValue)
             {
-                // マップフッターの定義情報を読み込む
-                var mapFooterDef = FieldMetaDataReader.Create("MapFooterEntry");
-
                 var entryFields = new List<FieldValueHolder>();
-                for (int i = 0; i < mapFooterDef.Count; i++)
+                for (int i = 0; i < _mapFooterDef.Count; i++)
                 {
                     // FieldValueを生成
                     var fieldValue = new FieldValueHolder(
-                        mapFooterDef[i],
+                        _mapFooterDef[i],
                         _sharedData);
 
                     entryFields.Add(fieldValue);
