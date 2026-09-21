@@ -1,5 +1,5 @@
-﻿using System.Windows.Forms;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Windows.Forms;
 using PochiPochiEditorPlus._Helpers._MatchHelper;
 using PochiPochiEditorPlus._Managers;
 using PochiPochiEditorPlus._Managers._FormGroupManager;
@@ -105,7 +105,7 @@ namespace PochiPochiEditorPlus._Forms
             {
                 TokenData.Wildcard(2),
                 TokenData.Exact(Constants.ByteSize, exactValues: 0x0),
-                TokenData.Exact(Constants.ByteSize, exactValues: 0x0),
+                TokenData.Exact(Constants.ByteSize, exactValues: 0x0)
             };
             entryCount = PatternMatcher.TryCountByPattern(
                 pattern,

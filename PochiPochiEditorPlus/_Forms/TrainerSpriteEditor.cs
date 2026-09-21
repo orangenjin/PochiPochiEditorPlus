@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 using PochiPochiEditorPlus._Helpers;
+using PochiPochiEditorPlus._Helpers._MatchHelper;
 using PochiPochiEditorPlus._Managers;
 using PochiPochiEditorPlus._Managers._CommandManager;
 using PochiPochiEditorPlus._Managers._FormGroupManager;
@@ -29,6 +31,7 @@ namespace PochiPochiEditorPlus._Forms
         private RefDataManager _paletteData = null;
         // UI制御用
         private int _currentSpriteIndex = 0;
+        private int _entryCount = 0;
         // データ識別タグ用
         private enum SpriteData { Image, Palette }
 
@@ -50,31 +53,41 @@ namespace PochiPochiEditorPlus._Forms
         {
             // 画像テーブルを作成
             int tableOffset = _sharedData.Config.TrainerSpriteImageTableOffset;
-            int entrycount = _sharedData.Config.TrainerSpriteCount;
+            // エントリー数を計算
+            var pattern = new List<TokenData>()
+            {
+                TokenData.Pointer(),
+                TokenData.Exact(Constants.UShortSize, exactValues: new long[]{ 0x800, 0x1000 }),
+                TokenData.Wildcard(1),
+                TokenData.Exact(Constants.ByteSize, exactValues: 0x0)
+            };
+            _entryCount = PatternMatcher.TryCountByPattern(
+                pattern,
+                _sharedData.RomData,
+                tableOffset);
             _imageEntry = 
-                new EntryManager("TrainerSpriteImageEntry", tableOffset, entrycount, _sharedData);
+                new EntryManager("TrainerSpriteImageEntry", tableOffset, _entryCount, _sharedData);
 
             // パレットテーブルを作成
             tableOffset = _sharedData.Config.TrainerSpritePaletteTableOffset;
             _paletteEntry = 
-                new EntryManager("TrainerSpritePaletteEntry", tableOffset, entrycount, _sharedData);
+                new EntryManager("TrainerSpritePaletteEntry", tableOffset, _entryCount, _sharedData);
 
             // Y座標位置テーブルを作成
             tableOffset = _sharedData.Config.TrainerSpriteYPosTableOffset;
             _yPosEntry = 
-                new EntryManager("TrainerSpriteYPosEntry", tableOffset, entrycount, _sharedData);
+                new EntryManager("TrainerSpriteYPosEntry", tableOffset, _entryCount, _sharedData);
 
             // アニメポインタテーブルを作成
             tableOffset = _sharedData.Config.TrainerSpriteAnimPointerTableOffset;
             _animPointerEntry = 
-                new EntryManager("TrainerSpriteAnimationPointerEntry", tableOffset, entrycount, _sharedData);
+                new EntryManager("TrainerSpriteAnimationPointerEntry", tableOffset, _entryCount, _sharedData);
         }
 
         private void InitializeControls()
         {
             // nudSpriteIndexの最大値
-            int spriteCount = _sharedData.Config.TrainerSpriteCount;
-            nudSpriteIndex.Maximum = spriteCount - 1;
+            nudSpriteIndex.Maximum = _entryCount - 1;
 
             // タグ設定
             btnImportSpriteImage.Tag = SpriteData.Image;
@@ -154,7 +167,7 @@ namespace PochiPochiEditorPlus._Forms
                 h => nudSpriteIndex.ValueChanged -= h,
                 (_, __) =>
                 {
-                    int newIndex = (int)nudSpriteIndex.Value;
+                    var newIndex = (int)nudSpriteIndex.Value;
                     LoadDataToUI(newIndex);
                 });
 
@@ -229,7 +242,7 @@ namespace PochiPochiEditorPlus._Forms
                 ConvHelper.ParseIntToString(
                     _animPointerEntry.Entries[index].SpriteAnimPointerOffset.GetData<int>());
             // アニメーションデータアドレス
-            int targetOffset =
+            var targetOffset =
                 _animPointerEntry.Entries[index].SpriteAnimPointerOffset.GetData<int>();
             txtSpriteAnimDataOffset.Text = IoHelper.TryReadPtr(
                 _sharedData.RomData,
