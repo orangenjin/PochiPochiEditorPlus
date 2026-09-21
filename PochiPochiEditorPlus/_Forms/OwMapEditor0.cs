@@ -1,20 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using PochiPochiEditorPlus._Helpers;
 using PochiPochiEditorPlus._Helpers._MatchHelper;
 using PochiPochiEditorPlus._Managers;
-using PochiPochiEditorPlus._Managers._CommandManager;
 using PochiPochiEditorPlus._Managers._FieldManager;
 using PochiPochiEditorPlus._Managers._FormGroupManager;
 using PochiPochiEditorPlus._Utilities;
-using PochiPochiEditorPlus._Utilities._QuickInput;
 
 namespace PochiPochiEditorPlus._Forms
 {
@@ -34,8 +28,8 @@ namespace PochiPochiEditorPlus._Forms
         private dynamic _mapFooterEntry = null;
 
         // 基準インデックスの計算を省略するため
-        private int _mapNameFirstIndex = default;
-        private Dictionary<int, string> _mapNameCache = new Dictionary<int, string>();
+        private int _mapNameFirstIndex = 0;
+        private Dictionary<int, string> _mapNameCache = null;
 
         // ノードからエントリーインデックスを取得するため
         public sealed class MapTreeNode : TreeNode, IMapNode
@@ -85,7 +79,7 @@ namespace PochiPochiEditorPlus._Forms
 
         private void RegisterFormGroupData(FormGroupData groupData)
         {
-            groupData.Register(this, () => _mapHeaderEntry);
+            groupData.Register(this, () => _mapFooterEntry);
         }
 
         private void InitializeMapNameEntry()
@@ -270,7 +264,7 @@ namespace PochiPochiEditorPlus._Forms
 
         private void LoadMapNames()
         {
-            _mapNameCache.Clear();
+            _mapNameCache = new Dictionary<int, string>();
 
             // 基準となるンデックス
             _mapNameFirstIndex = _sharedData.Config.MapNameFirstIndex;

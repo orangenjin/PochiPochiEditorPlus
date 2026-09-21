@@ -55,7 +55,7 @@ namespace PochiPochiEditorPlus._Forms
 
         private void test()
         {
-            var entry = _groupData._mapHeaderEntry[3][0];
+            // var entry = _groupData._mapHeaderEntry[3][0];
             //textBox1.Text = entry.MapFooterOffset.GetData<int>().ToString("X8");
         }
 
