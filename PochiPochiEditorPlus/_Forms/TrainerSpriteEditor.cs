@@ -28,7 +28,7 @@ namespace PochiPochiEditorPlus._Forms
         private RefDataManager _imageData = null;
         private RefDataManager _paletteData = null;
         // UI制御用
-        private int _currentSpriteIndex = default;
+        private int _currentSpriteIndex = 0;
         // データ識別タグ用
         private enum SpriteData { Image, Palette }
 
