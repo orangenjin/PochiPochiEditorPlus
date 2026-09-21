@@ -1,5 +1,5 @@
 ﻿using System.Windows.Forms;
-using PochiPochiEditorPlus._Helpers;
+using System.Collections.Generic;
 using PochiPochiEditorPlus._Helpers._MatchHelper;
 using PochiPochiEditorPlus._Managers;
 using PochiPochiEditorPlus._Managers._FormGroupManager;
@@ -48,17 +48,17 @@ namespace PochiPochiEditorPlus._Forms
 
         private void InitializeEntries()
         {
-            // 肩書きの長さを取得
+            // 肩書き名の長さを取得
             _entryLength = _sharedData.Config.TrainerClassNameEntryLength;
 
-            // 肩書名テーブルを作成
-            int tableOffset = _sharedData.Config.TrainerClassNameTableOffset;
-            int entrycount = PatternMatcher.TryCheckByTerminator(
+            // 肩書き名テーブルを作成
+            var tableOffset = _sharedData.Config.TrainerClassNameTableOffset;
+            var entryCount = PatternMatcher.TryCheckByTerminator(
                 _sharedData.RomData,
                 _entryLength,
                 tableOffset);
             _classNameEntry = 
-                new EntryManager("TrainerClassNameEntry", tableOffset, entrycount, _sharedData);
+                new EntryManager("TrainerClassNameEntry", tableOffset, entryCount, _sharedData);
 
             // 追加データのbool判定
             _isEncounterMusicEnabled = _sharedData.Config.EnableTrainerClassEncMusic;
@@ -71,7 +71,7 @@ namespace PochiPochiEditorPlus._Forms
                 // 戦闘前BGMテーブルを作成
                 tableOffset = _sharedData.Config.TrainerClassEncMusicTableOffset;
                 _encMusicEntry = 
-                    new EntryManager("TrainerClassEncMusicEntry", tableOffset, entrycount, _sharedData);
+                    new EntryManager("TrainerClassEncMusicEntry", tableOffset, entryCount, _sharedData);
             }
 
             if (_isBattleMusicEnabled)
@@ -79,7 +79,7 @@ namespace PochiPochiEditorPlus._Forms
                 // 戦闘中BGMテーブルを作成
                 tableOffset = _sharedData.Config.TrainerClassBattleMusicTableOffset;
                 _battleMusicEntry = 
-                    new EntryManager("TrainerClassBattleMusicEntry", tableOffset, entrycount, _sharedData);
+                    new EntryManager("TrainerClassBattleMusicEntry", tableOffset, entryCount, _sharedData);
             }
 
             if (_isPokeBallEnabled)
@@ -87,7 +87,7 @@ namespace PochiPochiEditorPlus._Forms
                 // 使用ボールIDテーブルを作成
                 tableOffset = _sharedData.Config.TrainerClassPokeBallTableOffset;
                 _pokeBallEntry = 
-                    new EntryManager("TrainerClassPokeBallEntry", tableOffset, entrycount, _sharedData);
+                    new EntryManager("TrainerClassPokeBallEntry", tableOffset, entryCount, _sharedData);
             }
 
             if (_isBaseIvEnabled)
@@ -95,14 +95,24 @@ namespace PochiPochiEditorPlus._Forms
                 // 基礎個体値テーブルを作成
                 tableOffset = _sharedData.Config.TrainerClassBaseIVTableOffset;
                 _baseIvEntry = 
-                    new EntryManager("TrainerClassBaseIvEntry", tableOffset, entrycount, _sharedData);
+                    new EntryManager("TrainerClassBaseIvEntry", tableOffset, entryCount, _sharedData);
             }
 
             // 賞金倍率テーブルを作成
             tableOffset = _sharedData.Config.TrainerClassPrizeMultiTableOffset;
-            entrycount = _sharedData.Config.TrainerClassPrizeMultiCount;
+            // エントリー数を計算
+            var pattern = new List<TokenData>() 
+            {
+                TokenData.Wildcard(2),
+                TokenData.Exact(Constants.ByteSize, exactValues: 0x0),
+                TokenData.Exact(Constants.ByteSize, exactValues: 0x0),
+            };
+            entryCount = PatternMatcher.TryCountByPattern(
+                pattern,
+                _sharedData.RomData,
+                tableOffset);
             _prizeMultiEntry = 
-                new EntryManager("TrainerClassPrizeMultiEntry", tableOffset, entrycount, _sharedData);
+                new EntryManager("TrainerClassPrizeMultiEntry", tableOffset, entryCount, _sharedData);
         }
 
         private void InitializeControls()
@@ -149,7 +159,7 @@ namespace PochiPochiEditorPlus._Forms
 
                 foreach (var entry in _classNameEntry.Entries)
                 {
-                    string className = entry.ClassNameStr.GetData<string>();
+                    var className = entry.ClassNameStr.GetData<string>();
                     cmbClassNameIndex.Items.Add(className);
                 }
             }
@@ -173,7 +183,7 @@ namespace PochiPochiEditorPlus._Forms
                 h => cmbClassNameIndex.SelectedIndexChanged -= h,
                 (_, __) =>
                 {
-                    int newIndex = cmbClassNameIndex.SelectedIndex;
+                    var newIndex = cmbClassNameIndex.SelectedIndex;
                     LoadDataToUI(newIndex);
                 });
 

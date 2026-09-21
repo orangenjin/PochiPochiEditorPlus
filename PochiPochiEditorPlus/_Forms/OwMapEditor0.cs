@@ -117,7 +117,7 @@ namespace PochiPochiEditorPlus._Forms
             // エントリー数を仮カウント（誤って含まれている可能性あり）
             var pointerPattern = new List<TokenData>(){ TokenData.Pointer() };
             int tableOffset = _sharedData.Config.MapBankTableOffset;
-            var bankEntrycount = PatternMatcher.TryCountByPattern(
+            var bankEntryCount = PatternMatcher.TryCountByPattern(
                 pointerPattern,
                 _sharedData.RomData,
                 tableOffset,
@@ -125,7 +125,7 @@ namespace PochiPochiEditorPlus._Forms
 
             // マップバンクテーブルを仮作成
             dynamic mapBankEntry = 
-                new EntryManager("MapBankPointerEntry", tableOffset, bankEntrycount, _sharedData);
+                new EntryManager("MapBankPointerEntry", tableOffset, bankEntryCount, _sharedData);
 
             // マップナンバーテーブルの先頭オフセットをすべて取得
             var mapNumberTableOffsets = new List<int>();
