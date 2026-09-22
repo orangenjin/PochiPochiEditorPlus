@@ -48,11 +48,11 @@ namespace PochiPochiEditorPlus._Forms
             this.picBlockDataImage = new System.Windows.Forms.PictureBox();
             this.grpTileSelector = new System.Windows.Forms.GroupBox();
             this.lblSelectTile = new System.Windows.Forms.Label();
-            this.cmbSelectTilePalette = new System.Windows.Forms.ComboBox();
+            this.cmbTilePalette = new System.Windows.Forms.ComboBox();
             this.chkSelectTileReverseV = new System.Windows.Forms.CheckBox();
             this.chkSelectTileReverseH = new System.Windows.Forms.CheckBox();
             this.picSelectTile = new System.Windows.Forms.PictureBox();
-            this.vScrollBar1 = new System.Windows.Forms.VScrollBar();
+            this.vsbTileView = new System.Windows.Forms.VScrollBar();
             this.pnlTileView = new System.Windows.Forms.Panel();
             this.grpBlockSelector = new System.Windows.Forms.GroupBox();
             this.vsrBlockView = new System.Windows.Forms.VScrollBar();
@@ -257,11 +257,11 @@ namespace PochiPochiEditorPlus._Forms
             // grpTileSelector
             // 
             this.grpTileSelector.Controls.Add(this.lblSelectTile);
-            this.grpTileSelector.Controls.Add(this.cmbSelectTilePalette);
+            this.grpTileSelector.Controls.Add(this.cmbTilePalette);
             this.grpTileSelector.Controls.Add(this.chkSelectTileReverseV);
             this.grpTileSelector.Controls.Add(this.chkSelectTileReverseH);
             this.grpTileSelector.Controls.Add(this.picSelectTile);
-            this.grpTileSelector.Controls.Add(this.vScrollBar1);
+            this.grpTileSelector.Controls.Add(this.vsbTileView);
             this.grpTileSelector.Controls.Add(this.pnlTileView);
             this.grpTileSelector.Location = new System.Drawing.Point(356, 16);
             this.grpTileSelector.Margin = new System.Windows.Forms.Padding(0);
@@ -282,15 +282,15 @@ namespace PochiPochiEditorPlus._Forms
             this.lblSelectTile.TabIndex = 12;
             this.lblSelectTile.Text = "選択中のタイル :";
             // 
-            // cmbSelectTilePalette
+            // cmbTilePalette
             // 
-            this.cmbSelectTilePalette.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbSelectTilePalette.FormattingEnabled = true;
-            this.cmbSelectTilePalette.Location = new System.Drawing.Point(162, 92);
-            this.cmbSelectTilePalette.Margin = new System.Windows.Forms.Padding(0);
-            this.cmbSelectTilePalette.Name = "cmbSelectTilePalette";
-            this.cmbSelectTilePalette.Size = new System.Drawing.Size(114, 23);
-            this.cmbSelectTilePalette.TabIndex = 11;
+            this.cmbTilePalette.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbTilePalette.FormattingEnabled = true;
+            this.cmbTilePalette.Location = new System.Drawing.Point(162, 92);
+            this.cmbTilePalette.Margin = new System.Windows.Forms.Padding(0);
+            this.cmbTilePalette.Name = "cmbTilePalette";
+            this.cmbTilePalette.Size = new System.Drawing.Size(114, 23);
+            this.cmbTilePalette.TabIndex = 11;
             // 
             // chkSelectTileReverseV
             // 
@@ -323,12 +323,12 @@ namespace PochiPochiEditorPlus._Forms
             this.picSelectTile.TabIndex = 9;
             this.picSelectTile.TabStop = false;
             // 
-            // vScrollBar1
+            // vsbTileView
             // 
-            this.vScrollBar1.Location = new System.Drawing.Point(282, 132);
-            this.vScrollBar1.Name = "vScrollBar1";
-            this.vScrollBar1.Size = new System.Drawing.Size(16, 280);
-            this.vScrollBar1.TabIndex = 8;
+            this.vsbTileView.Location = new System.Drawing.Point(282, 132);
+            this.vsbTileView.Name = "vsbTileView";
+            this.vsbTileView.Size = new System.Drawing.Size(16, 280);
+            this.vsbTileView.TabIndex = 8;
             // 
             // pnlTileView
             // 
@@ -492,12 +492,12 @@ namespace PochiPochiEditorPlus._Forms
         private System.Windows.Forms.VScrollBar vsrBlockView;
         private System.Windows.Forms.Label lblPaletteType;
         private System.Windows.Forms.GroupBox grpTileSelector;
-        private System.Windows.Forms.VScrollBar vScrollBar1;
+        private System.Windows.Forms.VScrollBar vsbTileView;
         private System.Windows.Forms.Panel pnlTileView;
         private System.Windows.Forms.CheckBox chkSelectTileReverseV;
         private System.Windows.Forms.CheckBox chkSelectTileReverseH;
         private System.Windows.Forms.PictureBox picSelectTile;
-        private System.Windows.Forms.ComboBox cmbSelectTilePalette;
+        private System.Windows.Forms.ComboBox cmbTilePalette;
         private System.Windows.Forms.GroupBox grpBlockDataAndAttr;
         private System.Windows.Forms.Label lblBlockDataImage;
         private System.Windows.Forms.PictureBox picBlockDataImage;

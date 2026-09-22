@@ -282,7 +282,7 @@ namespace PochiPochiEditorPlus._Forms
                 }
 
                 // 有効なタイル数に基づいて上限を設定
-                int totalTiles = GetTotalTileCount();
+                int totalTiles = _tilesetManager.GetTotalTileCount();
                 if (totalTiles > 0)
                 {
                     nudViewTileIndex.Maximum = totalTiles - 1;
@@ -394,7 +394,7 @@ namespace PochiPochiEditorPlus._Forms
 
                 int scaledTileSize = Constants.TileSize * Constants.DefaultScale;
                 int tilesPerRow = Constants.TilesetImageWidth / Constants.TileSize;
-                int totalTiles = GetTotalTileCount();
+                int totalTiles = _tilesetManager.GetTotalTileCount();
 
                 // 無効な領域をグレーに描画
                 int totalDisplayTiles = 
@@ -460,7 +460,7 @@ namespace PochiPochiEditorPlus._Forms
             int row = mouseY / scaledTileSize;
             int clickedIndex = row * tilesPerRow + col;
 
-            int totalTiles = GetTotalTileCount();
+            int totalTiles = _tilesetManager.GetTotalTileCount();
             if (clickedIndex >= 0 && clickedIndex < totalTiles)
             {
                 _selectedTileIndex = clickedIndex;
@@ -502,17 +502,6 @@ namespace PochiPochiEditorPlus._Forms
         public void RefreshUI()
         {
             LoadDataToUI(_currentTilesetNo);
-        }
-
-        /// <summary>
-        /// 有効なタイル総数を計算する。
-        /// </summary>
-        private int GetTotalTileCount()
-        {
-            if (_tilesetManager?.ImageData == null) return 0;
-            int bytesPerTile = 
-                (Constants.TileSize * Constants.TileSize) / Constants.PixelsPerByte4Bpp;
-            return _tilesetManager.ImageData.Length / bytesPerTile;
         }
     }
 }

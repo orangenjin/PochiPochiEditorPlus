@@ -232,5 +232,17 @@ namespace PochiPochiEditorPlus._Managers
                 ? 0
                 : (diff / _headerEntryLength) + 1;
         }
+
+        /// <summary>
+        /// 有効なタイル総数を計算する。
+        /// </summary>
+        public int GetTotalTileCount()
+        {
+            if (ImageData == null) return 0;
+
+            int bytesPerTile =
+                (Constants.TileSize * Constants.TileSize) / Constants.PixelsPerByte4Bpp;
+            return ImageData.Length / bytesPerTile;
+        }
     }
 }
