@@ -2,12 +2,15 @@
 using System.Dynamic;
 using System.Linq.Expressions;
 using System.Reflection;
+using System.Windows.Forms;
 using PochiPochiEditorPlus._Utilities;
 
 namespace PochiPochiEditorPlus._Managers._FormGroupManager
 {
     public sealed class FormGroupData : DynamicAccessor<FieldBinding>
     {
+        public EventHandler<Form> RefreshRequested { get; set; }
+
         public void Register<TValue>(object targetInstance, Expression<Func<TValue>> fieldExpression)
         {
             if (fieldExpression.Body is MemberExpression member && member.Member is FieldInfo fieldInfo)
@@ -37,6 +40,14 @@ namespace PochiPochiEditorPlus._Managers._FormGroupManager
             }
 
             return base.TrySetMember(binder, value);
+        }
+
+        /// <summary>
+        /// あるフォームから他のフォームへの再描画を行う。
+        /// </summary>
+        public void RequestRefresh(Form senderForm)
+        {
+            RefreshRequested?.Invoke(this, senderForm);
         }
     }
 

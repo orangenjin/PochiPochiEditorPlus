@@ -43,6 +43,7 @@ namespace PochiPochiEditorPlus._Managers._FormGroupManager
             if (formInfos.Any(x => x.Attribute.Order >= 0))
             {
                 GroupData = new FormGroupData();
+                GroupData.RefreshRequested += RefreshForms;
             }
 
             // フォーム作成
@@ -82,6 +83,8 @@ namespace PochiPochiEditorPlus._Managers._FormGroupManager
             }
             _forms.Clear();
             _forms = null;
+
+            GroupData.RefreshRequested -= RefreshForms;
             GroupData?.ClearDict();
             GroupData = null;
 
@@ -91,14 +94,18 @@ namespace PochiPochiEditorPlus._Managers._FormGroupManager
         }
 
         /// <summary>
-        /// Undo, Redo時、各エディタのUI再描画を行う。
+        /// 各エディタのUI再描画を行う。
+        /// 引数で特定のフォームを除外可能。
         /// </summary>
-        public void RefreshForms()
+        public void RefreshForms(object sender = null, Form excludeForm = null)
         {
             foreach (var form in _forms)
             {
                 // 念のため
                 if (form.IsDisposed) continue;
+
+                // 除外対象をスキップ、指定しない場合ループするかも
+                if (excludeForm != null && ReferenceEquals(form, excludeForm)) continue;
 
                 if (form is IEditorRefresh refreshable)
                 {
