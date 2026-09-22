@@ -28,6 +28,8 @@ namespace PochiPochiEditorPlus._Forms
         private UndoManager _undoManager = null;
         // イベント登録・解除用
         private EventBinder _eventBinder = null;
+        // UI制御用
+        private Bitmap _tileViewBmp = null;
 
         public OwMapEditor1(
             SharedData sharedData,
@@ -81,12 +83,26 @@ namespace PochiPochiEditorPlus._Forms
         {
             if (_groupData._mapFooterEntry != null)
             {
-
+                ChangeBlockTabState(true);
             }
             else
             {
-
+                ChangeBlockTabState(false);
             }
+        }
+
+        private void ChangeBlockTabState(bool value)
+        {
+            CtrlHelper.ResetControls(
+                tbpBlock,
+                includeSelf: false);
+
+            CtrlHelper.SetControlsEnabled(
+                tbpBlock,
+                enabled: value,
+                includeSelf: true);
+
+            // panelのクリア機能を実装
         }
 
         private void LoadCollTabPage()

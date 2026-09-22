@@ -411,7 +411,8 @@ namespace PochiPochiEditorPlus._Forms
             if (rb.Checked)
             {
                 UpdateMapSelector();
-                ChangeControlsState(false);
+                ClearData();
+                _groupData.RequestRefresh(this);
             }
         }
 
@@ -425,8 +426,11 @@ namespace PochiPochiEditorPlus._Forms
             else
             {
                 _currentMapNode = null;
-                ChangeControlsState(false);
+                ClearData();
             }
+
+            // 他のフォームの再描画
+            _groupData.RequestRefresh(this);
         }
 
         private void LoadDataToUI()
@@ -487,13 +491,12 @@ namespace PochiPochiEditorPlus._Forms
             }
             else
             {
-                ChangeControlsState(false);
+                ClearData();
             }
         }
 
         private void ChangeControlsState(bool value)
         {
-            // 値はリセットされる
             CtrlHelper.ResetControls(
                 grpMapHeader,
                 includeSelf: false);
@@ -504,6 +507,12 @@ namespace PochiPochiEditorPlus._Forms
                 includeSelf: true);
 
             // 他のクリアコントロールも追加
+        }
+
+        private void ClearData()
+        {
+            ChangeControlsState(false);
+            _mapFooterEntry = null;
         }
 
         private void ReadMapFooter(int offset)
