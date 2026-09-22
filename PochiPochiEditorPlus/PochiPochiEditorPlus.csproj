@@ -266,6 +266,18 @@
     <Content Include="txt\map\MapWthr.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="txt\tileset\TilesetBlockAttrAction.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="txt\tileset\TilesetBlockAttrLayer.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="txt\tileset\TilesetBlockAttrType.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="txt\tileset\TilesetBlockAttrUnk.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="txt\tileset\TilesetImageCompType.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

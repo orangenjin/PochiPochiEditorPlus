@@ -132,12 +132,12 @@ namespace PochiPochiEditorPlus._Forms
         {
             // 各コンボボックスにアイテムを追加
             CtrlHelper.LoadComboBoxFromFile(
-                (cmbMapType, "txt/Map/MapType.txt"),
-                (cmbMapWthr, "txt/Map/MapWthr.txt"),
-                (cmbMapSight, "txt/Map/MapSight.txt"),
-                (cmbMapBike, "txt/Map/MapBike.txt"),
-                (cmbMapSpBg, "txt/Map/MapSpBg.txt"),
-                (cmbMapNameType, "txt/Map/MapNameType.txt"));
+                (cmbMapType, "txt/map/MapType.txt"),
+                (cmbMapWthr, "txt/map/MapWthr.txt"),
+                (cmbMapSight, "txt/map/MapSight.txt"),
+                (cmbMapBike, "txt/map/MapBike.txt"),
+                (cmbMapSpBg, "txt/map/MapSpBg.txt"),
+                (cmbMapNameType, "txt/map/MapNameType.txt"));
         }
 
         private void InitializeMapHeaderEntry()
@@ -496,12 +496,12 @@ namespace PochiPochiEditorPlus._Forms
             // 値はリセットされる
             CtrlHelper.ResetControls(
                 grpMapHeader,
-                includeSelf: true);
+                includeSelf: false);
 
             CtrlHelper.SetControlsEnabled(
                 grpMapHeader,
                 enabled: value,
-                includeSelf: false);
+                includeSelf: true);
 
             // 他のクリアコントロールも追加
         }

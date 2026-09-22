@@ -40,13 +40,63 @@ namespace PochiPochiEditorPlus._Forms
             _groupData = groupData;
             _eventBinder = new EventBinder();
 
+            InitializeControls();
+            InitializeEventHandlers();
+
             LoadBlockTabPage();
+            LoadCollTabPage();
+            LoadEventTabPage();
+        }
 
-  
+        private void InitializeControls()
+        {
+            // 各コンボボックスにアイテムを追加
+            CtrlHelper.LoadComboBoxFromFile(
+                (cmbPaletteType, "txt/tileset/TilesetPaletteype.txt"),
+                (cmbSelectTilePalette, "txt/tileset/TilesetPaletteIndex.txt"),
+                (cmbBlockAttrAction, "txt/tileset/TilesetBlockAttrAction.txt"),
+                (cmbBlockAttrType, "txt/tileset/TilesetBlockAttrType.txt"),
+                (cmbBlockAttrUnk, "txt/tileset/TilesetBlockAttrUnk.txt"),
+                (cmbBlockAttrLayer, "txt/tileset/TilesetBlockAttrLayer.txt"));
+        }
 
+        private void InitializeEventHandlers()
+        {
+            // 枠描画
+            _eventBinder.BindCustom(
+                () => CtrlHelper.AttachBorder(grpBlockSelector, pnlBlockView),
+                () => CtrlHelper.DetachBorder(grpBlockSelector));
+            _eventBinder.BindCustom(
+                () => CtrlHelper.AttachBorder(grpTileSelector, picSelectTile, pnlTileView),
+                () => CtrlHelper.DetachBorder(grpTileSelector));
+            _eventBinder.BindCustom(
+                () => CtrlHelper.AttachBorder(grpBlockDataAndAttr, picBlockDataImage),
+                () => CtrlHelper.DetachBorder(grpBlockDataAndAttr));
+
+            // 解除タイミング指定
+            _eventBinder.BindCtrl(
+                h => this.Disposed += h,
+                h => this.Disposed -= h);
         }
 
         private void LoadBlockTabPage()
+        {
+            if (_groupData._mapFooterEntry != null)
+            {
+
+            }
+            else
+            {
+
+            }
+        }
+
+        private void LoadCollTabPage()
+        {
+
+        }
+
+        private void LoadEventTabPage()
         {
 
         }
@@ -58,6 +108,10 @@ namespace PochiPochiEditorPlus._Forms
             // var entry = _groupData._mapHeaderEntry[3][0];
             //textBox1.Text = entry.MapFooterOffset.GetData<int>().ToString("X8");
         }
+
+
+
+
 
         /// <summary>
         /// FormGroupManagerからのUI再描画用の処理。
