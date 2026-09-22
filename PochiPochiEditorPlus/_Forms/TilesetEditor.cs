@@ -424,15 +424,16 @@ namespace PochiPochiEditorPlus._Forms
                 // 選択中タイルに枠を描画
                 if (_selectedTileIndex >= 0 && _selectedTileIndex < totalTiles)
                 {
-                    int selCol = _selectedTileIndex % tilesPerRow;
-                    int selRow = _selectedTileIndex / tilesPerRow;
-                    Rectangle selRect = new Rectangle(
-                        selCol * scaledTileSize,
-                        selRow * scaledTileSize - vsbViewImage.Value,
-                        scaledTileSize - 1,
-                        scaledTileSize - 1);
+                    int selectedCol = _selectedTileIndex % tilesPerRow;
+                    int selectedRow = _selectedTileIndex / tilesPerRow;
 
-                    using (Pen redPen = new Pen(Color.Red, 1))
+                    Rectangle selRect = new Rectangle(
+                        selectedCol * scaledTileSize + 1,
+                        selectedRow * scaledTileSize - vsbViewImage.Value + 1,
+                        scaledTileSize - 2,
+                        scaledTileSize - 2);
+
+                    using (Pen redPen = new Pen(Color.Red, 2))
                     {
                         e.Graphics.DrawRectangle(redPen, selRect);
                     }
