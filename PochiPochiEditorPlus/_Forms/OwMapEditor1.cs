@@ -43,9 +43,7 @@ namespace PochiPochiEditorPlus._Forms
             InitializeControls();
             InitializeEventHandlers();
 
-            LoadBlockTabPage();
-            LoadCollTabPage();
-            LoadEventTabPage();
+            RefreshUI();
         }
 
         private void InitializeControls()
@@ -116,9 +114,11 @@ namespace PochiPochiEditorPlus._Forms
         /// <summary>
         /// FormGroupManagerからのUI再描画用の処理。
         /// </summary>
-        public void RefreshFromData()
+        public void RefreshUI()
         {
-
+            LoadBlockTabPage();
+            LoadCollTabPage();
+            LoadEventTabPage();
         }
     }
 }

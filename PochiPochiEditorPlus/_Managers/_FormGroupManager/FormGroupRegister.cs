@@ -83,8 +83,6 @@ namespace PochiPochiEditorPlus._Managers._FormGroupManager
             }
             _forms.Clear();
             _forms = null;
-
-            GroupData.RefreshRequested -= RefreshForms;
             GroupData?.ClearDict();
             GroupData = null;
 
@@ -109,7 +107,7 @@ namespace PochiPochiEditorPlus._Managers._FormGroupManager
 
                 if (form is IEditorRefresh refreshable)
                 {
-                    refreshable.RefreshFromData();
+                    refreshable.RefreshUI();
                 }
             }
         }

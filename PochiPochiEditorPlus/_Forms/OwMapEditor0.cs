@@ -26,6 +26,8 @@ namespace PochiPochiEditorPlus._Forms
         private dynamic _mapNameEntry = null;
         private dynamic _mapHeaderEntry = null;
         private dynamic _mapFooterEntry = null;
+        // UI制御用
+        private MapTreeNode _currentMapNode = null;
 
         // 定義情報を事前に計算するため
         private List<FieldMetaData> _mapFooterDef = null;
@@ -34,7 +36,7 @@ namespace PochiPochiEditorPlus._Forms
         private Dictionary<int, string> _mapNameCache = null;
 
         // ノードからエントリーインデックスを取得するため
-        public sealed class MapTreeNode : TreeNode, IMapNode
+        public sealed class MapTreeNode : TreeNode
         {
             public int MapBankIndex { get; }
             public int MapNumberIndex { get; }
@@ -44,11 +46,6 @@ namespace PochiPochiEditorPlus._Forms
                 MapBankIndex = bank;
                 MapNumberIndex = number;
             }
-        }
-        public interface IMapNode
-        {
-            int MapBankIndex { get; }
-            int MapNumberIndex { get; }
         }
 
         public OwMapEditor0(
@@ -420,19 +417,22 @@ namespace PochiPochiEditorPlus._Forms
 
         private void tvwMapSelector_AfterSelect(object sender, TreeViewEventArgs e)
         {
-            if (e.Node is IMapNode mapNode)
+            if (e.Node is MapTreeNode mapNode)
             {
-                var entry = _mapHeaderEntry[mapNode.MapBankIndex][mapNode.MapNumberIndex];
-                LoadDataToUI(entry);
+                _currentMapNode = mapNode;
+                LoadDataToUI();
             }
             else
             {
+                _currentMapNode = null;
                 ChangeControlsState(false);
             }
         }
 
-        private void LoadDataToUI(dynamic entry)
+        private void LoadDataToUI()
         {
+            var entry = _mapHeaderEntry[_currentMapNode.MapBankIndex][_currentMapNode.MapNumberIndex];
+
             if (entry.Fields[0].Offset != Constants.InvalidValue)
             {
                 // まずコントロールを有効化
@@ -534,9 +534,9 @@ namespace PochiPochiEditorPlus._Forms
         /// <summary>
         /// FormGroupManagerからのUI再描画用の処理。
         /// </summary>
-        public void RefreshFromData()
+        public void RefreshUI()
         {
-
+            LoadDataToUI();
         }
     }
 }

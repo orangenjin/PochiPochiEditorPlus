@@ -7,7 +7,7 @@ namespace PochiPochiEditorPlus._Managers._FormGroupManager
     /// </summary>
     public interface IEditorRefresh
     {
-        void RefreshFromData();
+        void RefreshUI();
     }
 
     /// <summary>

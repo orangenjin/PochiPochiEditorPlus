@@ -46,7 +46,7 @@ namespace PochiPochiEditorPlus._Forms
             InitializeControls();
             InitializeEventHandlers();
 
-            LoadDataToUI(_currentSpriteIndex);
+            RefreshUI();
         }
 
         private void InitializeEntries()
@@ -373,7 +373,7 @@ namespace PochiPochiEditorPlus._Forms
         /// <summary>
         /// FormGroupManagerからのUI再描画用の処理。
         /// </summary>
-        public void RefreshFromData()
+        public void RefreshUI()
         {
             // 現在のインデックスを再読み込み
             LoadDataToUI(_currentSpriteIndex);

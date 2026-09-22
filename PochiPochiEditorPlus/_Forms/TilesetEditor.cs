@@ -499,7 +499,7 @@ namespace PochiPochiEditorPlus._Forms
         /// <summary>
         /// FormGroupManagerからのUI再描画用の処理。
         /// </summary>
-        public void RefreshFromData()
+        public void RefreshUI()
         {
             LoadDataToUI(_currentTilesetNo);
         }
