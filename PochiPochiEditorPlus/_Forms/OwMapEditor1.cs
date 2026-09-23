@@ -137,7 +137,7 @@ namespace PochiPochiEditorPlus._Forms
                 enabled: value,
                 includeSelf: true);
 
-            // panelのクリア機能を実装
+            _imageLayers.SetImage(LayerNames.Base, null);
         }
 
         /// <summary>
@@ -147,7 +147,7 @@ namespace PochiPochiEditorPlus._Forms
         {
             // 選択中のパレットを取得
             int palIndex = cmbTilePalette.SelectedIndex;
-            if (palIndex < 0) ClearImage();
+            if (palIndex < 0) return;
             byte[] palData = palIndex >= (int)TilesetManager.PaletteKind.Palette7to12
                 ? _tileset2Manager.PaletteData[palIndex]
                 : _tileset1Manager.PaletteData[palIndex];
@@ -178,14 +178,7 @@ namespace PochiPochiEditorPlus._Forms
             }
             catch
             {
-                ClearImage();
-            }
-
-            // ImageLayersとUIのクリア処理ヘルパー
-            void ClearImage()
-            {
                 _imageLayers.SetImage(LayerNames.Base, null);
-                return;
             }
         }
 
