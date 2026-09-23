@@ -275,14 +275,14 @@ namespace PochiPochiEditorPlus._Forms
                         width,
                         height,
                         showBackColor: true);
-                // 2倍に拡大
-                var scaledImage = ImageHelper.ScaleBitmap(rawImage);
+                int scaledHeight = height * Constants.DefaultScale;
+                int scaledTileSize = Constants.TileSize * Constants.DefaultScale;
 
                 // スクロールバーの設定
                 _panelScroller.SetProperties(
-                    scaledImage.Height,
-                    Constants.TileSize * Constants.DefaultScale,
-                    Constants.TileSize * Constants.DefaultScale);
+                                    scaledHeight,
+                                    scaledTileSize,
+                                    scaledTileSize);
 
                 // 有効なタイル数に基づいてnudの上限を設定
                 int totalTiles = _tilesetManager.GetTotalTileCount();
@@ -296,7 +296,7 @@ namespace PochiPochiEditorPlus._Forms
                         _selectedTileIndex.ParseIntToString(txtViewTileIndex.Digits);
                 }
 
-                _imageLayers.SetImage(LayerNames.Base, scaledImage);
+                _imageLayers.SetImage(LayerNames.Base, rawImage);
             }
             catch
             {

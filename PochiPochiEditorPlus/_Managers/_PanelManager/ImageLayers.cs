@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Windows.Forms;
 using PochiPochiEditorPlus._Utilities;
 
@@ -11,8 +12,8 @@ namespace PochiPochiEditorPlus._Managers._PanelManager
         private Panel _panel = null;
         private Dictionary<TEnum, ImageLayer<TEnum>> _layers = null;
 
-        // PanelScrollerと併用前提
-        private int _scrollY = 0;
+        private int _scrollY = 0; // PanelScrollerと併用前提
+        private int _scale = 0;
 
         public ImageLayers(Panel panel, EventBinder eventBinder)
         {
@@ -30,16 +31,31 @@ namespace PochiPochiEditorPlus._Managers._PanelManager
             return _layers[id].Image;
         }
 
-        public void SetImage(TEnum id, Bitmap image)
+        public void SetImage(
+            TEnum id, 
+            Bitmap newImage, 
+            int scale = Constants.DefaultScale)
         {
-            // 画像を破棄
-            if (_layers.TryGetValue(id, out var layer))
+            // 新規ならインスタンスを生成
+            if (!_layers.TryGetValue(id, out var layer))
             {
-                layer.Image?.Dispose();
+                layer = new ImageLayer<TEnum>(id);
+                _layers[id] = layer;
             }
-            _layers[id] = new ImageLayer<TEnum>(id);
 
-            _layers[id].Image = image;
+            // 画像を入れ替え
+            var oldImage = layer.Image;
+            layer.Image = newImage;
+
+            // 画像を破棄
+            if (oldImage != null && oldImage != newImage)
+            {
+                oldImage.Dispose();
+            }
+
+            // 拡大設定
+            _scale = scale;
+
             _panel.Invalidate();
         }
 
@@ -58,6 +74,8 @@ namespace PochiPochiEditorPlus._Managers._PanelManager
         private void Panel_Paint(object sender, PaintEventArgs e)
         {
             e.Graphics.TranslateTransform(0, -_scrollY);
+            e.Graphics.InterpolationMode = InterpolationMode.NearestNeighbor;
+            e.Graphics.PixelOffsetMode = PixelOffsetMode.Half;
 
             foreach (var layer in _layers.Values)
             {
@@ -67,7 +85,15 @@ namespace PochiPochiEditorPlus._Managers._PanelManager
                 // 画像データがない場合はスキップ
                 if (layer.Image == null) continue;
 
-                e.Graphics.DrawImage(layer.Image, 0, 0);
+                // 拡大後の描画幅と高さを計算
+                var scaledWidth = layer.Image.Width * _scale;
+                var scaledHeight = layer.Image.Height * _scale;
+
+                e.Graphics.DrawImage(
+                    layer.Image,
+                    new Rectangle(0, 0, scaledWidth, scaledHeight),
+                    new Rectangle(0, 0, layer.Image.Width, layer.Image.Height),
+                    GraphicsUnit.Pixel);
             }
         }
     }
