@@ -38,7 +38,7 @@ namespace PochiPochiEditorPlus._Utilities
         /// <summary>
         /// 破棄のタイミングを指定する用。
         /// </summary>
-        public void Dispose()
+        private void Dispose()
         {
             foreach (var detach in _detachActions)
             {

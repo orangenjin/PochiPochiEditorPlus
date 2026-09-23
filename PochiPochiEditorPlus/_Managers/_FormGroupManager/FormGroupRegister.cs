@@ -89,7 +89,6 @@ namespace PochiPochiEditorPlus._Managers._FormGroupManager
 
                 if (!form.IsDisposed)
                 {
-                    form.FormClosed -= SingleForm_FormClosed;
                     form.Close();
                 }
             }
