@@ -109,6 +109,7 @@
     <Compile Include="_Managers\_FieldManager\FieldMetaDataReader.cs" />
     <Compile Include="_Managers\_FieldManager\FieldValueHolder.cs" />
     <Compile Include="_Managers\_FieldManager\FieldValueConv.cs" />
+    <Compile Include="_Managers\_PanelManager\PanelScroller.cs" />
     <Compile Include="_Utilities\DynamicAccessor.cs" />
     <Compile Include="_Utilities\EventBinder.cs" />
     <Compile Include="_Helpers\ConvHelper.cs" />

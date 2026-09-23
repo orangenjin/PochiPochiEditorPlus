@@ -26,6 +26,7 @@ namespace PochiPochiEditorPlus._Forms
         private int _currentTilesetNo = 0;
         private int _selectedTileIndex = 0;
         private ImageLayers<LayerNames> _imageLayers = null;
+        private PanelScroller _panelScroller = null;
 
         private enum LayerNames
         {
@@ -41,7 +42,13 @@ namespace PochiPochiEditorPlus._Forms
             _undoManager = undoManager;
             _eventBinder = new EventBinder();
             _tilesetManager = new TilesetManager(_sharedData);
+
             _imageLayers = new ImageLayers<LayerNames>(pnlViewImage, _eventBinder);
+            _panelScroller = new PanelScroller(pnlViewImage, vsbViewImage, _eventBinder);
+            _panelScroller.ScrollChanged += (_, __) =>
+            {
+                _imageLayers.SetScrollY(_panelScroller.ScrollY);
+            };
 
             InitializeControls();
             InitializeEventHandlers();
@@ -251,43 +258,33 @@ namespace PochiPochiEditorPlus._Forms
             byte[] palData = _tilesetManager.PaletteData[palIndex];
 
             // 横幅は128固定
-            int width = Constants.TilesetImageWidth;
+            var width = Constants.TilesetImageWidth;
             // 1行に対するバイト数
-            int bytesPerTileRow = (width * Constants.TileSize) / Constants.PixelsPerByte4Bpp;
+            var bytesPerTileRow = (width * Constants.TileSize) / Constants.PixelsPerByte4Bpp;
             // 必要なタイル行数を計算（端数は切り上げ）
-            int tileRows = (_tilesetManager.ImageData.Length + bytesPerTileRow - 1) / bytesPerTileRow;
+            var tileRows = (_tilesetManager.ImageData.Length + bytesPerTileRow - 1) / bytesPerTileRow;
             // 必要な高さを求める
-            int height = tileRows * Constants.TileSize;
+            var height = tileRows * Constants.TileSize;
 
             try
             {
-                Bitmap rawImage = ImageHelper.CreateBitmap(
+                // 画像を生成
+                var rawImage = ImageHelper.CreateBitmap(
                         _tilesetManager.ImageData,
                         palData,
                         width,
                         height,
                         showBackColor: true);
-
                 // 2倍に拡大
-                Bitmap scaledImage = ImageHelper.ScaleBitmap(rawImage);
+                var scaledImage = ImageHelper.ScaleBitmap(rawImage);
 
                 // スクロールバーの設定
-                if (scaledImage.Height > pnlViewImage.Height)
-                {
-                    vsbViewImage.Enabled = true;
-                    vsbViewImage.Minimum = 0;
-                    vsbViewImage.LargeChange = Constants.TileSize * Constants.DefaultScale;
-                    vsbViewImage.SmallChange = Constants.TileSize * Constants.DefaultScale;
-                    vsbViewImage.Maximum = (scaledImage.Height - pnlViewImage.Height) + vsbViewImage.LargeChange - 1;
-                    vsbViewImage.Value = 0;
-                }
-                else
-                {
-                    vsbViewImage.Enabled = false;
-                    vsbViewImage.Value = 0;
-                }
+                _panelScroller.SetProperties(
+                    scaledImage.Height,
+                    Constants.TileSize * Constants.DefaultScale,
+                    Constants.TileSize * Constants.DefaultScale);
 
-                // 有効なタイル数に基づいて上限を設定
+                // 有効なタイル数に基づいてnudの上限を設定
                 int totalTiles = _tilesetManager.GetTotalTileCount();
                 if (totalTiles > 0)
                 {

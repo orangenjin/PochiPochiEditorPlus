@@ -11,6 +11,9 @@ namespace PochiPochiEditorPlus._Managers._PanelManager
         private Panel _panel = null;
         private Dictionary<TEnum, ImageLayer<TEnum>> _layers = null;
 
+        // PanelScrollerと併用前提
+        private int _scrollY = 0;
+
         public ImageLayers(Panel panel, EventBinder eventBinder)
         {
             _panel = panel;
@@ -29,9 +32,12 @@ namespace PochiPochiEditorPlus._Managers._PanelManager
 
         public void SetImage(TEnum id, Bitmap image)
         {
-            // 登録と初期化
+            // 画像を破棄
+            if (_layers.TryGetValue(id, out var layer))
+            {
+                layer.Image?.Dispose();
+            }
             _layers[id] = new ImageLayer<TEnum>(id);
-            _layers[id].Image?.Dispose();
 
             _layers[id].Image = image;
             _panel.Invalidate();
@@ -43,8 +49,16 @@ namespace PochiPochiEditorPlus._Managers._PanelManager
             _panel.Invalidate();
         }
 
+        public void SetScrollY(int scrollY)
+        {
+            _scrollY = Math.Max(0, scrollY);
+            _panel.Invalidate();
+        }
+
         private void Panel_Paint(object sender, PaintEventArgs e)
         {
+            e.Graphics.TranslateTransform(0, -_scrollY);
+
             foreach (var layer in _layers.Values)
             {
                 // 無効化されている場合はスキップ
