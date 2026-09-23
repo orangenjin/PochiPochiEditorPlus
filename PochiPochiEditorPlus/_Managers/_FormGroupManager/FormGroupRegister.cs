@@ -16,6 +16,7 @@ namespace PochiPochiEditorPlus._Managers._FormGroupManager
 
         private Form _ownerForm = null;
         private List<Form> _forms = null;
+        private EventBinder _eventBinder = null;
 
         public FormGroupRegister(
             Form ownerForm,
@@ -25,6 +26,7 @@ namespace PochiPochiEditorPlus._Managers._FormGroupManager
         {
             _ownerForm = ownerForm;
             _forms = new List<Form>();
+            _eventBinder = new EventBinder();
 
             // グループと順番を判定
             var formInfos = Assembly.GetExecutingAssembly()
@@ -43,7 +45,9 @@ namespace PochiPochiEditorPlus._Managers._FormGroupManager
             if (formInfos.Any(x => x.Attribute.Order >= 0))
             {
                 GroupData = new FormGroupData();
-                GroupData.RefreshRequested += RefreshForms;
+                _eventBinder.BindCustom(
+                    () => GroupData.RefreshRequested += RefreshForms,
+                    () => GroupData.RefreshRequested -= RefreshForms);
             }
 
             // フォーム作成
@@ -53,9 +57,17 @@ namespace PochiPochiEditorPlus._Managers._FormGroupManager
                     ? (Form)Activator.CreateInstance(info.Type, sharedData, undoManager, GroupData)
                     : (Form)Activator.CreateInstance(info.Type, sharedData, undoManager);
 
-                form.FormClosed += SingleForm_FormClosed;
+                _eventBinder.BindCustom(
+                    () => form.FormClosed += SingleForm_FormClosed,
+                    () => form.FormClosed -= SingleForm_FormClosed);
+
                 _forms.Add(form);
             }
+
+            // 自壊させるため
+            _eventBinder.BindCtrl(
+                h => _ownerForm.Disposed += h,
+                h => _ownerForm.Disposed -= h);
         }
 
         public void ShowFormGroup()
