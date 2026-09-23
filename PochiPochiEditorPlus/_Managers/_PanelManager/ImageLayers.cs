@@ -8,23 +8,18 @@ namespace PochiPochiEditorPlus._Managers._PanelManager
 {
     public sealed class ImageLayers<TEnum> where TEnum : Enum
     {
-        private EventBinder _eventBinder = null;
         private Panel _panel = null;
         private Dictionary<TEnum, ImageLayer<TEnum>> _layers = null;
 
-        public ImageLayers(Panel panel)
+        public ImageLayers(Panel panel, EventBinder eventBinder)
         {
-            _eventBinder = new EventBinder();
             _panel = panel;
             _layers = new Dictionary<TEnum, ImageLayer<TEnum>>();
 
             // イベントの登録
-            _eventBinder.BindCustom(
+            eventBinder.BindCustom(
                 () => _panel.Paint += Panel_Paint,
                 () => _panel.Paint -= Panel_Paint);
-            _eventBinder.BindCtrl(
-                h => _panel.Disposed += h,
-                h => _panel.Disposed -= h);
         }
 
         public void AddLayer(TEnum id)
@@ -44,8 +39,12 @@ namespace PochiPochiEditorPlus._Managers._PanelManager
             _panel.Invalidate();
         }
 
-        public void SetImage(TEnum id, Image image)
+        public void SetImage(TEnum id, Bitmap image)
         {
+            // 登録と初期化
+            _layers[id] = new ImageLayer<TEnum>(id);
+            _layers[id].Image?.Dispose();
+
             _layers[id].Image = image;
             _panel.Invalidate();
         }
@@ -74,7 +73,7 @@ namespace PochiPochiEditorPlus._Managers._PanelManager
     {
         public TEnum Id { get; }
         public bool Visible { get; set; }
-        public Image Image { get; set; }
+        public Bitmap Image { get; set; }
 
         public ImageLayer(TEnum id)
         {

@@ -10,7 +10,7 @@ using System.Windows.Forms;
 using PochiPochiEditorPlus._Helpers;
 using PochiPochiEditorPlus._Helpers._MatchHelper;
 using PochiPochiEditorPlus._Managers;
-using PochiPochiEditorPlus._Managers._CommandManager;
+using PochiPochiEditorPlus._Managers._PanelManager;
 using PochiPochiEditorPlus._Managers._FieldManager;
 using PochiPochiEditorPlus._Managers._FormGroupManager;
 using PochiPochiEditorPlus._Utilities;
@@ -32,7 +32,14 @@ namespace PochiPochiEditorPlus._Forms
         private dynamic _tileset1Manager = null;
         private dynamic _tileset2Manager = null;
         // UI制御用
-        private Bitmap _tileViewBmp = null;
+        private ImageLayers<LayerNames> _imageLayers = null;
+
+        private enum LayerNames
+        {
+            Base,
+            Grid,
+            Select
+        }
 
         public OwMapEditor1(
             SharedData sharedData,
@@ -46,6 +53,9 @@ namespace PochiPochiEditorPlus._Forms
             _eventBinder = new EventBinder();
             _tileset1Manager = new TilesetManager(_sharedData);
             _tileset2Manager = new TilesetManager(_sharedData);
+            _imageLayers = new ImageLayers<LayerNames>(
+                pnlTileView,
+                _eventBinder);
 
             InitializeControls();
             InitializeEventHandlers();
@@ -135,54 +145,47 @@ namespace PochiPochiEditorPlus._Forms
         /// </summary>
         private void UpdateTileView()
         {
-            // 3：選択中のパレットを取得
+            // 選択中のパレットを取得
             int palIndex = cmbTilePalette.SelectedIndex;
-            if (palIndex < 0) return;
+            if (palIndex < 0) ClearImage();
             byte[] palData = palIndex >= (int)TilesetManager.PaletteKind.Palette7to12
                 ? _tileset2Manager.PaletteData[palIndex]
                 : _tileset1Manager.PaletteData[palIndex];
 
-            // 1：タイルセット1とタイルセット2の画像データを取得し、縦方向に連結する
+            // タイルセット1とタイルセット2の画像を連結
             byte[] imgData1 = _tileset1Manager.ImageData ?? Array.Empty<byte>();
             byte[] imgData2 = _tileset2Manager.ImageData ?? Array.Empty<byte>();
-
             byte[] combinedImageData = new byte[imgData1.Length + imgData2.Length];
             Array.Copy(imgData1, 0, combinedImageData, 0, imgData1.Length);
             Array.Copy(imgData2, 0, combinedImageData, imgData1.Length, imgData2.Length);
 
-            // 2：TilesetEditorのUpdateViewImageに基づく各値の計算
-            // 横幅は128固定
+            // 各値の計算
             int width = Constants.TilesetImageWidth;
-            // 1行に対するバイト数
             int bytesPerTileRow = (width * Constants.TileSize) / Constants.PixelsPerByte4Bpp;
-            // 必要なタイル行数を計算（結合したデータの長さを基準に端数は切り上げ）
             int tileRows = (combinedImageData.Length + bytesPerTileRow - 1) / bytesPerTileRow;
-            // 必要な高さを求める
             int height = tileRows * Constants.TileSize;
-
-            if (height <= 0) return;
 
             try
             {
-                // 既存のBitmapがあれば解放
-                _tileViewBmp?.Dispose();
+                Bitmap image = ImageHelper.CreateBitmap(
+                    combinedImageData,
+                    palData,
+                    width,
+                    height,
+                    showBackColor: true);
 
-                // 結合した画像データと選択されたパレットを使用してBitmapを生成
-                _tileViewBmp = ImageHelper.CreateBitmap(
-                        combinedImageData,
-                        palData,
-                        width,
-                        height,
-                        showBackColor: true);
-
-                // UIに反映（InitializeEventHandlersの記述からpnlTileViewが存在すると推測）
-                pnlTileView?.Invalidate();
+                _imageLayers.SetImage(LayerNames.Base, image);
             }
             catch
             {
-                // 生成に失敗した場合はリセット
-                _tileViewBmp?.Dispose();
-                _tileViewBmp = null;
+                ClearImage();
+            }
+
+            // ImageLayersとUIのクリア処理ヘルパー
+            void ClearImage()
+            {
+                _imageLayers.SetImage(LayerNames.Base, null);
+                return;
             }
         }
 
