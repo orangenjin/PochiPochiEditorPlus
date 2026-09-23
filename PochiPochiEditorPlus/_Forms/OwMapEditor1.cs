@@ -32,7 +32,7 @@ namespace PochiPochiEditorPlus._Forms
         private dynamic _tileset1Manager = null;
         private dynamic _tileset2Manager = null;
         // UI制御用
-        private ImageLayers<LayerNames> _imageLayers = null;
+        private PanelLayers<LayerNames> _panelLayers = null;
 
         private enum LayerNames
         {
@@ -53,7 +53,7 @@ namespace PochiPochiEditorPlus._Forms
             _eventBinder = new EventBinder();
             _tileset1Manager = new TilesetManager(_sharedData);
             _tileset2Manager = new TilesetManager(_sharedData);
-            _imageLayers = new ImageLayers<LayerNames>(
+            _panelLayers = new PanelLayers<LayerNames>(
                 pnlTileView,
                 _eventBinder);
 
@@ -137,7 +137,7 @@ namespace PochiPochiEditorPlus._Forms
                 enabled: value,
                 includeSelf: true);
 
-            _imageLayers.SetImage(LayerNames.Base, null);
+            _panelLayers.SetImage(LayerNames.Base, null);
         }
 
         /// <summary>
@@ -173,11 +173,11 @@ namespace PochiPochiEditorPlus._Forms
                     width,
                     height,
                     showBackColor: true);
-                _imageLayers.SetImage(LayerNames.Base, image);
+                _panelLayers.SetImage(LayerNames.Base, image);
             }
             catch
             {
-                _imageLayers.SetImage(LayerNames.Base, null);
+                _panelLayers.SetImage(LayerNames.Base, null);
             }
         }
 

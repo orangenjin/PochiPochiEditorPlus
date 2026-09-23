@@ -25,7 +25,7 @@ namespace PochiPochiEditorPlus._Forms
         // UI制御用
         private int _currentTilesetNo = 0;
         private int _selectedTileIndex = 0;
-        private ImageLayers<LayerNames> _imageLayers = null;
+        private PanelLayers<LayerNames> _panelLayers = null;
         private PanelScroller _panelScroller = null;
 
         private enum LayerNames
@@ -43,11 +43,11 @@ namespace PochiPochiEditorPlus._Forms
             _eventBinder = new EventBinder();
             _tilesetManager = new TilesetManager(_sharedData);
 
-            _imageLayers = new ImageLayers<LayerNames>(pnlViewImage, _eventBinder);
+            _panelLayers = new PanelLayers<LayerNames>(pnlViewImage, _eventBinder);
             _panelScroller = new PanelScroller(pnlViewImage, vsbViewImage, _eventBinder);
             _panelScroller.ScrollChanged += (_, __) =>
             {
-                _imageLayers.SetScrollY(_panelScroller.ScrollY);
+                _panelLayers.SetScrollY(_panelScroller.ScrollY);
             };
 
             InitializeControls();
@@ -166,7 +166,7 @@ namespace PochiPochiEditorPlus._Forms
                 h => cmbViewPalette.SelectedIndexChanged -= h,
                 (_, __) =>
                 {
-                    var image = _imageLayers.GetImage(LayerNames.Base);
+                    var image = _panelLayers.GetImage(LayerNames.Base);
                     if (image == null) return;
 
                     int palIndex = cmbViewPalette.SelectedIndex;
@@ -175,7 +175,7 @@ namespace PochiPochiEditorPlus._Forms
 
                     // パレットのみを書き換えて再描画
                     ImageHelper.ApplyPalette(image, palData, showBackColor: true);
-                    _imageLayers.SetImage(LayerNames.Base, image);
+                    _panelLayers.SetImage(LayerNames.Base, image);
                 });
             // スクロールバー操作時の再描画
             _eventBinder.BindCtrl(
@@ -296,11 +296,11 @@ namespace PochiPochiEditorPlus._Forms
                         _selectedTileIndex.ParseIntToString(txtViewTileIndex.Digits);
                 }
 
-                _imageLayers.SetImage(LayerNames.Base, rawImage);
+                _panelLayers.SetImage(LayerNames.Base, rawImage);
             }
             catch
             {
-                _imageLayers.SetImage(LayerNames.Base, null);
+                _panelLayers.SetImage(LayerNames.Base, null);
             }
         }
 
@@ -313,7 +313,7 @@ namespace PochiPochiEditorPlus._Forms
             // pnlViewImage
             if (!state)
             {
-                _imageLayers.SetImage(LayerNames.Base, null);
+                _panelLayers.SetImage(LayerNames.Base, null);
                 _selectedTileIndex = 0;
                 pnlViewImage.Invalidate();
             }

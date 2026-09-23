@@ -7,15 +7,18 @@ using PochiPochiEditorPlus._Utilities;
 
 namespace PochiPochiEditorPlus._Managers._PanelManager
 {
-    public sealed class ImageLayers<TEnum> where TEnum : Enum
+    public sealed class PanelLayers<TEnum> where TEnum : Enum
     {
+        // 対象のパネル
         private Panel _panel = null;
+        // ImageLayerを基礎とする
         private Dictionary<TEnum, ImageLayer<TEnum>> _layers = null;
 
-        private int _scrollY = 0; // PanelScrollerと併用前提
-        private int _scale = 0;
+        private int _scale = Constants.DefaultScale;
+        private int _scrollX = 0; // PanelScrollerと併用前提
+        private int _scrollY = 0;
 
-        public ImageLayers(Panel panel, EventBinder eventBinder)
+        public PanelLayers(Panel panel, EventBinder eventBinder)
         {
             _panel = panel;
             _layers = new Dictionary<TEnum, ImageLayer<TEnum>>();
@@ -32,15 +35,14 @@ namespace PochiPochiEditorPlus._Managers._PanelManager
         }
 
         public void SetImage(
-            TEnum id, 
-            Bitmap newImage, 
-            int scale = Constants.DefaultScale)
+            TEnum index, 
+            Bitmap newImage)
         {
             // 新規ならインスタンスを生成
-            if (!_layers.TryGetValue(id, out var layer))
+            if (!_layers.TryGetValue(index, out var layer))
             {
-                layer = new ImageLayer<TEnum>(id);
-                _layers[id] = layer;
+                layer = new ImageLayer<TEnum>();
+                _layers[index] = layer;
             }
 
             // 画像を入れ替え
@@ -53,15 +55,18 @@ namespace PochiPochiEditorPlus._Managers._PanelManager
                 oldImage.Dispose();
             }
 
-            // 拡大設定
-            _scale = scale;
-
             _panel.Invalidate();
         }
 
         public void SetVisible(TEnum id, bool visible)
         {
             _layers[id].Visible = visible;
+            _panel.Invalidate();
+        }
+
+        public void SetScrollX(int scrollX)
+        {
+            _scrollX = Math.Max(0, scrollX);
             _panel.Invalidate();
         }
 
@@ -73,7 +78,9 @@ namespace PochiPochiEditorPlus._Managers._PanelManager
 
         private void Panel_Paint(object sender, PaintEventArgs e)
         {
+            e.Graphics.TranslateTransform(0, -_scrollX);
             e.Graphics.TranslateTransform(0, -_scrollY);
+
             e.Graphics.InterpolationMode = InterpolationMode.NearestNeighbor;
             e.Graphics.PixelOffsetMode = PixelOffsetMode.Half;
 
@@ -99,17 +106,16 @@ namespace PochiPochiEditorPlus._Managers._PanelManager
     }
 
     /// <summary>
-    /// 各レイヤーに配置するクラスを定義する。
+    /// 各レイヤーに配置する土台となるクラスを定義する。
     /// </summary>
     public sealed class ImageLayer<TEnum> where TEnum : Enum
     {
-        public TEnum Id { get; }
-        public bool Visible { get; set; }
         public Bitmap Image { get; set; }
+        public bool Visible { get; set; }
 
-        public ImageLayer(TEnum id)
+        public ImageLayer()
         {
-            Id = id;
+            // 初期設定では表示する
             Visible = true;
         }
     }
