@@ -6,6 +6,7 @@ using PochiPochiEditorPlus._Helpers;
 using PochiPochiEditorPlus._Helpers._MatchHelper;
 using PochiPochiEditorPlus._Managers;
 using PochiPochiEditorPlus._Managers._FormGroupManager;
+using PochiPochiEditorPlus._Managers._PanelManager;
 using PochiPochiEditorPlus._Utilities;
 
 namespace PochiPochiEditorPlus._Forms
@@ -24,7 +25,14 @@ namespace PochiPochiEditorPlus._Forms
         // UI制御用
         private int _currentTilesetNo = 0;
         private int _selectedTileIndex = 0;
-        private Bitmap _viewBmp = null;
+        private ImageLayers<LayerNames> _imageLayers = null;
+
+        private enum LayerNames
+        {
+            Base,
+            Grid,
+            Select
+        }
 
         public TilesetEditor(SharedData sharedData, UndoManager undoManager)
         {
@@ -33,6 +41,7 @@ namespace PochiPochiEditorPlus._Forms
             _undoManager = undoManager;
             _eventBinder = new EventBinder();
             _tilesetManager = new TilesetManager(_sharedData);
+            _imageLayers = new ImageLayers<LayerNames>(pnlViewImage, _eventBinder);
 
             InitializeControls();
             InitializeEventHandlers();
@@ -150,15 +159,16 @@ namespace PochiPochiEditorPlus._Forms
                 h => cmbViewPalette.SelectedIndexChanged -= h,
                 (_, __) =>
                 {
-                    if (_viewBmp == null) return;
+                    var image = _imageLayers.GetImage(LayerNames.Base);
+                    if (image == null) return;
 
                     int palIndex = cmbViewPalette.SelectedIndex;
                     if (palIndex < 0) return;
                     byte[] palData = _tilesetManager.PaletteData[palIndex];
 
                     // パレットのみを書き換えて再描画
-                    ImageHelper.ApplyPalette(_viewBmp, palData, showBackColor: true);
-                    pnlViewImage.Invalidate();
+                    ImageHelper.ApplyPalette(image, palData, showBackColor: true);
+                    _imageLayers.SetImage(LayerNames.Base, image);
                 });
             // スクロールバー操作時の再描画
             _eventBinder.BindCtrl(
@@ -251,28 +261,24 @@ namespace PochiPochiEditorPlus._Forms
 
             try
             {
-                // 既存のBitmapがあれば解放
-                _viewBmp?.Dispose();
-
-                // Bitmapを生成
-                _viewBmp = ImageHelper.CreateBitmap(
+                Bitmap rawImage = ImageHelper.CreateBitmap(
                         _tilesetManager.ImageData,
                         palData,
                         width,
                         height,
                         showBackColor: true);
 
-                // スケール後の高さを計算
-                int scaledHeight = _viewBmp.Height * Constants.DefaultScale;
+                // 2倍に拡大
+                Bitmap scaledImage = ImageHelper.ScaleBitmap(rawImage);
 
                 // スクロールバーの設定
-                if (scaledHeight > pnlViewImage.Height)
+                if (scaledImage.Height > pnlViewImage.Height)
                 {
                     vsbViewImage.Enabled = true;
                     vsbViewImage.Minimum = 0;
                     vsbViewImage.LargeChange = Constants.TileSize * Constants.DefaultScale;
                     vsbViewImage.SmallChange = Constants.TileSize * Constants.DefaultScale;
-                    vsbViewImage.Maximum = (scaledHeight - pnlViewImage.Height) + vsbViewImage.LargeChange - 1;
+                    vsbViewImage.Maximum = (scaledImage.Height - pnlViewImage.Height) + vsbViewImage.LargeChange - 1;
                     vsbViewImage.Value = 0;
                 }
                 else
@@ -289,21 +295,15 @@ namespace PochiPochiEditorPlus._Forms
                     nudViewTileIndex.Minimum = 0;
                     _selectedTileIndex = Math.Min(_selectedTileIndex, totalTiles - 1);
                     nudViewTileIndex.Value = _selectedTileIndex;
-                    txtViewTileIndex.Text = 
+                    txtViewTileIndex.Text =
                         _selectedTileIndex.ParseIntToString(txtViewTileIndex.Digits);
                 }
+
+                _imageLayers.SetImage(LayerNames.Base, scaledImage);
             }
             catch
             {
-                _viewBmp?.Dispose();
-                _viewBmp = null;
-
-                vsbViewImage.Enabled = false;
-                vsbViewImage.Value = 0;
-            }
-            finally
-            {
-                pnlViewImage.Invalidate();
+                _imageLayers.SetImage(LayerNames.Base, null);
             }
         }
 
@@ -316,8 +316,7 @@ namespace PochiPochiEditorPlus._Forms
             // pnlViewImage
             if (!state)
             {
-                _viewBmp?.Dispose();
-                _viewBmp = null;
+                _imageLayers.SetImage(LayerNames.Base, null);
                 _selectedTileIndex = 0;
                 pnlViewImage.Invalidate();
             }
@@ -387,58 +386,7 @@ namespace PochiPochiEditorPlus._Forms
         /// </summary>
         private void pnlViewImage_Paint(object sender, PaintEventArgs e)
         {
-            if (_viewBmp != null)
-            {
-                // 2倍に拡大する
-                ImageHelper.ScaleBitmap(e.Graphics, _viewBmp, 0, -vsbViewImage.Value);
-
-                int scaledTileSize = Constants.TileSize * Constants.DefaultScale;
-                int tilesPerRow = Constants.TilesetImageWidth / Constants.TileSize;
-                int totalTiles = _tilesetManager.GetTotalTileCount();
-
-                // 無効な領域をグレーに描画
-                int totalDisplayTiles = 
-                    (_viewBmp.Width / Constants.TileSize) * (_viewBmp.Height / Constants.TileSize);
-                if (totalTiles < totalDisplayTiles)
-                {
-                    using (Brush invalidBrush = new SolidBrush(Color.FromArgb(160, 64, 64, 64)))
-                    {
-                        for (int i = totalTiles; i < totalDisplayTiles; i++)
-                        {
-                            int col = i % tilesPerRow;
-                            int row = i / tilesPerRow;
-                            Rectangle invalidRect = new Rectangle(
-                                col * scaledTileSize,
-                                row * scaledTileSize - vsbViewImage.Value,
-                                scaledTileSize,
-                                scaledTileSize);
-
-                            if (invalidRect.Bottom > 0 && invalidRect.Top < pnlViewImage.Height)
-                            {
-                                e.Graphics.FillRectangle(invalidBrush, invalidRect);
-                            }
-                        }
-                    }
-                }
-
-                // 選択中タイルに枠を描画
-                if (_selectedTileIndex >= 0 && _selectedTileIndex < totalTiles)
-                {
-                    int selectedCol = _selectedTileIndex % tilesPerRow;
-                    int selectedRow = _selectedTileIndex / tilesPerRow;
-
-                    Rectangle selRect = new Rectangle(
-                        selectedCol * scaledTileSize + 1,
-                        selectedRow * scaledTileSize - vsbViewImage.Value + 1,
-                        scaledTileSize - 2,
-                        scaledTileSize - 2);
-
-                    using (Pen redPen = new Pen(Color.Red, 2))
-                    {
-                        e.Graphics.DrawRectangle(redPen, selRect);
-                    }
-                }
-            }
+ 
         }
 
         /// <summary>
@@ -446,30 +394,7 @@ namespace PochiPochiEditorPlus._Forms
         /// </summary>
         private void pnlViewImage_MouseDown(object sender, MouseEventArgs e)
         {
-            if (_viewBmp == null || e.Button != MouseButtons.Left) return;
 
-            int scaledTileSize = Constants.TileSize * Constants.DefaultScale;
-            int tilesPerRow = Constants.TilesetImageWidth / Constants.TileSize;
-
-            int mouseX = e.X;
-            int mouseY = e.Y + vsbViewImage.Value;
-
-            if (mouseX < 0 || mouseX >= Constants.TilesetImageWidth * Constants.DefaultScale) return;
-
-            int col = mouseX / scaledTileSize;
-            int row = mouseY / scaledTileSize;
-            int clickedIndex = row * tilesPerRow + col;
-
-            int totalTiles = _tilesetManager.GetTotalTileCount();
-            if (clickedIndex >= 0 && clickedIndex < totalTiles)
-            {
-                _selectedTileIndex = clickedIndex;
-                if (nudViewTileIndex.Value != clickedIndex)
-                {
-                    nudViewTileIndex.Value = clickedIndex;
-                }
-                pnlViewImage.Invalidate();
-            }
         }
 
         /// <summary>

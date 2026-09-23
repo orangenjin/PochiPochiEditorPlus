@@ -22,21 +22,9 @@ namespace PochiPochiEditorPlus._Managers._PanelManager
                 () => _panel.Paint -= Panel_Paint);
         }
 
-        public void AddLayer(TEnum id)
+        public Bitmap GetImage(TEnum id)
         {
-            _layers[id] = new ImageLayer<TEnum>(id);
-            _panel.Invalidate();
-        }
-
-        public ImageLayer<TEnum> GetLayer(TEnum id)
-        {
-            return _layers[id];
-        }
-
-        public void SetVisible(TEnum id, bool visible)
-        {
-            _layers[id].Visible = visible;
-            _panel.Invalidate();
+            return _layers[id].Image;
         }
 
         public void SetImage(TEnum id, Bitmap image)
@@ -46,6 +34,12 @@ namespace PochiPochiEditorPlus._Managers._PanelManager
             _layers[id].Image?.Dispose();
 
             _layers[id].Image = image;
+            _panel.Invalidate();
+        }
+
+        public void SetVisible(TEnum id, bool visible)
+        {
+            _layers[id].Visible = visible;
             _panel.Invalidate();
         }
 
@@ -59,9 +53,7 @@ namespace PochiPochiEditorPlus._Managers._PanelManager
                 // 画像データがない場合はスキップ
                 if (layer.Image == null) continue;
 
-                e.Graphics.DrawImage(
-                    layer.Image,
-                    _panel.ClientRectangle);
+                e.Graphics.DrawImage(layer.Image, 0, 0);
             }
         }
     }

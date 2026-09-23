@@ -173,7 +173,6 @@ namespace PochiPochiEditorPlus._Forms
                     width,
                     height,
                     showBackColor: true);
-
                 _imageLayers.SetImage(LayerNames.Base, image);
             }
             catch
