@@ -9,56 +9,8 @@ namespace PochiPochiEditorPlus._Managers._PanelManager
 {
     public sealed class PanelLayers<TEnum> where TEnum : Enum
     {
-        public Size DisplaySize
-        {
-            get
-            {
-                int width = 0;
-                int height = 0;
-
-                foreach (var layer in _layers.Values)
-                {
-                    if (!layer.Visible || layer.Image == null)
-                        continue;
-
-                    width = Math.Max(width, layer.Image.Width * Scale);
-                    height = Math.Max(height, layer.Image.Height * Scale);
-                }
-
-                return new Size(width, height);
-            }
-        }
         public int Scale { get; set; }
-        public int ScrollX
-        {
-            get => _scrollX;
-            set
-            {
-                var newValue = Math.Max(0, value);
-                if (_scrollX != newValue)
-                {
-                    _scrollX = newValue;
-                    _panel.Invalidate();
-                }
-            }
-        }
-        public int ScrollY
-        {
-            get => _scrollY;
-            set
-            {
-                var newValue = Math.Max(0, value);
-                if (_scrollY != newValue)
-                {
-                    _scrollY = newValue;
-                    _panel.Invalidate();
-                }
-            }
-        }
-
-        // PanelScrollerと併用前提
-        private int _scrollX;
-        private int _scrollY;
+        public Func<Point> ScrollOffsetProvider { get; set; }
 
         // 対象のパネル
         private Panel _panel = null;
@@ -117,18 +69,15 @@ namespace PochiPochiEditorPlus._Managers._PanelManager
         private void Panel_Paint(object sender, PaintEventArgs e)
         {
             // X軸とY軸にスクロールオフセットを適用
-            e.Graphics.TranslateTransform(-ScrollX, -ScrollY);
+            var offset = ScrollOffsetProvider?.Invoke() ?? Point.Empty; ;
+            e.Graphics.TranslateTransform(-offset.X, -offset.Y);
 
             e.Graphics.InterpolationMode = InterpolationMode.NearestNeighbor;
             e.Graphics.PixelOffsetMode = PixelOffsetMode.Half;
 
             foreach (var layer in _layers.Values)
             {
-                // 無効化されている場合はスキップ
-                if (!layer.Visible) continue;
-
-                // 画像データがない場合はスキップ
-                if (layer.Image == null) continue;
+                if (!layer.Visible || layer.Image == null) continue;
 
                 // 拡大後の描画幅と高さを計算
                 var scaledWidth = layer.Image.Width * Scale;

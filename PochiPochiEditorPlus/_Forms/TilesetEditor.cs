@@ -44,11 +44,8 @@ namespace PochiPochiEditorPlus._Forms
             _tilesetManager = new TilesetManager(_sharedData);
 
             _panelLayers = new PanelLayers<LayerNames>(pnlViewImage, _eventBinder);
-            _panelScroller = new PanelScroller(pnlViewImage, vsbViewImage, _eventBinder);
-            _panelScroller.Scrolled += (_, __) =>
-            {
-                _panelLayers.ScrollY = _panelScroller.ScrollY;
-            };
+            _panelScroller = new PanelScroller(pnlViewImage, null, vsbViewImage, _eventBinder);
+            _panelLayers.ScrollOffsetProvider = () => new Point(0, _panelScroller.ScrollY);
 
             InitializeControls();
             InitializeEventHandlers();
@@ -177,11 +174,6 @@ namespace PochiPochiEditorPlus._Forms
                     ImageHelper.ApplyPalette(image, palData, showBackColor: true);
                     _panelLayers.SetImage(LayerNames.Base, image);
                 });
-            // スクロールバー操作時の再描画
-            _eventBinder.BindCtrl(
-                h => vsbViewImage.ValueChanged += h,
-                h => vsbViewImage.ValueChanged -= h,
-                (_, __) => pnlViewImage.Invalidate());
             // マウスホイールでのスクロール
             _eventBinder.BindCustom(
                 () => pnlViewImage.MouseWheel += pnlViewImage_MouseWheel,
@@ -265,7 +257,7 @@ namespace PochiPochiEditorPlus._Forms
             try
             {
                 // 画像を生成
-                var rawImage = ImageHelper.CreateBitmap(
+                var image = ImageHelper.CreateBitmap(
                     _tilesetManager.ImageData,
                     palData,
                     width,
@@ -273,11 +265,13 @@ namespace PochiPochiEditorPlus._Forms
                     showBackColor: true);
                 // 2倍に拡大
                 _panelLayers.Scale = Constants.DefaultScale;
+                // 画像を登録
+                _panelLayers.SetImage(LayerNames.Base, image);
 
                 // スクロールバーの設定
-                _panelScroller.SetHeight(
-                    _panelLayers.DisplaySize.Height,
-                    pnlViewImage.ClientSize.Height,
+                int contentHeight = image.Height * _panelLayers.Scale;
+                _panelScroller.UpdateRangeY(
+                    contentHeight, 
                     Constants.TileSize * Constants.DefaultScale);
 
                 // 有効なタイル数に基づいてnudの上限を設定
@@ -291,8 +285,6 @@ namespace PochiPochiEditorPlus._Forms
                     txtViewTileIndex.Text =
                         _selectedTileIndex.ParseIntToString(txtViewTileIndex.Digits);
                 }
-
-                _panelLayers.SetImage(LayerNames.Base, rawImage);
             }
             catch
             {
@@ -379,23 +371,7 @@ namespace PochiPochiEditorPlus._Forms
         /// </summary>
         private void EnsureTileVisible(int tileIndex)
         {
-            if (!vsbViewImage.Enabled) return;
 
-            int scaledTileSize = Constants.TileSize * Constants.DefaultScale;
-            int tilesPerRow = Constants.TilesetImageWidth / Constants.TileSize;
-            int row = tileIndex / tilesPerRow;
-            int tileY = row * scaledTileSize;
-
-            if (tileY < vsbViewImage.Value)
-            {
-                vsbViewImage.Value = Math.Max(vsbViewImage.Minimum, tileY);
-            }
-            else if (tileY + scaledTileSize > vsbViewImage.Value + pnlViewImage.Height)
-            {
-                vsbViewImage.Value = Math.Min(
-                    vsbViewImage.Maximum - vsbViewImage.LargeChange + 1,
-                    tileY + scaledTileSize - pnlViewImage.Height);
-            }
         }
 
         /// <summary>

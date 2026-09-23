@@ -7,38 +7,100 @@ namespace PochiPochiEditorPlus._Managers._PanelManager
 {
     public sealed class PanelScroller
     {
-        public EventHandler Scrolled { get; set; }
-        public int ScrollY => _vsb.Value;
+        public int ScrollX
+        {
+            get => _hsb?.Value ?? 0;
+            set
+            {
+                if (_hsb != null)
+                {
+                    _hsb.Value = Math.Max(
+                        _hsb.Minimum, 
+                        Math.Min(_hsb.Maximum - _hsb.LargeChange + 1, value));
+                }
+            }
+        }
+        public int ScrollY
+        {
+            get => _vsb?.Value ?? 0;
+            set
+            {
+                if (_vsb != null)
+                {
+                    _vsb.Value = Math.Max(
+                        _vsb.Minimum, 
+                        Math.Min(_vsb.Maximum - _vsb.LargeChange + 1, value));
+                }
+            }
+        }
+        public bool EnabledX => _hsb?.Enabled ?? false;
+        public bool EnabledY => _vsb?.Enabled ?? false;
 
-        private Panel _panel = null;
-        private VScrollBar _vsb = null;
+        private readonly Panel _panel;
+        private readonly HScrollBar _hsb;
+        private readonly VScrollBar _vsb;
 
         public PanelScroller(
-            Panel panel,
-            VScrollBar vsb,
+            Panel panel, 
+            HScrollBar hsb, 
+            VScrollBar vsb, 
             EventBinder eventBinder)
         {
             _panel = panel;
+            _hsb = hsb;
             _vsb = vsb;
 
-            eventBinder.BindCustom(
-                () => _vsb.ValueChanged += Vsb_ValueChanged,
-                () => _vsb.ValueChanged -= Vsb_ValueChanged);
+            if (_hsb != null)
+            {
+                eventBinder.BindCustom(
+                    () => _hsb.ValueChanged += ScrollBar_ValueChanged,
+                    () => _hsb.ValueChanged -= ScrollBar_ValueChanged);
+            }
+
+            if (_vsb != null)
+            {
+                eventBinder.BindCustom(
+                    () => _vsb.ValueChanged += ScrollBar_ValueChanged,
+                    () => _vsb.ValueChanged -= ScrollBar_ValueChanged);
+            }
         }
 
-        public void SetHeight(
-            int height, 
-            int largeChange, 
-            int smallChange)
+        public void UpdateRangeX(int contentWidth, int smallChange)
         {
-            _vsb.LargeChange = largeChange;
-            _vsb.SmallChange = smallChange;
+            if (_hsb == null) return;
 
-            if (height > _panel.ClientSize.Height)
+            int clientWidth = _panel.ClientSize.Width;
+
+            if (contentWidth > clientWidth)
+            {
+                _hsb.Enabled = true;
+                _hsb.LargeChange = clientWidth;
+                _hsb.SmallChange = smallChange;
+                _hsb.Minimum = 0;
+                _hsb.Maximum = contentWidth - 1;
+                _hsb.Value = 0;
+            }
+            else
+            {
+                _hsb.Enabled = false;
+                _hsb.Value = 0;
+            }
+        }
+
+        public void UpdateRangeY(int contentHeight, int smallChange)
+        {
+            if (_vsb == null) return;
+
+            int clientHeight = _panel.ClientSize.Height;
+
+            if (contentHeight > clientHeight)
             {
                 _vsb.Enabled = true;
+                _vsb.LargeChange = clientHeight;
+                _vsb.SmallChange = smallChange;
                 _vsb.Minimum = 0;
-                _vsb.Maximum = height - _panel.ClientSize.Height + _vsb.LargeChange - 1;
+                _vsb.Maximum = contentHeight - 1;
+                _vsb.Value = 0;
             }
             else
             {
@@ -47,10 +109,9 @@ namespace PochiPochiEditorPlus._Managers._PanelManager
             }
         }
 
-        private void Vsb_ValueChanged(object sender, EventArgs e)
+        private void ScrollBar_ValueChanged(object sender, EventArgs e)
         {
             _panel.Invalidate();
-            Scrolled?.Invoke(this, EventArgs.Empty);
         }
     }
 }
