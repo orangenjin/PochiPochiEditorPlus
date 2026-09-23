@@ -32,7 +32,7 @@ namespace PochiPochiEditorPlus._Managers._FieldManager
         /// <summary>
         /// エントリー長と入力可能な長さ(StringAttr用)の情報を保持する。
         /// </summary>
-        public class FieldLength
+        public sealed class FieldLength
         {
             public int EntryLength { get; set; }
             public int AllowedLength { get; set; }
