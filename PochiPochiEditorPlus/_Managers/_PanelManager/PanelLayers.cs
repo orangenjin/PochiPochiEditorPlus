@@ -9,14 +9,61 @@ namespace PochiPochiEditorPlus._Managers._PanelManager
 {
     public sealed class PanelLayers<TEnum> where TEnum : Enum
     {
+        public Size DisplaySize
+        {
+            get
+            {
+                int width = 0;
+                int height = 0;
+
+                foreach (var layer in _layers.Values)
+                {
+                    if (!layer.Visible || layer.Image == null)
+                        continue;
+
+                    width = Math.Max(width, layer.Image.Width * Scale);
+                    height = Math.Max(height, layer.Image.Height * Scale);
+                }
+
+                return new Size(width, height);
+            }
+        }
+        public int Scale { get; set; }
+        public int ScrollX
+        {
+            get => _scrollX;
+            set
+            {
+                var newValue = Math.Max(0, value);
+                if (_scrollX != newValue)
+                {
+                    _scrollX = newValue;
+                    _panel.Invalidate();
+                }
+            }
+        }
+        public int ScrollY
+        {
+            get => _scrollY;
+            set
+            {
+                var newValue = Math.Max(0, value);
+                if (_scrollY != newValue)
+                {
+                    _scrollY = newValue;
+                    _panel.Invalidate();
+                }
+            }
+        }
+
+        // PanelScrollerと併用前提
+        private int _scrollX;
+        private int _scrollY;
+
         // 対象のパネル
         private Panel _panel = null;
         // ImageLayerを基礎とする
         private Dictionary<TEnum, ImageLayer<TEnum>> _layers = null;
-
-        private int _scale = Constants.DefaultScale;
-        private int _scrollX = 0; // PanelScrollerと併用前提
-        private int _scrollY = 0;
 
         public PanelLayers(Panel panel, EventBinder eventBinder)
         {
@@ -60,26 +107,17 @@ namespace PochiPochiEditorPlus._Managers._PanelManager
 
         public void SetVisible(TEnum id, bool visible)
         {
-            _layers[id].Visible = visible;
-            _panel.Invalidate();
-        }
-
-        public void SetScrollX(int scrollX)
-        {
-            _scrollX = Math.Max(0, scrollX);
-            _panel.Invalidate();
-        }
-
-        public void SetScrollY(int scrollY)
-        {
-            _scrollY = Math.Max(0, scrollY);
-            _panel.Invalidate();
+            if (_layers.TryGetValue(id, out var layer))
+            {
+                layer.Visible = visible;
+                _panel.Invalidate();
+            }
         }
 
         private void Panel_Paint(object sender, PaintEventArgs e)
         {
-            e.Graphics.TranslateTransform(0, -_scrollX);
-            e.Graphics.TranslateTransform(0, -_scrollY);
+            // X軸とY軸にスクロールオフセットを適用
+            e.Graphics.TranslateTransform(-ScrollX, -ScrollY);
 
             e.Graphics.InterpolationMode = InterpolationMode.NearestNeighbor;
             e.Graphics.PixelOffsetMode = PixelOffsetMode.Half;
@@ -93,8 +131,8 @@ namespace PochiPochiEditorPlus._Managers._PanelManager
                 if (layer.Image == null) continue;
 
                 // 拡大後の描画幅と高さを計算
-                var scaledWidth = layer.Image.Width * _scale;
-                var scaledHeight = layer.Image.Height * _scale;
+                var scaledWidth = layer.Image.Width * Scale;
+                var scaledHeight = layer.Image.Height * Scale;
 
                 e.Graphics.DrawImage(
                     layer.Image,

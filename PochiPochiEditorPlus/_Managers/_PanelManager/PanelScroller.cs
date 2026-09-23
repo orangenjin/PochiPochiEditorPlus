@@ -7,13 +7,11 @@ namespace PochiPochiEditorPlus._Managers._PanelManager
 {
     public sealed class PanelScroller
     {
-        public EventHandler ScrollChanged { get; set; }
+        public EventHandler Scrolled { get; set; }
+        public int ScrollY => _vsb.Value;
 
         private Panel _panel = null;
         private VScrollBar _vsb = null;
-        private int _imageHeight = 0;
-
-        public int ScrollY => _vsb.Value;
 
         public PanelScroller(
             Panel panel,
@@ -28,37 +26,31 @@ namespace PochiPochiEditorPlus._Managers._PanelManager
                 () => _vsb.ValueChanged -= Vsb_ValueChanged);
         }
 
-        public void SetProperties(
+        public void SetHeight(
             int height, 
             int largeChange, 
             int smallChange)
         {
-            _imageHeight = height;
             _vsb.LargeChange = largeChange;
             _vsb.SmallChange = smallChange;
-            UpdateScrollBar();
-        }
 
-        private void Vsb_ValueChanged(object sender, EventArgs e)
-        {
-            _panel.Invalidate();
-            ScrollChanged?.Invoke(this, EventArgs.Empty);
-        }
-
-        private void UpdateScrollBar()
-        {
-            if (_imageHeight > _panel.ClientSize.Height)
+            if (height > _panel.ClientSize.Height)
             {
                 _vsb.Enabled = true;
                 _vsb.Minimum = 0;
-                _vsb.Maximum = _imageHeight - _panel.ClientSize.Height + _vsb.LargeChange - 1;
-                _vsb.Value = 0;
+                _vsb.Maximum = height - _panel.ClientSize.Height + _vsb.LargeChange - 1;
             }
             else
             {
                 _vsb.Enabled = false;
                 _vsb.Value = 0;
             }
+        }
+
+        private void Vsb_ValueChanged(object sender, EventArgs e)
+        {
+            _panel.Invalidate();
+            Scrolled?.Invoke(this, EventArgs.Empty);
         }
     }
 }
