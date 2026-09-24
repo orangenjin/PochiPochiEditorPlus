@@ -186,7 +186,6 @@ namespace PochiPochiEditorPlus._Forms
                     _selectedTileIndex = (int)nudViewTileIndex.Value;
                     txtViewTileIndex.Text =
                         _selectedTileIndex.ParseIntToString(txtViewTileIndex.Digits);
-                    pnlViewImage.Invalidate();
                 });
 
             // 解除タイミング指定
@@ -304,9 +303,8 @@ namespace PochiPochiEditorPlus._Forms
             if (!state)
             {
                 _panelLayers.SetImage(LayerNames.Tileset, null);
-                _panelGrid.UnitSize = 0;
+                _panelGrid.ClearGrid();
                 _panelSelector.ClearSelect();
-                _selectedTileIndex = 0;
                 pnlViewImage.Invalidate();
             }
 

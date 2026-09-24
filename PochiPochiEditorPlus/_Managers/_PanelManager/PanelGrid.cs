@@ -67,5 +67,10 @@ namespace PochiPochiEditorPlus._Managers._PanelManager
                 }
             }
         }
+
+        public void ClearGrid()
+        {
+            UnitSize = 0;
+        }
     }
 }
