@@ -73,12 +73,16 @@ namespace PochiPochiEditorPlus._Managers._LayerManager
 
     public abstract class LayerBase
     {
+        // 表示/非表示設定
         public bool Visible { get; set; }
 
-        public abstract void Draw(Graphics gfx, LayerData data);
+        // レイヤー基礎情報
+        protected LayerData _layerData = null;
 
-        public virtual void OnMouseDown(MouseEventArgs e, LayerData data) { }
-        public virtual void OnMouseMove(MouseEventArgs e, LayerData data) { }
-        public virtual void OnMouseUp(MouseEventArgs e, LayerData data) { }
+        public abstract void Draw(Graphics gfx);
+
+        public virtual void OnMouseDown(MouseEventArgs e) { }
+        public virtual void OnMouseMove(MouseEventArgs e) { }
+        public virtual void OnMouseUp(MouseEventArgs e) { }
     }
 }

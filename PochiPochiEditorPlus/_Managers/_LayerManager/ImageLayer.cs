@@ -21,12 +21,14 @@ namespace PochiPochiEditorPlus._Managers._LayerManager
         /// 描画用Bitmapを生成する。
         /// </summary>
         public void SetImageData(
+            LayerData layerData,
             byte[] imageData,
             byte[] paletteData, 
             int width, 
             int height,
             bool showBackColor = true)
         {
+            _layerData = layerData;
             ImageData = imageData;
             PaletteData = paletteData;
             ImageWidth = width;
@@ -65,12 +67,12 @@ namespace PochiPochiEditorPlus._Managers._LayerManager
         /// <summary>
         /// ここで拡大率を考慮して、画像を表示する。
         /// </summary>
-        public override void Draw(Graphics gfx, LayerData data)
+        public override void Draw(Graphics gfx)
         {
             if (_cachedBitmap == null) return;
 
-            int scaledWidth = _cachedBitmap.Width * data.Scale;
-            int scaledHeight = _cachedBitmap.Height * data.Scale;
+            int scaledWidth = _cachedBitmap.Width * _layerData.Scale;
+            int scaledHeight = _cachedBitmap.Height * _layerData.Scale;
 
             gfx.DrawImage(
                 _cachedBitmap,
