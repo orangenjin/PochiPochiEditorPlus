@@ -38,7 +38,7 @@ namespace PochiPochiEditorPlus._Managers._PanelManager
         private void Panel_Paint(object sender, PaintEventArgs e)
         {
             // サイズが未定義ならスキップ
-            if (_unitSize == 0) return;
+            if (_unitSize <= 0) return;
 
             // X軸とY軸のスクロールオフセットを取得
             var offset = ScrollOffsetProvider?.Invoke() ?? Point.Empty;

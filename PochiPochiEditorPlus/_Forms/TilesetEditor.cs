@@ -29,13 +29,9 @@ namespace PochiPochiEditorPlus._Forms
         private PanelLayers<LayerNames> _panelLayers = null;
         private PanelScroller _panelScroller = null;
         private PanelGrid _panelGrid = null;
+        private PanelSelector _panelSelector = null;
 
-        private enum LayerNames
-        {
-            Base,
-            Grid,
-            Select
-        }
+        private enum LayerNames{ Tileset }
 
         public TilesetEditor(SharedData sharedData, UndoManager undoManager)
         {
@@ -51,6 +47,8 @@ namespace PochiPochiEditorPlus._Forms
             _panelLayers.ScrollOffsetProvider = () => new Point(0, _panelScroller.ScrollY);
             _panelGrid = new PanelGrid(pnlViewImage, _eventBinder);
             _panelGrid.ScrollOffsetProvider = () => new Point(0, _panelScroller.ScrollY);
+            _panelSelector = new PanelSelector(pnlViewImage, _eventBinder);
+            _panelSelector.ScrollOffsetProvider = () => new Point(0, _panelScroller.ScrollY);
 
             InitializeControls();
             InitializeEventHandlers();
@@ -168,7 +166,7 @@ namespace PochiPochiEditorPlus._Forms
                 h => cmbViewPalette.SelectedIndexChanged -= h,
                 (_, __) =>
                 {
-                    var image = _panelLayers.GetImage(LayerNames.Base);
+                    var image = _panelLayers.GetImage(LayerNames.Tileset);
                     if (image == null) return;
 
                     int palIndex = cmbViewPalette.SelectedIndex;
@@ -177,12 +175,8 @@ namespace PochiPochiEditorPlus._Forms
 
                     // パレットのみを書き換えて再描画
                     ImageHelper.ApplyPalette(image, palData, showBackColor: true);
-                    _panelLayers.SetImage(LayerNames.Base, image);
+                    _panelLayers.SetImage(LayerNames.Tileset, image);
                 });
-            // クリックでタイル選択
-            _eventBinder.BindCustom(
-                () => pnlViewImage.MouseDown += pnlViewImage_MouseDown,
-                () => pnlViewImage.MouseDown -= pnlViewImage_MouseDown);
             // タイルインデックス数値
             _eventBinder.BindCtrl(
                 h => nudViewTileIndex.ValueChanged += h,
@@ -192,7 +186,6 @@ namespace PochiPochiEditorPlus._Forms
                     _selectedTileIndex = (int)nudViewTileIndex.Value;
                     txtViewTileIndex.Text =
                         _selectedTileIndex.ParseIntToString(txtViewTileIndex.Digits);
-                    EnsureTileVisible(_selectedTileIndex);
                     pnlViewImage.Invalidate();
                 });
 
@@ -267,7 +260,7 @@ namespace PochiPochiEditorPlus._Forms
                 // 2倍に拡大
                 _panelLayers.Scale = Constants.DefaultScale;
                 // 画像を登録
-                _panelLayers.SetImage(LayerNames.Base, image);
+                _panelLayers.SetImage(LayerNames.Tileset, image);
 
                 // スクロールバーの設定
                 int contentHeight = image.Height * _panelLayers.Scale;
@@ -277,6 +270,11 @@ namespace PochiPochiEditorPlus._Forms
 
                 // グリッドの設定
                 _panelGrid.UnitSize = Constants.TileSize * Constants.DefaultScale;
+
+                // 選択範囲の設定
+                var maxLength = Constants.TilesetImageWidth / Constants.TileSize;
+                _panelSelector.MaxSelectSize = new Size(maxLength, maxLength);
+                _panelSelector.UnitSize = Constants.TileSize * Constants.DefaultScale;
 
                 // 有効なタイル数に基づいてnudの上限を設定
                 int totalTiles = _tilesetManager.GetTotalTileCount();
@@ -292,7 +290,7 @@ namespace PochiPochiEditorPlus._Forms
             }
             catch
             {
-                _panelLayers.SetImage(LayerNames.Base, null);
+                _panelLayers.SetImage(LayerNames.Tileset, null);
             }
         }
 
@@ -305,8 +303,9 @@ namespace PochiPochiEditorPlus._Forms
             // タイル画像パネル
             if (!state)
             {
-                _panelLayers.SetImage(LayerNames.Base, null);
+                _panelLayers.SetImage(LayerNames.Tileset, null);
                 _panelGrid.UnitSize = 0;
+                _panelSelector.ClearSelect();
                 _selectedTileIndex = 0;
                 pnlViewImage.Invalidate();
             }
@@ -353,22 +352,6 @@ namespace PochiPochiEditorPlus._Forms
                 _sharedData.RomData,
                 _tilesetManager.CalcOffset(tilesetNo),
                 allowNullPointer: true); // nullポインタを許容する
-        }
-
-        /// <summary>
-        /// タイルクリックによるインデックス取得処理。
-        /// </summary>
-        private void pnlViewImage_MouseDown(object sender, MouseEventArgs e)
-        {
-
-        }
-
-        /// <summary>
-        /// 選択中のタイルが表示領域に入るようにスクロール位置を調整する。
-        /// </summary>
-        private void EnsureTileVisible(int tileIndex)
-        {
-
         }
 
         /// <summary>
