@@ -53,7 +53,10 @@ namespace PochiPochiEditorPlus._Managers._LayerManager
             _layerData = layerData;
 
             // このインスタンスのスクロール位置情報を提供
-            _layerData.ScrollOffsetProvider = () => new Point(ScrollX, ScrollY);
+            _layerData.ScrollOffsetProvider = 
+                () => new Point(
+                    ScrollX * _layerData.ScaledGridSize,
+                    ScrollY * _layerData.ScaledGridSize);
 
             if (_hsb != null)
             {
@@ -78,32 +81,34 @@ namespace PochiPochiEditorPlus._Managers._LayerManager
         }
 
         /// <summary>
-        /// スクロールバーの範囲を自動更新する。
+        /// スクロールバーの範囲を更新する。
         /// </summary>
         public void UpdateScrollRange()
         {
-            // スクロール量を計算
-            int contentWidth = _layerData.Columns * _layerData.ScaledGridSize;
-            int contentHeight = _layerData.Rows * _layerData.ScaledGridSize;
-            int smallChange = _layerData.ScaledGridSize;
-
-            UpdateRangeX(contentWidth, smallChange);
-            UpdateRangeY(contentHeight, smallChange);
+            UpdateRangeX();
+            UpdateRangeY();
         }
 
-        private void UpdateRangeX(int contentWidth, int smallChange)
+        private void UpdateRangeX()
         {
             if (_hsb == null) return;
 
             int clientWidth = _panel.ClientSize.Width;
+            int scaledSize = _layerData.ScaledGridSize;
+            int totalColumns = _layerData.Columns;
 
-            if (contentWidth > clientWidth)
+            // 表示できる列数
+            int visibleColumns = clientWidth / scaledSize;
+
+            if (totalColumns > visibleColumns)
             {
                 _hsb.Enabled = true;
-                _hsb.LargeChange = clientWidth;
-                _hsb.SmallChange = smallChange;
                 _hsb.Minimum = 0;
-                _hsb.Maximum = contentWidth - 1;
+                _hsb.SmallChange = 1;
+                _hsb.LargeChange = Math.Max(1, visibleColumns);
+
+                int maxScroll = totalColumns - visibleColumns;
+                _hsb.Maximum = maxScroll + _hsb.LargeChange - 1;
             }
             else
             {
@@ -112,19 +117,26 @@ namespace PochiPochiEditorPlus._Managers._LayerManager
             }
         }
 
-        private void UpdateRangeY(int contentHeight, int smallChange)
+        private void UpdateRangeY()
         {
             if (_vsb == null) return;
 
             int clientHeight = _panel.ClientSize.Height;
+            int scaledSize = _layerData.ScaledGridSize;
+            int totalRows = _layerData.Rows;
 
-            if (contentHeight > clientHeight)
+            // 表示できる行数
+            int visibleRows = clientHeight / scaledSize;
+
+            if (totalRows > visibleRows)
             {
                 _vsb.Enabled = true;
-                _vsb.LargeChange = clientHeight;
-                _vsb.SmallChange = smallChange;
                 _vsb.Minimum = 0;
-                _vsb.Maximum = contentHeight - 1;
+                _vsb.SmallChange = 1; 
+                _vsb.LargeChange = Math.Max(1, visibleRows);
+
+                int maxScroll = totalRows - visibleRows;
+                _vsb.Maximum = maxScroll + _vsb.LargeChange - 1;
             }
             else
             {

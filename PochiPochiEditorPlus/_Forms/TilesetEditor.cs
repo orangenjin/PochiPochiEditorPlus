@@ -278,6 +278,9 @@ namespace PochiPochiEditorPlus._Forms
             var maxLength = Constants.TilesetImageWidth / Constants.TileSize;
             _layerHolder.SelectorLayer.MaxSelectSize = new Size(maxLength, maxLength);
             _layerHolder.SetSelectorVisible(true);
+
+            // スクロールバーの設定
+            _layerScroller.UpdateScrollRange();
         }
 
         private void UpdateTabPageState(bool state)

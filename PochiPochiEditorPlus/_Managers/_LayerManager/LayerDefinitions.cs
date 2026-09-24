@@ -37,7 +37,7 @@ namespace PochiPochiEditorPlus._Managers._LayerManager
             }
 
             Columns = panelWidth / ScaledGridSize;
-            Rows = ValidItemCount / Columns + 1;
+            Rows = (ValidItemCount + Columns - 1) / Columns;
         }
 
         /// <summary>
