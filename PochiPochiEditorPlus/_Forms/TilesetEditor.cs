@@ -43,6 +43,7 @@ namespace PochiPochiEditorPlus._Forms
             _eventBinder = new EventBinder();
             _tilesetManager = new TilesetManager(_sharedData);
 
+            // タイル画像パネル関連
             _panelLayers = new PanelLayers<LayerNames>(pnlViewImage, _eventBinder);
             _panelScroller = new PanelScroller(pnlViewImage, null, vsbViewImage, _eventBinder);
             _panelLayers.ScrollOffsetProvider = () => new Point(0, _panelScroller.ScrollY);
@@ -77,7 +78,7 @@ namespace PochiPochiEditorPlus._Forms
                 () => CtrlHelper.AttachBorder(grpView, pnlViewImage),
                 () => CtrlHelper.DetachBorder(grpView));
 
-            // タイルセット番号
+            // タイルセットの読み込み
             _eventBinder.BindCtrl(
                 h => btnLoadTileset.Click += h,
                 h => btnLoadTileset.Click -= h,
@@ -92,7 +93,7 @@ namespace PochiPochiEditorPlus._Forms
                         UpdateTabPageState(true);
                         // マッチングに成功したら読み込む
                         LoadDataToUI(_currentTilesetNo);
-                        // btnLoadTilesetを更新
+                        // 読み込みUIを更新
                         UpdateLoadUIState(false);
                     }
                     else
@@ -104,9 +105,9 @@ namespace PochiPochiEditorPlus._Forms
                             MessageBoxButtons.OK,
                             MessageBoxIcon.Error);
 
-                        // 失敗したらUIを無効化・リセット
+                        // 失敗したらタブを無効化・リセット
                         UpdateTabPageState(false);
-                        // btnLoadTilesetを更新
+                        // 読み込みUIを更新
                         UpdateLoadUIState(true);
                     }
                 });
@@ -149,7 +150,7 @@ namespace PochiPochiEditorPlus._Forms
                 h => txtAnimHeaderOffset.Validated -= h,
                 (sender, e) => UpdateFromTextBox(
                     sender, _tilesetManager.HeaderEntry.AnimHeaderOffset, "アニメヘッダーアドレス"));
-            // テキストボックス更新ヘルパー
+            // 上記の更新ヘルパー
             void UpdateFromTextBox(object sender, dynamic entry, string itemName)
             {
                 var value = ((TextBox)sender).Text.ParseStringToInt();
@@ -174,10 +175,6 @@ namespace PochiPochiEditorPlus._Forms
                     ImageHelper.ApplyPalette(image, palData, showBackColor: true);
                     _panelLayers.SetImage(LayerNames.Base, image);
                 });
-            // マウスホイールでのスクロール
-            _eventBinder.BindCustom(
-                () => pnlViewImage.MouseWheel += pnlViewImage_MouseWheel,
-                () => pnlViewImage.MouseWheel -= pnlViewImage_MouseWheel);
             // クリックでタイル選択
             _eventBinder.BindCustom(
                 () => pnlViewImage.MouseDown += pnlViewImage_MouseDown,
@@ -227,7 +224,7 @@ namespace PochiPochiEditorPlus._Forms
                 ConvHelper.ParseIntToString(
                     _tilesetManager.HeaderEntry.AnimHeaderOffset.GetData<int>());
 
-            // grpView
+            // パレットタイプに応じてパレット初期選択を変更
             cmbViewPalette.SelectedIndex =
                 Convert.ToBoolean(_tilesetManager.HeaderEntry.PaletteType.GetData<int>())
                     ? (int)TilesetManager.PaletteKind.Palette7to12
@@ -348,14 +345,6 @@ namespace PochiPochiEditorPlus._Forms
                 _sharedData.RomData,
                 _tilesetManager.CalcOffset(tilesetNo),
                 allowNullPointer: true); // nullポインタを許容する
-        }
-
-        /// <summary>
-        /// パネルでのマウスホイールでスクロールさせる。
-        /// </summary>
-        private void pnlViewImage_MouseWheel(object sender, MouseEventArgs e)
-        {
-
         }
 
         /// <summary>

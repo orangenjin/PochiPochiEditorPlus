@@ -49,6 +49,7 @@ namespace PochiPochiEditorPlus._Managers._PanelManager
 
             if (_hsb != null)
             {
+                // 水平方向のスクロールイベント
                 eventBinder.BindCustom(
                     () => _hsb.ValueChanged += ScrollBar_ValueChanged,
                     () => _hsb.ValueChanged -= ScrollBar_ValueChanged);
@@ -56,10 +57,16 @@ namespace PochiPochiEditorPlus._Managers._PanelManager
 
             if (_vsb != null)
             {
+                // 垂直方向のスクロールイベント
                 eventBinder.BindCustom(
                     () => _vsb.ValueChanged += ScrollBar_ValueChanged,
                     () => _vsb.ValueChanged -= ScrollBar_ValueChanged);
             }
+
+            // マウスホイールのスクロールイベント
+            eventBinder.BindCustom(
+                () => _panel.MouseWheel += Panel_MouseWheel,
+                () => _panel.MouseWheel -= Panel_MouseWheel);
         }
 
         public void UpdateRangeX(int contentWidth, int smallChange)
@@ -109,6 +116,30 @@ namespace PochiPochiEditorPlus._Managers._PanelManager
         private void ScrollBar_ValueChanged(object sender, EventArgs e)
         {
             _panel.Invalidate();
+        }
+
+        private void Panel_MouseWheel(object sender, MouseEventArgs e)
+        {
+            // シフトキーで水平スクロール
+            if (Control.ModifierKeys == Keys.Shift)
+            {
+                if (_hsb != null && _hsb.Enabled)
+                {
+                    // 上下の仕様が逆なので、符号を反転させる
+                    ScrollX += e.Delta > 0 
+                        ? -_hsb.SmallChange
+                        : _hsb.SmallChange;
+                }
+            }
+            else
+            {
+                if (_vsb != null && _vsb.Enabled)
+                {
+                    ScrollY += e.Delta > 0 
+                        ? -_vsb.SmallChange
+                        : _vsb.SmallChange;
+                }
+            }
         }
     }
 }
