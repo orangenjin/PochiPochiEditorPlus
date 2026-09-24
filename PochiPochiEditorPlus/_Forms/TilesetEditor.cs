@@ -53,7 +53,7 @@ namespace PochiPochiEditorPlus._Forms
 
         private void InitializeControls()
         {
-            // pnlViewImageのダブルバッファリングを有効化
+            // タイル画像パネルのダブルバッファリングを有効化
             typeof(Control).GetProperty(
                 nameof(DoubleBuffered), 
                 System.Reflection.BindingFlags.Instance 
@@ -294,11 +294,11 @@ namespace PochiPochiEditorPlus._Forms
 
         private void UpdateTabPageState(bool state)
         {
-            // grpView
+            // 閲覧用グループ
             CtrlHelper.SetControlsEnabled(grpView, state);
             CtrlHelper.ResetControls(grpView);
 
-            // pnlViewImage
+            // タイル画像パネル
             if (!state)
             {
                 _panelLayers.SetImage(LayerNames.Base, null);
@@ -306,7 +306,7 @@ namespace PochiPochiEditorPlus._Forms
                 pnlViewImage.Invalidate();
             }
 
-            // tbcMain
+            // タブページ
             CtrlHelper.SetControlsEnabled(
                 tbcMain, 
                 state,
@@ -315,7 +315,7 @@ namespace PochiPochiEditorPlus._Forms
                 null);
             CtrlHelper.ResetControls(tbcMain);
 
-            // btnReloadTileset
+            // 再読み込みボタン
             btnReloadTileset.Enabled = state;
         }
 

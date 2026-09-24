@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Drawing;
 using System.Windows.Forms;
 using PochiPochiEditorPlus._Utilities;
 
@@ -33,8 +32,6 @@ namespace PochiPochiEditorPlus._Managers._PanelManager
                 }
             }
         }
-        public bool EnabledX => _hsb?.Enabled ?? false;
-        public bool EnabledY => _vsb?.Enabled ?? false;
 
         private readonly Panel _panel;
         private readonly HScrollBar _hsb;
