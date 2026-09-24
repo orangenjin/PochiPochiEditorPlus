@@ -59,7 +59,7 @@ namespace PochiPochiEditorPlus._Managers._LayerManager
         /// </summary>
         public void ApplyPalette(byte[] paletteData)
         {
-            if (_cachedBitmap != null) return;
+            if (_cachedBitmap == null) return;
             PaletteData = paletteData;
             ImageHelper.ApplyPalette(_cachedBitmap, PaletteData, ShowBackColor);
         }

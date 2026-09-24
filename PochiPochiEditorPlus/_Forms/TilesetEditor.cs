@@ -155,18 +155,17 @@ namespace PochiPochiEditorPlus._Forms
                 h => cmbViewPalette.SelectedIndexChanged -= h,
                 (_, __) =>
                 {
-                    /*
-                    var image = _panelLayers.GetImage(LayerNames.Tileset);
-                    if (image == null) return;
-
                     int palIndex = cmbViewPalette.SelectedIndex;
                     if (palIndex < 0) return;
-                    byte[] palData = _tilesetManager.PaletteData[palIndex];
 
-                    // パレットのみを書き換えて再描画
-                    ImageHelper.ApplyPalette(image, palData, showBackColor: true);
-                    _panelLayers.SetImage(LayerNames.Tileset, image);
-                    */
+                    // 画像レイヤーを取得
+                    var layer = _layerHolder.GetImageLayer(LayerNames.Tileset);
+                    if (layer == null) return;
+
+                    // パレットを更新
+                    byte[] palData = _tilesetManager.PaletteData[palIndex];
+                    layer.ApplyPalette(palData);
+                    pnlViewImage.Invalidate();
                 });
             // タイルインデックス数値
             _eventBinder.BindCtrl(
@@ -295,9 +294,9 @@ namespace PochiPochiEditorPlus._Forms
             // タイル画像パネル
             if (!state)
             {
-                // _panelLayers.SetImage(LayerNames.Tileset, null);
-                // _panelGrid.ClearGrid();
-                // _panelSelector.ClearSelect();
+                _layerHolder.SetLayerVisible(LayerNames.Tileset, false);
+                _layerHolder.SetGridVisible(false);
+                _layerHolder.SelectorLayer.ClearSelect();
                 pnlViewImage.Invalidate();
             }
 
