@@ -6,7 +6,7 @@ using PochiPochiEditorPlus._Helpers;
 using PochiPochiEditorPlus._Helpers._MatchHelper;
 using PochiPochiEditorPlus._Managers;
 using PochiPochiEditorPlus._Managers._FormGroupManager;
-using PochiPochiEditorPlus._Managers._PanelManager;
+using PochiPochiEditorPlus._Managers._LayerManager;
 using PochiPochiEditorPlus._Utilities;
 
 namespace PochiPochiEditorPlus._Forms
@@ -22,14 +22,11 @@ namespace PochiPochiEditorPlus._Forms
         private EventBinder _eventBinder = null;
         // 各エントリーテーブル用
         private dynamic _tilesetManager = null;
+        // パネル描画用
+        private LayerHolder<LayerNames> _layerHolder = null;
         // UI制御用
         private int _currentTilesetNo = 0;
         private int _selectedTileIndex = 0;
-        // パネル用
-        private PanelLayers<LayerNames> _panelLayers = null;
-        private PanelScroller _panelScroller = null;
-        private PanelGrid _panelGrid = null;
-        private PanelSelector _panelSelector = null;
 
         private enum LayerNames{ Tileset }
 
@@ -40,15 +37,7 @@ namespace PochiPochiEditorPlus._Forms
             _undoManager = undoManager;
             _eventBinder = new EventBinder();
             _tilesetManager = new TilesetManager(_sharedData);
-
-            // タイル画像パネル関連
-            _panelLayers = new PanelLayers<LayerNames>(pnlViewImage, _eventBinder);
-            _panelScroller = new PanelScroller(pnlViewImage, null, vsbViewImage, _eventBinder);
-            _panelLayers.ScrollOffsetProvider = () => new Point(0, _panelScroller.ScrollY);
-            _panelGrid = new PanelGrid(pnlViewImage, _eventBinder);
-            _panelGrid.ScrollOffsetProvider = () => new Point(0, _panelScroller.ScrollY);
-            _panelSelector = new PanelSelector(pnlViewImage, _eventBinder);
-            _panelSelector.ScrollOffsetProvider = () => new Point(0, _panelScroller.ScrollY);
+            _layerHolder = new LayerHolder<LayerNames>(pnlViewImage, _eventBinder);
 
             InitializeControls();
             InitializeEventHandlers();
@@ -166,6 +155,7 @@ namespace PochiPochiEditorPlus._Forms
                 h => cmbViewPalette.SelectedIndexChanged -= h,
                 (_, __) =>
                 {
+                    /*
                     var image = _panelLayers.GetImage(LayerNames.Tileset);
                     if (image == null) return;
 
@@ -176,6 +166,7 @@ namespace PochiPochiEditorPlus._Forms
                     // パレットのみを書き換えて再描画
                     ImageHelper.ApplyPalette(image, palData, showBackColor: true);
                     _panelLayers.SetImage(LayerNames.Tileset, image);
+                    */
                 });
             // タイルインデックス数値
             _eventBinder.BindCtrl(
@@ -247,50 +238,52 @@ namespace PochiPochiEditorPlus._Forms
             // 必要な高さを求める
             var height = tileRows * Constants.TileSize;
 
-            try
+            // 有効なタイル数に基づいてnudの上限を設定
+            int totalTiles = _tilesetManager.GetTotalTileCount();
+            if (totalTiles > 0)
             {
-                // 画像を生成
-                var image = ImageHelper.CreateBitmap(
-                    _tilesetManager.ImageData,
-                    palData,
-                    width,
-                    height,
-                    showBackColor: true);
-                // 2倍に拡大
-                _panelLayers.Scale = Constants.DefaultScale;
-                // 画像を登録
-                _panelLayers.SetImage(LayerNames.Tileset, image);
-
-                // スクロールバーの設定
-                int contentHeight = image.Height * _panelLayers.Scale;
-                _panelScroller.UpdateRangeY(
-                    contentHeight, 
-                    Constants.TileSize * Constants.DefaultScale);
-
-                // グリッドの設定
-                _panelGrid.UnitSize = Constants.TileSize * Constants.DefaultScale;
-
-                // 選択範囲の設定
-                var maxLength = Constants.TilesetImageWidth / Constants.TileSize;
-                _panelSelector.MaxSelectSize = new Size(maxLength, maxLength);
-                _panelSelector.UnitSize = Constants.TileSize * Constants.DefaultScale;
-
-                // 有効なタイル数に基づいてnudの上限を設定
-                int totalTiles = _tilesetManager.GetTotalTileCount();
-                if (totalTiles > 0)
-                {
-                    nudViewTileIndex.Maximum = totalTiles - 1;
-                    nudViewTileIndex.Minimum = 0;
-                    _selectedTileIndex = Math.Min(_selectedTileIndex, totalTiles - 1);
-                    nudViewTileIndex.Value = _selectedTileIndex;
-                    txtViewTileIndex.Text =
-                        _selectedTileIndex.ParseIntToString(txtViewTileIndex.Digits);
-                }
+                nudViewTileIndex.Maximum = totalTiles - 1;
+                nudViewTileIndex.Minimum = 0;
+                _selectedTileIndex = Math.Min(_selectedTileIndex, totalTiles - 1);
+                nudViewTileIndex.Value = _selectedTileIndex;
+                txtViewTileIndex.Text =
+                    _selectedTileIndex.ParseIntToString(txtViewTileIndex.Digits);
             }
-            catch
-            {
-                _panelLayers.SetImage(LayerNames.Tileset, null);
-            }
+
+            // レイヤー初期設定
+            _layerHolder.Initialize(
+                gridSize: Constants.TileSize,
+                scale: Constants.DefaultScale,
+                validItemCount: totalTiles);
+
+            // 画像の設定
+            _layerHolder.SetImageLayer(
+                LayerNames.Tileset,
+                _tilesetManager.ImageData,
+                palData,
+                width,
+                height);
+            _layerHolder.SetLayerVisible(LayerNames.Tileset, true);
+
+            // グリッドの設定
+            _layerHolder.SetGridVisible(true);
+
+            // 選択範囲の設定
+            var maxLength = Constants.TilesetImageWidth / Constants.TileSize;
+            _layerHolder.SelectorLayer.MaxSelectSize = new Size(maxLength, maxLength);
+            _layerHolder.SetSelectorVisible(true);
+
+
+            /*
+            // スクロールバーの設定
+            int contentHeight = image.Height * _panelLayers.Scale;
+            _panelScroller.UpdateRangeY(
+                contentHeight, 
+                Constants.TileSize * Constants.DefaultScale);
+            */
+
+
+
         }
 
         private void UpdateTabPageState(bool state)
@@ -302,9 +295,9 @@ namespace PochiPochiEditorPlus._Forms
             // タイル画像パネル
             if (!state)
             {
-                _panelLayers.SetImage(LayerNames.Tileset, null);
-                _panelGrid.ClearGrid();
-                _panelSelector.ClearSelect();
+                // _panelLayers.SetImage(LayerNames.Tileset, null);
+                // _panelGrid.ClearGrid();
+                // _panelSelector.ClearSelect();
                 pnlViewImage.Invalidate();
             }
 

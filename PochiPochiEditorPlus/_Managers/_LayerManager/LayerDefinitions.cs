@@ -55,8 +55,17 @@ namespace PochiPochiEditorPlus._Managers._LayerManager
         public Point GetGridPoint(Point mouseLoc)
         {
             var offset = ScrollOffset;
-            int x = (mouseLoc.X + offset.X) / ScaledGridSize;
-            int y = (mouseLoc.Y + offset.Y) / ScaledGridSize;
+            int rawX = mouseLoc.X + offset.X;
+            int rawY = mouseLoc.Y + offset.Y;
+
+            // 負の座標を丸める
+            int x = rawX < 0 
+                ? (rawX - ScaledGridSize + 1) / ScaledGridSize 
+                : rawX / ScaledGridSize;
+            int y = rawY < 0 
+                ? (rawY - ScaledGridSize + 1) / ScaledGridSize 
+                : rawY / ScaledGridSize;
+
             return new Point(x, y);
         }
     }

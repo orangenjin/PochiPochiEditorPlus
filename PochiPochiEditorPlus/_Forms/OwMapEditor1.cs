@@ -10,7 +10,7 @@ using System.Windows.Forms;
 using PochiPochiEditorPlus._Helpers;
 using PochiPochiEditorPlus._Helpers._MatchHelper;
 using PochiPochiEditorPlus._Managers;
-using PochiPochiEditorPlus._Managers._PanelManager;
+using PochiPochiEditorPlus._Managers._LayerManager;
 using PochiPochiEditorPlus._Managers._FieldManager;
 using PochiPochiEditorPlus._Managers._FormGroupManager;
 using PochiPochiEditorPlus._Utilities;
@@ -32,7 +32,7 @@ namespace PochiPochiEditorPlus._Forms
         private dynamic _tileset1Manager = null;
         private dynamic _tileset2Manager = null;
         // UI制御用
-        private PanelLayers<LayerNames> _panelLayers = null;
+        private LayerHolder<LayerNames> _layerLayers = null;
 
         private enum LayerNames
         {
@@ -53,9 +53,6 @@ namespace PochiPochiEditorPlus._Forms
             _eventBinder = new EventBinder();
             _tileset1Manager = new TilesetManager(_sharedData);
             _tileset2Manager = new TilesetManager(_sharedData);
-            _panelLayers = new PanelLayers<LayerNames>(
-                pnlTileView,
-                _eventBinder);
 
             InitializeControls();
             InitializeEventHandlers();
@@ -137,7 +134,7 @@ namespace PochiPochiEditorPlus._Forms
                 enabled: value,
                 includeSelf: true);
 
-            _panelLayers.SetImage(LayerNames.Base, null);
+           // _panelLayers.SetImage(LayerNames.Base, null);
         }
 
         /// <summary>
@@ -173,11 +170,11 @@ namespace PochiPochiEditorPlus._Forms
                     width,
                     height,
                     showBackColor: true);
-                _panelLayers.SetImage(LayerNames.Base, image);
+                // _panelLayers.SetImage(LayerNames.Base, image);
             }
             catch
             {
-                _panelLayers.SetImage(LayerNames.Base, null);
+                // _panelLayers.SetImage(LayerNames.Base, null);
             }
         }
 

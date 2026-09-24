@@ -38,13 +38,20 @@ namespace PochiPochiEditorPlus._Managers._LayerManager
             _cachedBitmap?.Dispose();
             _cachedBitmap = null;
 
-            // 画像を生成
-            _cachedBitmap = ImageHelper.CreateBitmap(
-                ImageData,
-                PaletteData,
-                ImageWidth,
-                ImageHeight,
-                ShowBackColor);
+            try
+            {
+                // 画像を生成
+                _cachedBitmap = ImageHelper.CreateBitmap(
+                    ImageData,
+                    PaletteData,
+                    ImageWidth,
+                    ImageHeight,
+                    ShowBackColor);
+            }
+            catch 
+            {
+                _cachedBitmap = null;
+            }
         }
 
         /// <summary>

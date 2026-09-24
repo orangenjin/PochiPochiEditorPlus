@@ -63,23 +63,36 @@ namespace PochiPochiEditorPlus._Managers._LayerManager
             var gridPoint = data.GetGridPoint(e.Location);
 
             // 選択可能サイズを取得
-            int limitX = Math.Max(0, MaxSelectSize.Width - 1);
-            int limitY = Math.Max(0, MaxSelectSize.Height - 1);
+            if (MaxSelectSize.Width > 0 && MaxSelectSize.Height > 0)
+            {
+                int limitX = MaxSelectSize.Width - 1;
+                int limitY = MaxSelectSize.Height - 1;
+
+                gridPoint.X = Math.Max(
+                    _startGridPoint.X - limitX, 
+                    Math.Min(gridPoint.X, _startGridPoint.X + limitX));
+                gridPoint.Y = Math.Max(
+                    _startGridPoint.Y - limitY,
+                    Math.Min(gridPoint.Y, _startGridPoint.Y + limitY));
+            }
 
             // 開始点を基準に、選択範囲が最大範囲を超えないようにする
-            gridPoint.X = Math.Max(
-                _startGridPoint.X - limitX, Math.Min(gridPoint.X, 
-                _startGridPoint.X + limitX));
-            gridPoint.Y = Math.Max(
-                _startGridPoint.Y - limitY, Math.Min(gridPoint.Y, 
-                _startGridPoint.Y + limitY));
+            int maxGridX = Math.Max(0, data.Columns - 1);
+            int maxGridY = Math.Max(0, data.Rows - 1);
+            gridPoint.X = Math.Max(0, Math.Min(gridPoint.X, maxGridX));
+            gridPoint.Y = Math.Max(0, Math.Min(gridPoint.Y, maxGridY));
 
-            if (!data.IsValidGrid(gridPoint.X, gridPoint.Y))
+            // 有効アイテム数の範囲内に収める
+            if (data.ValidItemCount > 0)
             {
-                // 有効範囲内に調整する
+                int currentIndex = gridPoint.Y * data.Columns + gridPoint.X;
                 int maxIndex = data.ValidItemCount - 1;
-                gridPoint.X = Math.Min(gridPoint.X, maxIndex % data.Columns);
-                gridPoint.Y = Math.Min(gridPoint.Y, maxIndex / data.Columns);
+
+                if (currentIndex > maxIndex)
+                {
+                    gridPoint.X = maxIndex % data.Columns;
+                    gridPoint.Y = maxIndex / data.Columns;
+                }
             }
 
             if (_currentGridPoint != gridPoint)

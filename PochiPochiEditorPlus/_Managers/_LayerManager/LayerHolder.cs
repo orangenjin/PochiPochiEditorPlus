@@ -119,5 +119,35 @@ namespace PochiPochiEditorPlus._Managers._LayerManager
             => SelectorLayer.OnMouseMove(e, Data);
         private void Panel_MouseUp(object sender, MouseEventArgs e)
             => SelectorLayer.OnMouseUp(e, Data);
+
+        /// <summary>
+        /// 画像レイヤーの表示を設定する。
+        /// </summary>
+        public void SetLayerVisible(TEnum key, bool visible)
+        {
+            if (ImageLayers.TryGetValue(key, out var layer))
+            {
+                layer.Visible = visible;
+                _panel.Invalidate();
+            }
+        }
+
+        /// <summary>
+        /// グリッドレイヤーの表示を設定する。
+        /// </summary>
+        public void SetGridVisible(bool visible)
+        {
+            GridLayer.Visible = visible;
+            _panel.Invalidate();
+        }
+
+        /// <summary>
+        /// 選択範囲レイヤーの表示を設定する。
+        /// </summary>
+        public void SetSelectorVisible(bool visible)
+        {
+            SelectorLayer.Visible = visible;
+            _panel.Invalidate();
+        }
     }
 }
