@@ -13,7 +13,6 @@ namespace PochiPochiEditorPlus._Managers._LayerManager
         public byte[] PaletteData { get; set; }
         public int ImageWidth { get; set; }
         public int ImageHeight { get; set; }
-        public bool ShowBackColor { get; set; }
 
         // パレット切り替え時のために保持
         private Bitmap _cachedBitmap = null;
@@ -32,7 +31,6 @@ namespace PochiPochiEditorPlus._Managers._LayerManager
             PaletteData = paletteData;
             ImageWidth = width;
             ImageHeight = height;
-            ShowBackColor = showBackColor;
 
             // 画像を破棄
             _cachedBitmap?.Dispose();
@@ -46,7 +44,7 @@ namespace PochiPochiEditorPlus._Managers._LayerManager
                     PaletteData,
                     ImageWidth,
                     ImageHeight,
-                    ShowBackColor);
+                    showBackColor);
             }
             catch 
             {
@@ -57,11 +55,11 @@ namespace PochiPochiEditorPlus._Managers._LayerManager
         /// <summary>
         /// パレットデータのみを変更する。
         /// </summary>
-        public void ApplyPalette(byte[] paletteData)
+        public void ApplyPalette(byte[] paletteData, bool showBackColor = true)
         {
             if (_cachedBitmap == null) return;
             PaletteData = paletteData;
-            ImageHelper.ApplyPalette(_cachedBitmap, PaletteData, ShowBackColor);
+            ImageHelper.ApplyPalette(_cachedBitmap, PaletteData, showBackColor);
         }
 
         /// <summary>
@@ -84,7 +82,7 @@ namespace PochiPochiEditorPlus._Managers._LayerManager
         /// <summary>
         /// GridSize単位で、指定したマスの画像データを抽出する。
         /// </summary>
-        public byte[] ExtractImageAtGrid(int gridX, int gridY, LayerData data)
+        public byte[] ExtractImageDataAtGrid(int gridX, int gridY, LayerData data)
         {
             if (ImageData == null) return null;
             if (!data.IsValidGrid(gridX, gridY)) return null;
