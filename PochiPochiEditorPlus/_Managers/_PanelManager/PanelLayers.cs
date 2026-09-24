@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.Linq;
 using System.Windows.Forms;
 using PochiPochiEditorPlus._Utilities;
 
@@ -28,14 +29,12 @@ namespace PochiPochiEditorPlus._Managers._PanelManager
                 () => _panel.Paint -= Panel_Paint);
         }
 
-        public Bitmap GetImage(TEnum id)
+        public Bitmap GetImage(TEnum index)
         {
-            return _layers[id].Image;
+            return _layers[index].Image;
         }
 
-        public void SetImage(
-            TEnum index, 
-            Bitmap newImage)
+        public void SetImage(TEnum index, Bitmap newImage)
         {
             // 新規ならインスタンスを生成
             if (!_layers.TryGetValue(index, out var layer))
@@ -57,9 +56,9 @@ namespace PochiPochiEditorPlus._Managers._PanelManager
             _panel.Invalidate();
         }
 
-        public void SetVisible(TEnum id, bool visible)
+        public void SetVisible(TEnum index, bool visible)
         {
-            if (_layers.TryGetValue(id, out var layer))
+            if (_layers.TryGetValue(index, out var layer))
             {
                 layer.Visible = visible;
                 _panel.Invalidate();
@@ -74,8 +73,9 @@ namespace PochiPochiEditorPlus._Managers._PanelManager
             e.Graphics.InterpolationMode = InterpolationMode.NearestNeighbor;
             e.Graphics.PixelOffsetMode = PixelOffsetMode.Half;
 
-            foreach (var layer in _layers.Values)
+            foreach (var kvp in _layers.OrderBy(x => x.Key))
             {
+                var layer = kvp.Value;
                 if (!layer.Visible || layer.Image == null) continue;
 
                 // 拡大後の描画幅と高さを計算

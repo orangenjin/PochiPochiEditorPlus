@@ -274,7 +274,7 @@ namespace PochiPochiEditorPlus._Managers
         }
     }
 
-    public class ByteTrieNode
+    public sealed class ByteTrieNode
     {
         public Dictionary<byte, ByteTrieNode> Children { get; set; }
         public string Value { get; set; }
@@ -288,7 +288,7 @@ namespace PochiPochiEditorPlus._Managers
         }
     }
 
-    public class StringTrieNode
+    public sealed class StringTrieNode
     {
         public Dictionary<char, StringTrieNode> Children { get; set; }
         public byte[] Value { get; set; }
