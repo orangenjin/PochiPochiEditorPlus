@@ -276,7 +276,7 @@ namespace PochiPochiEditorPlus._Forms
                     Constants.TileSize * Constants.DefaultScale);
 
                 // グリッドの設定
-                _panelGrid.Size = Constants.TileSize * Constants.DefaultScale;
+                _panelGrid.UnitSize = Constants.TileSize * Constants.DefaultScale;
 
                 // 有効なタイル数に基づいてnudの上限を設定
                 int totalTiles = _tilesetManager.GetTotalTileCount();
@@ -306,7 +306,7 @@ namespace PochiPochiEditorPlus._Forms
             if (!state)
             {
                 _panelLayers.SetImage(LayerNames.Base, null);
-                _panelGrid.Size = 0;
+                _panelGrid.UnitSize = 0;
                 _selectedTileIndex = 0;
                 pnlViewImage.Invalidate();
             }
