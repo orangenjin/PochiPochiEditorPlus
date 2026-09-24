@@ -68,9 +68,8 @@ namespace PochiPochiEditorPlus._Managers._PanelManager
 
         private void Panel_Paint(object sender, PaintEventArgs e)
         {
-            // X軸とY軸にスクロールオフセットを適用
-            var offset = ScrollOffsetProvider?.Invoke() ?? Point.Empty; ;
-            e.Graphics.TranslateTransform(-offset.X, -offset.Y);
+            // X軸とY軸にスクロールオフセットを取得
+            var offset = ScrollOffsetProvider?.Invoke() ?? Point.Empty;
 
             e.Graphics.InterpolationMode = InterpolationMode.NearestNeighbor;
             e.Graphics.PixelOffsetMode = PixelOffsetMode.Half;
@@ -85,7 +84,7 @@ namespace PochiPochiEditorPlus._Managers._PanelManager
 
                 e.Graphics.DrawImage(
                     layer.Image,
-                    new Rectangle(0, 0, scaledWidth, scaledHeight),
+                    new Rectangle(-offset.X, -offset.Y, scaledWidth, scaledHeight),
                     new Rectangle(0, 0, layer.Image.Width, layer.Image.Height),
                     GraphicsUnit.Pixel);
             }

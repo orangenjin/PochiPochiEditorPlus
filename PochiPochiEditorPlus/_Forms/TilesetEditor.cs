@@ -25,8 +25,10 @@ namespace PochiPochiEditorPlus._Forms
         // UI制御用
         private int _currentTilesetNo = 0;
         private int _selectedTileIndex = 0;
+        // パネル用
         private PanelLayers<LayerNames> _panelLayers = null;
         private PanelScroller _panelScroller = null;
+        private PanelGrid _panelGrid = null;
 
         private enum LayerNames
         {
@@ -47,6 +49,8 @@ namespace PochiPochiEditorPlus._Forms
             _panelLayers = new PanelLayers<LayerNames>(pnlViewImage, _eventBinder);
             _panelScroller = new PanelScroller(pnlViewImage, null, vsbViewImage, _eventBinder);
             _panelLayers.ScrollOffsetProvider = () => new Point(0, _panelScroller.ScrollY);
+            _panelGrid = new PanelGrid(pnlViewImage, _eventBinder);
+            _panelGrid.ScrollOffsetProvider = () => new Point(0, _panelScroller.ScrollY);
 
             InitializeControls();
             InitializeEventHandlers();
@@ -271,6 +275,10 @@ namespace PochiPochiEditorPlus._Forms
                     contentHeight, 
                     Constants.TileSize * Constants.DefaultScale);
 
+                // グリッドの設定
+                _panelGrid.Size = Constants.TileSize * Constants.DefaultScale;
+                _panelGrid.Visible = true;
+
                 // 有効なタイル数に基づいてnudの上限を設定
                 int totalTiles = _tilesetManager.GetTotalTileCount();
                 if (totalTiles > 0)
@@ -299,6 +307,7 @@ namespace PochiPochiEditorPlus._Forms
             if (!state)
             {
                 _panelLayers.SetImage(LayerNames.Base, null);
+                _panelGrid.Visible = false;
                 _selectedTileIndex = 0;
                 pnlViewImage.Invalidate();
             }
