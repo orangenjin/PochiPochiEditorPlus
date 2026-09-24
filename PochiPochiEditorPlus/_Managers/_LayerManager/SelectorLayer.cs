@@ -1,0 +1,117 @@
+﻿using System;
+using System.Drawing;
+using System.Windows.Forms;
+
+namespace PochiPochiEditorPlus._Managers._LayerManager
+{
+    public sealed class SelectorLayer : LayerBase
+    {
+        // 選択可能な最大範囲
+        public Size MaxSelectSize { get; set; }
+        public Rectangle SelectedGrids { get; set; }
+
+        private Point _currentGridPoint;
+        private bool _isDragging = false;
+        private Point _startGridPoint;
+        private Action _requestInvalidate;
+
+        public SelectorLayer(Action requestInvalidate)
+        {
+            _requestInvalidate = requestInvalidate;
+        }
+
+        public override void Draw(Graphics gfx, LayerData data)
+        {
+            if (SelectedGrids.Width <= 0 || SelectedGrids.Height <= 0) return;
+
+            int drawX = SelectedGrids.X * data.ScaledGridSize;
+            int drawY = SelectedGrids.Y * data.ScaledGridSize;
+            int drawWidth = SelectedGrids.Width * data.ScaledGridSize;
+            int drawHeight = SelectedGrids.Height * data.ScaledGridSize;
+
+            using (var brush = new SolidBrush(Color.Red))
+            {
+                gfx.FillRectangle(brush, drawX, drawY, drawWidth, 1);
+                gfx.FillRectangle(brush, drawX, drawY + drawHeight - 1, drawWidth, 1);
+                gfx.FillRectangle(brush, drawX, drawY + 1, 1, drawHeight - 2);
+                gfx.FillRectangle(brush, drawX + drawWidth - 1, drawY + 1, 1, drawHeight - 2);
+            }
+        }
+
+        public override void OnMouseDown(MouseEventArgs e, LayerData data)
+        {
+            if (e.Button != MouseButtons.Right) return;
+
+            // マス座標を取得
+            var gridPoint = data.GetGridPoint(e.Location);
+
+            // 有効なマスかどうかを判定
+            if (data.IsValidGrid(gridPoint.X, gridPoint.Y))
+            {
+                _startGridPoint = gridPoint;
+                _currentGridPoint = gridPoint;
+                _isDragging = true;
+                UpdateSelection();
+            }
+        }
+
+        public override void OnMouseMove(MouseEventArgs e, LayerData data)
+        {
+            if (!_isDragging) return;
+
+            // マス座標を取得
+            var gridPoint = data.GetGridPoint(e.Location);
+
+            // 選択可能サイズを取得
+            int limitX = Math.Max(0, MaxSelectSize.Width - 1);
+            int limitY = Math.Max(0, MaxSelectSize.Height - 1);
+
+            // 開始点を基準に、選択範囲が最大範囲を超えないようにする
+            gridPoint.X = Math.Max(
+                _startGridPoint.X - limitX, Math.Min(gridPoint.X, 
+                _startGridPoint.X + limitX));
+            gridPoint.Y = Math.Max(
+                _startGridPoint.Y - limitY, Math.Min(gridPoint.Y, 
+                _startGridPoint.Y + limitY));
+
+            if (!data.IsValidGrid(gridPoint.X, gridPoint.Y))
+            {
+                // 有効範囲内に調整する
+                int maxIndex = data.ValidItemCount - 1;
+                gridPoint.X = Math.Min(gridPoint.X, maxIndex % data.Columns);
+                gridPoint.Y = Math.Min(gridPoint.Y, maxIndex / data.Columns);
+            }
+
+            if (_currentGridPoint != gridPoint)
+            {
+                _currentGridPoint = gridPoint;
+                UpdateSelection();
+            }
+        }
+
+        public override void OnMouseUp(MouseEventArgs e, LayerData data)
+        {
+            if (e.Button == MouseButtons.Right && _isDragging)
+            {
+                _isDragging = false;
+            }
+        }
+
+        private void UpdateSelection()
+        {
+            int minX = Math.Min(_startGridPoint.X, _currentGridPoint.X);
+            int minY = Math.Min(_startGridPoint.Y, _currentGridPoint.Y);
+            int maxX = Math.Max(_startGridPoint.X, _currentGridPoint.X);
+            int maxY = Math.Max(_startGridPoint.Y, _currentGridPoint.Y);
+
+            SelectedGrids = new Rectangle(minX, minY, maxX - minX + 1, maxY - minY + 1);
+            _requestInvalidate?.Invoke();
+        }
+
+        public void ClearSelect()
+        {
+            SelectedGrids = Rectangle.Empty;
+            _requestInvalidate?.Invoke();
+        }
+    }
+}

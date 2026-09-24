@@ -26,7 +26,7 @@ namespace PochiPochiEditorPlus._Managers._LayerManager
             byte[] paletteData, 
             int width, 
             int height,
-            bool showBackColor)
+            bool showBackColor = true)
         {
             ImageData = imageData;
             PaletteData = paletteData;
@@ -60,7 +60,7 @@ namespace PochiPochiEditorPlus._Managers._LayerManager
         /// <summary>
         /// ここで拡大率を考慮して、画像を表示する。
         /// </summary>
-        public override void Draw(Graphics gfx, Rectangle rect, LayerData data)
+        public override void Draw(Graphics gfx, LayerData data)
         {
             if (_cachedBitmap == null) return;
 

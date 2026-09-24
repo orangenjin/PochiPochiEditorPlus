@@ -15,13 +15,29 @@ namespace PochiPochiEditorPlus._Managers._LayerManager
         // 有効なアイテム総数
         public int ValidItemCount { get; set; }
         // パネルのサイズに基づいて計算される列・行・合計マス
-        public int Columns { get; private set; }
-        public int Rows { get; private set; }
+        public int Columns { get; set; }
+        public int Rows { get; set; }
         public int TotalGridCount => Columns * Rows; // 描画領域として確保される合計マス数
 
         // スクロールによるオフセットを補正する
         public Func<Point> ScrollOffsetProvider { get; set; }
         public Point ScrollOffset => ScrollOffsetProvider?.Invoke() ?? Point.Empty;
+
+        /// <summary>
+        /// パネルの幅に基づいて、列数と行数を再計算する。
+        /// </summary>
+        public void CalcLayout(int panelWidth)
+        {
+            if (ScaledGridSize <= 0)
+            {
+                Columns = 0;
+                Rows = 0;
+                return;
+            }
+
+            Columns = panelWidth / ScaledGridSize;
+            Rows = ValidItemCount / Columns + 1;
+        }
 
         /// <summary>
         /// 指定されたマス座標が有効なアイテムであるかを判定する。
@@ -34,7 +50,7 @@ namespace PochiPochiEditorPlus._Managers._LayerManager
         }
 
         /// <summary>
-        /// マウスによる座標を、スクロールを考慮したマス座標を取得する。
+        /// マウスによる座標を、スクロールを考慮したマス座標に変換する。
         /// </summary>
         public Point GetGridPoint(Point mouseLoc)
         {
@@ -49,7 +65,7 @@ namespace PochiPochiEditorPlus._Managers._LayerManager
     {
         public bool Visible { get; set; }
 
-        public abstract void Draw(Graphics gfx, Rectangle rect, LayerData data);
+        public abstract void Draw(Graphics gfx, LayerData data);
 
         public virtual void OnMouseDown(MouseEventArgs e, LayerData data) { }
         public virtual void OnMouseMove(MouseEventArgs e, LayerData data) { }
