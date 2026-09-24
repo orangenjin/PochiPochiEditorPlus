@@ -183,6 +183,7 @@ namespace PochiPochiEditorPlus._Forms
                     _selectedTileIndex = (int)nudViewTileIndex.Value;
                     txtViewTileIndex.Text =
                         _selectedTileIndex.ParseIntToString(txtViewTileIndex.Digits);
+                    _layerHolder.SelectSingleItem(_selectedTileIndex);
                 });
 
             // 解除タイミング指定

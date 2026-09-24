@@ -149,5 +149,21 @@ namespace PochiPochiEditorPlus._Managers._LayerManager
             SelectorLayer.Visible = visible;
             _panel.Invalidate();
         }
+
+        /// <summary>
+        /// 選択されているアイテムのインデックスを取得する。
+        /// </summary>
+        public List<int> GetSelectedIndex()
+        {
+            return SelectorLayer.GetSelectedIndex(Data);
+        }
+
+        /// <summary>
+        /// 指定したインデックスのアイテムを単一選択する。
+        /// </summary>
+        public void SelectSingleItem(int index)
+        {
+            SelectorLayer.SelectSingleItem(index, Data);
+        }
     }
 }

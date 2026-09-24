@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -18,6 +19,54 @@ namespace PochiPochiEditorPlus._Managers._LayerManager
         public SelectorLayer(Action requestInvalidate)
         {
             _requestInvalidate = requestInvalidate;
+        }
+
+        public void SelectSingleItem(int index, LayerData data)
+        {
+            // インデックスが有効な範囲内か判定
+            if (index < 0 || index >= data.ValidItemCount)
+            {
+                ClearSelect();
+                return;
+            }
+
+            // マス座標を逆算する
+            int gridX = index % data.Columns;
+            int gridY = index / data.Columns;
+
+            SelectedGrids = new Rectangle(gridX, gridY, 1, 1);
+            _startGridPoint = new Point(gridX, gridY);
+            _currentGridPoint = new Point(gridX, gridY);
+
+            _requestInvalidate?.Invoke();
+        }
+
+        public List<int> GetSelectedIndex(LayerData data)
+        {
+            var selectedIndices = new List<int>();
+
+            // 選択範囲が存在しない場合
+            if (SelectedGrids.Width <= 0 || SelectedGrids.Height <= 0)
+            {
+                return selectedIndices;
+            }
+
+            for (int girdY = SelectedGrids.Top; girdY < SelectedGrids.Bottom; girdY++)
+            {
+                for (int gridX = SelectedGrids.Left; gridX < SelectedGrids.Right; gridX++)
+                {
+                    // 座標からインデックスを計算
+                    int index = girdY * data.Columns + gridX;
+
+                    // 有効なアイテム範囲内かどうかを確認
+                    if (index < data.ValidItemCount)
+                    {
+                        selectedIndices.Add(index);
+                    }
+                }
+            }
+
+            return selectedIndices;
         }
 
         public override void Draw(Graphics gfx, LayerData data)
