@@ -189,8 +189,8 @@ namespace PochiPochiEditorPlus._Forms
                     _layerHolder.SelectorLayer.SelectSingleItem(_selectedTileIndex);
                 });
             _eventBinder.BindCustom(
-                () => _layerHolder.SelectorLayer.SelectChanged += SelectedTiles,
-                () => _layerHolder.SelectorLayer.SelectChanged -= SelectedTiles);
+                () => _layerHolder.SelectorLayer.SelectChanged += UpdateSelectedTileIndex,
+                () => _layerHolder.SelectorLayer.SelectChanged -= UpdateSelectedTileIndex);
 
             // 解除タイミング指定
             _eventBinder.BindCtrl(
@@ -350,7 +350,7 @@ namespace PochiPochiEditorPlus._Forms
                 allowNullPointer: true); // nullポインタを許容する
         }
 
-        private void SelectedTiles()
+        private void UpdateSelectedTileIndex()
         {
             var indexList = _layerHolder.SelectorLayer.GetSelectedIndexList();
             if (indexList.Count == 0) return;
