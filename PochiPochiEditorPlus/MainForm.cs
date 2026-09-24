@@ -97,6 +97,12 @@ namespace PochiPochiEditorPlus
                 h => tsmiClearRom.Click -= h,
                 (_, __) =>
                 {
+                    // 起動中の補助ツールを閉じる
+                    foreach (var form in _openToolForms.Values.ToList())
+                    {
+                        form.Close();
+                    }
+
                     // Rom情報を更新
                     _romPath = string.Empty;
                     _sharedData.ClearRom();
@@ -298,11 +304,10 @@ namespace PochiPochiEditorPlus
 
         private void lstHistory_DrawItem(object sender, DrawItemEventArgs e)
         {
-            if (e.Index < 0) return;
+            if (e.Index < 0 || e.Index >= lstHistory.Items.Count) return;
+            if (!(lstHistory.Items[e.Index] is ICommand command)) return;
 
-            var command = _undoManager.History[e.Index];
             bool isFuture = e.Index >= _undoManager.CurrentIndex;
-
             e.DrawBackground();
             Color textColor = GetHistoryTextColor();
 
