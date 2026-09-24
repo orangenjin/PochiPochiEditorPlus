@@ -17,7 +17,8 @@ namespace PochiPochiEditorPlus._Managers._LayerManager
         // パネルのサイズに基づいて計算される列・行・合計マス
         public int Columns { get; set; }
         public int Rows { get; set; }
-        public int TotalGridCount => Columns * Rows; // 描画領域として確保される合計マス数
+        // 描画領域として確保される合計マス数
+        public int TotalGridCount => Columns * Rows;
 
         // スクロールによるオフセットを補正する
         public Func<Point> ScrollOffsetProvider { get; set; }

@@ -24,6 +24,7 @@ namespace PochiPochiEditorPlus._Forms
         private dynamic _tilesetManager = null;
         // パネル描画用
         private LayerHolder<LayerNames> _layerHolder = null;
+        private LayerScroller _layerScroller = null;
         // UI制御用
         private int _currentTilesetNo = 0;
         private int _selectedTileIndex = 0;
@@ -38,6 +39,12 @@ namespace PochiPochiEditorPlus._Forms
             _eventBinder = new EventBinder();
             _tilesetManager = new TilesetManager(_sharedData);
             _layerHolder = new LayerHolder<LayerNames>(pnlViewImage, _eventBinder);
+            _layerScroller = new LayerScroller(
+                pnlViewImage,
+                null,
+                vsbViewImage,
+                _layerHolder.Data,
+                _eventBinder);
 
             InitializeControls();
             InitializeEventHandlers();
@@ -271,18 +278,6 @@ namespace PochiPochiEditorPlus._Forms
             var maxLength = Constants.TilesetImageWidth / Constants.TileSize;
             _layerHolder.SelectorLayer.MaxSelectSize = new Size(maxLength, maxLength);
             _layerHolder.SetSelectorVisible(true);
-
-
-            /*
-            // スクロールバーの設定
-            int contentHeight = image.Height * _panelLayers.Scale;
-            _panelScroller.UpdateRangeY(
-                contentHeight, 
-                Constants.TileSize * Constants.DefaultScale);
-            */
-
-
-
         }
 
         private void UpdateTabPageState(bool state)
@@ -297,6 +292,7 @@ namespace PochiPochiEditorPlus._Forms
                 _layerHolder.SetLayerVisible(LayerNames.Tileset, false);
                 _layerHolder.SetGridVisible(false);
                 _layerHolder.SelectorLayer.ClearSelect();
+                _layerHolder.SetSelectorVisible(false);
                 pnlViewImage.Invalidate();
             }
 

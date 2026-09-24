@@ -53,11 +53,11 @@ namespace PochiPochiEditorPlus._Managers._LayerManager
             Data.GridSize = gridSize;
             Data.Scale = scale;
             Data.ValidItemCount = validItemCount;
-            Data.CalcLayout(_panel.Size.Width);
+            Data.CalcLayout(_panel.ClientSize.Width);
         }
 
         /// <summary>
-        /// 特定のレイヤーの画像を取得する。
+        /// 特定のレイヤーを取得する。
         /// </summary>
         public ImageLayer GetImageLayer(TEnum key)
         {
