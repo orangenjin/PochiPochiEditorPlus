@@ -49,7 +49,8 @@
         // 画像
         public const int TileSize = 8;
         public const int Bpp4 = 4;
-        public const int PixelsPerByte4Bpp = BitsPerByte / Bpp4;
+        public const int PixelsPerByte = BitsPerByte / Bpp4;
+        public const int BytesPerTile = TileSize * TileSize / PixelsPerByte;
         public const int SpriteSize = 64;
         public const int DefaultScale = 2;
 
@@ -57,8 +58,8 @@
         public const int TilesetImageWidth = 128;
         public const int Tileset1ImageHeight = 320;
         public const int Tileset2ImageMaxHeight = 192;
-        public const int Tileset1BlockAmount = Tileset1ImageHeight * Constants.PixelsPerByte4Bpp;
-        public const int Tileset2BlockMaxAmount = Tileset2ImageMaxHeight * Constants.PixelsPerByte4Bpp;
+        public const int Tileset1BlockAmount = Tileset1ImageHeight * Constants.PixelsPerByte;
+        public const int Tileset2BlockMaxAmount = Tileset2ImageMaxHeight * Constants.PixelsPerByte;
         public const int PaletteEntryCount = 16;
 
         // ダイアログフィルター

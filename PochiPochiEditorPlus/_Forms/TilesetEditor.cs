@@ -241,7 +241,7 @@ namespace PochiPochiEditorPlus._Forms
             // 横幅は128固定
             var width = Constants.TilesetImageWidth;
             // 1行に対するバイト数
-            var bytesPerTileRow = (width * Constants.TileSize) / Constants.PixelsPerByte4Bpp;
+            var bytesPerTileRow = (width * Constants.TileSize) / Constants.PixelsPerByte;
             // 必要なタイル行数を計算（端数は切り上げ）
             var tileRows = (_tilesetManager.ImageData.Length + bytesPerTileRow - 1) / bytesPerTileRow;
             // 必要な高さを求める

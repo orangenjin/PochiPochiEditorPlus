@@ -106,7 +106,7 @@ namespace PochiPochiEditorPlus._Managers
                     (_dynamicHeaderEntry.PaletteType.GetData<int>() == (int)PaletteKind.Palette0to6)
                         ? Constants.TilesetImageWidth * Constants.Tileset1ImageHeight
                         : Constants.TilesetImageWidth * Constants.Tileset2ImageMaxHeight;
-                var maxByteLength = maxPixelCount / Constants.PixelsPerByte4Bpp;
+                var maxByteLength = maxPixelCount / Constants.PixelsPerByte;
 
                 // バイト数を確定させる
                 int byteLength;
@@ -241,7 +241,7 @@ namespace PochiPochiEditorPlus._Managers
             if (ImageData == null) return 0;
 
             int bytesPerTile =
-                (Constants.TileSize * Constants.TileSize) / Constants.PixelsPerByte4Bpp;
+                (Constants.TileSize * Constants.TileSize) / Constants.PixelsPerByte;
             return ImageData.Length / bytesPerTile;
         }
     }

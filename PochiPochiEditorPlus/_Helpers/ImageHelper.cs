@@ -261,7 +261,7 @@ namespace PochiPochiEditorPlus._Helpers
                     for (int yPixel = 0; yPixel < Constants.TileSize; yPixel++)
                     {
                         // 4bppの場合、1バイトで2ピクセル分
-                        for (int xPixel = 0; xPixel < Constants.TileSize; xPixel += Constants.PixelsPerByte4Bpp)
+                        for (int xPixel = 0; xPixel < Constants.TileSize; xPixel += Constants.PixelsPerByte)
                         {
                             if (dataIndex >= imageData.Length) break;
 
@@ -272,7 +272,7 @@ namespace PochiPochiEditorPlus._Helpers
                             int rightIndex = (temp >> Constants.NibbleShift) & Constants.NibbleMask;
 
                             // Bitmapの書き込み位置を計算
-                            int byteIndex = (yTile + yPixel) * bmpData.Stride + ((xTile + xPixel) / Constants.PixelsPerByte4Bpp);
+                            int byteIndex = (yTile + yPixel) * bmpData.Stride + ((xTile + xPixel) / Constants.PixelsPerByte);
                             pixels[byteIndex] = (byte)((leftIndex << Constants.NibbleShift) | rightIndex);
                         }
                     }
@@ -409,10 +409,10 @@ namespace PochiPochiEditorPlus._Helpers
                 {
                     for (int yPixel = 0; yPixel < Constants.TileSize; yPixel++)
                     {
-                        for (int xPixel = 0; xPixel < Constants.TileSize; xPixel += Constants.PixelsPerByte4Bpp)
+                        for (int xPixel = 0; xPixel < Constants.TileSize; xPixel += Constants.PixelsPerByte)
                         {
                             // Bitmap上の位置
-                            int byteIndex = (yTile + yPixel) * bmpData.Stride + ((xTile + xPixel) / Constants.PixelsPerByte4Bpp);
+                            int byteIndex = (yTile + yPixel) * bmpData.Stride + ((xTile + xPixel) / Constants.PixelsPerByte);
                             byte pixelByte = pixels[byteIndex];
 
                             // パレットインデックスを分離

@@ -161,7 +161,7 @@ namespace PochiPochiEditorPlus._Forms
 
             // 各値の計算
             int width = Constants.TilesetImageWidth;
-            int bytesPerTileRow = (width * Constants.TileSize) / Constants.PixelsPerByte4Bpp;
+            int bytesPerTileRow = (width * Constants.TileSize) / Constants.PixelsPerByte;
             int tileRows = (combinedImageData.Length + bytesPerTileRow - 1) / bytesPerTileRow;
             int height = tileRows * Constants.TileSize;
 
