@@ -23,8 +23,8 @@ namespace PochiPochiEditorPlus._Managers._LayerManager
         {
             Data = new LayerData();
             ImageLayers = new Dictionary<TEnum, ImageLayer>();
-            GridLayer = new GridLayer();
-            SelectorLayer = new SelectorLayer(() => _panel.Invalidate());
+            GridLayer = new GridLayer(Data);
+            SelectorLayer = new SelectorLayer(Data, () => _panel.Invalidate());
             _panel = panel;
 
             eventBinder.BindCustom(
@@ -79,7 +79,7 @@ namespace PochiPochiEditorPlus._Managers._LayerManager
             // 新規ならインスタンスを生成
             if (!ImageLayers.TryGetValue(key, out var layer))
             {
-                layer = new ImageLayer();
+                layer = new ImageLayer(Data);
                 ImageLayers[key] = layer;
             }
 
@@ -105,20 +105,29 @@ namespace PochiPochiEditorPlus._Managers._LayerManager
             // 各レイヤーの描画
             foreach (var kvp in ImageLayers.OrderBy(x => x.Key))
             {
-                if (kvp.Value.Visible) kvp.Value.Draw(e.Graphics, Data);
+                if (kvp.Value.Visible)
+                {
+                    kvp.Value.Draw(e.Graphics);
+                }
             }
-            if (GridLayer.Visible) GridLayer.Draw(e.Graphics, Data);
-            if (SelectorLayer.Visible) SelectorLayer.Draw(e.Graphics, Data);
+            if (GridLayer.Visible)
+            {
+                GridLayer.Draw(e.Graphics);
+            }
+            if (SelectorLayer.Visible)
+            {
+                SelectorLayer.Draw(e.Graphics);
+            }
 
             e.Graphics.ResetTransform();
         }
 
         private void Panel_MouseDown(object sender, MouseEventArgs e) 
-            => SelectorLayer.OnMouseDown(e, Data);
+            => SelectorLayer.OnMouseDown(e);
         private void Panel_MouseMove(object sender, MouseEventArgs e) 
-            => SelectorLayer.OnMouseMove(e, Data);
+            => SelectorLayer.OnMouseMove(e);
         private void Panel_MouseUp(object sender, MouseEventArgs e)
-            => SelectorLayer.OnMouseUp(e, Data);
+            => SelectorLayer.OnMouseUp(e);
 
         /// <summary>
         /// 画像レイヤーの表示を設定する。
@@ -148,22 +157,6 @@ namespace PochiPochiEditorPlus._Managers._LayerManager
         {
             SelectorLayer.Visible = visible;
             _panel.Invalidate();
-        }
-
-        /// <summary>
-        /// 選択されているアイテムのインデックスを取得する。
-        /// </summary>
-        public List<int> GetSelectedIndex()
-        {
-            return SelectorLayer.GetSelectedIndex(Data);
-        }
-
-        /// <summary>
-        /// 指定したインデックスのアイテムを単一選択する。
-        /// </summary>
-        public void SelectSingleItem(int index)
-        {
-            SelectorLayer.SelectSingleItem(index, Data);
         }
     }
 }

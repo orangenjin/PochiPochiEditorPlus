@@ -17,18 +17,21 @@ namespace PochiPochiEditorPlus._Managers._LayerManager
         // パレット切り替え時のために保持
         private Bitmap _cachedBitmap = null;
 
+        public ImageLayer(LayerData layerData)
+        {
+            _layerData = layerData;
+        }
+
         /// <summary>
         /// 描画用Bitmapを生成する。
         /// </summary>
         public void SetImageData(
-            LayerData layerData,
             byte[] imageData,
             byte[] paletteData, 
             int width, 
             int height,
             bool showBackColor = true)
         {
-            _layerData = layerData;
             ImageData = imageData;
             PaletteData = paletteData;
             ImageWidth = width;
@@ -84,14 +87,14 @@ namespace PochiPochiEditorPlus._Managers._LayerManager
         /// <summary>
         /// GridSize単位で、指定したマスの画像データを抽出する。
         /// </summary>
-        public byte[] ExtractImageDataAtGrid(int gridX, int gridY, LayerData data)
+        public byte[] ExtractImageDataAtGrid(int gridX, int gridY)
         {
             if (ImageData == null) return null;
-            if (!data.IsValidGrid(gridX, gridY)) return null;
+            if (!_layerData.IsValidGrid(gridX, gridY)) return null;
 
             // 1マスにおけるタイル数を計算
-            int tilesPerGridX = data.GridSize / Constants.TileSize;
-            int tilesPerGridY = data.GridSize / Constants.TileSize;
+            int tilesPerGridX = _layerData.GridSize / Constants.TileSize;
+            int tilesPerGridY = _layerData.GridSize / Constants.TileSize;
 
             var extractedBytes = 
                 new List<byte>(tilesPerGridX * tilesPerGridY * Constants.BytesPerTile);
