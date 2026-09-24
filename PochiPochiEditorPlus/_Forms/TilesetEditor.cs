@@ -183,8 +183,14 @@ namespace PochiPochiEditorPlus._Forms
                     _selectedTileIndex = (int)nudViewTileIndex.Value;
                     txtViewTileIndex.Text =
                         _selectedTileIndex.ParseIntToString(txtViewTileIndex.Digits);
+
+                    var selectedIndexList = _layerHolder.SelectorLayer.GetSelectedIndexList();
+                    if (selectedIndexList.Count > 0 && selectedIndexList[0] == _selectedTileIndex) return;
                     _layerHolder.SelectorLayer.SelectSingleItem(_selectedTileIndex);
                 });
+            _eventBinder.BindCustom(
+                () => _layerHolder.SelectorLayer.SelectChanged += SelectedTiles,
+                () => _layerHolder.SelectorLayer.SelectChanged -= SelectedTiles);
 
             // 解除タイミング指定
             _eventBinder.BindCtrl(
@@ -342,6 +348,13 @@ namespace PochiPochiEditorPlus._Forms
                 _sharedData.RomData,
                 _tilesetManager.CalcOffset(tilesetNo),
                 allowNullPointer: true); // nullポインタを許容する
+        }
+
+        private void SelectedTiles()
+        {
+            var indexList = _layerHolder.SelectorLayer.GetSelectedIndexList();
+            if (indexList.Count == 0) return;
+            nudViewTileIndex.Value = (decimal)indexList[0];
         }
 
         /// <summary>

@@ -10,6 +10,8 @@ namespace PochiPochiEditorPlus._Managers._LayerManager
         // 選択可能な最大範囲
         public Size MaxSelectSize { get; set; }
         public Rectangle SelectedGrids { get; set; }
+        // 選択範囲が変化したことを通知する
+        public Action SelectChanged { get; set; }
 
         private Point _currentGridPoint;
         private bool _isDragging = false;
@@ -157,6 +159,7 @@ namespace PochiPochiEditorPlus._Managers._LayerManager
             if (e.Button == MouseButtons.Right && _isDragging)
             {
                 _isDragging = false;
+                SelectChanged?.Invoke();
             }
         }
 
