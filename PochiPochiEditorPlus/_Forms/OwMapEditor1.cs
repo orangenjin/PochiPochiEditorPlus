@@ -32,6 +32,7 @@ namespace PochiPochiEditorPlus._Forms
         private LayerScroller _blockLayerScroller = null;
         private enum LayerNames { Tile, BlockLower, BlockUpper }
         // UI制御用
+        private int _selectedBlockIndex = 0;
         private byte[] _combinedTilesetImageData = null;
 
         public OwMapEditor1(
@@ -88,7 +89,6 @@ namespace PochiPochiEditorPlus._Forms
 
             // 各コンボボックスにアイテムを追加
             CtrlHelper.LoadComboBoxFromFile(
-                (cmbPaletteType, "txt/tileset/TilesetPaletteype.txt"),
                 (cmbTilePalette, "txt/tileset/TilesetPaletteIndex.txt"),
                 (cmbBlockAttrAction, "txt/tileset/TilesetBlockAttrAction.txt"),
                 (cmbBlockAttrType, "txt/tileset/TilesetBlockAttrType.txt"),
@@ -126,6 +126,26 @@ namespace PochiPochiEditorPlus._Forms
                     pnlTileView.Invalidate();
                 });
 
+            // タイルインデックス数値
+            _eventBinder.BindCtrl(
+                h => nudBlockIndex.ValueChanged += h,
+                h => nudBlockIndex.ValueChanged -= h,
+                (_, __) =>
+                {
+                    // nudの数値とtxtの表示
+                    _selectedBlockIndex = (int)nudBlockIndex.Value;
+                    txtBlockIndex.Text =
+                        _selectedBlockIndex.ParseIntToString(txtBlockIndex.Digits);
+
+                    // 選択範囲の更新
+                    var selectedIndexList = _blockLayerHolder.SelectorLayer.GetSelectedIndexList();
+                    if (selectedIndexList.Count > 0 && selectedIndexList[0] == _selectedBlockIndex) return;
+                    _blockLayerHolder.SelectorLayer.SelectSingleItem(_selectedBlockIndex);
+                });
+            _eventBinder.BindCustom(
+                () => _blockLayerHolder.SelectorLayer.SelectChanged += UpdateSelectedBlockIndex,
+                () => _blockLayerHolder.SelectorLayer.SelectChanged -= UpdateSelectedBlockIndex);
+
             // 解除タイミング指定
             _eventBinder.BindCtrl(
                 h => this.Disposed += h,
@@ -146,11 +166,9 @@ namespace PochiPochiEditorPlus._Forms
             _tileset1Manager.ReadHeader(tileset1No, _sharedData);
             _tileset2Manager.ReadHeader(tileset2No, _sharedData);
 
-            // まず画像を連結させる
-            CombineTilesetImage();
-
             // タイルを描画
             cmbTilePalette.SelectedIndex = 0;
+            CombineTilesetImage();
             UpdateTileView();
 
             // ブロックを描画
@@ -169,6 +187,16 @@ namespace PochiPochiEditorPlus._Forms
                 return _tileset1Manager.TryCalcTilesetNo(footer.Tileset1HeaderOffset.GetData<int>(), out no1) &&
                        _tileset2Manager.TryCalcTilesetNo(footer.Tileset2HeaderOffset.GetData<int>(), out no2);
             }
+        }
+
+        private void CombineTilesetImage()
+        {
+            // タイルセット1とタイルセット2の画像を連結
+            byte[] imgData1 = _tileset1Manager.ImageData ?? Array.Empty<byte>();
+            byte[] imgData2 = _tileset2Manager.ImageData ?? Array.Empty<byte>();
+            _combinedTilesetImageData = new byte[imgData1.Length + imgData2.Length];
+            Array.Copy(imgData1, 0, _combinedTilesetImageData, 0, imgData1.Length);
+            Array.Copy(imgData2, 0, _combinedTilesetImageData, imgData1.Length, imgData2.Length);
         }
 
         /// <summary>
@@ -240,6 +268,17 @@ namespace PochiPochiEditorPlus._Forms
         {
             if (_blockDataList == null || _blockDataList.Count == 0) return;
             int blockSize = Constants.TileSize * Constants.TilePerBlockSide;
+
+            // ブロック数に基づいてnudの上限を設定
+            if (_blockDataList.Count > 0)
+            {
+                nudBlockIndex.Maximum = _blockDataList.Count - 1;
+                nudBlockIndex.Minimum = 0;
+                _selectedBlockIndex = Math.Min(_selectedBlockIndex, _blockDataList.Count - 1);
+                nudBlockIndex.Value = _selectedBlockIndex;
+                txtBlockIndex.Text =
+                    _selectedBlockIndex.ParseIntToString(txtBlockIndex.Digits);
+            }
 
             // レイヤーの初期設定
             _blockLayerHolder.Initialize(
@@ -402,8 +441,7 @@ namespace PochiPochiEditorPlus._Forms
             CtrlHelper.SetControlsEnabled(
                 tbpBlock,
                 enabled: state,
-                includeSelf: true,
-                excludeNames: new string[] { nameof(cmbPaletteType) });
+                includeSelf: true);
             // タイル画像パネル
             if (!state)
             {
@@ -423,22 +461,19 @@ namespace PochiPochiEditorPlus._Forms
             }
         }
 
-        private void CombineTilesetImage()
-        {
-            // タイルセット1とタイルセット2の画像を連結
-            byte[] imgData1 = _tileset1Manager.ImageData ?? Array.Empty<byte>();
-            byte[] imgData2 = _tileset2Manager.ImageData ?? Array.Empty<byte>();
-            _combinedTilesetImageData = new byte[imgData1.Length + imgData2.Length];
-            Array.Copy(imgData1, 0, _combinedTilesetImageData, 0, imgData1.Length);
-            Array.Copy(imgData2, 0, _combinedTilesetImageData, imgData1.Length, imgData2.Length);
-        }
-
         private byte[] GetProperPaletteData(int palIndex)
         {
             if (palIndex < 0) return Array.Empty<byte>();
             return palIndex >= (int)TilesetHeaderHolder.PaletteKind.Palette7to12
                 ? _tileset2Manager.PaletteData[palIndex]
                 : _tileset1Manager.PaletteData[palIndex];
+        }
+
+        private void UpdateSelectedBlockIndex()
+        {
+            var indexList = _blockLayerHolder.SelectorLayer.GetSelectedIndexList();
+            if (indexList.Count == 0) return;
+            nudBlockIndex.Value = (decimal)indexList[0];
         }
 
         private void LoadCollTabPage()

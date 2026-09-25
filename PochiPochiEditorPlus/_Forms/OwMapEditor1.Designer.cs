@@ -56,14 +56,12 @@ namespace PochiPochiEditorPlus._Forms
             this.pnlTileView = new System.Windows.Forms.Panel();
             this.grpBlockSelector = new System.Windows.Forms.GroupBox();
             this.vsrBlockView = new System.Windows.Forms.VScrollBar();
-            this.lblPaletteType = new System.Windows.Forms.Label();
             this.lblBlockIndex = new System.Windows.Forms.Label();
             this.pnlBlockView = new System.Windows.Forms.Panel();
-            this.txtBlockIndex = new PochiPochiEditorPlus._Utilities._CustomCtrls.HexTextBox();
             this.nudBlockIndex = new System.Windows.Forms.NumericUpDown();
-            this.cmbPaletteType = new System.Windows.Forms.ComboBox();
             this.tbpColl = new System.Windows.Forms.TabPage();
             this.tbpEvent = new System.Windows.Forms.TabPage();
+            this.txtBlockIndex = new PochiPochiEditorPlus._Utilities._CustomCtrls.HexTextBox();
             this.tbcMain.SuspendLayout();
             this.tbpBlock.SuspendLayout();
             this.grpBlockDataAndAttr.SuspendLayout();
@@ -341,12 +339,10 @@ namespace PochiPochiEditorPlus._Forms
             // grpBlockSelector
             // 
             this.grpBlockSelector.Controls.Add(this.vsrBlockView);
-            this.grpBlockSelector.Controls.Add(this.lblPaletteType);
             this.grpBlockSelector.Controls.Add(this.lblBlockIndex);
             this.grpBlockSelector.Controls.Add(this.pnlBlockView);
             this.grpBlockSelector.Controls.Add(this.txtBlockIndex);
             this.grpBlockSelector.Controls.Add(this.nudBlockIndex);
-            this.grpBlockSelector.Controls.Add(this.cmbPaletteType);
             this.grpBlockSelector.Location = new System.Drawing.Point(20, 16);
             this.grpBlockSelector.Margin = new System.Windows.Forms.Padding(0);
             this.grpBlockSelector.Name = "grpBlockSelector";
@@ -358,25 +354,15 @@ namespace PochiPochiEditorPlus._Forms
             // 
             // vsrBlockView
             // 
-            this.vsrBlockView.Location = new System.Drawing.Point(282, 92);
+            this.vsrBlockView.Location = new System.Drawing.Point(282, 60);
             this.vsrBlockView.Name = "vsrBlockView";
-            this.vsrBlockView.Size = new System.Drawing.Size(16, 320);
+            this.vsrBlockView.Size = new System.Drawing.Size(16, 352);
             this.vsrBlockView.TabIndex = 6;
-            // 
-            // lblPaletteType
-            // 
-            this.lblPaletteType.AutoSize = true;
-            this.lblPaletteType.Location = new System.Drawing.Point(20, 32);
-            this.lblPaletteType.Margin = new System.Windows.Forms.Padding(0);
-            this.lblPaletteType.Name = "lblPaletteType";
-            this.lblPaletteType.Size = new System.Drawing.Size(118, 15);
-            this.lblPaletteType.TabIndex = 5;
-            this.lblPaletteType.Text = "パレット読み込み設定 :";
             // 
             // lblBlockIndex
             // 
             this.lblBlockIndex.AutoSize = true;
-            this.lblBlockIndex.Location = new System.Drawing.Point(20, 62);
+            this.lblBlockIndex.Location = new System.Drawing.Point(20, 32);
             this.lblBlockIndex.Margin = new System.Windows.Forms.Padding(0);
             this.lblBlockIndex.Name = "lblBlockIndex";
             this.lblBlockIndex.Size = new System.Drawing.Size(72, 15);
@@ -385,25 +371,15 @@ namespace PochiPochiEditorPlus._Forms
             // 
             // pnlBlockView
             // 
-            this.pnlBlockView.Location = new System.Drawing.Point(20, 92);
+            this.pnlBlockView.Location = new System.Drawing.Point(20, 60);
             this.pnlBlockView.Margin = new System.Windows.Forms.Padding(0);
             this.pnlBlockView.Name = "pnlBlockView";
-            this.pnlBlockView.Size = new System.Drawing.Size(256, 320);
+            this.pnlBlockView.Size = new System.Drawing.Size(256, 352);
             this.pnlBlockView.TabIndex = 3;
-            // 
-            // txtBlockIndex
-            // 
-            this.txtBlockIndex.Digits = 4;
-            this.txtBlockIndex.Location = new System.Drawing.Point(204, 58);
-            this.txtBlockIndex.Margin = new System.Windows.Forms.Padding(0);
-            this.txtBlockIndex.Name = "txtBlockIndex";
-            this.txtBlockIndex.ReadOnly = true;
-            this.txtBlockIndex.Size = new System.Drawing.Size(72, 23);
-            this.txtBlockIndex.TabIndex = 2;
             // 
             // nudBlockIndex
             // 
-            this.nudBlockIndex.Location = new System.Drawing.Point(122, 58);
+            this.nudBlockIndex.Location = new System.Drawing.Point(122, 28);
             this.nudBlockIndex.Margin = new System.Windows.Forms.Padding(0);
             this.nudBlockIndex.Maximum = new decimal(new int[] {
             1023,
@@ -413,17 +389,6 @@ namespace PochiPochiEditorPlus._Forms
             this.nudBlockIndex.Name = "nudBlockIndex";
             this.nudBlockIndex.Size = new System.Drawing.Size(72, 23);
             this.nudBlockIndex.TabIndex = 1;
-            // 
-            // cmbPaletteType
-            // 
-            this.cmbPaletteType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbPaletteType.Enabled = false;
-            this.cmbPaletteType.FormattingEnabled = true;
-            this.cmbPaletteType.Location = new System.Drawing.Point(156, 28);
-            this.cmbPaletteType.Margin = new System.Windows.Forms.Padding(0);
-            this.cmbPaletteType.Name = "cmbPaletteType";
-            this.cmbPaletteType.Size = new System.Drawing.Size(120, 23);
-            this.cmbPaletteType.TabIndex = 0;
             // 
             // tbpColl
             // 
@@ -444,6 +409,16 @@ namespace PochiPochiEditorPlus._Forms
             this.tbpEvent.TabIndex = 2;
             this.tbpEvent.Text = "イベント";
             this.tbpEvent.UseVisualStyleBackColor = true;
+            // 
+            // txtBlockIndex
+            // 
+            this.txtBlockIndex.Digits = 4;
+            this.txtBlockIndex.Location = new System.Drawing.Point(204, 28);
+            this.txtBlockIndex.Margin = new System.Windows.Forms.Padding(0);
+            this.txtBlockIndex.Name = "txtBlockIndex";
+            this.txtBlockIndex.ReadOnly = true;
+            this.txtBlockIndex.Size = new System.Drawing.Size(72, 23);
+            this.txtBlockIndex.TabIndex = 2;
             // 
             // OwMapEditor1
             // 
@@ -479,13 +454,11 @@ namespace PochiPochiEditorPlus._Forms
         private System.Windows.Forms.TabPage tbpColl;
         private System.Windows.Forms.TabPage tbpEvent;
         private System.Windows.Forms.GroupBox grpBlockSelector;
-        private System.Windows.Forms.ComboBox cmbPaletteType;
         private System.Windows.Forms.NumericUpDown nudBlockIndex;
         private _Utilities._CustomCtrls.HexTextBox txtBlockIndex;
         private System.Windows.Forms.Label lblBlockIndex;
         private System.Windows.Forms.Panel pnlBlockView;
         private System.Windows.Forms.VScrollBar vsrBlockView;
-        private System.Windows.Forms.Label lblPaletteType;
         private System.Windows.Forms.GroupBox grpTileSelector;
         private System.Windows.Forms.VScrollBar vsbTileView;
         private System.Windows.Forms.Panel pnlTileView;
