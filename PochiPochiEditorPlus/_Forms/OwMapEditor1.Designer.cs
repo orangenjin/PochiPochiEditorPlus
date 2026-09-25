@@ -59,11 +59,11 @@ namespace PochiPochiEditorPlus._Forms
             this.lblPaletteType = new System.Windows.Forms.Label();
             this.lblBlockIndex = new System.Windows.Forms.Label();
             this.pnlBlockView = new System.Windows.Forms.Panel();
+            this.txtBlockIndex = new PochiPochiEditorPlus._Utilities._CustomCtrls.HexTextBox();
             this.nudBlockIndex = new System.Windows.Forms.NumericUpDown();
             this.cmbPaletteType = new System.Windows.Forms.ComboBox();
             this.tbpColl = new System.Windows.Forms.TabPage();
             this.tbpEvent = new System.Windows.Forms.TabPage();
-            this.txtBlockIndex = new PochiPochiEditorPlus._Utilities._CustomCtrls.HexTextBox();
             this.tbcMain.SuspendLayout();
             this.tbpBlock.SuspendLayout();
             this.grpBlockDataAndAttr.SuspendLayout();
@@ -391,13 +391,18 @@ namespace PochiPochiEditorPlus._Forms
             this.pnlBlockView.Size = new System.Drawing.Size(256, 320);
             this.pnlBlockView.TabIndex = 3;
             // 
+            // txtBlockIndex
+            // 
+            this.txtBlockIndex.Digits = 4;
+            this.txtBlockIndex.Location = new System.Drawing.Point(204, 58);
+            this.txtBlockIndex.Margin = new System.Windows.Forms.Padding(0);
+            this.txtBlockIndex.Name = "txtBlockIndex";
+            this.txtBlockIndex.ReadOnly = true;
+            this.txtBlockIndex.Size = new System.Drawing.Size(72, 23);
+            this.txtBlockIndex.TabIndex = 2;
+            // 
             // nudBlockIndex
             // 
-            this.nudBlockIndex.Increment = new decimal(new int[] {
-            0,
-            0,
-            0,
-            0});
             this.nudBlockIndex.Location = new System.Drawing.Point(122, 58);
             this.nudBlockIndex.Margin = new System.Windows.Forms.Padding(0);
             this.nudBlockIndex.Maximum = new decimal(new int[] {
@@ -439,16 +444,6 @@ namespace PochiPochiEditorPlus._Forms
             this.tbpEvent.TabIndex = 2;
             this.tbpEvent.Text = "イベント";
             this.tbpEvent.UseVisualStyleBackColor = true;
-            // 
-            // txtBlockIndex
-            // 
-            this.txtBlockIndex.Digits = 4;
-            this.txtBlockIndex.Location = new System.Drawing.Point(204, 58);
-            this.txtBlockIndex.Margin = new System.Windows.Forms.Padding(0);
-            this.txtBlockIndex.Name = "txtBlockIndex";
-            this.txtBlockIndex.ReadOnly = true;
-            this.txtBlockIndex.Size = new System.Drawing.Size(72, 23);
-            this.txtBlockIndex.TabIndex = 2;
             // 
             // OwMapEditor1
             // 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Windows.Forms;
@@ -89,6 +90,22 @@ namespace PochiPochiEditorPlus._Managers._LayerManager
                 width, 
                 height, 
                 showBackColor);
+            _panel.Invalidate();
+        }
+
+        /// <summary>
+        /// Bitmap形式で画像を登録する。
+        /// </summary>
+        public void SetImageLayer(TEnum key, Bitmap bitmap)
+        {
+            // 新規ならインスタンスを生成
+            if (!ImageLayers.TryGetValue(key, out var layer))
+            {
+                layer = new ImageLayer(Data);
+                ImageLayers[key] = layer;
+            }
+
+            layer.SetBitmap(bitmap);
             _panel.Invalidate();
         }
 

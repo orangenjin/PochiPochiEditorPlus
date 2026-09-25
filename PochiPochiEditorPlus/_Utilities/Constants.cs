@@ -62,7 +62,6 @@
         public const int Tileset2BlockMaxAmount = Tileset2ImageMaxHeight * Constants.PixelsPerByte;
         public const int PaletteEntryCount = 16;
         public const int TilePerBlockSide = 2;
-        public const int TilePerBlock = TilePerBlockSide * TilePerBlockSide;
 
         // ダイアログフィルター
         public const string RomFileFilter = "ROMファイル|*.gba";

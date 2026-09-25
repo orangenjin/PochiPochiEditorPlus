@@ -30,9 +30,9 @@ namespace PochiPochiEditorPlus._Forms
         private LayerScroller _tileLayerScroller = null;
         private LayerHolder<LayerNames> _blockLayerHolder = null;
         private LayerScroller _blockLayerScroller = null;
-        private enum LayerNames { Tile, Block }
+        private enum LayerNames { Tile, BlockLower, BlockUpper }
         // UI制御用
-        private byte[] _combinedImageData = null;
+        private byte[] _combinedTilesetImageData = null;
 
         public OwMapEditor1(
             SharedData sharedData,
@@ -183,7 +183,7 @@ namespace PochiPochiEditorPlus._Forms
             // 幅と高さの計算
             int width = Constants.TilesetImageWidth;
             int bytesPerTileRow = (width * Constants.TileSize) / Constants.PixelsPerByte;
-            int tileRows = (_combinedImageData.Length + bytesPerTileRow - 1) / bytesPerTileRow;
+            int tileRows = (_combinedTilesetImageData.Length + bytesPerTileRow - 1) / bytesPerTileRow;
             int height = tileRows * Constants.TileSize;
 
             // 有効なタイル数を計算
@@ -198,7 +198,7 @@ namespace PochiPochiEditorPlus._Forms
             // 画像の設定
             _tileLayerHolder.SetImageLayer(
                 LayerNames.Tile,
-                _combinedImageData,
+                _combinedTilesetImageData,
                 palData,
                 width,
                 height);
@@ -208,7 +208,7 @@ namespace PochiPochiEditorPlus._Forms
             _tileLayerHolder.SetGridVisible(true);
 
             // 選択範囲の設定
-            var maxLength = Constants.DefaultScale;
+            var maxLength = Constants.TilePerBlockSide;
             _tileLayerHolder.SelectorLayer.MaxSelectSize = new Size(maxLength, maxLength);
             _tileLayerHolder.SetSelectorVisible(true);
 
@@ -238,7 +238,173 @@ namespace PochiPochiEditorPlus._Forms
 
         private void UpdateBlockView()
         {
+            if (_blockDataList == null || _blockDataList.Count == 0) return;
+            int blockSize = Constants.TileSize * Constants.TilePerBlockSide;
 
+            // レイヤーの初期設定
+            _blockLayerHolder.Initialize(
+                gridSize: blockSize,
+                scale: Constants.DefaultScale,
+                validItemCount: _blockDataList.Count);
+
+            int cols = _blockLayerHolder.Data.Columns;
+            int rows = _blockLayerHolder.Data.Rows;
+
+            // 全ブロックを描画するための土台を作成
+            int imgWidth = cols * blockSize;
+            int imgHeight = rows * blockSize;
+            Bitmap lowerBmp = new Bitmap(imgWidth, imgHeight);
+            Bitmap upperBmp = new Bitmap(imgWidth, imgHeight);
+
+            // 定数を事前に計算
+            var tileLayer = _tileLayerHolder.GetImageLayer(LayerNames.Tile);
+            int tilesPerRow = Constants.TilesetImageWidth / Constants.TileSize;
+
+            using (Graphics gLower = Graphics.FromImage(lowerBmp))
+            using (Graphics gUpper = Graphics.FromImage(upperBmp))
+            {
+                for (int i = 0; i < _blockDataList.Count; i++)
+                {
+                    var blockData = _blockDataList[i];
+
+                    // ブロックの描画座標を計算
+                    int gridX = i % cols;
+                    int gridY = i / cols;
+                    int drawX = gridX * blockSize;
+                    int drawY = gridY * blockSize;
+
+                    DrawBlockLayer(
+                        gLower, 
+                        blockData.Lower, 
+                        drawX, 
+                        drawY, 
+                        tileLayer,
+                        tilesPerRow,
+                        isLower: true);
+                    DrawBlockLayer(
+                        gUpper, 
+                        blockData.Upper,
+                        drawX, 
+                        drawY, 
+                        tileLayer, 
+                        tilesPerRow,
+                        isLower: false);
+                }
+            }
+
+            // 生成した画像を画像レイヤーにセット
+            _blockLayerHolder.SetImageLayer(LayerNames.BlockLower, lowerBmp);
+            _blockLayerHolder.SetImageLayer(LayerNames.BlockUpper, upperBmp);
+
+            // 画像レイヤーを表示する
+            _blockLayerHolder.SetLayerVisible(LayerNames.BlockLower, true);
+            _blockLayerHolder.SetLayerVisible(LayerNames.BlockUpper, true);
+
+            // グリッドの設定
+            _blockLayerHolder.SetGridVisible(true);
+
+            // 選択範囲の設定
+            _blockLayerHolder.SelectorLayer.MaxSelectSize = new Size(1, 1);
+            _blockLayerHolder.SetSelectorVisible(true);
+
+            // スクロールバーの設定
+            _blockLayerScroller.UpdateScrollRange();
+        }
+
+        private void DrawBlockLayer(
+            Graphics gfx,
+            BlockLayer layer,
+            int drawX,
+            int drawY,
+            ImageLayer tileLayer,
+            int tilesPerRow,
+            bool isLower)
+        {
+            // 4つのタイルを配置
+            DrawTile(
+                gfx, 
+                layer.TopLeft, 
+                drawX,
+                drawY, 
+                tileLayer, 
+                tilesPerRow, 
+                isLower);
+            DrawTile(
+                gfx, 
+                layer.TopRight, 
+                drawX + Constants.TileSize,
+                drawY, 
+                tileLayer, 
+                tilesPerRow, 
+                isLower);
+            DrawTile(
+                gfx, 
+                layer.BottomLeft, 
+                drawX, 
+                drawY + Constants.TileSize, 
+                tileLayer,
+                tilesPerRow,
+                isLower);
+            DrawTile(
+                gfx, 
+                layer.BottomRight, 
+                drawX + Constants.TileSize, 
+                drawY + Constants.TileSize,
+                tileLayer,
+                tilesPerRow, 
+                isLower);
+        }
+
+        private void DrawTile(
+            Graphics gfx,
+            BlockTileData tileData,
+            int x,
+            int y,
+            ImageLayer tileLayer,
+            int tilesPerRow,
+            bool isLower)
+        {
+            // タイルを描画するマス座標(タイルの画像レイヤー)を計算
+            int tileGridX = tileData.TileIndex % tilesPerRow;
+            int tileGridY = tileData.TileIndex / tilesPerRow;
+
+            // タイルの画像レイヤーから画像データを取得
+            byte[] tileBytes = tileLayer.ExtractImageDataAtGrid(tileGridX, tileGridY);
+            if (tileBytes == null || tileBytes.Length == 0) return;
+
+            // パレットデータを取得
+            byte[] palData = GetProperPaletteData(tileData.PaletteIndex);
+
+            // 上位レイヤーは背景色を透過する
+            using (Bitmap tileBmp = ImageHelper.CreateBitmap(
+                tileBytes, palData, Constants.TileSize, Constants.TileSize, showBackColor: isLower))
+            {
+                if (tileBmp == null) return;
+
+                // タイルの反転情報を適用
+                RotateFlipType flipType = RotateFlipType.RotateNoneFlipNone;
+                if (tileData.ReverseX && tileData.ReverseY)
+                {
+                    flipType = RotateFlipType.RotateNoneFlipXY;
+                }
+                else if (tileData.ReverseX)
+                {
+                    flipType = RotateFlipType.RotateNoneFlipX;
+                }
+                else if (tileData.ReverseY)
+                {
+                    flipType = RotateFlipType.RotateNoneFlipY;
+                }
+
+                // 反転が必要なら反転させる
+                if (flipType != RotateFlipType.RotateNoneFlipNone)
+                {
+                    tileBmp.RotateFlip(flipType);
+                }
+
+                // キャンバスに描画
+                gfx.DrawImage(tileBmp, x, y);
+            }
         }
 
         private void ChangeBlockTabState(bool state)
@@ -268,9 +434,9 @@ namespace PochiPochiEditorPlus._Forms
             // タイルセット1とタイルセット2の画像を連結
             byte[] imgData1 = _tileset1Manager.ImageData ?? Array.Empty<byte>();
             byte[] imgData2 = _tileset2Manager.ImageData ?? Array.Empty<byte>();
-            _combinedImageData = new byte[imgData1.Length + imgData2.Length];
-            Array.Copy(imgData1, 0, _combinedImageData, 0, imgData1.Length);
-            Array.Copy(imgData2, 0, _combinedImageData, imgData1.Length, imgData2.Length);
+            _combinedTilesetImageData = new byte[imgData1.Length + imgData2.Length];
+            Array.Copy(imgData1, 0, _combinedTilesetImageData, 0, imgData1.Length);
+            Array.Copy(imgData2, 0, _combinedTilesetImageData, imgData1.Length, imgData2.Length);
         }
 
         private byte[] GetProperPaletteData(int palIndex)

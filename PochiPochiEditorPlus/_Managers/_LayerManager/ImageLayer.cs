@@ -68,6 +68,21 @@ namespace PochiPochiEditorPlus._Managers._LayerManager
         }
 
         /// <summary>
+        /// パレット再描画をしないBitmap画像に対して使用できる。
+        /// </summary>
+        public void SetBitmap(Bitmap bitmap)
+        {
+            // 画像を破棄
+            _cachedBitmap?.Dispose();
+            _cachedBitmap = bitmap;
+
+            ImageData = null;
+            PaletteData = null;
+            ImageWidth = bitmap.Width;
+            ImageHeight = bitmap.Height;
+        }
+
+        /// <summary>
         /// ここで拡大率を考慮して、画像を表示する。
         /// </summary>
         public override void Draw(Graphics gfx)
