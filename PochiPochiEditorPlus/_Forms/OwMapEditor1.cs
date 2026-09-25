@@ -27,8 +27,10 @@ namespace PochiPochiEditorPlus._Forms
         private List<BlockData> _blockDataList = null;
         // パネル描画用
         private LayerHolder<LayerNames> _tileLayerHolder = null;
-        private enum LayerNames { Tileset }
         private LayerScroller _tileLayerScroller = null;
+        private LayerHolder<LayerNames> _blockLayerHolder = null;
+        private LayerScroller _blockLayerScroller = null;
+        private enum LayerNames { Tile, Block }
         // UI制御用
         private byte[] _combinedImageData = null;
 
@@ -44,12 +46,22 @@ namespace PochiPochiEditorPlus._Forms
             _eventBinder = new EventBinder();
             _tileset1Manager = new TilesetHeaderHolder(_sharedData);
             _tileset2Manager = new TilesetHeaderHolder(_sharedData);
+
+            // タイル画像パネル
             _tileLayerHolder = new LayerHolder<LayerNames>(pnlTileView, _eventBinder);
             _tileLayerScroller = new LayerScroller(
                 pnlTileView,
                 null,
                 vsbTileView,
                 _tileLayerHolder.Data,
+                _eventBinder);
+            // ブロック画像パネル
+            _blockLayerHolder = new LayerHolder<LayerNames>(pnlBlockView, _eventBinder);
+            _blockLayerScroller = new LayerScroller(
+                pnlBlockView,
+                null,
+                vsrBlockView,
+                _blockLayerHolder.Data,
                 _eventBinder);
 
             InitializeControls();
@@ -66,6 +78,13 @@ namespace PochiPochiEditorPlus._Forms
                 System.Reflection.BindingFlags.Instance
                 | System.Reflection.BindingFlags.NonPublic)
                     ?.SetValue(pnlTileView, true, null);
+
+            // ブロック画像パネルのダブルバッファリングを有効化
+            typeof(Control).GetProperty(
+                nameof(DoubleBuffered),
+                System.Reflection.BindingFlags.Instance
+                | System.Reflection.BindingFlags.NonPublic)
+                    ?.SetValue(pnlBlockView, true, null);
 
             // 各コンボボックスにアイテムを追加
             CtrlHelper.LoadComboBoxFromFile(
@@ -97,7 +116,7 @@ namespace PochiPochiEditorPlus._Forms
                 (_, __) =>
                 {
                     // 画像レイヤーを取得
-                    var layer = _tileLayerHolder.GetImageLayer(LayerNames.Tileset);
+                    var layer = _tileLayerHolder.GetImageLayer(LayerNames.Tile);
                     if (layer == null) return;
 
                     // パレットを更新
@@ -178,12 +197,12 @@ namespace PochiPochiEditorPlus._Forms
 
             // 画像の設定
             _tileLayerHolder.SetImageLayer(
-                LayerNames.Tileset,
+                LayerNames.Tile,
                 _combinedImageData,
                 palData,
                 width,
                 height);
-            _tileLayerHolder.SetLayerVisible(LayerNames.Tileset, true);
+            _tileLayerHolder.SetLayerVisible(LayerNames.Tile, true);
 
             // グリッドの設定
             _tileLayerHolder.SetGridVisible(true);
@@ -237,7 +256,7 @@ namespace PochiPochiEditorPlus._Forms
             // タイル画像パネル
             if (!state)
             {
-                _tileLayerHolder.SetLayerVisible(LayerNames.Tileset, false);
+                _tileLayerHolder.SetLayerVisible(LayerNames.Tile, false);
                 _tileLayerHolder.SetGridVisible(false);
                 _tileLayerHolder.SelectorLayer.ClearSelect();
                 _tileLayerHolder.SetSelectorVisible(false);
