@@ -1,9 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 using PochiPochiEditorPlus._Helpers;
 using PochiPochiEditorPlus._Managers;
-using PochiPochiEditorPlus._Managers._FieldManager;
 using PochiPochiEditorPlus._Managers._FormGroupManager;
 using PochiPochiEditorPlus._Managers._LayerManager;
 using PochiPochiEditorPlus._Managers._TilesetManager;
@@ -24,6 +24,7 @@ namespace PochiPochiEditorPlus._Forms
         // 各エントリーテーブル用
         private dynamic _tileset1Manager = null;
         private dynamic _tileset2Manager = null;
+        private List<BlockData> _blockDataList = null;
         // パネル描画用
         private LayerHolder<LayerNames> _layerHolder = null;
         private enum LayerNames { Tileset }
@@ -134,7 +135,8 @@ namespace PochiPochiEditorPlus._Forms
             UpdateTileView();
 
             // ブロックを描画
-
+            SetBlockData();
+            UpdateBlockView();
 
             // フッターとタイル番号の検証ヘルパー
             bool TryGetTilesetNumbers(out int no1, out int no2)
@@ -193,11 +195,31 @@ namespace PochiPochiEditorPlus._Forms
 
             // スクロールバーの設定
             _layerScroller.UpdateScrollRange();
+        }
 
+        private void SetBlockData()
+        {
+            _blockDataList = new List<BlockData>();
+            BlockData blockData;
+            int currentIndex = _blockDataList.Count;
 
+            // タイルセット1のブロックを追加
+            for (int i = 0; i < _tileset1Manager.BlockDataEntries.Count; i++)
+            {
+                blockData = TilesetDataCalc.GetBlockData(currentIndex, _tileset1Manager.BlockDataEntries[i]);
+                _blockDataList.Add(blockData);
+            }
+            // 続きからタイルセット2のブロックを追加
+            for (int i = 0; i < _tileset2Manager.BlockDataEntries.Count; i++)
+            {
+                blockData = TilesetDataCalc.GetBlockData(currentIndex, _tileset2Manager.BlockDataEntries[i]);
+                _blockDataList.Add(blockData);
+            }
+        }
 
-            // test
-            var data = TilesetDataCalc.GetBlockLayerData(_tileset1Manager.BlockDataEntries[6].LowerTopLeft);
+        private void UpdateBlockView()
+        {
+
         }
 
         private void ChangeBlockTabState(bool state)
