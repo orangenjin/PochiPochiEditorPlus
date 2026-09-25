@@ -13,7 +13,7 @@ namespace PochiPochiEditorPlus._Managers._LayerManager
         // レイヤーの基礎情報を保持
         public LayerData Data { get; }
         // 各レイヤーについて
-        public Dictionary<TEnum, ImageLayer> ImageLayers { get; }
+        public Dictionary<TEnum, LayerBase> Layers { get; }
         public GridLayer GridLayer { get; }
         public SelectorLayer SelectorLayer { get; }
 
@@ -23,7 +23,7 @@ namespace PochiPochiEditorPlus._Managers._LayerManager
         public LayerHolder(Panel panel, EventBinder eventBinder)
         {
             Data = new LayerData();
-            ImageLayers = new Dictionary<TEnum, ImageLayer>();
+            Layers = new Dictionary<TEnum, LayerBase>();
             GridLayer = new GridLayer(Data);
             SelectorLayer = new SelectorLayer(Data, () => _panel.Invalidate());
             _panel = panel;
@@ -60,52 +60,50 @@ namespace PochiPochiEditorPlus._Managers._LayerManager
         /// <summary>
         /// 特定のレイヤーを取得する。
         /// </summary>
-        public ImageLayer GetImageLayer(TEnum key)
+        public T GetLayer<T>(TEnum key) where T : LayerBase
         {
-            ImageLayers.TryGetValue(key, out var layer);
-            return layer;
+            if (Layers.TryGetValue(key, out var layer) 
+                && layer is T typedLayer)
+            {
+                return typedLayer;
+            }
+            return null;
         }
 
         /// <summary>
-        /// バイト配列形式で画像データを登録する。
+        /// 特殊レイヤーを登録する。
         /// </summary>
-        public void SetImageLayer(
-            TEnum key, 
-            byte[] imageData, 
-            byte[] paletteData, 
-            int width, 
-            int height, 
-            bool showBackColor = true)
+        public void AddLayer(TEnum key, LayerBase layer)
         {
-            // 新規ならインスタンスを生成
-            if (!ImageLayers.TryGetValue(key, out var layer))
-            {
-                layer = new ImageLayer(Data);
-                ImageLayers[key] = layer;
-            }
-
-            layer.SetImageData(
-                imageData, 
-                paletteData, 
-                width, 
-                height, 
-                showBackColor);
+            Layers[key] = layer;
             _panel.Invalidate();
         }
 
         /// <summary>
-        /// Bitmap形式で画像を登録する。
+        /// 画像レイヤーを登録する。
         /// </summary>
-        public void SetImageLayer(TEnum key, Bitmap bitmap)
+        public void SetImageLayer(
+            TEnum key,
+            byte[] imageData,
+            byte[] paletteData,
+            int width,
+            int height,
+            bool showBackColor = true)
         {
             // 新規ならインスタンスを生成
-            if (!ImageLayers.TryGetValue(key, out var layer))
+            if (!Layers.TryGetValue(key, out var layer) 
+                || !(layer is ImageLayer))
             {
                 layer = new ImageLayer(Data);
-                ImageLayers[key] = layer;
+                Layers[key] = layer;
             }
 
-            layer.SetBitmap(bitmap);
+            ((ImageLayer)layer).SetImageData(
+                imageData,
+                paletteData,
+                width,
+                height,
+                showBackColor);
             _panel.Invalidate();
         }
 
@@ -120,7 +118,7 @@ namespace PochiPochiEditorPlus._Managers._LayerManager
             e.Graphics.TranslateTransform(-offset.X, -offset.Y);
 
             // 各レイヤーの描画
-            foreach (var kvp in ImageLayers.OrderBy(x => x.Key))
+            foreach (var kvp in Layers.OrderBy(x => x.Key))
             {
                 if (kvp.Value.Visible)
                 {
@@ -147,11 +145,11 @@ namespace PochiPochiEditorPlus._Managers._LayerManager
             => SelectorLayer.OnMouseUp(e);
 
         /// <summary>
-        /// 画像レイヤーの表示を設定する。
+        /// レイヤーの表示を設定する。
         /// </summary>
         public void SetLayerVisible(TEnum key, bool visible)
         {
-            if (ImageLayers.TryGetValue(key, out var layer))
+            if (Layers.TryGetValue(key, out var layer))
             {
                 layer.Visible = visible;
                 _panel.Invalidate();

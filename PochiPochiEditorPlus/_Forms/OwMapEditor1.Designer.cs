@@ -114,14 +114,14 @@ namespace PochiPochiEditorPlus._Forms
             this.grpBlockDataAndAttr.Controls.Add(this.lblBlockAttrAction);
             this.grpBlockDataAndAttr.Controls.Add(this.lblBlockDataImage);
             this.grpBlockDataAndAttr.Controls.Add(this.picBlockDataImage);
-            this.grpBlockDataAndAttr.Location = new System.Drawing.Point(692, 16);
+            this.grpBlockDataAndAttr.Location = new System.Drawing.Point(356, 16);
             this.grpBlockDataAndAttr.Margin = new System.Windows.Forms.Padding(0);
             this.grpBlockDataAndAttr.Name = "grpBlockDataAndAttr";
             this.grpBlockDataAndAttr.Padding = new System.Windows.Forms.Padding(0);
             this.grpBlockDataAndAttr.Size = new System.Drawing.Size(258, 434);
             this.grpBlockDataAndAttr.TabIndex = 2;
             this.grpBlockDataAndAttr.TabStop = false;
-            this.grpBlockDataAndAttr.Text = "データと属性";
+            this.grpBlockDataAndAttr.Text = "ブロックデータと属性";
             // 
             // chkBlockAttrWildEncWater
             // 
@@ -263,7 +263,7 @@ namespace PochiPochiEditorPlus._Forms
             this.grpTileSelector.Controls.Add(this.picSelectTile);
             this.grpTileSelector.Controls.Add(this.vsbTileView);
             this.grpTileSelector.Controls.Add(this.pnlTileView);
-            this.grpTileSelector.Location = new System.Drawing.Point(356, 16);
+            this.grpTileSelector.Location = new System.Drawing.Point(632, 16);
             this.grpTileSelector.Margin = new System.Windows.Forms.Padding(0);
             this.grpTileSelector.Name = "grpTileSelector";
             this.grpTileSelector.Padding = new System.Windows.Forms.Padding(0);

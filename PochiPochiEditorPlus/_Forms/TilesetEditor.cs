@@ -166,7 +166,7 @@ namespace PochiPochiEditorPlus._Forms
                     if (palIndex < 0) return;
 
                     // 画像レイヤーを取得
-                    var layer = _layerHolder.GetImageLayer(LayerNames.Tileset);
+                    var layer = _layerHolder.GetLayer<ImageLayer>(LayerNames.Tileset);
                     if (layer == null) return;
 
                     // パレットを更新

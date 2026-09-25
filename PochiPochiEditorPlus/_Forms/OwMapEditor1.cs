@@ -116,7 +116,7 @@ namespace PochiPochiEditorPlus._Forms
                 (_, __) =>
                 {
                     // 画像レイヤーを取得
-                    var layer = _tileLayerHolder.GetImageLayer(LayerNames.Tile);
+                    var layer = _tileLayerHolder.GetLayer<ImageLayer>(LayerNames.Tile);
                     if (layer == null) return;
 
                     // パレットを更新
@@ -247,63 +247,49 @@ namespace PochiPochiEditorPlus._Forms
                 scale: Constants.DefaultScale,
                 validItemCount: _blockDataList.Count);
 
-            int cols = _blockLayerHolder.Data.Columns;
-            int rows = _blockLayerHolder.Data.Rows;
+            // 画像を破棄
+            var oldLower = _blockLayerHolder.GetLayer<MapBlockLayer>(LayerNames.BlockLower);
+            oldLower?.DisposeImages();
+            var oldUpper = _blockLayerHolder.GetLayer<MapBlockLayer>(LayerNames.BlockUpper);
+            oldUpper?.DisposeImages();
 
-            // 全ブロックを描画するための土台を作成
-            int imgWidth = cols * blockSize;
-            int imgHeight = rows * blockSize;
-            Bitmap lowerBmp = new Bitmap(imgWidth, imgHeight);
-            Bitmap upperBmp = new Bitmap(imgWidth, imgHeight);
+            var lowerBlockLayer = new MapBlockLayer(_blockLayerHolder.Data, blockSize);
+            var upperBlockLayer = new MapBlockLayer(_blockLayerHolder.Data, blockSize);
 
             // 定数を事前に計算
-            var tileLayer = _tileLayerHolder.GetImageLayer(LayerNames.Tile);
+            var tileLayer = _tileLayerHolder.GetLayer<ImageLayer>(LayerNames.Tile);
             int tilesPerRow = Constants.TilesetImageWidth / Constants.TileSize;
 
-            using (Graphics gLower = Graphics.FromImage(lowerBmp))
-            using (Graphics gUpper = Graphics.FromImage(upperBmp))
+            for (int i = 0; i < _blockDataList.Count; i++)
             {
-                for (int i = 0; i < _blockDataList.Count; i++)
+                var blockData = _blockDataList[i];
+
+                // 1ブロック分の画像を用意
+                Bitmap lowerBmp = new Bitmap(blockSize, blockSize);
+                Bitmap upperBmp = new Bitmap(blockSize, blockSize);
+
+                using (Graphics gLower = Graphics.FromImage(lowerBmp))
+                using (Graphics gUpper = Graphics.FromImage(upperBmp))
                 {
-                    var blockData = _blockDataList[i];
-
-                    // ブロックの描画座標を計算
-                    int gridX = i % cols;
-                    int gridY = i / cols;
-                    int drawX = gridX * blockSize;
-                    int drawY = gridY * blockSize;
-
-                    DrawBlockLayer(
-                        gLower, 
-                        blockData.Lower, 
-                        drawX, 
-                        drawY, 
-                        tileLayer,
-                        tilesPerRow,
-                        isLower: true);
-                    DrawBlockLayer(
-                        gUpper, 
-                        blockData.Upper,
-                        drawX, 
-                        drawY, 
-                        tileLayer, 
-                        tilesPerRow,
-                        isLower: false);
+                    DrawBlockLayer(gLower, blockData.Lower, 0, 0, tileLayer, tilesPerRow, isLower: true);
+                    DrawBlockLayer(gUpper, blockData.Upper, 0, 0, tileLayer, tilesPerRow, isLower: false);
                 }
+
+                // リストに追加
+                lowerBlockLayer.BlockImages.Add(lowerBmp);
+                upperBlockLayer.BlockImages.Add(upperBmp);
             }
 
-            // 生成した画像を画像レイヤーにセット
-            _blockLayerHolder.SetImageLayer(LayerNames.BlockLower, lowerBmp);
-            _blockLayerHolder.SetImageLayer(LayerNames.BlockUpper, upperBmp);
+            // 生成したカスタムレイヤーを登録
+            _blockLayerHolder.AddLayer(LayerNames.BlockLower, lowerBlockLayer);
+            _blockLayerHolder.AddLayer(LayerNames.BlockUpper, upperBlockLayer);
 
             // 画像レイヤーを表示する
             _blockLayerHolder.SetLayerVisible(LayerNames.BlockLower, true);
             _blockLayerHolder.SetLayerVisible(LayerNames.BlockUpper, true);
 
-            // グリッドの設定
+            // グリッドと選択範囲の設定
             _blockLayerHolder.SetGridVisible(true);
-
-            // 選択範囲の設定
             _blockLayerHolder.SelectorLayer.MaxSelectSize = new Size(1, 1);
             _blockLayerHolder.SetSelectorVisible(true);
 
@@ -465,6 +451,55 @@ namespace PochiPochiEditorPlus._Forms
             LoadBlockTabPage();
             LoadCollTabPage();
             LoadEventTabPage();
+        }
+    }
+
+    // マップのブロックを管理するためのカスタムレイヤー
+    public sealed class MapBlockLayer : LayerBase
+    {
+        public List<Bitmap> BlockImages { get; set; } 
+        public int BlockSize { get; set; }
+
+        public MapBlockLayer(LayerData layerData, int blockSize)
+        {
+            _layerData = layerData;
+
+            BlockImages = new List<Bitmap>();
+            BlockSize = blockSize;
+        }
+
+        public override void Draw(Graphics gfx)
+        {
+            if (BlockImages == null || BlockImages.Count == 0) return;
+
+            int cols = _layerData.Columns;
+            int scaledBlockSize = BlockSize * _layerData.Scale;
+
+            for (int i = 0; i < BlockImages.Count; i++)
+            {
+                var bmp = BlockImages[i];
+                if (bmp == null) continue;
+
+                int gridX = i % cols;
+                int gridY = i / cols;
+                int drawX = gridX * scaledBlockSize;
+                int drawY = gridY * scaledBlockSize;
+
+                gfx.DrawImage(bmp,
+                    new Rectangle(drawX, drawY, scaledBlockSize, scaledBlockSize),
+                    new Rectangle(0, 0, BlockSize, BlockSize),
+                    GraphicsUnit.Pixel);
+            }
+        }
+
+        // メモリリークを防ぐため
+        public void DisposeImages()
+        {
+            foreach (var img in BlockImages)
+            {
+                img?.Dispose();
+            }
+            BlockImages.Clear();
         }
     }
 }
