@@ -37,7 +37,7 @@ namespace PochiPochiEditorPlus._Forms
             _sharedData = sharedData;
             _undoManager = undoManager;
             _eventBinder = new EventBinder();
-            _tilesetManager = new TilesetHolder(_sharedData);
+            _tilesetManager = new TilesetHeaderHolder(_sharedData);
             _layerHolder = new LayerHolder<LayerNames>(pnlViewImage, _eventBinder);
             _layerScroller = new LayerScroller(
                 pnlViewImage,
@@ -227,8 +227,8 @@ namespace PochiPochiEditorPlus._Forms
             // パレットタイプに応じてパレット初期選択を変更
             cmbViewPalette.SelectedIndex =
                 Convert.ToBoolean(_tilesetManager.HeaderEntry.PaletteType.GetData<int>())
-                    ? (int)TilesetHolder.PaletteKind.Palette7to12
-                    : (int)TilesetHolder.PaletteKind.Palette0to6;
+                    ? (int)TilesetHeaderHolder.PaletteKind.Palette7to12
+                    : (int)TilesetHeaderHolder.PaletteKind.Palette0to6;
             UpdateViewImage();
         }
 

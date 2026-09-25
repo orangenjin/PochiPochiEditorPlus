@@ -1,17 +1,10 @@
 ﻿using System;
-using System.Drawing;
-using System.Windows.Forms;
 using PochiPochiEditorPlus._Helpers;
-using PochiPochiEditorPlus._Managers;
 using PochiPochiEditorPlus._Managers._FieldManager;
-using PochiPochiEditorPlus._Managers._FormGroupManager;
-using PochiPochiEditorPlus._Managers._LayerManager;
-using PochiPochiEditorPlus._Managers._TilesetManager;
-using PochiPochiEditorPlus._Utilities;
 
 namespace PochiPochiEditorPlus._Managers._TilesetManager
 {
-    public static class TilesetDataConv
+    public static class TilesetDataCalc
     {
         // ビット位置
         private const int BlockDataPaletteShift = 12;
@@ -79,6 +72,30 @@ namespace PochiPochiEditorPlus._Managers._TilesetManager
                 byteValue,
                 result.Length);
             return result;
+        }
+
+        /// <summary>
+        /// エントリーからブロックデータを構築する。
+        /// </summary>
+        public static BlockData GetBlockData(int index, dynamic entry)
+        {
+            // 下位レイヤー
+            var lowerLayer = new BlockLayer(
+                GetBlockLayerData(entry.LowerTopLeft),
+                GetBlockLayerData(entry.LowerTopRight),
+                GetBlockLayerData(entry.LowerBottomLeft),
+                GetBlockLayerData(entry.LowerBottomRight)
+            );
+
+            // 上位レイヤー
+            var upperLayer = new BlockLayer(
+                GetBlockLayerData(entry.UpperTopLeft),
+                GetBlockLayerData(entry.UpperTopRight),
+                GetBlockLayerData(entry.UpperBottomLeft),
+                GetBlockLayerData(entry.UpperBottomRight)
+            );
+
+            return new BlockData(index, lowerLayer, upperLayer);
         }
     }
 }

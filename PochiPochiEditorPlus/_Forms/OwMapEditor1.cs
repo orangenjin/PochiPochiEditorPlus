@@ -41,8 +41,8 @@ namespace PochiPochiEditorPlus._Forms
             _undoManager = undoManager;
             _groupData = groupData;
             _eventBinder = new EventBinder();
-            _tileset1Manager = new TilesetHolder(_sharedData);
-            _tileset2Manager = new TilesetHolder(_sharedData);
+            _tileset1Manager = new TilesetHeaderHolder(_sharedData);
+            _tileset2Manager = new TilesetHeaderHolder(_sharedData);
             _layerHolder = new LayerHolder<LayerNames>(pnlTileView, _eventBinder);
             _layerScroller = new LayerScroller(
                 pnlTileView,
@@ -197,7 +197,7 @@ namespace PochiPochiEditorPlus._Forms
 
 
             // test
-            var data = TilesetDataConv.GetBlockLayerData(_tileset1Manager.BlockDataEntries[6].LowerTopLeft);
+            var data = TilesetDataCalc.GetBlockLayerData(_tileset1Manager.BlockDataEntries[6].LowerTopLeft);
         }
 
         private void ChangeBlockTabState(bool state)
@@ -235,7 +235,7 @@ namespace PochiPochiEditorPlus._Forms
         private byte[] GetProperPaletteData(int palIndex)
         {
             if (palIndex < 0) return Array.Empty<byte>();
-            return palIndex >= (int)TilesetHolder.PaletteKind.Palette7to12
+            return palIndex >= (int)TilesetHeaderHolder.PaletteKind.Palette7to12
                 ? _tileset2Manager.PaletteData[palIndex]
                 : _tileset1Manager.PaletteData[palIndex];
         }

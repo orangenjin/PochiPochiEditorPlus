@@ -9,14 +9,14 @@ namespace PochiPochiEditorPlus._Forms._Tools
     public partial class TilesetNoCalc : Form
     {
         private EventBinder _eventBinder = null;
-        private TilesetHolder _tilesetManager = null;
+        private TilesetHeaderHolder _tilesetManager = null;
 
         public TilesetNoCalc(SharedData sharedData)
         {
             InitializeComponent();
 
             _eventBinder = new EventBinder();
-            _tilesetManager = new TilesetHolder(sharedData);
+            _tilesetManager = new TilesetHeaderHolder(sharedData);
             InitializeEventHandlers();
         }
 

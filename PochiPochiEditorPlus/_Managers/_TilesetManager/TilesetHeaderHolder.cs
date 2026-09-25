@@ -7,7 +7,7 @@ using PochiPochiEditorPlus._Utilities;
 
 namespace PochiPochiEditorPlus._Managers._TilesetManager
 {
-    public sealed class TilesetHolder
+    public sealed class TilesetHeaderHolder
     {
         public Entry HeaderEntry { get; set; }
         public byte[] ImageData { get; set; }
@@ -34,7 +34,7 @@ namespace PochiPochiEditorPlus._Managers._TilesetManager
             Palette7to12 = 7
         }
 
-        public TilesetHolder(SharedData sharedData)
+        public TilesetHeaderHolder(SharedData sharedData)
         {
             // メタデータの読み込み
             _headerMetaData = FieldMetaDataReader.Create("TilesetHeaderEntry");
