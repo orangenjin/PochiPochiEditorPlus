@@ -1,17 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using PochiPochiEditorPlus._Helpers;
+﻿using PochiPochiEditorPlus._Helpers;
 using PochiPochiEditorPlus._Managers._FieldManager;
-using PochiPochiEditorPlus._Managers._TilesetManager;
-using PochiPochiEditorPlus._Utilities;
 
 namespace PochiPochiEditorPlus._Managers._TilesetManager
 {
     public static class TilesetDataConv
     {
+        // ビット位置
+        private const int BlockDataPaletteShift = 12;
+
+        // ビットマスク
+        private const ushort BlockDataTileIndexMask = 0x03FF;    // Bit 0-9
+        private const ushort BlockDataReverseXMask = 0x0400;     // Bit 10
+        private const ushort BlockDataReverseYMask = 0x0800;     // Bit 11
+        private const ushort BlockDataPaletteMask = 0xF000;      // Bit 12-15
+
         /// <summary>
         /// バイト配列をブロックデータに変換する。
         /// </summary>
@@ -24,12 +26,12 @@ namespace PochiPochiEditorPlus._Managers._TilesetManager
                 fieldValue.Lengths.EntryLength);
 
             // ビット演算で各データを抽出
-            int tileIndex = byteValue & 0x3FF;          // Bit 0-9
-            bool reverseX = (byteValue & 0x400) != 0;   // Bit 10
-            bool reverseY = (byteValue & 0x800) != 0;   // Bit 11
-            int paletteIndex = (byteValue >> 12) & 0xF; // Bit 12-15
+            int tileIndex = byteValue & BlockDataTileIndexMask;
+            bool reverseX = (byteValue & BlockDataReverseXMask) != 0;
+            bool reverseY = (byteValue & BlockDataReverseYMask) != 0;
+            int paletteIndex = (byteValue & BlockDataPaletteMask) >> BlockDataPaletteShift;
 
-            // クラスの生成[cite: 3]
+            // インスタンスの生成
             return new TilesetBlockData(
                 tileIndex,
                 paletteIndex,
@@ -46,10 +48,10 @@ namespace PochiPochiEditorPlus._Managers._TilesetManager
         {
             // ushortに結合
             ushort byteValue = (ushort)(
-                (dataValue.TileIndex & 0x3FF) |
-                (dataValue.ReverseX ? 0x400 : 0) |
-                (dataValue.ReverseY ? 0x800 : 0) |
-                ((dataValue.PaletteIndex & 0xF) << 12)
+                (dataValue.TileIndex & BlockDataTileIndexMask) |
+                (dataValue.ReverseX ? BlockDataReverseXMask : 0) |
+                (dataValue.ReverseY ? BlockDataReverseYMask : 0) |
+                ((dataValue.PaletteIndex & 0xF) << BlockDataPaletteShift)
             );
 
             // 戻り値用に整形
