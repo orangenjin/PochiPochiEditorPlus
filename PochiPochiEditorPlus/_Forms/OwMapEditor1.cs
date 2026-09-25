@@ -24,10 +24,12 @@ namespace PochiPochiEditorPlus._Forms
         // 各エントリーテーブル用
         private dynamic _tileset1Manager = null;
         private dynamic _tileset2Manager = null;
-        // UI制御用
+        // パネル描画用
         private LayerHolder<LayerNames> _layerHolder = null;
         private enum LayerNames { Tileset }
         private LayerScroller _layerScroller = null;
+        // UI制御用
+        private byte[] _combinedImageData = null;
 
         public OwMapEditor1(
             SharedData sharedData,
@@ -93,17 +95,13 @@ namespace PochiPochiEditorPlus._Forms
                 h => cmbTilePalette.SelectedIndexChanged -= h,
                 (_, __) =>
                 {
-                    int palIndex = cmbTilePalette.SelectedIndex;
-                    if (palIndex < 0) return;
-
                     // 画像レイヤーを取得
                     var layer = _layerHolder.GetImageLayer(LayerNames.Tileset);
                     if (layer == null) return;
 
                     // パレットを更新
-                    byte[] palData = palIndex >= (int)TilesetHolder.PaletteKind.Palette7to12
-                        ? _tileset2Manager.PaletteData[palIndex]
-                        : _tileset1Manager.PaletteData[palIndex];
+                    int palIndex = cmbTilePalette.SelectedIndex;
+                    var palData = GetProperPaletteData(palIndex);
                     layer.ApplyPalette(palData);
                     pnlTileView.Invalidate();
                 });
@@ -128,9 +126,15 @@ namespace PochiPochiEditorPlus._Forms
             _tileset1Manager.ReadHeader(tileset1No, _sharedData);
             _tileset2Manager.ReadHeader(tileset2No, _sharedData);
 
+            // まず画像を連結させる
+            CombineTilesetImage();
+
             // タイルを描画
             cmbTilePalette.SelectedIndex = 0;
             UpdateTileView();
+
+            // ブロックを描画
+
 
             // フッターとタイル番号の検証ヘルパー
             bool TryGetTilesetNumbers(out int no1, out int no2)
@@ -146,27 +150,6 @@ namespace PochiPochiEditorPlus._Forms
             }
         }
 
-        private void ChangeBlockTabState(bool state)
-        {
-            // ブロックタブページ
-            CtrlHelper.ResetControls(
-                tbpBlock,
-                includeSelf: false);
-            CtrlHelper.SetControlsEnabled(
-                tbpBlock,
-                enabled: state,
-                includeSelf: true);
-
-            // タイル画像パネル
-            if (!state)
-            {
-                _layerHolder.SetLayerVisible(LayerNames.Tileset, false);
-                _layerHolder.SetGridVisible(false);
-                _layerHolder.SelectorLayer.ClearSelect();
-                _layerHolder.SetSelectorVisible(false);
-            }
-        }
-
         /// <summary>
         /// 画像とパレットからBitmapを生成して表示する
         /// </summary>
@@ -174,22 +157,12 @@ namespace PochiPochiEditorPlus._Forms
         {
             // 選択中のパレットを取得
             int palIndex = cmbTilePalette.SelectedIndex;
-            if (palIndex < 0) return;
-            byte[] palData = palIndex >= (int)TilesetHolder.PaletteKind.Palette7to12
-                ? _tileset2Manager.PaletteData[palIndex]
-                : _tileset1Manager.PaletteData[palIndex];
-
-            // タイルセット1とタイルセット2の画像を連結
-            byte[] imgData1 = _tileset1Manager.ImageData ?? Array.Empty<byte>();
-            byte[] imgData2 = _tileset2Manager.ImageData ?? Array.Empty<byte>();
-            byte[] combinedImageData = new byte[imgData1.Length + imgData2.Length];
-            Array.Copy(imgData1, 0, combinedImageData, 0, imgData1.Length);
-            Array.Copy(imgData2, 0, combinedImageData, imgData1.Length, imgData2.Length);
+            var palData = GetProperPaletteData(palIndex);
 
             // 幅と高さの計算
             int width = Constants.TilesetImageWidth;
             int bytesPerTileRow = (width * Constants.TileSize) / Constants.PixelsPerByte;
-            int tileRows = (combinedImageData.Length + bytesPerTileRow - 1) / bytesPerTileRow;
+            int tileRows = (_combinedImageData.Length + bytesPerTileRow - 1) / bytesPerTileRow;
             int height = tileRows * Constants.TileSize;
 
             // 有効なタイル数を計算
@@ -204,7 +177,7 @@ namespace PochiPochiEditorPlus._Forms
             // 画像の設定
             _layerHolder.SetImageLayer(
                 LayerNames.Tileset,
-                combinedImageData,
+                _combinedImageData,
                 palData,
                 width,
                 height);
@@ -224,10 +197,47 @@ namespace PochiPochiEditorPlus._Forms
 
 
             // test
-            var data = _tileset1Manager.BlockDataEntries[6].LowerTopLeft
-                .GetData<TilesetBlockData>(converter: (Func<FieldValueHolder, TilesetBlockData>)TilesetDataConv.BytesToTilesetBlockData);
+            var data = TilesetDataConv.GetBlockLayerData(_tileset1Manager.BlockDataEntries[6].LowerTopLeft);
+        }
 
-            txtBlockIndex.Text = data.PaletteIndex.ToString("X8");
+        private void ChangeBlockTabState(bool state)
+        {
+            // ブロックタブページ
+            CtrlHelper.ResetControls(
+                tbpBlock,
+                includeSelf: false);
+            CtrlHelper.SetControlsEnabled(
+                tbpBlock,
+                enabled: state,
+                includeSelf: true,
+                excludeNames: new string[] { nameof(cmbPaletteType) });
+
+            // タイル画像パネル
+            if (!state)
+            {
+                _layerHolder.SetLayerVisible(LayerNames.Tileset, false);
+                _layerHolder.SetGridVisible(false);
+                _layerHolder.SelectorLayer.ClearSelect();
+                _layerHolder.SetSelectorVisible(false);
+            }
+        }
+
+        private void CombineTilesetImage()
+        {
+            // タイルセット1とタイルセット2の画像を連結
+            byte[] imgData1 = _tileset1Manager.ImageData ?? Array.Empty<byte>();
+            byte[] imgData2 = _tileset2Manager.ImageData ?? Array.Empty<byte>();
+            _combinedImageData = new byte[imgData1.Length + imgData2.Length];
+            Array.Copy(imgData1, 0, _combinedImageData, 0, imgData1.Length);
+            Array.Copy(imgData2, 0, _combinedImageData, imgData1.Length, imgData2.Length);
+        }
+
+        private byte[] GetProperPaletteData(int palIndex)
+        {
+            if (palIndex < 0) return Array.Empty<byte>();
+            return palIndex >= (int)TilesetHolder.PaletteKind.Palette7to12
+                ? _tileset2Manager.PaletteData[palIndex]
+                : _tileset1Manager.PaletteData[palIndex];
         }
 
         private void LoadCollTabPage()

@@ -1,5 +1,13 @@
-﻿using PochiPochiEditorPlus._Helpers;
+﻿using System;
+using System.Drawing;
+using System.Windows.Forms;
+using PochiPochiEditorPlus._Helpers;
+using PochiPochiEditorPlus._Managers;
 using PochiPochiEditorPlus._Managers._FieldManager;
+using PochiPochiEditorPlus._Managers._FormGroupManager;
+using PochiPochiEditorPlus._Managers._LayerManager;
+using PochiPochiEditorPlus._Managers._TilesetManager;
+using PochiPochiEditorPlus._Utilities;
 
 namespace PochiPochiEditorPlus._Managers._TilesetManager
 {
@@ -17,7 +25,7 @@ namespace PochiPochiEditorPlus._Managers._TilesetManager
         /// <summary>
         /// バイト配列をブロックデータに変換する。
         /// </summary>
-        public static TilesetBlockData BytesToTilesetBlockData(
+        public static BlockTileData BytesToBlockLayerData(
             FieldValueHolder fieldValue)
         {
             var byteValue = (ushort)IoHelper.ReadBytesAsInt(
@@ -32,7 +40,7 @@ namespace PochiPochiEditorPlus._Managers._TilesetManager
             int paletteIndex = (byteValue & BlockDataPaletteMask) >> BlockDataPaletteShift;
 
             // インスタンスの生成
-            return new TilesetBlockData(
+            return new BlockTileData(
                 tileIndex,
                 paletteIndex,
                 reverseX,
@@ -40,10 +48,19 @@ namespace PochiPochiEditorPlus._Managers._TilesetManager
         }
 
         /// <summary>
+        /// タイルデータを取得するメソッドを簡素化するため。
+        /// </summary>
+        public static BlockTileData GetBlockLayerData(dynamic value)
+        {
+            return value.GetData<BlockTileData>(
+                converter: (Func<FieldValueHolder, BlockTileData>)BytesToBlockLayerData);
+        }
+
+        /// <summary>
         /// ブロックデータをバイト配列に変換する。
         /// </summary>
-        public static byte[] TilesetBlockDataToBytes(
-            TilesetBlockData dataValue,
+        public static byte[] BlockLayerDataToBytes(
+            BlockTileData dataValue,
             FieldValueHolder fieldValue)
         {
             // ushortに結合

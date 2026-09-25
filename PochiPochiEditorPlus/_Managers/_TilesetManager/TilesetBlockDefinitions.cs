@@ -1,23 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using PochiPochiEditorPlus._Helpers;
-using PochiPochiEditorPlus._Managers._FieldManager;
-using PochiPochiEditorPlus._Managers._TilesetManager;
-using PochiPochiEditorPlus._Utilities;
-
-namespace PochiPochiEditorPlus._Managers._TilesetManager
+﻿namespace PochiPochiEditorPlus._Managers._TilesetManager
 {
-    public sealed class TilesetBlockData
+    public sealed class BlockTileData
     {
         public int TileIndex { get; set; }
         public bool ReverseX { get; set; }
         public bool ReverseY { get; set; }
         public int PaletteIndex { get; set; }
 
-        public TilesetBlockData(
+        public BlockTileData(
             int tileIndex, 
             int paletteIndex,
             bool reverseX = false,
@@ -30,8 +20,43 @@ namespace PochiPochiEditorPlus._Managers._TilesetManager
             ReverseX = reverseX;
             ReverseY = reverseY;
         }
+    }
 
+    public sealed class BlockLayer
+    {
+        public BlockTileData TopLeft { get; set; }
+        public BlockTileData TopRight { get; set; }
+        public BlockTileData BottomLeft { get; set; }
+        public BlockTileData BottomRight { get; set; }
 
+        public BlockLayer(
+            BlockTileData topLeft,
+            BlockTileData topRight,
+            BlockTileData bottomLeft,
+            BlockTileData bottomRight)
+        {
+            TopLeft = topLeft;
+            TopRight = topRight;
+            BottomLeft = bottomLeft;
+            BottomRight = bottomRight;
+        }
+    }
 
+    public sealed class BlockData
+    {
+        public int BlockIndex { get; set; }
+
+        public BlockLayer Lower { get; set; }
+        public BlockLayer Upper { get; set; }
+
+        public BlockData(
+            int blockIndex,
+            BlockLayer lower,
+            BlockLayer upper)
+        {
+            BlockIndex = blockIndex;
+            Lower = lower;
+            Upper = upper;
+        }
     }
 }
