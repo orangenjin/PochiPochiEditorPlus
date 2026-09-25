@@ -1,7 +1,7 @@
 ﻿using System.Drawing;
 using System.Windows.Forms;
 using PochiPochiEditorPlus._Helpers;
-using PochiPochiEditorPlus._Managers;
+using PochiPochiEditorPlus._Managers._TilesetManager;
 using PochiPochiEditorPlus._Utilities;
 
 namespace PochiPochiEditorPlus._Forms._Tools
@@ -9,14 +9,14 @@ namespace PochiPochiEditorPlus._Forms._Tools
     public partial class TilesetNoCalc : Form
     {
         private EventBinder _eventBinder = null;
-        private TilesetManager _tilesetManager = null;
+        private TilesetHolder _tilesetManager = null;
 
         public TilesetNoCalc(SharedData sharedData)
         {
             InitializeComponent();
 
             _eventBinder = new EventBinder();
-            _tilesetManager = new TilesetManager(sharedData);
+            _tilesetManager = new TilesetHolder(sharedData);
             InitializeEventHandlers();
         }
 

@@ -1,20 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using PochiPochiEditorPlus._Helpers;
-using PochiPochiEditorPlus._Helpers._MatchHelper;
 using PochiPochiEditorPlus._Managers;
 using PochiPochiEditorPlus._Managers._LayerManager;
-using PochiPochiEditorPlus._Managers._FieldManager;
 using PochiPochiEditorPlus._Managers._FormGroupManager;
+using PochiPochiEditorPlus._Managers._TilesetManager;
 using PochiPochiEditorPlus._Utilities;
-using PochiPochiEditorPlus._Utilities._QuickInput;
 
 namespace PochiPochiEditorPlus._Forms
 {
@@ -46,8 +38,8 @@ namespace PochiPochiEditorPlus._Forms
             _undoManager = undoManager;
             _groupData = groupData;
             _eventBinder = new EventBinder();
-            _tileset1Manager = new TilesetManager(_sharedData);
-            _tileset2Manager = new TilesetManager(_sharedData);
+            _tileset1Manager = new TilesetHolder(_sharedData);
+            _tileset2Manager = new TilesetHolder(_sharedData);
             _layerHolder = new LayerHolder<LayerNames>(pnlTileView, _eventBinder);
             _layerScroller = new LayerScroller(
                 pnlTileView,
@@ -108,7 +100,7 @@ namespace PochiPochiEditorPlus._Forms
                     if (layer == null) return;
 
                     // パレットを更新
-                    byte[] palData = palIndex >= (int)TilesetManager.PaletteKind.Palette7to12
+                    byte[] palData = palIndex >= (int)TilesetHolder.PaletteKind.Palette7to12
                         ? _tileset2Manager.PaletteData[palIndex]
                         : _tileset1Manager.PaletteData[palIndex];
                     layer.ApplyPalette(palData);
@@ -182,7 +174,7 @@ namespace PochiPochiEditorPlus._Forms
             // 選択中のパレットを取得
             int palIndex = cmbTilePalette.SelectedIndex;
             if (palIndex < 0) return;
-            byte[] palData = palIndex >= (int)TilesetManager.PaletteKind.Palette7to12
+            byte[] palData = palIndex >= (int)TilesetHolder.PaletteKind.Palette7to12
                 ? _tileset2Manager.PaletteData[palIndex]
                 : _tileset1Manager.PaletteData[palIndex];
 
@@ -227,6 +219,13 @@ namespace PochiPochiEditorPlus._Forms
 
             // スクロールバーの設定
             _layerScroller.UpdateScrollRange();
+
+
+
+            // test
+            var bytes = _tileset1Manager.BlockDataEntries[1].LowerTopLeft.GetData<int>();
+
+            txtBlockIndex.Text = bytes.ToString("X8");
         }
 
         private void LoadCollTabPage()

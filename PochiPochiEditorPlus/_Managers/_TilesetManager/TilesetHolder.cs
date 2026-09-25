@@ -5,9 +5,9 @@ using PochiPochiEditorPlus._Helpers;
 using PochiPochiEditorPlus._Managers._FieldManager;
 using PochiPochiEditorPlus._Utilities;
 
-namespace PochiPochiEditorPlus._Managers
+namespace PochiPochiEditorPlus._Managers._TilesetManager
 {
-    public sealed class TilesetManager
+    public sealed class TilesetHolder
     {
         public Entry HeaderEntry { get; set; }
         public byte[] ImageData { get; set; }
@@ -16,9 +16,9 @@ namespace PochiPochiEditorPlus._Managers
         public List<Entry> BlockAttrEntries { get; set; }
 
         // コンストラクタで事前に計算
-        public List<FieldValueHolder> _headerFields = null;
-        public List<FieldValueHolder> _blockFields = null;
-        public List<FieldValueHolder> _attrFields = null;
+        private List<FieldMetaData> _headerMetaData = null;
+        private List<FieldMetaData> _blockMetaData = null;
+        private List<FieldMetaData> _attrMetaData = null;
         // 定数用
         private int _baseHeaderOffset = 0;
         private int _headerEntryLength = 0;
@@ -34,45 +34,30 @@ namespace PochiPochiEditorPlus._Managers
             Palette7to12 = 7
         }
 
-        public TilesetManager(SharedData sharedData)
+        public TilesetHolder(SharedData sharedData)
         {
-            // ヘッダー定義を読み込み
-            _headerFields = 
-                GenerateContainer(FieldMetaDataReader.Create("TilesetHeaderEntry"));
-            // ブロック定義を読み込み
-            _blockFields = 
-                GenerateContainer(FieldMetaDataReader.Create("BlockDataEntry"));
-            // 属性定義を読み込み
-            _attrFields =
-                GenerateContainer(FieldMetaDataReader.Create("AttrDataEntry"));
-
-            // ヘルパーメソッド
-            List<FieldValueHolder> GenerateContainer(List<FieldMetaData> metaData)
-            {
-                var fields = new List<FieldValueHolder>();
-                for (int i = 0; i < metaData.Count; i++)
-                {
-                    var fieldValue = 
-                        new FieldValueHolder(metaData[i], sharedData);
-                    fields.Add(fieldValue);
-                }
-                return fields;
-            }
+            // メタデータの読み込み
+            _headerMetaData = FieldMetaDataReader.Create("TilesetHeaderEntry");
+            _blockMetaData = FieldMetaDataReader.Create("BlockDataEntry");
+            _attrMetaData = FieldMetaDataReader.Create("AttrDataEntry");
 
             // 定数を計算
+            _headerEntryLength = _headerMetaData.Sum(m => new FieldValueHolder(m, sharedData).Lengths.EntryLength);
+            _blockDataEntryLength = _blockMetaData.Sum(m => new FieldValueHolder(m, sharedData).Lengths.EntryLength);
+            _blockAttrEntryLength = _attrMetaData.Sum(m => new FieldValueHolder(m, sharedData).Lengths.EntryLength);
+
             dynamic dynamicConfig = sharedData.Config;
             _baseHeaderOffset = dynamicConfig.TilesetHeaderBaseOffset;
-            _headerEntryLength = _headerFields.Sum(f => f.Lengths.EntryLength);
-            _blockDataEntryLength = _blockFields.Sum(f => f.Lengths.EntryLength);
-            _blockAttrEntryLength = _attrFields.Sum(f => f.Lengths.EntryLength);
         }
 
         public void ReadHeader(int tilesetNo, SharedData sharedData)
         {
             var offset = CalcOffset(tilesetNo);
 
+            // ヘッダー用フィールドを新規作成
+            var headerFields = _headerMetaData.Select(m => new FieldValueHolder(m, sharedData)).ToList();
             // 単一エントリーとして読み込む
-            HeaderEntry = new Entry(offset, 0, _headerFields);
+            HeaderEntry = new Entry(offset, 0, headerFields);
             _dynamicHeaderEntry = HeaderEntry;
 
             // タイルデータとパレットデータを読み込む
@@ -80,11 +65,11 @@ namespace PochiPochiEditorPlus._Managers
             PaletteData = LoadPalettes(sharedData);
 
             // ブロックデータを読み込む
-            BlockDataEntries =
-                LoadBlockEntries(_dynamicHeaderEntry.BlockDataTableOffset.GetData<int>(), _blockFields);
+            BlockDataEntries = 
+                LoadBlockEntries(_dynamicHeaderEntry.BlockDataTableOffset.GetData<int>(), _blockMetaData, sharedData);
             // ブロック属性データを読み込む
-            BlockAttrEntries =
-                LoadBlockEntries(_dynamicHeaderEntry.BlockAttrTableOffset.GetData<int>(), _attrFields);
+            BlockAttrEntries = 
+                LoadBlockEntries(_dynamicHeaderEntry.BlockAttrTableOffset.GetData<int>(), _attrMetaData, sharedData);
         }
 
         private byte[] LoadImage(SharedData sharedData)
@@ -158,13 +143,17 @@ namespace PochiPochiEditorPlus._Managers
             }
         }
 
-        private List<Entry> LoadBlockEntries(int tableOffset, List<FieldValueHolder> fields) 
+        private List<Entry> LoadBlockEntries(
+            int tableOffset, 
+            List<FieldMetaData> metaData, 
+            SharedData sharedData)
         {
             var blockCount = CalcBlockCount();
             var entries = new List<Entry>();
 
             for (int i = 0; i < blockCount; i++)
             {
+                var fields = metaData.Select(m => new FieldValueHolder(m, sharedData)).ToList();
                 entries.Add(new Entry(tableOffset, i, fields));
             }
 

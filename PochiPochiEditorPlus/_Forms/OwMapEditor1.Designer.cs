@@ -49,8 +49,8 @@ namespace PochiPochiEditorPlus._Forms
             this.grpTileSelector = new System.Windows.Forms.GroupBox();
             this.lblSelectTile = new System.Windows.Forms.Label();
             this.cmbTilePalette = new System.Windows.Forms.ComboBox();
-            this.chkSelectTileReverseV = new System.Windows.Forms.CheckBox();
-            this.chkSelectTileReverseH = new System.Windows.Forms.CheckBox();
+            this.chkSelectTileReverseY = new System.Windows.Forms.CheckBox();
+            this.chkSelectTileReverseX = new System.Windows.Forms.CheckBox();
             this.picSelectTile = new System.Windows.Forms.PictureBox();
             this.vsbTileView = new System.Windows.Forms.VScrollBar();
             this.pnlTileView = new System.Windows.Forms.Panel();
@@ -258,8 +258,8 @@ namespace PochiPochiEditorPlus._Forms
             // 
             this.grpTileSelector.Controls.Add(this.lblSelectTile);
             this.grpTileSelector.Controls.Add(this.cmbTilePalette);
-            this.grpTileSelector.Controls.Add(this.chkSelectTileReverseV);
-            this.grpTileSelector.Controls.Add(this.chkSelectTileReverseH);
+            this.grpTileSelector.Controls.Add(this.chkSelectTileReverseY);
+            this.grpTileSelector.Controls.Add(this.chkSelectTileReverseX);
             this.grpTileSelector.Controls.Add(this.picSelectTile);
             this.grpTileSelector.Controls.Add(this.vsbTileView);
             this.grpTileSelector.Controls.Add(this.pnlTileView);
@@ -292,27 +292,27 @@ namespace PochiPochiEditorPlus._Forms
             this.cmbTilePalette.Size = new System.Drawing.Size(114, 23);
             this.cmbTilePalette.TabIndex = 11;
             // 
-            // chkSelectTileReverseV
+            // chkSelectTileReverseY
             // 
-            this.chkSelectTileReverseV.AutoSize = true;
-            this.chkSelectTileReverseV.Location = new System.Drawing.Point(162, 66);
-            this.chkSelectTileReverseV.Margin = new System.Windows.Forms.Padding(0);
-            this.chkSelectTileReverseV.Name = "chkSelectTileReverseV";
-            this.chkSelectTileReverseV.Size = new System.Drawing.Size(74, 19);
-            this.chkSelectTileReverseV.TabIndex = 10;
-            this.chkSelectTileReverseV.Text = "上下反転";
-            this.chkSelectTileReverseV.UseVisualStyleBackColor = true;
+            this.chkSelectTileReverseY.AutoSize = true;
+            this.chkSelectTileReverseY.Location = new System.Drawing.Point(162, 66);
+            this.chkSelectTileReverseY.Margin = new System.Windows.Forms.Padding(0);
+            this.chkSelectTileReverseY.Name = "chkSelectTileReverseY";
+            this.chkSelectTileReverseY.Size = new System.Drawing.Size(74, 19);
+            this.chkSelectTileReverseY.TabIndex = 10;
+            this.chkSelectTileReverseY.Text = "上下反転";
+            this.chkSelectTileReverseY.UseVisualStyleBackColor = true;
             // 
-            // chkSelectTileReverseH
+            // chkSelectTileReverseX
             // 
-            this.chkSelectTileReverseH.AutoSize = true;
-            this.chkSelectTileReverseH.Location = new System.Drawing.Point(162, 42);
-            this.chkSelectTileReverseH.Margin = new System.Windows.Forms.Padding(0);
-            this.chkSelectTileReverseH.Name = "chkSelectTileReverseH";
-            this.chkSelectTileReverseH.Size = new System.Drawing.Size(74, 19);
-            this.chkSelectTileReverseH.TabIndex = 10;
-            this.chkSelectTileReverseH.Text = "左右反転";
-            this.chkSelectTileReverseH.UseVisualStyleBackColor = true;
+            this.chkSelectTileReverseX.AutoSize = true;
+            this.chkSelectTileReverseX.Location = new System.Drawing.Point(162, 42);
+            this.chkSelectTileReverseX.Margin = new System.Windows.Forms.Padding(0);
+            this.chkSelectTileReverseX.Name = "chkSelectTileReverseX";
+            this.chkSelectTileReverseX.Size = new System.Drawing.Size(74, 19);
+            this.chkSelectTileReverseX.TabIndex = 10;
+            this.chkSelectTileReverseX.Text = "左右反転";
+            this.chkSelectTileReverseX.UseVisualStyleBackColor = true;
             // 
             // picSelectTile
             // 
@@ -494,8 +494,8 @@ namespace PochiPochiEditorPlus._Forms
         private System.Windows.Forms.GroupBox grpTileSelector;
         private System.Windows.Forms.VScrollBar vsbTileView;
         private System.Windows.Forms.Panel pnlTileView;
-        private System.Windows.Forms.CheckBox chkSelectTileReverseV;
-        private System.Windows.Forms.CheckBox chkSelectTileReverseH;
+        private System.Windows.Forms.CheckBox chkSelectTileReverseY;
+        private System.Windows.Forms.CheckBox chkSelectTileReverseX;
         private System.Windows.Forms.PictureBox picSelectTile;
         private System.Windows.Forms.ComboBox cmbTilePalette;
         private System.Windows.Forms.GroupBox grpBlockDataAndAttr;
