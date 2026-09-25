@@ -24,12 +24,11 @@ namespace PochiPochiEditorPlus._Forms
         private dynamic _tilesetManager = null;
         // パネル描画用
         private LayerHolder<LayerNames> _layerHolder = null;
+        private enum LayerNames { Tileset }
         private LayerScroller _layerScroller = null;
         // UI制御用
         private int _currentTilesetNo = 0;
         private int _selectedTileIndex = 0;
-
-        private enum LayerNames{ Tileset }
 
         public TilesetEditor(SharedData sharedData, UndoManager undoManager)
         {
@@ -303,7 +302,6 @@ namespace PochiPochiEditorPlus._Forms
                 _layerHolder.SetGridVisible(false);
                 _layerHolder.SelectorLayer.ClearSelect();
                 _layerHolder.SetSelectorVisible(false);
-                pnlViewImage.Invalidate();
             }
 
             // タブページ

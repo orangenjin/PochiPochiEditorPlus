@@ -32,14 +32,9 @@ namespace PochiPochiEditorPlus._Forms
         private dynamic _tileset1Manager = null;
         private dynamic _tileset2Manager = null;
         // UI制御用
-        private LayerHolder<LayerNames> _layerLayers = null;
-
-        private enum LayerNames
-        {
-            Base,
-            Grid,
-            Select
-        }
+        private LayerHolder<LayerNames> _layerHolder = null;
+        private enum LayerNames { Tileset }
+        private LayerScroller _layerScroller = null;
 
         public OwMapEditor1(
             SharedData sharedData,
@@ -53,6 +48,13 @@ namespace PochiPochiEditorPlus._Forms
             _eventBinder = new EventBinder();
             _tileset1Manager = new TilesetManager(_sharedData);
             _tileset2Manager = new TilesetManager(_sharedData);
+            _layerHolder = new LayerHolder<LayerNames>(pnlTileView, _eventBinder);
+            _layerScroller = new LayerScroller(
+                pnlTileView,
+                null,
+                vsbTileView,
+                _layerHolder.Data,
+                _eventBinder);
 
             InitializeControls();
             InitializeEventHandlers();
@@ -62,6 +64,13 @@ namespace PochiPochiEditorPlus._Forms
 
         private void InitializeControls()
         {
+            // タイル画像パネルのダブルバッファリングを有効化
+            typeof(Control).GetProperty(
+                nameof(DoubleBuffered),
+                System.Reflection.BindingFlags.Instance
+                | System.Reflection.BindingFlags.NonPublic)
+                    ?.SetValue(pnlTileView, true, null);
+
             // 各コンボボックスにアイテムを追加
             CtrlHelper.LoadComboBoxFromFile(
                 (cmbPaletteType, "txt/tileset/TilesetPaletteype.txt"),
@@ -84,6 +93,27 @@ namespace PochiPochiEditorPlus._Forms
             _eventBinder.BindCustom(
                 () => CtrlHelper.AttachBorder(grpBlockDataAndAttr, picBlockDataImage),
                 () => CtrlHelper.DetachBorder(grpBlockDataAndAttr));
+
+            // パレット切り替え
+            _eventBinder.BindCtrl(
+                h => cmbTilePalette.SelectedIndexChanged += h,
+                h => cmbTilePalette.SelectedIndexChanged -= h,
+                (_, __) =>
+                {
+                    int palIndex = cmbTilePalette.SelectedIndex;
+                    if (palIndex < 0) return;
+
+                    // 画像レイヤーを取得
+                    var layer = _layerHolder.GetImageLayer(LayerNames.Tileset);
+                    if (layer == null) return;
+
+                    // パレットを更新
+                    byte[] palData = palIndex >= (int)TilesetManager.PaletteKind.Palette7to12
+                        ? _tileset2Manager.PaletteData[palIndex]
+                        : _tileset1Manager.PaletteData[palIndex];
+                    layer.ApplyPalette(palData);
+                    pnlTileView.Invalidate();
+                });
 
             // 解除タイミング指定
             _eventBinder.BindCtrl(
@@ -123,18 +153,25 @@ namespace PochiPochiEditorPlus._Forms
             }
         }
 
-        private void ChangeBlockTabState(bool value)
+        private void ChangeBlockTabState(bool state)
         {
+            // ブロックタブページ
             CtrlHelper.ResetControls(
                 tbpBlock,
                 includeSelf: false);
-
             CtrlHelper.SetControlsEnabled(
                 tbpBlock,
-                enabled: value,
+                enabled: state,
                 includeSelf: true);
 
-           // _panelLayers.SetImage(LayerNames.Base, null);
+            // タイル画像パネル
+            if (!state)
+            {
+                _layerHolder.SetLayerVisible(LayerNames.Tileset, false);
+                _layerHolder.SetGridVisible(false);
+                _layerHolder.SelectorLayer.ClearSelect();
+                _layerHolder.SetSelectorVisible(false);
+            }
         }
 
         /// <summary>
@@ -156,26 +193,40 @@ namespace PochiPochiEditorPlus._Forms
             Array.Copy(imgData1, 0, combinedImageData, 0, imgData1.Length);
             Array.Copy(imgData2, 0, combinedImageData, imgData1.Length, imgData2.Length);
 
-            // 各値の計算
+            // 幅と高さの計算
             int width = Constants.TilesetImageWidth;
             int bytesPerTileRow = (width * Constants.TileSize) / Constants.PixelsPerByte;
             int tileRows = (combinedImageData.Length + bytesPerTileRow - 1) / bytesPerTileRow;
             int height = tileRows * Constants.TileSize;
 
-            try
-            {
-                Bitmap image = ImageHelper.CreateBitmap(
-                    combinedImageData,
-                    palData,
-                    width,
-                    height,
-                    showBackColor: true);
-                // _panelLayers.SetImage(LayerNames.Base, image);
-            }
-            catch
-            {
-                // _panelLayers.SetImage(LayerNames.Base, null);
-            }
+            // 有効なタイル数を計算
+            int totalTiles = _tileset1Manager.GetTotalTileCount() + _tileset2Manager.GetTotalTileCount();
+
+            // レイヤー初期設定
+            _layerHolder.Initialize(
+                gridSize: Constants.TileSize,
+                scale: Constants.DefaultScale,
+                validItemCount: totalTiles);
+
+            // 画像の設定
+            _layerHolder.SetImageLayer(
+                LayerNames.Tileset,
+                combinedImageData,
+                palData,
+                width,
+                height);
+            _layerHolder.SetLayerVisible(LayerNames.Tileset, true);
+
+            // グリッドの設定
+            _layerHolder.SetGridVisible(true);
+
+            // 選択範囲の設定
+            var maxLength = Constants.DefaultScale;
+            _layerHolder.SelectorLayer.MaxSelectSize = new Size(maxLength, maxLength);
+            _layerHolder.SetSelectorVisible(true);
+
+            // スクロールバーの設定
+            _layerScroller.UpdateScrollRange();
         }
 
         private void LoadCollTabPage()
@@ -186,14 +237,6 @@ namespace PochiPochiEditorPlus._Forms
         private void LoadEventTabPage()
         {
 
-        }
-
-
-
-        private void test()
-        {
-            // var entry = _groupData._mapHeaderEntry[3][0];
-            //textBox1.Text = entry.MapFooterOffset.GetData<int>().ToString("X8");
         }
 
         /// <summary>
