@@ -3,8 +3,9 @@ using System.Drawing;
 using System.Windows.Forms;
 using PochiPochiEditorPlus._Helpers;
 using PochiPochiEditorPlus._Managers;
-using PochiPochiEditorPlus._Managers._LayerManager;
+using PochiPochiEditorPlus._Managers._FieldManager;
 using PochiPochiEditorPlus._Managers._FormGroupManager;
+using PochiPochiEditorPlus._Managers._LayerManager;
 using PochiPochiEditorPlus._Managers._TilesetManager;
 using PochiPochiEditorPlus._Utilities;
 
@@ -223,9 +224,10 @@ namespace PochiPochiEditorPlus._Forms
 
 
             // test
-            var bytes = _tileset1Manager.BlockDataEntries[1].LowerTopLeft.GetData<int>();
+            var data = _tileset1Manager.BlockDataEntries[6].LowerTopLeft
+                .GetData<TilesetBlockData>(converter: (Func<FieldValueHolder, TilesetBlockData>)TilesetDataConv.BytesToTilesetBlockData);
 
-            txtBlockIndex.Text = bytes.ToString("X8");
+            txtBlockIndex.Text = data.PaletteIndex.ToString("X8");
         }
 
         private void LoadCollTabPage()

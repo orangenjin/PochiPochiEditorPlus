@@ -31,32 +31,6 @@ namespace PochiPochiEditorPlus._Managers._TilesetManager
             ReverseY = reverseY;
         }
 
-        /// <summary>
-        /// バイト配列をブロックデータに変換する。
-        /// </summary>
-        public static TilesetBlockData BytesToTilesetBlockData(
-            FieldValueHolder fieldValue,
-            int argIndex,
-            CharmapManager charmap)
-        {
-            var  rawValue = (ushort)IoHelper.ReadBytesAsInt(
-                fieldValue.BinaryData, 
-                fieldValue.Offset, 
-                Constants.UShortSize);
-
-            // ビット演算で各データを抽出
-            int tileIndex = rawValue & 0x3FF;          // Bit 0-9
-            bool reverseX = (rawValue & 0x400) != 0;   // Bit 10
-            bool reverseY = (rawValue & 0x800) != 0;   // Bit 11
-            int paletteIndex = (rawValue >> 12) & 0xF; // Bit 12-15
-
-            // クラスの生成[cite: 3]
-            return new TilesetBlockData(
-                tileIndex, 
-                paletteIndex,
-                reverseX,
-                reverseY);
-        }
 
 
     }

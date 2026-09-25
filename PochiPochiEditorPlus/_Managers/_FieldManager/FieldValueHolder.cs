@@ -119,11 +119,11 @@ namespace PochiPochiEditorPlus._Managers._FieldManager
         /// </summary>
         public T GetData<T>(
             int argIndex = 0,
-            Func<FieldValueHolder, int, CharmapManager, T> converter = null)
+            Func<FieldValueHolder, T> converter = null)
         {
             // 通常の型Tで対応できない特殊処理があれば渡す
             return converter != null
-                ? converter(this, argIndex, _sharedData.Charmap)
+                ? converter(this)
                 : FieldValueConv.BytesToModelConv<T>(this, argIndex, _sharedData.Charmap);
         }
 
@@ -133,11 +133,11 @@ namespace PochiPochiEditorPlus._Managers._FieldManager
         public void SetData<T>(
             T rawData,
             int argIndex = 0,
-            Func<T, FieldValueHolder, int, CharmapManager, byte[]> converter = null)
+            Func<T, FieldValueHolder, byte[]> converter = null)
         {
             // 通常の型Tで対応できない特殊処理があれば渡す
             byte[] newBytes = converter != null
-                    ? converter(rawData, this, argIndex, _sharedData.Charmap)
+                    ? converter(rawData, this)
                     : FieldValueConv.ModelToBytesConv(rawData, this, argIndex, _sharedData.Charmap);
 
             // 新しいbyte[]を代入

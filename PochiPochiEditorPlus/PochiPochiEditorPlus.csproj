@@ -99,6 +99,7 @@
     <Compile Include="_Managers\_LayerManager\LayerDefinitions.cs" />
     <Compile Include="_Managers\RefDataManager.cs" />
     <Compile Include="_Managers\_TilesetManager\TilesetBlockData.cs" />
+    <Compile Include="_Managers\_TilesetManager\TilesetDataConv.cs" />
     <Compile Include="_Managers\_TilesetManager\TilesetHolder.cs" />
     <Compile Include="_Managers\_CommandManager\CombineCommands.cs" />
     <Compile Include="_Managers\_CommandManager\FieldValueChangeCommand.cs" />
