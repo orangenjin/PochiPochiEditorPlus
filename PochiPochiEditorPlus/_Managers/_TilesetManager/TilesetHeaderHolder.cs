@@ -9,7 +9,7 @@ namespace PochiPochiEditorPlus._Managers._TilesetManager
 {
     public sealed class TilesetHeaderHolder
     {
-        public Entry HeaderEntry { get; set; }
+        public dynamic HeaderEntry { get; set; }
         public byte[] ImageData { get; set; }
         public List<byte[]> PaletteData { get; set; }
         public List<Entry> BlockDataEntries { get; set; }
@@ -24,9 +24,6 @@ namespace PochiPochiEditorPlus._Managers._TilesetManager
         private int _headerEntryLength = 0;
         private int _blockDataEntryLength = 0;
         private int _blockAttrEntryLength = 0;
-        // 簡易アクセス用
-        // 一応プロパティはdynamicにしないようにする
-        private dynamic _dynamicHeaderEntry = null;
 
         public enum PaletteKind
         {
@@ -58,7 +55,6 @@ namespace PochiPochiEditorPlus._Managers._TilesetManager
             var headerFields = _headerMetaData.Select(m => new FieldValueHolder(m, sharedData)).ToList();
             // 単一エントリーとして読み込む
             HeaderEntry = new Entry(offset, 0, headerFields);
-            _dynamicHeaderEntry = HeaderEntry;
 
             // タイルデータとパレットデータを読み込む
             ImageData = LoadImage(sharedData);
@@ -66,20 +62,20 @@ namespace PochiPochiEditorPlus._Managers._TilesetManager
 
             // ブロックデータを読み込む
             BlockDataEntries = 
-                LoadBlockEntries(_dynamicHeaderEntry.BlockDataTableOffset.GetData<int>(), _blockMetaData, sharedData);
+                LoadBlockEntries(HeaderEntry.BlockDataTableOffset.GetData<int>(), _blockMetaData, sharedData);
             // ブロック属性データを読み込む
             BlockAttrEntries = 
-                LoadBlockEntries(_dynamicHeaderEntry.BlockAttrTableOffset.GetData<int>(), _attrMetaData, sharedData);
+                LoadBlockEntries(HeaderEntry.BlockAttrTableOffset.GetData<int>(), _attrMetaData, sharedData);
         }
 
         private byte[] LoadImage(SharedData sharedData)
         {
             try
             {
-                var imageOffset = _dynamicHeaderEntry.ImageOffset.GetData<int>();
+                var imageOffset = HeaderEntry.ImageOffset.GetData<int>();
 
                 // 圧縮の場合
-                if (Convert.ToBoolean(_dynamicHeaderEntry.ImageCompType.GetData<int>()))
+                if (Convert.ToBoolean(HeaderEntry.ImageCompType.GetData<int>()))
                 {
                     byte[] decompressed = 
                         ImageHelper.DecompressLZ77(sharedData.RomData, imageOffset);
@@ -88,20 +84,20 @@ namespace PochiPochiEditorPlus._Managers._TilesetManager
 
                 // 非圧縮の場合
                 var maxPixelCount = 
-                    (_dynamicHeaderEntry.PaletteType.GetData<int>() == (int)PaletteKind.Palette0to6)
+                    (HeaderEntry.PaletteType.GetData<int>() == (int)PaletteKind.Palette0to6)
                         ? Constants.TilesetImageWidth * Constants.Tileset1ImageHeight
                         : Constants.TilesetImageWidth * Constants.Tileset2ImageMaxHeight;
                 var maxByteLength = maxPixelCount / Constants.PixelsPerByte;
 
                 // バイト数を確定させる
                 int byteLength;
-                if (_dynamicHeaderEntry.PaletteType.GetData<int>() == (int)PaletteKind.Palette0to6)
+                if (HeaderEntry.PaletteType.GetData<int>() == (int)PaletteKind.Palette0to6)
                 {
                     byteLength = maxByteLength;
                 }
                 else
                 {
-                    var paletteOffset = _dynamicHeaderEntry.PaletteOffset.GetData<int>();
+                    var paletteOffset = HeaderEntry.PaletteOffset.GetData<int>();
                     // 画像データとパレットデータが順に並んでいると想定
                     var expectedBytes = paletteOffset - imageOffset;
                     byteLength = Math.Min(expectedBytes, maxByteLength);
@@ -125,7 +121,7 @@ namespace PochiPochiEditorPlus._Managers._TilesetManager
 
             try
             {
-                var basePaletteOffset = _dynamicHeaderEntry.PaletteOffset.GetData<int>();
+                var basePaletteOffset = HeaderEntry.PaletteOffset.GetData<int>();
                 for (int i = 0; i < Constants.PaletteEntryCount; i++)
                 {
                     var currentPos = basePaletteOffset + i * paletteDataLength;
@@ -162,15 +158,15 @@ namespace PochiPochiEditorPlus._Managers._TilesetManager
             // ブロック数を計算する
             int CalcBlockCount()
             {
-                if (_dynamicHeaderEntry.PaletteType.GetData<int>() == (int)PaletteKind.Palette0to6)
+                if (HeaderEntry.PaletteType.GetData<int>() == (int)PaletteKind.Palette0to6)
                 {
                     return Constants.Tileset1BlockAmount;
                 }
                 else
                 {
                     // ブロックデータとブロック属性が順に並んでいると想定
-                    var blockDataTableOffset = _dynamicHeaderEntry.BlockDataTableOffset.GetData<int>();
-                    var blockAttrTableOffset = _dynamicHeaderEntry.BlockAttrTableOffset.GetData<int>();
+                    var blockDataTableOffset = HeaderEntry.BlockDataTableOffset.GetData<int>();
+                    var blockAttrTableOffset = HeaderEntry.BlockAttrTableOffset.GetData<int>();
                     var expectedCount = (blockAttrTableOffset - blockDataTableOffset) / _blockDataEntryLength;
                     return Math.Min(expectedCount, Constants.Tileset2BlockMaxAmount);
                 }
