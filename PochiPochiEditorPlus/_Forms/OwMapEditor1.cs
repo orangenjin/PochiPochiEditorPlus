@@ -281,8 +281,8 @@ namespace PochiPochiEditorPlus._Forms
             }
 
             // 生成したカスタムレイヤーを登録
-            _blockLayerHolder.AddLayer(LayerNames.BlockLower, lowerBlockLayer);
-            _blockLayerHolder.AddLayer(LayerNames.BlockUpper, upperBlockLayer);
+            _blockLayerHolder.AddCustomLayer(LayerNames.BlockLower, lowerBlockLayer);
+            _blockLayerHolder.AddCustomLayer(LayerNames.BlockUpper, upperBlockLayer);
 
             // 画像レイヤーを表示する
             _blockLayerHolder.SetLayerVisible(LayerNames.BlockLower, true);
@@ -404,14 +404,22 @@ namespace PochiPochiEditorPlus._Forms
                 enabled: state,
                 includeSelf: true,
                 excludeNames: new string[] { nameof(cmbPaletteType) });
-
             // タイル画像パネル
             if (!state)
             {
-                _tileLayerHolder.SetLayerVisible(LayerNames.Tile, false);
-                _tileLayerHolder.SetGridVisible(false);
+                _tileLayerHolder.SetLayerVisible(LayerNames.Tile, state);
+                _tileLayerHolder.SetGridVisible(state);
                 _tileLayerHolder.SelectorLayer.ClearSelect();
-                _tileLayerHolder.SetSelectorVisible(false);
+                _tileLayerHolder.SetSelectorVisible(state);
+            }
+            // ブロック画像パネル
+            if (!state)
+            {
+                _blockLayerHolder.SetLayerVisible(LayerNames.BlockLower, state);
+                _blockLayerHolder.SetLayerVisible(LayerNames.BlockUpper, state);
+                _blockLayerHolder.SetGridVisible(state);
+                _blockLayerHolder.SelectorLayer.ClearSelect();
+                _blockLayerHolder.SetSelectorVisible(state);
             }
         }
 

@@ -73,7 +73,7 @@ namespace PochiPochiEditorPlus._Managers._LayerManager
         /// <summary>
         /// 特殊レイヤーを登録する。
         /// </summary>
-        public void AddLayer(TEnum key, LayerBase layer)
+        public void AddCustomLayer(TEnum key, LayerBase layer)
         {
             Layers[key] = layer;
             _panel.Invalidate();
