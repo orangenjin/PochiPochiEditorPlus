@@ -33,7 +33,9 @@ namespace PochiPochiEditorPlus._Managers._LayerManager
             int index = gridY * _layerData.Columns + gridX;
 
             _blockImages[index]?.Dispose();
-            _blockImages[index] = (Bitmap)image.Clone();
+            _blockImages[index] = image != null 
+                ? (Bitmap)image.Clone()
+                : null;
         }
 
         public Bitmap GetBlockImage(int gridX, int gridY)
@@ -71,7 +73,10 @@ namespace PochiPochiEditorPlus._Managers._LayerManager
         {
             if (_blockImages != null)
             {
-                foreach (var img in _blockImages) img?.Dispose();
+                foreach (var img in _blockImages)
+                {
+                    img?.Dispose();
+                }
                 _blockImages = null;
             }
         }
