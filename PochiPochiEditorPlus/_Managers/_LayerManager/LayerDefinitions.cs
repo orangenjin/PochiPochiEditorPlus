@@ -29,13 +29,6 @@ namespace PochiPochiEditorPlus._Managers._LayerManager
         /// </summary>
         public void CalcLayout(int panelWidth)
         {
-            if (ScaledGridSize <= 0)
-            {
-                Columns = 0;
-                Rows = 0;
-                return;
-            }
-
             Columns = panelWidth / ScaledGridSize;
             Rows = (ValidItemCount + Columns - 1) / Columns;
         }
@@ -47,7 +40,7 @@ namespace PochiPochiEditorPlus._Managers._LayerManager
         {
             if (gridX < 0 || gridX >= Columns || gridY < 0 || gridY >= Rows) return false;
             int index = gridY * Columns + gridX;
-            return index < ValidItemCount; // 有効アイテム範囲内かどうか
+            return index < ValidItemCount;
         }
 
         /// <summary>
@@ -59,7 +52,7 @@ namespace PochiPochiEditorPlus._Managers._LayerManager
             int rawX = mouseLoc.X + offset.X;
             int rawY = mouseLoc.Y + offset.Y;
 
-            // 負の座標を丸める
+            // 負の座標を修正
             int x = rawX < 0 
                 ? (rawX - ScaledGridSize + 1) / ScaledGridSize 
                 : rawX / ScaledGridSize;
@@ -71,18 +64,21 @@ namespace PochiPochiEditorPlus._Managers._LayerManager
         }
     }
 
-    public abstract class LayerBase
+    /// <summary>
+    /// 各レイヤーはこれを継承する。
+    /// </summary>
+    public abstract class LayerBase : IDisposable
     {
         // 表示/非表示設定
         public bool Visible { get; set; }
 
-        // レイヤー基礎情報
+        // 共通のレイヤーデータを内部的に保持
         protected LayerData _layerData = null;
 
         public abstract void Draw(Graphics gfx);
-
         public virtual void OnMouseDown(MouseEventArgs e) { }
         public virtual void OnMouseMove(MouseEventArgs e) { }
         public virtual void OnMouseUp(MouseEventArgs e) { }
+        public virtual void Dispose() { }
     }
 }
