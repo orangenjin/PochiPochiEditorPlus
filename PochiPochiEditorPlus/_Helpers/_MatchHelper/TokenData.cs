@@ -4,11 +4,8 @@
     {
         public TokenType Type { get; }
         public IToken Def { get; }
-        public byte[] Value { get; set; } // 後入れ
 
-        private TokenData(
-            TokenType type,
-            IToken def)
+        private TokenData(TokenType type, IToken def)
         {
             Type = type;
             Def = def;
@@ -20,8 +17,7 @@
             bool isSigned = false, 
             params long[] exactValues)
         {
-            var tokenDef = 
-                new ExactToken(length, isSigned, exactValues);
+            var tokenDef = new ExactToken(length, isSigned, exactValues);
             return new TokenData(TokenType.Exact, tokenDef);
         }
 
@@ -38,8 +34,7 @@
             int length,
             bool isSigned = false)
         {
-            var tokenDef =
-                new RangeToken(min, max, length, isSigned);
+            var tokenDef = new RangeToken(min, max, length, isSigned);
             return new TokenData(TokenType.Range, tokenDef);
         }
 

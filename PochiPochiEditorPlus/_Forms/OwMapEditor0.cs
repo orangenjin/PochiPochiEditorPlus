@@ -112,8 +112,7 @@ namespace PochiPochiEditorPlus._Forms
                     _sharedData.RomData,
                     new byte[] { Constants.StrTerminatorByte },
                     mapNameOffset,
-                    mapNameAllowedLength,
-                    1);
+                    mapNameAllowedLength);
 
                 // 終端文字が無ければ終了
                 if (!IsValid) break;

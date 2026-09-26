@@ -43,10 +43,10 @@ namespace PochiPochiEditorPlus._Helpers._MatchHelper
 
         public bool IsValid(byte[] data, int offset)
         {
-            long extractedvalue = IoHelper.ReadBytesAsInt(
-                data: data,
-                offset: offset,
-                length: Length,
+            long value = IoHelper.ReadBytesAsLong(
+                data,
+                offset,
+                Length,
                 isLittleEndian: true,
                 isSigned: IsSigned);
 
@@ -55,10 +55,12 @@ namespace PochiPochiEditorPlus._Helpers._MatchHelper
         }
     }
 
+    /// <summary>
+    /// ポインタとして読み取れるかどうかを判定する。
+    /// </summary>
     public sealed class PointerToken : IToken
     {
-        // 再帰的マッチングのためオフセット保持
-        public int Offset { get; set; }
+        public int Offset { get; private set; }
         public int Length { get; }
 
         public PointerToken()
@@ -72,21 +74,22 @@ namespace PochiPochiEditorPlus._Helpers._MatchHelper
             var result = IoHelper.TryReadPtr(
                 data, 
                 offset, 
-                out int resultOffset);
+                out int value);
 
             // 結果を格納
-            Offset = resultOffset;
+            Offset = value;
             return result;
         }
 
         /// <summary>
         /// nullポインタかどうかを判定する。
         /// </summary>
-        public bool IsNullPointer => Offset == Constants.InvalidValue;
+        public bool IsNullPointer 
+            => Offset == Constants.InvalidValue;
     }
 
     /// <summary>
-    /// Range型、最小値と最大値を設定する。
+    /// 最小値と最大値を設定し、判定する。
     /// </summary>
     public sealed class RangeToken : IToken
     {
@@ -110,7 +113,7 @@ namespace PochiPochiEditorPlus._Helpers._MatchHelper
         public bool IsValid(byte[] data, int offset)
         {
             // リトルエンディアンで読み取る
-            long value = IoHelper.ReadBytesAsInt(
+            long value = IoHelper.ReadBytesAsLong(
                 data,
                 offset,
                 Length,
@@ -123,7 +126,7 @@ namespace PochiPochiEditorPlus._Helpers._MatchHelper
     }
 
     /// <summary>
-    /// 何でもtrueを返す。
+    /// 何でもtrueを返す。長さは任意指定可能。
     /// </summary>
     public sealed class WildcardToken : IToken
     {

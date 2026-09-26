@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using PochiPochiEditorPlus._Utilities;
 
 namespace PochiPochiEditorPlus._Helpers._MatchHelper
@@ -42,24 +41,6 @@ namespace PochiPochiEditorPlus._Helpers._MatchHelper
                 currentPos += length;
             }
 
-            // 判定成功時の場合
-            currentPos = offset;
-            for (int i = 0; i < tokens.Count; i++)
-            {
-                var token = tokens[i];
-                int length = token.GetLength();
-
-                token.Value = new byte[length];
-                Array.Copy(
-                    data,
-                    currentPos,
-                    token.Value,
-                    0,
-                    length);
-
-                currentPos += length;
-            }
-
             return true;
         }
 
@@ -80,7 +61,7 @@ namespace PochiPochiEditorPlus._Helpers._MatchHelper
 
             while (currentPos + patternLength <= data.Length)
             {
-                // falseが戻るまで続ける
+                // falseが出るまで続ける
                 if (!TryMatch(tokens, data, currentPos, allowNullPointer)) break;
 
                 count++;
@@ -91,7 +72,22 @@ namespace PochiPochiEditorPlus._Helpers._MatchHelper
         }
 
         /// <summary>
-        /// 終端文字とパディング文字があるかどうかを判定する。
+        /// TokenDataの長さを計算する。
+        /// </summary>
+        public static int GetPatternLength(List<TokenData> tokens)
+        {
+            int length = 0;
+            for (int i = 0; i < tokens.Count; i++)
+            {
+                length += tokens[i].GetLength();
+            }
+
+            return length;
+        }
+
+        /// <summary>
+        /// 終端文字(1文字以上)とパディング文字(0文字以上)があるかどうかを判定する。
+        /// つまり、テキスト文字列かどうかを確認する。
         /// </summary>
         public static bool TryCheck(
             byte[] data,
@@ -100,7 +96,7 @@ namespace PochiPochiEditorPlus._Helpers._MatchHelper
             byte paddingByte = Constants.PaddingByte,
             int offset = 0)
         {
-            // 探索開始位置を計算
+            // 後方から確認するための探索開始位置を計算
             int endPos = offset + entryLength - 1;
             int currentPos = endPos;
 
@@ -122,9 +118,19 @@ namespace PochiPochiEditorPlus._Helpers._MatchHelper
         }
 
         /// <summary>
+        /// 無効なバイト文字を定義する。
+        /// </summary>
+        private static HashSet<byte> InvalidBytes = new HashSet<byte>()
+        {
+            Constants.StrTerminatorByte,
+            Constants.PaddingByte,
+            Constants.StrNewlineByte
+        };
+
+        /// <summary>
         /// 終端文字とパディング文字で終わるエントリが連続する個数を取得する。
         /// </summary>
-        public static int TryCheckByTerminator(
+        public static int TryCountByTerminator(
             byte[] data,
             int entryLength,
             int baseOffset = 0,
@@ -147,14 +153,14 @@ namespace PochiPochiEditorPlus._Helpers._MatchHelper
         }
 
         /// <summary>
-        /// 特定のバイト配列が指定した個数分存在するかを検証する。
+        /// 特定のバイト配列が指定した個数分以上存在するかを検証する。
         /// </summary>
         public static bool TrySearch(
             byte[] data,
             byte[] pattern,
             int offset,
             int length,
-            int expectedCount)
+            int expectedCount = 1)
         {
             // 探索の終了位置を計算
             int endPos = offset + length;
@@ -193,29 +199,5 @@ namespace PochiPochiEditorPlus._Helpers._MatchHelper
             // カウントが引数以上かを判定
             return count >= expectedCount;
         }
-
-        /// <summary>
-        /// TokenDataの長さを計算する。
-        /// </summary>
-        public static int GetPatternLength(List<TokenData> tokens)
-        {
-            int length = 0;
-            for (int i = 0; i < tokens.Count; i++)
-            {
-                length += tokens[i].GetLength();
-            }
-
-            return length;
-        }
-
-        /// <summary>
-        /// 無効なバイト文字を定義する。
-        /// </summary>
-        private static HashSet<byte> InvalidBytes = new HashSet<byte>()
-        {
-            Constants.StrTerminatorByte,
-            Constants.PaddingByte,
-            Constants.StrNewlineByte
-        };
     }
 }
