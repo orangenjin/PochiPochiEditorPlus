@@ -14,7 +14,7 @@ namespace PochiPochiEditorPlus._Managers._LayerManager
         public int ImageWidth { get; set; }
         public int ImageHeight { get; set; }
 
-        // パレット切り替え時のために保持
+        // パレット切り替えのために保持
         private Bitmap _cachedBitmap = null;
 
         public ImageLayer(LayerData layerData)
@@ -68,24 +68,7 @@ namespace PochiPochiEditorPlus._Managers._LayerManager
         }
 
         /// <summary>
-        /// ここで拡大率を考慮して、画像を表示する。
-        /// </summary>
-        public override void Draw(Graphics gfx)
-        {
-            if (_cachedBitmap == null) return;
-
-            int scaledWidth = _cachedBitmap.Width * _layerData.Scale;
-            int scaledHeight = _cachedBitmap.Height * _layerData.Scale;
-
-            gfx.DrawImage(
-                _cachedBitmap,
-                new Rectangle(0, 0, scaledWidth, scaledHeight),
-                new Rectangle(0, 0, _cachedBitmap.Width, _cachedBitmap.Height),
-                GraphicsUnit.Pixel);
-        }
-
-        /// <summary>
-        /// GridSize単位で、指定したマスの画像データを抽出する。
+        /// 指定したマスの画像データ(バイト配列)を抽出する。
         /// </summary>
         public byte[] ExtractImageDataAtGrid(int gridX, int gridY)
         {
@@ -96,7 +79,7 @@ namespace PochiPochiEditorPlus._Managers._LayerManager
             int tilesPerGridX = _layerData.GridSize / Constants.TileSize;
             int tilesPerGridY = _layerData.GridSize / Constants.TileSize;
 
-            var extractedBytes = 
+            var extractedBytes =
                 new List<byte>(tilesPerGridX * tilesPerGridY * Constants.BytesPerTile);
             int totalTilesX = ImageWidth / Constants.TileSize;
 
@@ -123,6 +106,23 @@ namespace PochiPochiEditorPlus._Managers._LayerManager
             }
 
             return extractedBytes.ToArray();
+        }
+
+        /// <summary>
+        /// 拡大率を考慮して、画像を表示する。
+        /// </summary>
+        public override void Draw(Graphics gfx)
+        {
+            if (_cachedBitmap == null) return;
+
+            int scaledWidth = _cachedBitmap.Width * _layerData.Scale;
+            int scaledHeight = _cachedBitmap.Height * _layerData.Scale;
+
+            gfx.DrawImage(
+                _cachedBitmap,
+                new Rectangle(0, 0, scaledWidth, scaledHeight),
+                new Rectangle(0, 0, _cachedBitmap.Width, _cachedBitmap.Height),
+                GraphicsUnit.Pixel);
         }
     }
 }

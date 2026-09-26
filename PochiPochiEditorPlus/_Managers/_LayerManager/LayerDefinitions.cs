@@ -75,6 +75,12 @@ namespace PochiPochiEditorPlus._Managers._LayerManager
         // 共通のレイヤーデータを内部的に保持
         protected LayerData _layerData = null;
 
+        protected LayerBase(bool visible = true)
+        {
+            // 初期設定では表示する
+            Visible = visible;
+        }
+
         public abstract void Draw(Graphics gfx);
         public virtual void OnMouseDown(MouseEventArgs e) { }
         public virtual void OnMouseMove(MouseEventArgs e) { }
