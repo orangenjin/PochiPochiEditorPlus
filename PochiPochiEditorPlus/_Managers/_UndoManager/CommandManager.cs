@@ -3,19 +3,20 @@ using System.Collections.Generic;
 
 namespace PochiPochiEditorPlus._Managers
 {
-    public sealed class UndoManager
+    public sealed class CommandManager
     {
-        private List<ICommand> _history = new List<ICommand>();
-        private int _currentIndex = 0;
+        public EventHandler StateChanged { get; set; } // UndoとRedoの発生判定
+        public List<ICommand> History { get; }
+        public int CurrentIndex { get; private set; }
 
-        // Undo, Redoの発生判定
-        public event EventHandler StateChanged = null;
+        public CommandManager()
+        {
+            History = new List<ICommand>();
+        }
 
-        // 公開用
-        public List<ICommand> History => _history;
-        public int CurrentIndex => _currentIndex;
-        public bool CanUndo => _currentIndex > 0;
-        public bool CanRedo => _currentIndex < _history.Count;
+        // 状態確認用
+        public bool CanUndo => CurrentIndex > 0;
+        public bool CanRedo => CurrentIndex < History.Count;
 
         public void PushCommand(ICommand command)
         {
@@ -23,15 +24,15 @@ namespace PochiPochiEditorPlus._Managers
             {
                 // Undo済みの位置から新しい操作を行った場合
                 // そこから先のRedo履歴は破棄
-                if (_currentIndex < _history.Count)
+                if (CurrentIndex < History.Count)
                 {
-                    _history.RemoveRange(
-                        _currentIndex,
-                        _history.Count - _currentIndex);
+                    History.RemoveRange(
+                        CurrentIndex,
+                        History.Count - CurrentIndex);
                 }
 
-                _history.Add(command);
-                _currentIndex++;
+                History.Add(command);
+                CurrentIndex++;
             });
         }
 
@@ -41,8 +42,8 @@ namespace PochiPochiEditorPlus._Managers
 
             ExecuteAndNotify(() =>
             {
-                _currentIndex--;
-                _history[_currentIndex].Undo();
+                CurrentIndex--;
+                History[CurrentIndex].Undo();
             });
         }
 
@@ -52,8 +53,8 @@ namespace PochiPochiEditorPlus._Managers
 
             ExecuteAndNotify(() =>
             {
-                _history[_currentIndex].Redo();
-                _currentIndex++;
+                History[CurrentIndex].Redo();
+                CurrentIndex++;
             });
         }
 
@@ -71,12 +72,12 @@ namespace PochiPochiEditorPlus._Managers
         /// </summary>
         public void MoveTo(int targetIndex)
         {
-            while (_currentIndex > targetIndex)
+            while (CurrentIndex > targetIndex)
             {
                 Undo();
             }
 
-            while (_currentIndex < targetIndex)
+            while (CurrentIndex < targetIndex)
             {
                 Redo();
             }
@@ -89,8 +90,8 @@ namespace PochiPochiEditorPlus._Managers
         {
             ExecuteAndNotify(() =>
             {
-                _history.Clear();
-                _currentIndex = 0;
+                History.Clear();
+                CurrentIndex = 0;
             });
         }
     }

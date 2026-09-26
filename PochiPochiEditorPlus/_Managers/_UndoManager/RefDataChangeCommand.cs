@@ -5,11 +5,11 @@
         private RefDataManager _refData = null;
 
         // RefDataの変更前
-        private int _oldOffset = default;
+        private int _oldOffset = 0;
         private byte[] _oldData = null;
 
         // RefDataの変更後
-        private int _newOffset = default;
+        private int _newOffset = 0;
         private byte[] _newData = null;
 
         // newOffsetに元々存在していたデータ
