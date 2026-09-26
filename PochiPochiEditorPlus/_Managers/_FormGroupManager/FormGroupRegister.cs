@@ -3,16 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
+using PochiPochiEditorPlus._Managers._CommandManager;
 using PochiPochiEditorPlus._Utilities;
 
 namespace PochiPochiEditorPlus._Managers._FormGroupManager
 {
     public sealed class FormGroupRegister
     {
-        // フォームグループ内でのデータのやり取り用
-        public FormGroupData GroupData { get; set; }
-        // メイン画面のUI状態更新用
-        public EventHandler Closed { get; set; }
+        public FormGroupData GroupData { get; set; } // グループ内データのやり取り用
+        public EventHandler Closed { get; set; } // メイン画面のUI状態更新用
 
         private Form _ownerForm = null;
         private List<Form> _forms = null;
@@ -21,7 +20,7 @@ namespace PochiPochiEditorPlus._Managers._FormGroupManager
             Form ownerForm,
             FormGroup group,
             SharedData sharedData,
-            UndoManager undoManager)
+            CommandManager commandManager)
         {
             _ownerForm = ownerForm;
             _forms = new List<Form>();
@@ -50,8 +49,8 @@ namespace PochiPochiEditorPlus._Managers._FormGroupManager
             foreach (var info in formInfos)
             {
                 var form = GroupData != null
-                    ? (Form)Activator.CreateInstance(info.Type, sharedData, undoManager, GroupData)
-                    : (Form)Activator.CreateInstance(info.Type, sharedData, undoManager);
+                    ? (Form)Activator.CreateInstance(info.Type, sharedData, commandManager, GroupData)
+                    : (Form)Activator.CreateInstance(info.Type, sharedData, commandManager);
 
                 form.FormClosed += SingleForm_FormClosed;
                 _forms.Add(form);

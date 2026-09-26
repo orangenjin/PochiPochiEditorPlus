@@ -21,7 +21,7 @@ namespace PochiPochiEditorPlus._Managers._TilesetManager
         public static BlockTileData BytesToBlockLayerData(
             FieldValueHolder fieldValue)
         {
-            var byteValue = (ushort)IoHelper.ReadBytesAsInt(
+            var byteValue = (ushort)IoHelper.ReadBytesAsLong(
                 fieldValue.BinaryData,
                 0,
                 fieldValue.Lengths.EntryLength);
@@ -66,7 +66,7 @@ namespace PochiPochiEditorPlus._Managers._TilesetManager
 
             // 戻り値用に整形
             byte[] result = new byte[fieldValue.Lengths.EntryLength];
-            IoHelper.WriteIntAsBytes(
+            IoHelper.WriteLongAsBytes(
                 result,
                 0,
                 byteValue,

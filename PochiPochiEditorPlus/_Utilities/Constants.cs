@@ -58,8 +58,8 @@
         public const int TilesetImageWidth = 128;
         public const int Tileset1ImageHeight = 320;
         public const int Tileset2ImageMaxHeight = 192;
-        public const int Tileset1BlockAmount = Tileset1ImageHeight * Constants.PixelsPerByte;
-        public const int Tileset2BlockMaxAmount = Tileset2ImageMaxHeight * Constants.PixelsPerByte;
+        public const int Tileset1BlockAmount = Tileset1ImageHeight * PixelsPerByte;
+        public const int Tileset2BlockMaxAmount = Tileset2ImageMaxHeight * PixelsPerByte;
         public const int PaletteEntryCount = 16;
         public const int TilePerBlockSide = 2;
 

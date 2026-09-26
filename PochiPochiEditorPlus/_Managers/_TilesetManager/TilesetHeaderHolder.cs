@@ -56,7 +56,7 @@ namespace PochiPochiEditorPlus._Managers._TilesetManager
             // 単一エントリーとして読み込む
             HeaderEntry = new Entry(offset, 0, headerFields);
 
-            // タイルデータとパレットデータを読み込む
+            // 画像データとパレットデータを読み込む
             ImageData = LoadImage(sharedData);
             PaletteData = LoadPalettes(sharedData);
 
