@@ -35,7 +35,7 @@ namespace PochiPochiEditorPlus._Managers._FieldManager
                 case Constants.ByteSize:
                 case Constants.UShortSize:
                 case Constants.UIntSize:
-                    rawValue = IoHelper.ReadBytesAsInt(
+                    rawValue = IoHelper.ReadBytesAsLong(
                         binaryData,
                         0,
                         entryLength,
@@ -171,7 +171,7 @@ namespace PochiPochiEditorPlus._Managers._FieldManager
                 rawValue = Convert.ToInt64(value);
             }
 
-            IoHelper.WriteIntAsBytes(result, 0, rawValue, entryLength);
+            IoHelper.WriteLongAsBytes(result, 0, rawValue, entryLength);
             return result;
         }
 

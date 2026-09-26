@@ -148,7 +148,7 @@ namespace PochiPochiEditorPlus._Managers._FieldManager
         /// 簡易的に値(通常)を更新する。
         /// </summary>
         public void UpdateData<T>(
-            UndoManager undoManager,
+            CommandManager commandManager,
             T data,
             string desc,
             int argIndex = 0)
@@ -160,7 +160,7 @@ namespace PochiPochiEditorPlus._Managers._FieldManager
 
             if (command != null)
             {
-                undoManager.PushCommand(command);
+                commandManager.PushCommand(command);
             }
         }
 
