@@ -1,4 +1,4 @@
-﻿namespace PochiPochiEditorPlus._Managers._CommandManager
+﻿namespace PochiPochiEditorPlus._Managers._UndoManager
 {
     public sealed class RefDataChangeCommand : ICommand
     {

@@ -3,7 +3,7 @@ using System.Linq;
 using PochiPochiEditorPlus._Helpers;
 using PochiPochiEditorPlus._Utilities;
 
-namespace PochiPochiEditorPlus._Managers._CommandManager
+namespace PochiPochiEditorPlus._Managers._UndoManager
 {
     /// <summary>
     /// フィールド値でない可変長データを扱う。

@@ -1,6 +1,6 @@
 ﻿using PochiPochiEditorPlus._Managers._FieldManager;
 
-namespace PochiPochiEditorPlus._Managers._CommandManager
+namespace PochiPochiEditorPlus._Managers._UndoManager
 {
     public sealed class FieldValueChangeCommand : ICommand
     {

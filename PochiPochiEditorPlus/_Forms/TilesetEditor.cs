@@ -4,10 +4,10 @@ using System.Drawing;
 using System.Windows.Forms;
 using PochiPochiEditorPlus._Helpers;
 using PochiPochiEditorPlus._Helpers._MatchHelper;
-using PochiPochiEditorPlus._Managers;
 using PochiPochiEditorPlus._Managers._FormGroupManager;
 using PochiPochiEditorPlus._Managers._LayerManager;
 using PochiPochiEditorPlus._Managers._TilesetManager;
+using PochiPochiEditorPlus._Managers._UndoManager;
 using PochiPochiEditorPlus._Utilities;
 
 namespace PochiPochiEditorPlus._Forms
@@ -18,7 +18,7 @@ namespace PochiPochiEditorPlus._Forms
         // 共有データ用
         private SharedData _sharedData = null;
         // 変更履歴用
-        private UndoManager _undoManager = null;
+        private CommandManager _commandManager = null;
         // イベント登録・解除用
         private EventBinder _eventBinder = null;
         // 各エントリーテーブル用
@@ -31,11 +31,11 @@ namespace PochiPochiEditorPlus._Forms
         private int _currentTilesetNo = 0;
         private int _selectedTileIndex = 0;
 
-        public TilesetEditor(SharedData sharedData, UndoManager undoManager)
+        public TilesetEditor(SharedData sharedData, CommandManager commandManager)
         {
             InitializeComponent();
             _sharedData = sharedData;
-            _undoManager = undoManager;
+            _commandManager = commandManager;
             _eventBinder = new EventBinder();
             _tilesetManager = new TilesetHeaderHolder(_sharedData);
             _layerHolder = new LayerHolder<LayerNames>(pnlViewImage, _eventBinder);
@@ -153,7 +153,7 @@ namespace PochiPochiEditorPlus._Forms
             {
                 var value = ((TextBox)sender).Text.ParseStringToInt();
                 var desc = $"[{this.Text}]{itemName}(ID:{_currentTilesetNo:D8})";
-                entry.UpdateData(_undoManager, value, desc);
+                entry.UpdateData(_commandManager, value, desc);
             }
 
             // パレット切り替え

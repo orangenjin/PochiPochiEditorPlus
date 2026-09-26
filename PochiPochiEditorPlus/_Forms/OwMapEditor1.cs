@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 using PochiPochiEditorPlus._Helpers;
-using PochiPochiEditorPlus._Managers;
 using PochiPochiEditorPlus._Managers._FormGroupManager;
 using PochiPochiEditorPlus._Managers._LayerManager;
 using PochiPochiEditorPlus._Managers._TilesetManager;
+using PochiPochiEditorPlus._Managers._UndoManager;
 using PochiPochiEditorPlus._Utilities;
 
 namespace PochiPochiEditorPlus._Forms
@@ -18,7 +18,7 @@ namespace PochiPochiEditorPlus._Forms
         private dynamic _sharedData = null;
         private dynamic _groupData = null;
         // 変更履歴用
-        private UndoManager _undoManager = null;
+        private CommandManager _commandManager = null;
         // イベント登録・解除用
         private EventBinder _eventBinder = null;
         // 各エントリーテーブル用
@@ -37,12 +37,12 @@ namespace PochiPochiEditorPlus._Forms
 
         public OwMapEditor1(
             SharedData sharedData,
-            UndoManager undoManager,
+            CommandManager commandManager,
             FormGroupData groupData)
         {
             InitializeComponent();
             _sharedData = sharedData;
-            _undoManager = undoManager;
+            _commandManager = commandManager;
             _groupData = groupData;
             _eventBinder = new EventBinder();
             _tileset1Manager = new TilesetHeaderHolder(_sharedData);

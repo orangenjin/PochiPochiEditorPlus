@@ -8,6 +8,7 @@ using System.Windows.Forms;
 using PochiPochiEditorPlus._Helpers;
 using PochiPochiEditorPlus._Managers;
 using PochiPochiEditorPlus._Managers._FormGroupManager;
+using PochiPochiEditorPlus._Managers._UndoManager;
 using PochiPochiEditorPlus._Utilities;
 
 namespace PochiPochiEditorPlus
@@ -23,7 +24,7 @@ namespace PochiPochiEditorPlus
         private ConfigManager _configManager = null;
         private CharmapManager _charmapManager = null;
         // 変更履歴管理用
-        private UndoManager _undoManager = null;
+        private CommandManager _commandManager = null;
         // 補助ツール管理用
         private Dictionary<ToolStripMenuItem, Form> _openToolForms = null;
         // パス用
@@ -44,7 +45,7 @@ namespace PochiPochiEditorPlus
 
             // その他のデータを初期化
             _eventBinder = new EventBinder();
-            _undoManager = new UndoManager();
+            _commandManager = new CommandManager();
             _openToolForms = new Dictionary<ToolStripMenuItem, Form>();
 
             // タグ付加
@@ -108,7 +109,7 @@ namespace PochiPochiEditorPlus
                     _sharedData.ClearRom();
 
                     // 変更履歴をクリア
-                    _undoManager.Clear();
+                    _commandManager.Clear();
 
                     // UIの状態を更新
                     UpdateMainFormUI();
@@ -135,8 +136,8 @@ namespace PochiPochiEditorPlus
 
             // 変更履歴関連
             _eventBinder.BindCtrl(
-                h => _undoManager.StateChanged += h,
-                h => _undoManager.StateChanged -= h,
+                h => _commandManager.StateChanged += h,
+                h => _commandManager.StateChanged -= h,
                 (_, __) =>
                 {
                     UpdateMainFormUI();
@@ -148,14 +149,14 @@ namespace PochiPochiEditorPlus
                 h => tsmiUndo.Click -= h,
                 (_, __) =>
                 {
-                    _undoManager.Undo();
+                    _commandManager.Undo();
                 });
             _eventBinder.BindCtrl(
                 h => tsmiRedo.Click += h,
                 h => tsmiRedo.Click -= h,
                 (_, __) =>
                 {
-                    _undoManager.Redo();
+                    _commandManager.Redo();
                 });
             _eventBinder.BindCustom(
                 () => lstHistory.DrawItem += lstHistory_DrawItem,
@@ -168,7 +169,7 @@ namespace PochiPochiEditorPlus
                     int index = lstHistory.SelectedIndex;
 
                     if (index < 0) return;
-                    _undoManager.MoveTo(index + 1);
+                    _commandManager.MoveTo(index + 1);
                 });
 
             // 補助ツール
@@ -211,8 +212,8 @@ namespace PochiPochiEditorPlus
             tsmiTool.Enabled = isRomLoaded;
 
             // Undo/Redoの状態を更新
-            tsmiUndo.Enabled = _undoManager.CanUndo;
-            tsmiRedo.Enabled = _undoManager.CanRedo;
+            tsmiUndo.Enabled = _commandManager.CanUndo;
+            tsmiRedo.Enabled = _commandManager.CanRedo;
         }
 
         private void EditorButton_Click(object sender, EventArgs e)
@@ -226,7 +227,7 @@ namespace PochiPochiEditorPlus
             if (!Enum.TryParse(groupName, out FormGroup group)) return;
 
             // フォーム生成
-            _formGroupManager = new FormGroupRegister(this, group, _sharedData, _undoManager);
+            _formGroupManager = new FormGroupRegister(this, group, _sharedData, _commandManager);
             _formGroupManager.Closed += (_, __) =>
             {
                 _formGroupManager = null;
@@ -290,7 +291,7 @@ namespace PochiPochiEditorPlus
                 lstHistory.BeginUpdate();
                 lstHistory.Items.Clear();
 
-                foreach (var command in _undoManager.History)
+                foreach (var command in _commandManager.History)
                 {
                     lstHistory.Items.Add(command);
                 }
@@ -307,7 +308,7 @@ namespace PochiPochiEditorPlus
             if (e.Index < 0 || e.Index >= lstHistory.Items.Count) return;
             if (!(lstHistory.Items[e.Index] is ICommand command)) return;
 
-            bool isFuture = e.Index >= _undoManager.CurrentIndex;
+            bool isFuture = e.Index >= _commandManager.CurrentIndex;
             e.DrawBackground();
             Color textColor = GetHistoryTextColor();
 

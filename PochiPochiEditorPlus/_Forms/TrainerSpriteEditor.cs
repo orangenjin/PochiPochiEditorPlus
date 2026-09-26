@@ -4,9 +4,9 @@ using System.Drawing;
 using System.Windows.Forms;
 using PochiPochiEditorPlus._Helpers;
 using PochiPochiEditorPlus._Helpers._MatchHelper;
-using PochiPochiEditorPlus._Managers;
-using PochiPochiEditorPlus._Managers._CommandManager;
+using PochiPochiEditorPlus._Managers._FieldManager;
 using PochiPochiEditorPlus._Managers._FormGroupManager;
+using PochiPochiEditorPlus._Managers._UndoManager;
 using PochiPochiEditorPlus._Utilities;
 using PochiPochiEditorPlus._Utilities._QuickInput;
 
@@ -18,7 +18,7 @@ namespace PochiPochiEditorPlus._Forms
         // 共有データ用
         private dynamic _sharedData = null;
         // 変更履歴用
-        private UndoManager _undoManager = null;
+        private CommandManager _commandManager = null;
         // イベント登録・解除用
         private EventBinder _eventBinder = null;
         // 各テーブル用
@@ -35,11 +35,11 @@ namespace PochiPochiEditorPlus._Forms
         // データ識別タグ用
         private enum SpriteData { Image, Palette }
 
-        public TrainerSpriteEditor(SharedData sharedData, UndoManager undoManager)
+        public TrainerSpriteEditor(SharedData sharedData, CommandManager commandManager)
         {
             InitializeComponent();
             _sharedData = sharedData;
-            _undoManager = undoManager;
+            _commandManager = commandManager;
             _eventBinder = new EventBinder();
 
             InitializeEntries();
@@ -126,7 +126,7 @@ namespace PochiPochiEditorPlus._Forms
                     var desc = $"[{this.Text}]画像アドレス(ID:{_currentSpriteIndex:D4})";
 
                     _imageEntry.Entries[_currentSpriteIndex].SpriteImageOffset
-                        .UpdateData(_undoManager, offsetValue, desc);
+                        .UpdateData(_commandManager, offsetValue, desc);
                 });
             // パレットアドレス
             _eventBinder.BindCtrl(
@@ -143,7 +143,7 @@ namespace PochiPochiEditorPlus._Forms
                     var desc = $"[{this.Text}]パレットアドレス(ID:{_currentSpriteIndex:D4})";
 
                     _paletteEntry.Entries[_currentSpriteIndex].SpritePaletteOffset
-                        .UpdateData(_undoManager, offsetValue, desc);
+                        .UpdateData(_commandManager, offsetValue, desc);
                 });
             // Y座標位置
             _eventBinder.BindCtrl(
@@ -158,7 +158,7 @@ namespace PochiPochiEditorPlus._Forms
                     // データを更新
                     var desc = $"[{this.Text}]Y座標位置(ID:{_currentSpriteIndex:D4})";
                     _yPosEntry.Entries[_currentSpriteIndex].SpriteYPosValue
-                        .UpdateData(_undoManager, value, desc);
+                        .UpdateData(_commandManager, value, desc);
                 });
 
             // 画像インデックスnud
@@ -359,7 +359,7 @@ namespace PochiPochiEditorPlus._Forms
 
                 if (combine.HasCommands)
                 {
-                    _undoManager.PushCommand(combine);
+                    _commandManager.PushCommand(combine);
                 }
             }
         }

@@ -1,8 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Windows.Forms;
 using PochiPochiEditorPlus._Helpers._MatchHelper;
-using PochiPochiEditorPlus._Managers;
+using PochiPochiEditorPlus._Managers._FieldManager;
 using PochiPochiEditorPlus._Managers._FormGroupManager;
+using PochiPochiEditorPlus._Managers._UndoManager;
 using PochiPochiEditorPlus._Utilities;
 
 namespace PochiPochiEditorPlus._Forms
@@ -13,7 +14,7 @@ namespace PochiPochiEditorPlus._Forms
         // 共有データ用
         private dynamic _sharedData = null;
         // 変更履歴用
-        private UndoManager _undoManager = null;
+        private CommandManager _commandManager = null;
         // イベント登録・解除用
         private EventBinder _eventBinder = null;
         // 各エントリーテーブル用
@@ -32,11 +33,11 @@ namespace PochiPochiEditorPlus._Forms
         private bool _isPokeBallEnabled = false;
         private bool _isBaseIvEnabled = false;
 
-        public TrainerClassEditor(SharedData sharedData, UndoManager undoManager)
+        public TrainerClassEditor(SharedData sharedData, CommandManager commandManager)
         {
             InitializeComponent();
             _sharedData = sharedData;
-            _undoManager = undoManager;
+            _commandManager = commandManager;
             _eventBinder = new EventBinder();
 
             InitializeEntries();
@@ -53,7 +54,7 @@ namespace PochiPochiEditorPlus._Forms
 
             // 肩書き名テーブルを作成
             var tableOffset = _sharedData.Config.TrainerClassNameTableOffset;
-            var entryCount = PatternMatcher.TryCheckByTerminator(
+            var entryCount = PatternMatcher.TryCountByTerminator(
                 _sharedData.RomData,
                 _entryLength,
                 tableOffset);
@@ -200,7 +201,7 @@ namespace PochiPochiEditorPlus._Forms
                     // データを更新
                     var desc = $"[{this.Text}]肩書き名(ID:{_currentClassIndex:D4})";
                     _classNameEntry.Entries[_currentClassIndex].ClassNameStr
-                        .UpdateData(_undoManager, text, desc);
+                        .UpdateData(_commandManager, text, desc);
                 });
 
             // 賞金倍率
@@ -219,7 +220,7 @@ namespace PochiPochiEditorPlus._Forms
                     // データを更新
                     var desc = $"[{this.Text}]賞金倍率(ID:{_currentClassIndex:D4})";
                     _prizeMultiEntry.Entries[calcIndex].ClassPrizeMultiValue
-                        .UpdateData(_undoManager, value, desc);
+                        .UpdateData(_commandManager, value, desc);
                 });
 
             // 追加データ関連
@@ -237,7 +238,7 @@ namespace PochiPochiEditorPlus._Forms
                         // データを更新
                         var desc = $"[{this.Text}]戦闘前BGM(ID:{_currentClassIndex:D4})";
                         _encMusicEntry.Entries[_currentClassIndex].EncounterMusicIndex
-                            .UpdateData(_undoManager, value, desc);
+                            .UpdateData(_commandManager, value, desc);
                     });
             }
 
@@ -255,7 +256,7 @@ namespace PochiPochiEditorPlus._Forms
                         // データを更新
                         var desc = $"[{this.Text}]戦闘中BGM(ID:{_currentClassIndex:D4})";
                         _battleMusicEntry.Entries[_currentClassIndex].BattleMusicIndex
-                            .UpdateData(_undoManager, value, desc);
+                            .UpdateData(_commandManager, value, desc);
                     });
             }
 
@@ -273,7 +274,7 @@ namespace PochiPochiEditorPlus._Forms
                         // データを更新
                         var desc = $"[{this.Text}]使用ボールID(ID:{_currentClassIndex:D4})";
                         _pokeBallEntry.Entries[_currentClassIndex].PokeBallIndex
-                            .UpdateData(_undoManager, value, desc);
+                            .UpdateData(_commandManager, value, desc);
                     });
             }
 
@@ -291,7 +292,7 @@ namespace PochiPochiEditorPlus._Forms
                         // データを更新
                         var desc = $"[{this.Text}]基礎個体値(ID:{_currentClassIndex:D4})";
                         _baseIvEntry.Entries[_currentClassIndex].BaseIvValue
-                            .UpdateData(_undoManager, value, desc);
+                            .UpdateData(_commandManager, value, desc);
                     });
             }
 

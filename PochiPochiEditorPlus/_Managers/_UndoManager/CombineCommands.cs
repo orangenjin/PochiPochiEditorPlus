@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace PochiPochiEditorPlus._Managers._CommandManager
+namespace PochiPochiEditorPlus._Managers._UndoManager
 {
     public sealed class CombineCommands : ICommand
     {
