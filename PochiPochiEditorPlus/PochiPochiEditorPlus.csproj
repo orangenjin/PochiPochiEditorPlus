@@ -97,7 +97,7 @@
     <Compile Include="_Managers\_LayerManager\GridLayer.cs" />
     <Compile Include="_Managers\_LayerManager\ImageLayer.cs" />
     <Compile Include="_Managers\_LayerManager\LayerDefinitions.cs" />
-    <Compile Include="_Managers\RefDataManager.cs" />
+    <Compile Include="_Managers\_UndoManager\RefDataManager.cs" />
     <Compile Include="_Managers\_TilesetManager\TilesetBlockDefinitions.cs" />
     <Compile Include="_Managers\_TilesetManager\TilesetDataCalc.cs" />
     <Compile Include="_Managers\_TilesetManager\TilesetHeaderHolder.cs" />

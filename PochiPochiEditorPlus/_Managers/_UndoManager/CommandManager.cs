@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace PochiPochiEditorPlus._Managers
+namespace PochiPochiEditorPlus._Managers._CommandManager
 {
     public sealed class CommandManager
     {

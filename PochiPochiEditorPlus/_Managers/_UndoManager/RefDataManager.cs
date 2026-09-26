@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Linq;
 using PochiPochiEditorPlus._Helpers;
-using PochiPochiEditorPlus._Managers._CommandManager;
 using PochiPochiEditorPlus._Utilities;
 
-namespace PochiPochiEditorPlus._Managers
+namespace PochiPochiEditorPlus._Managers._CommandManager
 {
     /// <summary>
     /// フィールド値でない可変長データを扱う。
@@ -45,7 +44,7 @@ namespace PochiPochiEditorPlus._Managers
         }
 
         public void UpdateData(
-            UndoManager undoManager,
+            CommandManager commandManager,
             int newOffset,
             byte[] newBinaryData,
             string desc)
@@ -57,7 +56,7 @@ namespace PochiPochiEditorPlus._Managers
 
             if (command != null)
             {
-                undoManager.PushCommand(command);
+                commandManager.PushCommand(command);
             }
         }
 
