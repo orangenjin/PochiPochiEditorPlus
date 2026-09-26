@@ -116,7 +116,7 @@ namespace PochiPochiEditorPlus._Forms
                 (_, __) =>
                 {
                     // 画像レイヤーを取得
-                    var layer = _tileLayerHolder.GetLayer<ImageLayer>(LayerNames.Tile);
+                    var layer = _tileLayerHolder.GetLayer<SingleImageLayer>(LayerNames.Tile);
                     if (layer == null) return;
 
                     // パレットを更新
@@ -296,7 +296,7 @@ namespace PochiPochiEditorPlus._Forms
             var upperBlockLayer = new MapBlockLayer(_blockLayerHolder.Data, blockSize);
 
             // 定数を事前に計算
-            var tileLayer = _tileLayerHolder.GetLayer<ImageLayer>(LayerNames.Tile);
+            var tileLayer = _tileLayerHolder.GetLayer<SingleImageLayer>(LayerNames.Tile);
             int tilesPerRow = Constants.TilesetImageWidth / Constants.TileSize;
 
             for (int i = 0; i < _blockDataList.Count; i++)
@@ -341,7 +341,7 @@ namespace PochiPochiEditorPlus._Forms
             BlockLayer layer,
             int drawX,
             int drawY,
-            ImageLayer tileLayer,
+            SingleImageLayer tileLayer,
             int tilesPerRow,
             bool isLower)
         {
@@ -385,7 +385,7 @@ namespace PochiPochiEditorPlus._Forms
             BlockTileData tileData,
             int x,
             int y,
-            ImageLayer tileLayer,
+            SingleImageLayer tileLayer,
             int tilesPerRow,
             bool isLower)
         {

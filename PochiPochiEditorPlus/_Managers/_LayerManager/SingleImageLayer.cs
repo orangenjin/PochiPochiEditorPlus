@@ -6,7 +6,7 @@ using PochiPochiEditorPlus._Utilities;
 
 namespace PochiPochiEditorPlus._Managers._LayerManager
 {
-    public sealed class ImageLayer : LayerBase
+    public sealed class SingleImageLayer : LayerBase
     {
         // バイト配列の画像データ
         public byte[] ImageData { get; set; }
@@ -17,7 +17,7 @@ namespace PochiPochiEditorPlus._Managers._LayerManager
         // パレット切り替えのために保持
         private Bitmap _cachedBitmap = null;
 
-        public ImageLayer(LayerData layerData)
+        public SingleImageLayer(LayerData layerData)
         {
             _layerData = layerData;
         }
