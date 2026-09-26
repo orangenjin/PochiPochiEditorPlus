@@ -9,8 +9,7 @@ namespace PochiPochiEditorPlus._Managers
     public sealed class ConfigManager : DynamicAccessor<object>
     {
         // 設定名からパスを取得
-        public Dictionary<string, string> Configs => _configs;
-        private Dictionary<string, string> _configs = new Dictionary<string, string>();
+        public Dictionary<string, string> Configs { get; }
 
         /// <summary>
         /// 設定ファイル名とパスを格納する。
@@ -20,11 +19,12 @@ namespace PochiPochiEditorPlus._Managers
             if (!Directory.Exists(folderPath)) return;
 
             var searchPattern = $"*.{Constants.IniExt}";
+            Configs = new Dictionary<string, string>();
 
             foreach (string filePath in Directory.EnumerateFiles(folderPath, searchPattern))
             {
                 string name = Path.GetFileNameWithoutExtension(filePath);
-                _configs[name] = filePath;
+                Configs[name] = filePath;
             }
         }
 
@@ -37,7 +37,7 @@ namespace PochiPochiEditorPlus._Managers
             ClearDict();
 
             // ファイルパスを取得
-            if (!_configs.TryGetValue(configName, out string filePath)) return;
+            if (!Configs.TryGetValue(configName, out string filePath)) return;
 
             // 設定値を解析
             foreach (string line in File.ReadLines(filePath, Encoding.UTF8))

@@ -27,8 +27,8 @@ namespace PochiPochiEditorPlus._Managers
             foreach (string line in File.ReadLines(filePath, Encoding.UTF8))
             {
                 // 空行とコメント行をスキップ
-                if (string.IsNullOrWhiteSpace(line) ||
-                    line.StartsWith(";")) continue;
+                if (string.IsNullOrWhiteSpace(line)
+                    || line.StartsWith(";")) continue;
 
                 // イコールで分割
                 string[] parts = line.Split('=');
