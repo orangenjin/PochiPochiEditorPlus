@@ -10,7 +10,7 @@ namespace PochiPochiEditorPlus._Helpers
 {
     public static class CtrlHelper
     {
-        // AttachExternalBorderの対象コントロールを保持
+        // AttachBorderの対象コントロールを保持
         private static Dictionary<Control, List<Control>> _drawBorders = 
             new Dictionary<Control, List<Control>>();
 
@@ -240,7 +240,7 @@ namespace PochiPochiEditorPlus._Helpers
             btnNext.Click -= BtnIncrease;
             nud.ValueChanged -= UpdateBtnsToNud;
 
-            // 辞書から削除しておく
+            // リストから削除しておく
             var navigator = _nudNavigators.First(x => x.Nud == nud);
             _nudNavigators.Remove(navigator);
         }

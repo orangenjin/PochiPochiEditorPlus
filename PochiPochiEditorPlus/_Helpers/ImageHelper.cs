@@ -27,7 +27,7 @@ namespace PochiPochiEditorPlus._Helpers
         {
             // ヘッダの読み込み
             // 先頭1バイトは識別子(LZ77HeaderIdentifier)
-            int header = (int)IoHelper.ReadBytesAsInt(data, offset, LZ77HeaderSize);
+            int header = (int)IoHelper.ReadBytesAsLong(data, offset, LZ77HeaderSize);
             // 残り3バイトは解凍後のサイズ
             int decompressedSize = header >> Constants.BitsPerByte;
             var result = new byte[decompressedSize];
@@ -229,7 +229,7 @@ namespace PochiPochiEditorPlus._Helpers
         }
 
         /// <summary>
-        /// タイルデータとパレットデータからBitmap(4bppインデックスカラー)を生成する。
+        /// 画像データとパレットデータからBitmap(4bppインデックスカラー)を生成する。
         /// </summary>
         public static Bitmap CreateBitmap(
             byte[] imageData,
@@ -329,7 +329,7 @@ namespace PochiPochiEditorPlus._Helpers
         }
 
         /// <summary>
-        /// Bitmapからタイルデータとパレットデータを抽出する。
+        /// Bitmapから画像データとパレットデータを抽出する。
         /// </summary>
         public static bool ExtractImageAndPalette(
             Bitmap bmp,
@@ -383,7 +383,7 @@ namespace PochiPochiEditorPlus._Helpers
                     (r << Constants.RedShift));
 
                 // バイト配列に上書き
-                IoHelper.WriteIntAsBytes(
+                IoHelper.WriteLongAsBytes(
                     paletteData,
                     i * Constants.BytesPerColor,
                     gbaColor,

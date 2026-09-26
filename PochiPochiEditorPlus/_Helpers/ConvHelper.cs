@@ -10,8 +10,11 @@ namespace PochiPochiEditorPlus._Helpers
         /// </summary>
         public static int ParseStringToInt(this string str)
         {
-            // null, 空白である場合スキップ
-            if (string.IsNullOrWhiteSpace(str)) return Constants.InvalidValue;
+            // null, 空白である場合
+            if (string.IsNullOrWhiteSpace(str))
+            {
+                return Constants.InvalidValue;
+            }
 
             // 字詰め
             var trimStr = str.Replace(" ", string.Empty);
