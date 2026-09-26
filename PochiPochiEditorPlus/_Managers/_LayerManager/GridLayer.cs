@@ -15,7 +15,6 @@ namespace PochiPochiEditorPlus._Managers._LayerManager
 
             // 拡大後のグリッドサイズを使用
             int size = _layerData.ScaledGridSize;
-
             // グリッドの太さを調整
             int thickness = 1 * _layerData.Scale;
 

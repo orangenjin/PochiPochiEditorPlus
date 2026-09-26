@@ -116,7 +116,7 @@
     <Compile Include="_Managers\_FieldManager\FieldValueConv.cs" />
     <Compile Include="_Managers\_LayerManager\LayerHolder.cs" />
     <Compile Include="_Managers\_LayerManager\LayerScroller.cs" />
-    <Compile Include="_Managers\_LayerManager\SelectorLayer.cs" />
+    <Compile Include="_Managers\_LayerManager\SelectLayer.cs" />
     <Compile Include="_Utilities\DynamicAccessor.cs" />
     <Compile Include="_Utilities\EventBinder.cs" />
     <Compile Include="_Helpers\ConvHelper.cs" />

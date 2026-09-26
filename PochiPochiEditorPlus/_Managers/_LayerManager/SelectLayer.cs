@@ -5,12 +5,14 @@ using System.Windows.Forms;
 
 namespace PochiPochiEditorPlus._Managers._LayerManager
 {
-    public sealed class SelectorLayer : LayerBase
+    public sealed class SelectLayer : LayerBase
     {
         // 選択可能な最大範囲
+        // 0以下の場合は制限なし
         public Size MaxSelectSize { get; set; }
-        public Rectangle SelectedGrids { get; set; }
-        // 選択範囲が変化したことを通知する
+        // 選択されているグリッドの範囲
+        public Rectangle SelectedGrids { get; private set; }
+        // 選択範囲が確定した際に通知するイベント
         public Action SelectChanged { get; set; }
 
         private Point _currentGridPoint;
@@ -18,12 +20,15 @@ namespace PochiPochiEditorPlus._Managers._LayerManager
         private Point _startGridPoint;
         private Action _requestInvalidate;
 
-        public SelectorLayer(LayerData layerData, Action requestInvalidate)
+        public SelectLayer(LayerData layerData, Action requestInvalidate)
         {
             _layerData = layerData;
             _requestInvalidate = requestInvalidate;
         }
 
+        /// <summary>
+        /// 指定したインデックス(1マス)を選択状態にする。
+        /// </summary>
         public void SelectSingleItem(int index)
         {
             // インデックスが有効な範囲内か判定
@@ -44,6 +49,15 @@ namespace PochiPochiEditorPlus._Managers._LayerManager
             _requestInvalidate?.Invoke();
         }
 
+        public void ClearSelect()
+        {
+            SelectedGrids = Rectangle.Empty;
+            _requestInvalidate?.Invoke();
+        }
+
+        /// <summary>
+        /// 選択されているすべての有効なインデックスのリストを取得する。
+        /// </summary>
         public List<int> GetSelectedIndexList()
         {
             var selectedIndexList = new List<int>();
@@ -54,15 +68,14 @@ namespace PochiPochiEditorPlus._Managers._LayerManager
                 return selectedIndexList;
             }
 
-            for (int girdY = SelectedGrids.Top; girdY < SelectedGrids.Bottom; girdY++)
+            for (int gridY = SelectedGrids.Top; gridY < SelectedGrids.Bottom; gridY++)
             {
                 for (int gridX = SelectedGrids.Left; gridX < SelectedGrids.Right; gridX++)
                 {
-                    // 座標からインデックスを計算
-                    int index = girdY * _layerData.Columns + gridX;
+                    int index = gridY * _layerData.Columns + gridX;
 
-                    // 有効なアイテム範囲内かどうかを確認
-                    if (index < _layerData.ValidItemCount)
+                    // アイテムが存在する有効な範囲内のみ取得
+                    if (index >= 0 && index < _layerData.ValidItemCount)
                     {
                         selectedIndexList.Add(index);
                     }
@@ -70,6 +83,30 @@ namespace PochiPochiEditorPlus._Managers._LayerManager
             }
 
             return selectedIndexList;
+        }
+
+        /// <summary>
+        /// 選択されているマス座標のリストを取得する。
+        /// </summary>
+        public List<Point> GetSelectedGridPoints()
+        {
+            var points = new List<Point>();
+            if (SelectedGrids.Width <= 0 || SelectedGrids.Height <= 0)
+            {
+                return points;
+            }
+
+            for (int gridY = SelectedGrids.Top; gridY < SelectedGrids.Bottom; gridY++)
+            {
+                for (int gridX = SelectedGrids.Left; gridX < SelectedGrids.Right; gridX++)
+                {
+                    if (_layerData.IsValidGrid(gridX, gridY))
+                    {
+                        points.Add(new Point(gridX, gridY));
+                    }
+                }
+            }
+            return points;
         }
 
         public override void Draw(Graphics gfx)
@@ -80,13 +117,35 @@ namespace PochiPochiEditorPlus._Managers._LayerManager
             int drawY = SelectedGrids.Y * _layerData.ScaledGridSize;
             int drawWidth = SelectedGrids.Width * _layerData.ScaledGridSize;
             int drawHeight = SelectedGrids.Height * _layerData.ScaledGridSize;
+            int thickness = 1 * _layerData.Scale;
 
             using (var brush = new SolidBrush(Color.Red))
             {
-                gfx.FillRectangle(brush, drawX, drawY, drawWidth, 1);
-                gfx.FillRectangle(brush, drawX, drawY + drawHeight - 1, drawWidth, 1);
-                gfx.FillRectangle(brush, drawX, drawY + 1, 1, drawHeight - 2);
-                gfx.FillRectangle(brush, drawX + drawWidth - 1, drawY + 1, 1, drawHeight - 2);
+                // 四辺を描画
+                gfx.FillRectangle(
+                    brush, 
+                    drawX, 
+                    drawY, 
+                    drawWidth,
+                    thickness);
+                gfx.FillRectangle(
+                    brush,
+                    drawX, 
+                    drawY + drawHeight - thickness, 
+                    drawWidth,
+                    thickness);
+                gfx.FillRectangle(
+                    brush, 
+                    drawX, 
+                    drawY + thickness,
+                    thickness, 
+                    drawHeight - (thickness * 2));
+                gfx.FillRectangle(
+                    brush, 
+                    drawX + drawWidth - thickness,
+                    drawY + thickness,
+                    thickness,
+                    drawHeight - (thickness * 2));
             }
         }
 
@@ -114,7 +173,7 @@ namespace PochiPochiEditorPlus._Managers._LayerManager
             // マス座標を取得
             var gridPoint = _layerData.GetGridPoint(e.Location);
 
-            // 選択可能サイズを取得
+            // 最大選択サイズの制限
             if (MaxSelectSize.Width > 0 && MaxSelectSize.Height > 0)
             {
                 int limitX = MaxSelectSize.Width - 1;
@@ -171,12 +230,6 @@ namespace PochiPochiEditorPlus._Managers._LayerManager
             int maxY = Math.Max(_startGridPoint.Y, _currentGridPoint.Y);
 
             SelectedGrids = new Rectangle(minX, minY, maxX - minX + 1, maxY - minY + 1);
-            _requestInvalidate?.Invoke();
-        }
-
-        public void ClearSelect()
-        {
-            SelectedGrids = Rectangle.Empty;
             _requestInvalidate?.Invoke();
         }
     }
