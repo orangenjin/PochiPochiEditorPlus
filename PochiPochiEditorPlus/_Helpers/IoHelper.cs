@@ -7,15 +7,18 @@ namespace PochiPochiEditorPlus._Helpers
     {
         /// <summary>
         /// 1, 2, 4バイトのデータを読み取り、整数として返す。
+        /// 符号付きにも対応するために、long型を採用している。
         /// </summary>
-        public static long ReadBytesAsInt(
+        public static long ReadBytesAsLong(
             byte[] data,
             int offset,
             int length,
             bool isLittleEndian = true,
             bool isSigned = false)
         {
+            // 戻り値用
             long result;
+
             switch (length)
             {
                 // 1バイト
@@ -45,6 +48,7 @@ namespace PochiPochiEditorPlus._Helpers
                             | (long)data[offset + 3];
                     break;
 
+                // その他
                 default:
                     throw new Exception();
             }
@@ -52,9 +56,14 @@ namespace PochiPochiEditorPlus._Helpers
             // 符号付きの場合
             if (isSigned)
             {
-                int shiftBits =
-                    (Constants.UIntSize - length) * Constants.BitsPerByte;
-                result = (result << shiftBits) >> shiftBits;
+                int bits = length * Constants.BitsPerByte;
+                long signBit = 1L << (bits - 1);
+                long valueMask = (1L << bits) - 1;
+
+                if ((result & signBit) != 0)
+                {
+                    result |= ~valueMask;
+                }
             }
 
             return result;
@@ -63,7 +72,7 @@ namespace PochiPochiEditorPlus._Helpers
         /// <summary>
         /// 整数を1, 2, 4バイトのデータとして書き込む。
         /// </summary>
-        public static void WriteIntAsBytes(
+        public static void WriteLongAsBytes(
             byte[] buffer,
             int offset,
             long value,
@@ -130,6 +139,7 @@ namespace PochiPochiEditorPlus._Helpers
                     }
                     break;
 
+                // その他
                 default:
                     throw new Exception();
             }
@@ -145,7 +155,7 @@ namespace PochiPochiEditorPlus._Helpers
             int ptrOffset,
             out int resultOffset)
         {
-            long rawAddr = ReadBytesAsInt(
+            long rawAddr = ReadBytesAsLong(
                 data,
                 ptrOffset,
                 Constants.UIntSize);
@@ -158,8 +168,8 @@ namespace PochiPochiEditorPlus._Helpers
             }
 
             // 有効なアドレス範囲外
-            if (rawAddr < Constants.BaseAddr ||
-                rawAddr > Constants.EndAddr)
+            if (rawAddr < Constants.BaseAddr
+                || rawAddr > Constants.EndAddr)
             {
                 resultOffset = Constants.InvalidValue;
                 return false;
@@ -175,12 +185,12 @@ namespace PochiPochiEditorPlus._Helpers
         public static void WriteBytesToData(
             byte[] buffer,
             int offset,
-            byte[] bytes,
+            byte[] value,
             byte alignPaddingByte = Constants.PaddingByte)
         {
-            Array.Copy(bytes, 0, buffer, offset, bytes.Length);
+            Array.Copy(value, 0, buffer, offset, value.Length);
 
-            int endOffset = offset + bytes.Length;
+            int endOffset = offset + value.Length;
             int paddingCount =
                 (Constants.UIntSize - (endOffset % Constants.UIntSize))
                 % Constants.UIntSize;

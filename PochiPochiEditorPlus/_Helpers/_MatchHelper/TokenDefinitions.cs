@@ -11,6 +11,9 @@ namespace PochiPochiEditorPlus._Helpers._MatchHelper
         Wildcard
     }
 
+    /// <summary>
+    /// トークンが持つべき情報を定義する。
+    /// </summary>
     public interface IToken
     {
         int Length { get; }
@@ -18,7 +21,7 @@ namespace PochiPochiEditorPlus._Helpers._MatchHelper
     }
 
     /// <summary>
-    /// 特定の値を設定し、比較する。
+    /// 複数指定可能な特定の値を設定し、比較する。
     /// </summary>
     public sealed class ExactToken : IToken
     {
@@ -40,13 +43,12 @@ namespace PochiPochiEditorPlus._Helpers._MatchHelper
 
         public bool IsValid(byte[] data, int offset)
         {
-            long value = IoHelper.ReadBytesAsInt(
+            long extractedvalue = IoHelper.ReadBytesAsInt(
                 data: data,
                 offset: offset,
                 length: Length,
                 isLittleEndian: true,
-                isSigned: IsSigned
-            );
+                isSigned: IsSigned);
 
             // 値が含まれているか判定
             return _exactValues.Contains(value);
