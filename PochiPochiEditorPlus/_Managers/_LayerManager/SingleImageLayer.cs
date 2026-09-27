@@ -17,11 +17,6 @@ namespace PochiPochiEditorPlus._Managers._LayerManager
         // パレット切り替えのために保持
         private Bitmap _cachedBitmap = null;
 
-        public SingleImageLayer(LayerData layerData)
-        {
-            _layerData = layerData;
-        }
-
         /// <summary>
         /// 描画用Bitmapを生成する。
         /// </summary>
@@ -73,11 +68,11 @@ namespace PochiPochiEditorPlus._Managers._LayerManager
         public byte[] ExtractImageDataAtGrid(int gridX, int gridY)
         {
             if (ImageData == null) return null;
-            if (!_layerData.IsValidGrid(gridX, gridY)) return null;
+            if (!Data.IsValidGrid(gridX, gridY)) return null;
 
             // 1マスにおけるタイル数を計算
-            int tilesPerGridX = _layerData.GridSize / Constants.TileSize;
-            int tilesPerGridY = _layerData.GridSize / Constants.TileSize;
+            int tilesPerGridX = Data.GridSize / Constants.TileSize;
+            int tilesPerGridY = Data.GridSize / Constants.TileSize;
 
             var extractedBytes =
                 new List<byte>(tilesPerGridX * tilesPerGridY * Constants.BytesPerTile);
@@ -115,8 +110,8 @@ namespace PochiPochiEditorPlus._Managers._LayerManager
         {
             if (_cachedBitmap == null) return;
 
-            int scaledWidth = _cachedBitmap.Width * _layerData.Scale;
-            int scaledHeight = _cachedBitmap.Height * _layerData.Scale;
+            int scaledWidth = _cachedBitmap.Width * Data.Scale;
+            int scaledHeight = _cachedBitmap.Height * Data.Scale;
 
             gfx.DrawImage(
                 _cachedBitmap,

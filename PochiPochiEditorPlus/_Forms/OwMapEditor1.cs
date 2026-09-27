@@ -125,6 +125,7 @@ namespace PochiPochiEditorPlus._Forms
                 h => cmbTilePalette.SelectedIndexChanged -= h,
                 (_, __) =>
                 {
+                    /*
                     // 画像レイヤーを取得
                     var layer = _tileLayerHolder.GetLayer<SingleImageLayer>(LayerNames.Tile);
                     if (layer == null) return;
@@ -134,6 +135,7 @@ namespace PochiPochiEditorPlus._Forms
                     var palData = GetProperPaletteData(palIndex);
                     layer.ApplyPalette(palData);
                     pnlTileView.Invalidate();
+                    */
                 });
 
             // タイルインデックス数値
@@ -303,6 +305,8 @@ namespace PochiPochiEditorPlus._Forms
                 scale: Constants.DefaultScale,
                 validItemCount: _blockDataList.Count);
 
+            /*
+             * 
             // 画像を破棄
             var oldLower = _blockLayerHolder.GetLayer<MapBlockLayer>(LayerNames.BlockLower);
             oldLower?.DisposeImages();
@@ -335,6 +339,8 @@ namespace PochiPochiEditorPlus._Forms
                 lowerBlockLayer.BlockImages.Add(lowerBmp);
                 upperBlockLayer.BlockImages.Add(upperBmp);
             }
+
+            */
 
             /*
             // 生成したカスタムレイヤーを登録
@@ -526,7 +532,6 @@ namespace PochiPochiEditorPlus._Forms
 
         public MapBlockLayer(LayerData layerData, int blockSize)
         {
-            _layerData = layerData;
 
             BlockImages = new List<Bitmap>();
             BlockSize = blockSize;
@@ -536,8 +541,8 @@ namespace PochiPochiEditorPlus._Forms
         {
             if (BlockImages == null || BlockImages.Count == 0) return;
 
-            int cols = _layerData.Columns;
-            int scaledBlockSize = BlockSize * _layerData.Scale;
+            int cols = Data.Columns;
+            int scaledBlockSize = BlockSize * Data.Scale;
 
             for (int i = 0; i < BlockImages.Count; i++)
             {

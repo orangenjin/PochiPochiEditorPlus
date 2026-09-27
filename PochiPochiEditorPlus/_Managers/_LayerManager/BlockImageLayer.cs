@@ -7,20 +7,15 @@ namespace PochiPochiEditorPlus._Managers._LayerManager
         // 各ブロックが持つ画像
         private Bitmap[] _blockImages = null;
 
-        public BlockImageLayer(LayerData layerData)
-        {
-            _layerData = layerData;
-        }
-
         /// <summary>
         /// 初期化して配列を確保する。
         /// </summary>
         public void Allocate()
         {
-            int total = _layerData.ValidItemCount;
+            int total = Data.ValidItemCount;
 
             // 配列の画像を破棄
-            Dispose();
+            ClearImages();
             _blockImages = new Bitmap[total];
         }
 
@@ -29,8 +24,8 @@ namespace PochiPochiEditorPlus._Managers._LayerManager
         /// </summary>
         public void SetBlockImage(int gridX, int gridY, Bitmap image)
         {
-            if (!_layerData.IsValidGrid(gridX, gridY)) return;
-            int index = gridY * _layerData.Columns + gridX;
+            if (!Data.IsValidGrid(gridX, gridY)) return;
+            int index = gridY * Data.Columns + gridX;
 
             _blockImages[index]?.Dispose();
             _blockImages[index] = image != null 
@@ -40,17 +35,17 @@ namespace PochiPochiEditorPlus._Managers._LayerManager
 
         public Bitmap GetBlockImage(int gridX, int gridY)
         {
-            if (!_layerData.IsValidGrid(gridX, gridY)) return null;
-            return _blockImages[gridY * _layerData.Columns + gridX];
+            if (!Data.IsValidGrid(gridX, gridY)) return null;
+            return _blockImages[gridY * Data.Columns + gridX];
         }
 
         public override void Draw(Graphics gfx)
         {
             if (_blockImages == null) return;
 
-            int cols = _layerData.Columns;
+            int cols = Data.Columns;
             if (cols <= 0) return;
-            int size = _layerData.ScaledGridSize;
+            int size = Data.ScaledGridSize;
 
             for (int i = 0; i < _blockImages.Length; i++)
             {
@@ -61,7 +56,7 @@ namespace PochiPochiEditorPlus._Managers._LayerManager
                 int gridY = i / cols;
                 gfx.DrawImage(bmp,
                     new Rectangle(gridX * size, gridY * size, size, size),
-                    new Rectangle(0, 0, _layerData.GridSize, _layerData.GridSize),
+                    new Rectangle(0, 0, Data.GridSize, Data.GridSize),
                     GraphicsUnit.Pixel);
             }
         }
@@ -69,7 +64,7 @@ namespace PochiPochiEditorPlus._Managers._LayerManager
         /// <summary>
         /// 配列の画像を破棄して、参照を切る。
         /// </summary>
-        public override void Dispose()
+        public void ClearImages()
         {
             if (_blockImages != null)
             {

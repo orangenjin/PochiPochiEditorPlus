@@ -4,24 +4,19 @@ namespace PochiPochiEditorPlus._Managers._LayerManager
 {
     public sealed class GridLayer : LayerBase
     {
-        public GridLayer(LayerData layerData)
-        {
-            _layerData = layerData;
-        }
-
         public override void Draw(Graphics gfx)
         {
-            if (_layerData.ValidItemCount <= 0) return;
+            if (Data.ValidItemCount <= 0) return;
 
             // 拡大後のグリッドサイズを使用
-            int size = _layerData.ScaledGridSize;
+            int size = Data.ScaledGridSize;
 
             using (var brush = new SolidBrush(Color.FromArgb(80, Color.Gray)))
             {
-                for (int i = 0; i < _layerData.TotalGridCount; i++)
+                for (int i = 0; i < Data.TotalGridCount; i++)
                 {
-                    int gridX = i % _layerData.Columns;
-                    int gridY = i / _layerData.Columns;
+                    int gridX = i % Data.Columns;
+                    int gridY = i / Data.Columns;
                     int drawX = gridX * size;
                     int drawY = gridY * size;
 

@@ -24,7 +24,7 @@ namespace PochiPochiEditorPlus._Forms
         // 各エントリーテーブル用
         private dynamic _tilesetManager = null;
         // パネル描画用
-        private LayerHolder<LayerNames> _layerHolder = null;
+        private dynamic _layerHolder = null;
         private LayerScroller _layerScroller = null;
         // UI制御用
         private int _currentTilesetNo = 0;
@@ -79,11 +79,9 @@ namespace PochiPochiEditorPlus._Forms
         private void InitializeLayers()
         {
             // レイヤーの登録
-            _layerHolder.AddLayer(LayerNames.Tile, new SingleImageLayer(_layerHolder.Data));
-            _layerHolder.AddLayer(LayerNames.Grid, new GridLayer(_layerHolder.Data));
-            _layerHolder.AddLayer(
-                LayerNames.Select,
-                new SelectLayer(_layerHolder.Data, () => _layerHolder.Panel.Invalidate()));
+            _layerHolder.AddLayer<SingleImageLayer>(LayerNames.Tile);
+            _layerHolder.AddLayer<GridLayer>(LayerNames.Grid);
+            _layerHolder.AddLayer<SelectLayer>(LayerNames.Select);
         }
 
         private void InitializeEventHandlers()
@@ -183,7 +181,7 @@ namespace PochiPochiEditorPlus._Forms
                     if (palIndex < 0) return;
 
                     // 画像レイヤーを取得
-                    var imageLayer = _layerHolder.GetLayer<SingleImageLayer>(LayerNames.Tile);
+                    var imageLayer = _layerHolder.Tile;
                     if (imageLayer == null) return;
 
                     // パレットを更新
@@ -192,6 +190,8 @@ namespace PochiPochiEditorPlus._Forms
                     pnlViewImage.Invalidate();
                 });
             // タイルインデックス数値
+            // dunamicなのでキャストする
+            var selectLayer = (SelectLayer)_layerHolder.Select;
             _eventBinder.BindCtrl(
                 h => nudViewTileIndex.ValueChanged += h,
                 h => nudViewTileIndex.ValueChanged -= h,
@@ -201,14 +201,13 @@ namespace PochiPochiEditorPlus._Forms
                     txtViewTileIndex.Text =
                         _selectedTileIndex.ParseIntToString(txtViewTileIndex.Digits);
 
-                    var selectLayer = _layerHolder.GetLayer<SelectLayer>(LayerNames.Select);
                     var selectedIndexList = selectLayer.GetSelectedIndexList();
                     if (selectedIndexList.Count > 0 && selectedIndexList[0] == _selectedTileIndex) return;
                     selectLayer.SelectSingleItem(_selectedTileIndex);
                 });
             _eventBinder.BindCustom(
-                () => _layerHolder.GetLayer<SelectLayer>(LayerNames.Select).SelectChanged += UpdateSelectedTileIndex,
-                () => _layerHolder.GetLayer<SelectLayer>(LayerNames.Select).SelectChanged -= UpdateSelectedTileIndex);
+                () => selectLayer.SelectChanged += UpdateSelectedTileIndex,
+                () => selectLayer.SelectChanged -= UpdateSelectedTileIndex);
 
             // 解除タイミング指定
             _eventBinder.BindCtrl(
@@ -288,17 +287,15 @@ namespace PochiPochiEditorPlus._Forms
                 validItemCount: totalTiles);
 
             // 画像の設定
-            var imageLayer = _layerHolder.GetLayer<SingleImageLayer>(LayerNames.Tile);
-            imageLayer.SetImageData(
+            _layerHolder.Tile.SetImageData(
                 _tilesetManager.ImageData,
                 palData,
                 width,
                 height);
 
             // 選択範囲の設定
-            var selectLayer = _layerHolder.GetLayer<SelectLayer>(LayerNames.Select);
             var maxLength = Constants.TilesetImageWidth / Constants.TileSize;
-            selectLayer.MaxSelectSize = new Size(maxLength, maxLength);
+            _layerHolder.Select.MaxSelectSize = new Size(maxLength, maxLength);
 
             // スクロールバーの設定
             _layerScroller.UpdateScrollRange();
@@ -366,8 +363,7 @@ namespace PochiPochiEditorPlus._Forms
 
         private void UpdateSelectedTileIndex()
         {
-            var selectLayer = _layerHolder.GetLayer<SelectLayer>(LayerNames.Select);
-            var indexList = selectLayer.GetSelectedIndexList();
+            var indexList = _layerHolder.Select.GetSelectedIndexList();
             if (indexList.Count == 0) return;
             nudViewTileIndex.Value = (decimal)indexList[0];
         }

@@ -16,7 +16,6 @@ namespace PochiPochiEditorPlus._Managers._LayerManager
             BlockImageLayer targetImageLayer,
             Action requestInvalidate)
         {
-            _layerData = layerData;
             _clipboard = clipboard;
             _targetImageLayer = targetImageLayer;
             _requestInvalidate = requestInvalidate;
@@ -34,7 +33,7 @@ namespace PochiPochiEditorPlus._Managers._LayerManager
             if (_clipboard.CopiedImages == null) return;
 
             // マウス座標からクリック地点のマス座標を取得
-            var startGridPoint = _layerData.GetGridPoint(e.Location);
+            var startGridPoint = Data.GetGridPoint(e.Location);
             bool isPasted = false;
 
             for (int y = 0; y < _clipboard.Height; y++)
@@ -45,7 +44,7 @@ namespace PochiPochiEditorPlus._Managers._LayerManager
                     int targetY = startGridPoint.Y + y;
 
                     // 有効な範囲内かどうかを判定
-                    if (_layerData.IsValidGrid(targetX, targetY))
+                    if (Data.IsValidGrid(targetX, targetY))
                     {
                         var imgToPaste = _clipboard.CopiedImages[x, y];
                         _targetImageLayer.SetBlockImage(targetX, targetY, imgToPaste);
