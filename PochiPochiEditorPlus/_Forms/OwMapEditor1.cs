@@ -265,9 +265,6 @@ namespace PochiPochiEditorPlus._Forms
 
             // スクロールバーの設定
             _tileLayerScroller.UpdateScrollRange();
-
-            // 再描画
-            _tileLayerHolder.Panel.Invalidate();
         }
 
         private void SetBlockData()
@@ -350,9 +347,6 @@ namespace PochiPochiEditorPlus._Forms
 
             // スクロールバーの設定
             _blockLayerScroller.UpdateScrollRange();
-
-            // 再描画
-            _blockLayerHolder.Panel.Invalidate();
         }
 
         private void DrawBlockLayer(
@@ -464,7 +458,6 @@ namespace PochiPochiEditorPlus._Forms
             // タイル画像のレイヤー表示切り替え
             _tileLayerHolder.SetAllLayersVisibility(state);
             _tileLayerHolder.Panel.Invalidate();
-
             // ブロック画像のレイヤー表示切り替え
             _blockLayerHolder.SetAllLayersVisibility(state);
             _blockLayerHolder.Panel.Invalidate();

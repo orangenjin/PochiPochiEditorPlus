@@ -297,9 +297,6 @@ namespace PochiPochiEditorPlus._Forms
 
             // スクロールバーの設定
             _layerScroller.UpdateScrollRange();
-
-            // 再描画
-            _layerHolder.Panel.Invalidate();
         }
 
         private void UpdateTabPageState(bool state)
