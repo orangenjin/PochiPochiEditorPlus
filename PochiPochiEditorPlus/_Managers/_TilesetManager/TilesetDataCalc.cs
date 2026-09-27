@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using PochiPochiEditorPlus._Helpers;
 using PochiPochiEditorPlus._Managers._FieldManager;
+using PochiPochiEditorPlus._Utilities;
 
 namespace PochiPochiEditorPlus._Managers._TilesetManager
 {
@@ -16,23 +17,25 @@ namespace PochiPochiEditorPlus._Managers._TilesetManager
         private const ushort BlockDataReverseXMask = 0x0400;     // Bit 10
         private const ushort BlockDataReverseYMask = 0x0800;     // Bit 11
         private const ushort BlockDataPaletteMask = 0xF000;      // Bit 12-15
+        private const byte WildEncGrassMask = 0x01;             // Bit 0
+        private const byte WildEncWaterMask = 0x02;             // Bit 1
+        private const byte LayerAndWildEncLayerMask = 0xFC;     // Bit 2-7
 
         /// <summary>
         /// バイト配列をブロックデータに変換する。
         /// </summary>
-        public static BlockTileData BytesToBlockLayerData(
-            FieldValueHolder fieldValue)
+        public static BlockTileData BytesToBlockTileData(FieldValueHolder fieldValue)
         {
-            var byteValue = (ushort)IoHelper.ReadBytesAsLong(
+            var ushortValue = (ushort)IoHelper.ReadBytesAsLong(
                 fieldValue.BinaryData,
                 0,
                 fieldValue.Lengths.EntryLength);
 
             // ビット演算で各データを抽出
-            int tileIndex = byteValue & BlockDataTileIndexMask;
-            bool reverseX = (byteValue & BlockDataReverseXMask) != 0;
-            bool reverseY = (byteValue & BlockDataReverseYMask) != 0;
-            int paletteIndex = (byteValue & BlockDataPaletteMask) >> BlockDataPaletteShift;
+            int tileIndex = ushortValue & BlockDataTileIndexMask;
+            bool reverseX = (ushortValue & BlockDataReverseXMask) != 0;
+            bool reverseY = (ushortValue & BlockDataReverseYMask) != 0;
+            int paletteIndex = (ushortValue & BlockDataPaletteMask) >> BlockDataPaletteShift;
 
             // インスタンスの生成
             return new BlockTileData(
@@ -45,24 +48,23 @@ namespace PochiPochiEditorPlus._Managers._TilesetManager
         /// <summary>
         /// ブロックデータをバイト配列に変換する。
         /// </summary>
-        public static byte[] BlockLayerDataToBytes(
+        public static byte[] BlockTileDataToBytes(
             BlockTileData dataValue,
             FieldValueHolder fieldValue)
         {
             // ushortに結合
-            ushort byteValue = (ushort)(
+            ushort ushortValue = (ushort)(
                 (dataValue.TileIndex & BlockDataTileIndexMask) |
                 (dataValue.ReverseX ? BlockDataReverseXMask : 0) |
                 (dataValue.ReverseY ? BlockDataReverseYMask : 0) |
-                ((dataValue.PaletteIndex & 0xF) << BlockDataPaletteShift)
-            );
+                ((dataValue.PaletteIndex & Constants.NibbleMask) << BlockDataPaletteShift));
 
             // 戻り値用に整形
             byte[] result = new byte[fieldValue.Lengths.EntryLength];
             IoHelper.WriteLongAsBytes(
                 result,
                 0,
-                byteValue,
+                ushortValue,
                 result.Length);
             return result;
         }
@@ -71,10 +73,10 @@ namespace PochiPochiEditorPlus._Managers._TilesetManager
         /// <summary>
         /// タイルデータを取得するメソッドを簡素化するため。
         /// </summary>
-        public static BlockTileData GetBlockLayerData(dynamic value)
+        public static BlockTileData GetBlockTileData(dynamic value)
         {
             return value.GetData<BlockTileData>(
-                converter: (Func<FieldValueHolder, BlockTileData>)BytesToBlockLayerData);
+                converter: (Func<FieldValueHolder, BlockTileData>)BytesToBlockTileData);
         }
 
         /// <summary>
@@ -84,18 +86,18 @@ namespace PochiPochiEditorPlus._Managers._TilesetManager
         {
             // 下位レイヤー
             var lowerLayer = new BlockLayer(
-                GetBlockLayerData(entry.LowerTopLeft),
-                GetBlockLayerData(entry.LowerTopRight),
-                GetBlockLayerData(entry.LowerBottomLeft),
-                GetBlockLayerData(entry.LowerBottomRight)
+                GetBlockTileData(entry.LowerTopLeft),
+                GetBlockTileData(entry.LowerTopRight),
+                GetBlockTileData(entry.LowerBottomLeft),
+                GetBlockTileData(entry.LowerBottomRight)
             );
 
             // 上位レイヤー
             var upperLayer = new BlockLayer(
-                GetBlockLayerData(entry.UpperTopLeft),
-                GetBlockLayerData(entry.UpperTopRight),
-                GetBlockLayerData(entry.UpperBottomLeft),
-                GetBlockLayerData(entry.UpperBottomRight)
+                GetBlockTileData(entry.UpperTopLeft),
+                GetBlockTileData(entry.UpperTopRight),
+                GetBlockTileData(entry.UpperBottomLeft),
+                GetBlockTileData(entry.UpperBottomRight)
             );
 
             return new BlockData(index, lowerLayer, upperLayer);
@@ -148,6 +150,51 @@ namespace PochiPochiEditorPlus._Managers._TilesetManager
             yield return (layer.TopRight, 1, 0);
             yield return (layer.BottomLeft, 0, 1);
             yield return (layer.BottomRight, 1, 1);
+        }
+
+        /// <summary>
+        /// バイト配列を属性データに変換する。
+        /// </summary>
+        public static LayerAndWildEncAttr BytesToLayerAndWildEncAttr(FieldValueHolder fieldValue)
+        {
+            var byteValue = (byte)IoHelper.ReadBytesAsLong(
+                fieldValue.BinaryData,
+                0,
+                fieldValue.Lengths.EntryLength);
+
+            // ビット演算で各データを抽出
+            bool wildEncGrass = (byteValue & WildEncGrassMask) != 0;
+            bool wildEncWater = (byteValue & WildEncWaterMask) != 0;
+            int layer = byteValue & LayerAndWildEncLayerMask;
+
+            // インスタンスの生成
+            return new LayerAndWildEncAttr(
+                layer,
+                wildEncGrass,
+                wildEncWater);
+        }
+
+        /// <summary>
+        /// 属性データをバイト配列に変換する。
+        /// </summary>
+        public static byte[] LayerAndWildEncAttrToBytes(
+            LayerAndWildEncAttr dataValue,
+            FieldValueHolder fieldValue)
+        {
+            // byteに結合
+            byte byteValue = (byte)(
+                (dataValue.Layer & LayerAndWildEncLayerMask) |
+                (dataValue.WildEncGrass ? WildEncGrassMask : 0) |
+                (dataValue.WildEncWater ? WildEncWaterMask : 0));
+
+            // 戻り値
+            byte[] result = new byte[fieldValue.Lengths.EntryLength];
+            IoHelper.WriteLongAsBytes(
+                result,
+                0,
+                byteValue,
+                result.Length);
+            return result;
         }
     }
 }

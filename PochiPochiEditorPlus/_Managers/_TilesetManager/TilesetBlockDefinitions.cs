@@ -1,24 +1,20 @@
 ﻿namespace PochiPochiEditorPlus._Managers._TilesetManager
 {
-    public sealed class BlockTileData
+    public sealed class BlockData
     {
-        public int TileIndex { get; set; }
-        public bool ReverseX { get; set; }
-        public bool ReverseY { get; set; }
-        public int PaletteIndex { get; set; }
+        public int BlockIndex { get; set; }
 
-        public BlockTileData(
-            int tileIndex, 
-            int paletteIndex,
-            bool reverseX = false,
-            bool reverseY = false)
+        public BlockLayer Lower { get; set; }
+        public BlockLayer Upper { get; set; }
+
+        public BlockData(
+            int blockIndex,
+            BlockLayer lower,
+            BlockLayer upper)
         {
-            TileIndex = tileIndex;
-            PaletteIndex = paletteIndex;
-
-            // 初期設定では反転なし
-            ReverseX = reverseX;
-            ReverseY = reverseY;
+            BlockIndex = blockIndex;
+            Lower = lower;
+            Upper = upper;
         }
     }
 
@@ -42,21 +38,42 @@
         }
     }
 
-    public sealed class BlockData
+    public sealed class BlockTileData
     {
-        public int BlockIndex { get; set; }
+        public int TileIndex { get; set; }
+        public bool ReverseX { get; set; }
+        public bool ReverseY { get; set; }
+        public int PaletteIndex { get; set; }
 
-        public BlockLayer Lower { get; set; }
-        public BlockLayer Upper { get; set; }
-
-        public BlockData(
-            int blockIndex,
-            BlockLayer lower,
-            BlockLayer upper)
+        public BlockTileData(
+            int tileIndex,
+            int paletteIndex,
+            bool reverseX = false,
+            bool reverseY = false)
         {
-            BlockIndex = blockIndex;
-            Lower = lower;
-            Upper = upper;
+            TileIndex = tileIndex;
+            PaletteIndex = paletteIndex;
+
+            // 初期設定では反転なし
+            ReverseX = reverseX;
+            ReverseY = reverseY;
+        }
+    }
+
+    public sealed class LayerAndWildEncAttr
+    {
+        public int Layer { get; set; }
+        public bool WildEncGrass { get; set; }
+        public bool WildEncWater { get; set; }
+
+        public LayerAndWildEncAttr(
+            int layer,
+            bool wildEncGrass,
+            bool wildEncWater)
+        {
+            Layer = layer;
+            WildEncGrass = wildEncGrass;
+            WildEncWater = wildEncWater;
         }
     }
 }
