@@ -49,25 +49,25 @@ namespace PochiPochiEditorPlus._Forms
             this.grpTileSelector = new System.Windows.Forms.GroupBox();
             this.lblSelectTile = new System.Windows.Forms.Label();
             this.cmbTilePalette = new System.Windows.Forms.ComboBox();
-            this.chkSelectTileReverseY = new System.Windows.Forms.CheckBox();
-            this.chkSelectTileReverseX = new System.Windows.Forms.CheckBox();
-            this.picSelectTile = new System.Windows.Forms.PictureBox();
+            this.chkBoardTileReverseY = new System.Windows.Forms.CheckBox();
+            this.chkBoardTileReverseX = new System.Windows.Forms.CheckBox();
+            this.picBoardTile = new System.Windows.Forms.PictureBox();
             this.vsbTileView = new System.Windows.Forms.VScrollBar();
             this.pnlTileView = new System.Windows.Forms.Panel();
             this.grpBlockSelector = new System.Windows.Forms.GroupBox();
             this.vsrBlockView = new System.Windows.Forms.VScrollBar();
             this.lblBlockIndex = new System.Windows.Forms.Label();
             this.pnlBlockView = new System.Windows.Forms.Panel();
+            this.txtBlockIndex = new PochiPochiEditorPlus._Utilities._CustomCtrls.HexTextBox();
             this.nudBlockIndex = new System.Windows.Forms.NumericUpDown();
             this.tbpColl = new System.Windows.Forms.TabPage();
             this.tbpEvent = new System.Windows.Forms.TabPage();
-            this.txtBlockIndex = new PochiPochiEditorPlus._Utilities._CustomCtrls.HexTextBox();
             this.tbcMain.SuspendLayout();
             this.tbpBlock.SuspendLayout();
             this.grpBlockDataAndAttr.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picBlockDataImage)).BeginInit();
             this.grpTileSelector.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.picSelectTile)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picBoardTile)).BeginInit();
             this.grpBlockSelector.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudBlockIndex)).BeginInit();
             this.SuspendLayout();
@@ -256,9 +256,9 @@ namespace PochiPochiEditorPlus._Forms
             // 
             this.grpTileSelector.Controls.Add(this.lblSelectTile);
             this.grpTileSelector.Controls.Add(this.cmbTilePalette);
-            this.grpTileSelector.Controls.Add(this.chkSelectTileReverseY);
-            this.grpTileSelector.Controls.Add(this.chkSelectTileReverseX);
-            this.grpTileSelector.Controls.Add(this.picSelectTile);
+            this.grpTileSelector.Controls.Add(this.chkBoardTileReverseY);
+            this.grpTileSelector.Controls.Add(this.chkBoardTileReverseX);
+            this.grpTileSelector.Controls.Add(this.picBoardTile);
             this.grpTileSelector.Controls.Add(this.vsbTileView);
             this.grpTileSelector.Controls.Add(this.pnlTileView);
             this.grpTileSelector.Location = new System.Drawing.Point(632, 16);
@@ -290,36 +290,36 @@ namespace PochiPochiEditorPlus._Forms
             this.cmbTilePalette.Size = new System.Drawing.Size(114, 23);
             this.cmbTilePalette.TabIndex = 11;
             // 
-            // chkSelectTileReverseY
+            // chkBoardTileReverseY
             // 
-            this.chkSelectTileReverseY.AutoSize = true;
-            this.chkSelectTileReverseY.Location = new System.Drawing.Point(162, 66);
-            this.chkSelectTileReverseY.Margin = new System.Windows.Forms.Padding(0);
-            this.chkSelectTileReverseY.Name = "chkSelectTileReverseY";
-            this.chkSelectTileReverseY.Size = new System.Drawing.Size(74, 19);
-            this.chkSelectTileReverseY.TabIndex = 10;
-            this.chkSelectTileReverseY.Text = "上下反転";
-            this.chkSelectTileReverseY.UseVisualStyleBackColor = true;
+            this.chkBoardTileReverseY.AutoSize = true;
+            this.chkBoardTileReverseY.Location = new System.Drawing.Point(162, 66);
+            this.chkBoardTileReverseY.Margin = new System.Windows.Forms.Padding(0);
+            this.chkBoardTileReverseY.Name = "chkBoardTileReverseY";
+            this.chkBoardTileReverseY.Size = new System.Drawing.Size(74, 19);
+            this.chkBoardTileReverseY.TabIndex = 10;
+            this.chkBoardTileReverseY.Text = "上下反転";
+            this.chkBoardTileReverseY.UseVisualStyleBackColor = true;
             // 
-            // chkSelectTileReverseX
+            // chkBoardTileReverseX
             // 
-            this.chkSelectTileReverseX.AutoSize = true;
-            this.chkSelectTileReverseX.Location = new System.Drawing.Point(162, 42);
-            this.chkSelectTileReverseX.Margin = new System.Windows.Forms.Padding(0);
-            this.chkSelectTileReverseX.Name = "chkSelectTileReverseX";
-            this.chkSelectTileReverseX.Size = new System.Drawing.Size(74, 19);
-            this.chkSelectTileReverseX.TabIndex = 10;
-            this.chkSelectTileReverseX.Text = "左右反転";
-            this.chkSelectTileReverseX.UseVisualStyleBackColor = true;
+            this.chkBoardTileReverseX.AutoSize = true;
+            this.chkBoardTileReverseX.Location = new System.Drawing.Point(162, 42);
+            this.chkBoardTileReverseX.Margin = new System.Windows.Forms.Padding(0);
+            this.chkBoardTileReverseX.Name = "chkBoardTileReverseX";
+            this.chkBoardTileReverseX.Size = new System.Drawing.Size(74, 19);
+            this.chkBoardTileReverseX.TabIndex = 10;
+            this.chkBoardTileReverseX.Text = "左右反転";
+            this.chkBoardTileReverseX.UseVisualStyleBackColor = true;
             // 
-            // picSelectTile
+            // picBoardTile
             // 
-            this.picSelectTile.Location = new System.Drawing.Point(20, 50);
-            this.picSelectTile.Margin = new System.Windows.Forms.Padding(0);
-            this.picSelectTile.Name = "picSelectTile";
-            this.picSelectTile.Size = new System.Drawing.Size(128, 64);
-            this.picSelectTile.TabIndex = 9;
-            this.picSelectTile.TabStop = false;
+            this.picBoardTile.Location = new System.Drawing.Point(20, 50);
+            this.picBoardTile.Margin = new System.Windows.Forms.Padding(0);
+            this.picBoardTile.Name = "picBoardTile";
+            this.picBoardTile.Size = new System.Drawing.Size(128, 64);
+            this.picBoardTile.TabIndex = 9;
+            this.picBoardTile.TabStop = false;
             // 
             // vsbTileView
             // 
@@ -377,6 +377,16 @@ namespace PochiPochiEditorPlus._Forms
             this.pnlBlockView.Size = new System.Drawing.Size(256, 352);
             this.pnlBlockView.TabIndex = 3;
             // 
+            // txtBlockIndex
+            // 
+            this.txtBlockIndex.Digits = 4;
+            this.txtBlockIndex.Location = new System.Drawing.Point(204, 28);
+            this.txtBlockIndex.Margin = new System.Windows.Forms.Padding(0);
+            this.txtBlockIndex.Name = "txtBlockIndex";
+            this.txtBlockIndex.ReadOnly = true;
+            this.txtBlockIndex.Size = new System.Drawing.Size(72, 23);
+            this.txtBlockIndex.TabIndex = 2;
+            // 
             // nudBlockIndex
             // 
             this.nudBlockIndex.Location = new System.Drawing.Point(122, 28);
@@ -410,16 +420,6 @@ namespace PochiPochiEditorPlus._Forms
             this.tbpEvent.Text = "イベント";
             this.tbpEvent.UseVisualStyleBackColor = true;
             // 
-            // txtBlockIndex
-            // 
-            this.txtBlockIndex.Digits = 4;
-            this.txtBlockIndex.Location = new System.Drawing.Point(204, 28);
-            this.txtBlockIndex.Margin = new System.Windows.Forms.Padding(0);
-            this.txtBlockIndex.Name = "txtBlockIndex";
-            this.txtBlockIndex.ReadOnly = true;
-            this.txtBlockIndex.Size = new System.Drawing.Size(72, 23);
-            this.txtBlockIndex.TabIndex = 2;
-            // 
             // OwMapEditor1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -439,7 +439,7 @@ namespace PochiPochiEditorPlus._Forms
             ((System.ComponentModel.ISupportInitialize)(this.picBlockDataImage)).EndInit();
             this.grpTileSelector.ResumeLayout(false);
             this.grpTileSelector.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.picSelectTile)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picBoardTile)).EndInit();
             this.grpBlockSelector.ResumeLayout(false);
             this.grpBlockSelector.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudBlockIndex)).EndInit();
@@ -462,9 +462,9 @@ namespace PochiPochiEditorPlus._Forms
         private System.Windows.Forms.GroupBox grpTileSelector;
         private System.Windows.Forms.VScrollBar vsbTileView;
         private System.Windows.Forms.Panel pnlTileView;
-        private System.Windows.Forms.CheckBox chkSelectTileReverseY;
-        private System.Windows.Forms.CheckBox chkSelectTileReverseX;
-        private System.Windows.Forms.PictureBox picSelectTile;
+        private System.Windows.Forms.CheckBox chkBoardTileReverseY;
+        private System.Windows.Forms.CheckBox chkBoardTileReverseX;
+        private System.Windows.Forms.PictureBox picBoardTile;
         private System.Windows.Forms.ComboBox cmbTilePalette;
         private System.Windows.Forms.GroupBox grpBlockDataAndAttr;
         private System.Windows.Forms.Label lblBlockDataImage;

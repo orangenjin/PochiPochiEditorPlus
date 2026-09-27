@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Windows.Forms;
@@ -7,19 +6,16 @@ using PochiPochiEditorPlus._Utilities;
 
 namespace PochiPochiEditorPlus._Managers._LayerManager
 {
-    public sealed class LayerHolder<TEnum> where TEnum : Enum
+    public sealed class LayerHolder<TEnum> : DynamicAccessor<LayerBase> where TEnum : Enum
     {
         // 対象のパネルコントロール
         public Panel Panel { get; }
         // レイヤーの基礎情報を各レイヤーに注入する
         public LayerData Data { get; }
-        // 各レイヤーを格納する
-        public Dictionary<TEnum, LayerBase> Layers { get; }
 
         public LayerHolder(Panel panel, EventBinder eventBinder)
         {
             Data = new LayerData();
-            Layers = new Dictionary<TEnum, LayerBase>();
             Panel = panel;
 
             eventBinder.BindCustom(
@@ -54,26 +50,11 @@ namespace PochiPochiEditorPlus._Managers._LayerManager
         /// <summary>
         /// LayerBaseを継承したレイヤーを登録する。
         /// </summary>
-        public void AddLayer(TEnum key, LayerBase layer)
+        public void AddLayer<TLayer>(TEnum key) where TLayer : LayerBase, new()
         {
-            if (Layers.TryGetValue(key, out var oldLayer))
-            {
-                oldLayer?.Dispose();
-            }
-            Layers[key] = layer;
-        }
-
-        /// <summary>
-        /// 特定のレイヤーを取得する。
-        /// </summary>
-        public T GetLayer<T>(TEnum key) where T : LayerBase
-        {
-            if (Layers.TryGetValue(key, out var layer) 
-                && layer is T typedLayer)
-            {
-                return typedLayer;
-            }
-            return null;
+            var layer = new TLayer();
+            layer.Data = Data;
+            Register(key.ToString(), layer);
         }
 
         /// <summary>
@@ -81,7 +62,7 @@ namespace PochiPochiEditorPlus._Managers._LayerManager
         /// </summary>
         public void HideAllLayers()
         {
-            foreach (var layer in Layers.Values)
+            foreach (var layer in _values.Values)
             {
                 layer.Visible = false;
             }
@@ -98,10 +79,10 @@ namespace PochiPochiEditorPlus._Managers._LayerManager
             e.Graphics.TranslateTransform(-offset.X, -offset.Y);
 
             // 各レイヤーをEnum順に描画
-            var sortedKeys = Enum.GetValues(typeof(TEnum)).Cast<TEnum>().OrderBy(k => k);
-            foreach (var key in sortedKeys)
+            foreach (var key in Enum.GetValues(typeof(TEnum)))
             {
-                if (Layers.TryGetValue(key, out var layer) && layer.Visible)
+                string keyStr = key.ToString();
+                if (_values.TryGetValue(keyStr, out var layer) && layer.Visible)
                 {
                     layer.Draw(e.Graphics);
                 }
@@ -112,10 +93,10 @@ namespace PochiPochiEditorPlus._Managers._LayerManager
 
         // マウスイベントを各レイヤーに渡す
         private void Panel_MouseDown(object sender, MouseEventArgs e)
-            => Layers.Values.Where(l => l.Visible).ToList().ForEach(l => l.OnMouseDown(e));
+            => _values.Values.Where(l => l.Visible).ToList().ForEach(l => l.OnMouseDown(e));
         private void Panel_MouseMove(object sender, MouseEventArgs e)
-            => Layers.Values.Where(l => l.Visible).ToList().ForEach(l => l.OnMouseMove(e));
+            => _values.Values.Where(l => l.Visible).ToList().ForEach(l => l.OnMouseMove(e));
         private void Panel_MouseUp(object sender, MouseEventArgs e)
-            => Layers.Values.Where(l => l.Visible).ToList().ForEach(l => l.OnMouseUp(e));
+            => _values.Values.Where(l => l.Visible).ToList().ForEach(l => l.OnMouseUp(e));
     }
 }

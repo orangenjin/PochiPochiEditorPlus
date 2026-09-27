@@ -30,10 +30,20 @@ namespace PochiPochiEditorPlus._Forms
         private LayerScroller _tileLayerScroller = null;
         private LayerHolder<LayerNames> _blockLayerHolder = null;
         private LayerScroller _blockLayerScroller = null;
-        private enum LayerNames { Tile, BlockLower, BlockUpper }
+        private LayerHolder<LayerNames> _boardLayerHolder = null;
         // UI制御用
         private int _selectedBlockIndex = 0;
         private byte[] _combinedTilesetImageData = null;
+
+        private enum LayerNames 
+        { 
+            Tile,
+            BlockLower,
+            BlockUpper,
+            Grid,
+            Select,
+            Paste
+        }
 
         public OwMapEditor1(
             SharedData sharedData,
@@ -103,7 +113,7 @@ namespace PochiPochiEditorPlus._Forms
                 () => CtrlHelper.AttachBorder(grpBlockSelector, pnlBlockView),
                 () => CtrlHelper.DetachBorder(grpBlockSelector));
             _eventBinder.BindCustom(
-                () => CtrlHelper.AttachBorder(grpTileSelector, picSelectTile, pnlTileView),
+                () => CtrlHelper.AttachBorder(grpTileSelector, picBoardTile, pnlTileView),
                 () => CtrlHelper.DetachBorder(grpTileSelector));
             _eventBinder.BindCustom(
                 () => CtrlHelper.AttachBorder(grpBlockDataAndAttr, picBlockDataImage),

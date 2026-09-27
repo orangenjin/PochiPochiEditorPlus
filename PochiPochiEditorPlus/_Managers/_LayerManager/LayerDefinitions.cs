@@ -67,13 +67,12 @@ namespace PochiPochiEditorPlus._Managers._LayerManager
     /// <summary>
     /// 各レイヤーはこれを継承する。
     /// </summary>
-    public abstract class LayerBase : IDisposable
+    public abstract class LayerBase
     {
         // 表示/非表示設定
         public bool Visible { get; set; }
-
         // 共通のレイヤーデータを内部的に保持
-        protected LayerData _layerData = null;
+        public LayerData Data { get; set; }
 
         protected LayerBase(bool visible = true)
         {
@@ -85,6 +84,5 @@ namespace PochiPochiEditorPlus._Managers._LayerManager
         public virtual void OnMouseDown(MouseEventArgs e) { }
         public virtual void OnMouseMove(MouseEventArgs e) { }
         public virtual void OnMouseUp(MouseEventArgs e) { }
-        public virtual void Dispose() { }
     }
 }
