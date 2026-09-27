@@ -7,6 +7,7 @@ using PochiPochiEditorPlus._Helpers;
 using PochiPochiEditorPlus._Helpers._MatchHelper;
 using PochiPochiEditorPlus._Managers._FieldManager;
 using PochiPochiEditorPlus._Managers._FormGroupManager;
+using PochiPochiEditorPlus._Managers._LayerManager;
 using PochiPochiEditorPlus._Managers._UndoManager;
 using PochiPochiEditorPlus._Utilities;
 
@@ -28,6 +29,7 @@ namespace PochiPochiEditorPlus._Forms
         private dynamic _mapFooterEntry = null;
         // UI制御用
         private MapTreeNode _currentMapNode = null;
+        private ClipboardData _clipboardData = null;
 
         // 定義情報を事前に計算するため
         private List<FieldMetaData> _mapFooterDef = null;
@@ -82,6 +84,7 @@ namespace PochiPochiEditorPlus._Forms
         private void RegisterFormGroupData(FormGroupData groupData)
         {
             groupData.Register(this, () => _mapFooterEntry);
+            groupData.Register(this, () => _clipboardData);
         }
 
         private void InitializeMapNameEntry()
