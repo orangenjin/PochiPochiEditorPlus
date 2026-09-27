@@ -26,11 +26,11 @@ namespace PochiPochiEditorPlus._Forms
         private dynamic _tileset2Manager = null;
         private List<BlockData> _blockDataList = null;
         // パネル描画用
-        private LayerHolder<LayerNames> _tileLayerHolder = null;
+        private dynamic _tileLayerHolder = null;
         private LayerScroller _tileLayerScroller = null;
-        private LayerHolder<LayerNames> _blockLayerHolder = null;
+        private dynamic _blockLayerHolder = null;
         private LayerScroller _blockLayerScroller = null;
-        private LayerHolder<LayerNames> _boardLayerHolder = null;
+        private LayerHolder<LayerNames> _dataLayerHolder = null;
         // UI制御用
         private int _selectedBlockIndex = 0;
         private byte[] _combinedTilesetImageData = null;
@@ -40,6 +40,7 @@ namespace PochiPochiEditorPlus._Forms
             Tile,
             BlockLower,
             BlockUpper,
+            Data,
             Grid,
             Select,
             Paste
@@ -76,6 +77,7 @@ namespace PochiPochiEditorPlus._Forms
                 _eventBinder);
 
             InitializeControls();
+            InitializeLayers();
             InitializeEventHandlers();
 
             RefreshUI();
@@ -106,6 +108,20 @@ namespace PochiPochiEditorPlus._Forms
                 (cmbBlockAttrLayer, "txt/tileset/TilesetBlockAttrLayer.txt"));
         }
 
+        private void InitializeLayers()
+        {
+            // タイルレイヤー
+            _tileLayerHolder.AddLayer<SingleImageLayer>(LayerNames.Tile);
+            _tileLayerHolder.AddLayer<GridLayer>(LayerNames.Grid);
+            _tileLayerHolder.AddLayer<SelectLayer>(LayerNames.Select);
+
+            // ブロックレイヤー
+            _blockLayerHolder.AddLayer<BlockImageLayer>(LayerNames.BlockLower);
+            _blockLayerHolder.AddLayer<BlockImageLayer>(LayerNames.BlockUpper);
+            _blockLayerHolder.AddLayer<GridLayer>(LayerNames.Grid);
+            _blockLayerHolder.AddLayer<SelectLayer>(LayerNames.Select);
+        }
+
         private void InitializeEventHandlers()
         {
             // 枠描画
@@ -125,9 +141,8 @@ namespace PochiPochiEditorPlus._Forms
                 h => cmbTilePalette.SelectedIndexChanged -= h,
                 (_, __) =>
                 {
-                    /*
                     // 画像レイヤーを取得
-                    var layer = _tileLayerHolder.GetLayer<SingleImageLayer>(LayerNames.Tile);
+                    var layer = _tileLayerHolder.Tile;
                     if (layer == null) return;
 
                     // パレットを更新
@@ -135,10 +150,11 @@ namespace PochiPochiEditorPlus._Forms
                     var palData = GetProperPaletteData(palIndex);
                     layer.ApplyPalette(palData);
                     pnlTileView.Invalidate();
-                    */
                 });
 
             // タイルインデックス数値
+            // dunamic型にイベント登録できないのでキャスト
+            var selectLayer = (SelectLayer)_blockLayerHolder.Select;
             _eventBinder.BindCtrl(
                 h => nudBlockIndex.ValueChanged += h,
                 h => nudBlockIndex.ValueChanged -= h,
@@ -146,20 +162,16 @@ namespace PochiPochiEditorPlus._Forms
                 {
                     // nudの数値とtxtの表示
                     _selectedBlockIndex = (int)nudBlockIndex.Value;
-                    txtBlockIndex.Text =
-                        _selectedBlockIndex.ParseIntToString(txtBlockIndex.Digits);
+                    txtBlockIndex.Text = _selectedBlockIndex.ParseIntToString(txtBlockIndex.Digits);
 
                     // 選択範囲の更新
-                    // var selectedIndexList = _blockLayerHolder.SelectorLayer.GetSelectedIndexList();
-                    // if (selectedIndexList.Count > 0 && selectedIndexList[0] == _selectedBlockIndex) return;
-                    // _blockLayerHolder.SelectorLayer.SelectSingleItem(_selectedBlockIndex);
+                    var selectedIndexList = selectLayer.GetSelectedIndexList();
+                    if (selectedIndexList.Count > 0 && selectedIndexList[0] == _selectedBlockIndex) return;
+                    selectLayer.SelectSingleItem(_selectedBlockIndex);
                 });
-
-            /*
             _eventBinder.BindCustom(
-                () => _blockLayerHolder.SelectorLayer.SelectChanged += UpdateSelectedBlockIndex,
-                () => _blockLayerHolder.SelectorLayer.SelectChanged -= UpdateSelectedBlockIndex);
-            */
+                () => selectLayer.SelectChanged += UpdateSelectedBlockIndex,
+                () => selectLayer.SelectChanged -= UpdateSelectedBlockIndex);
 
             // 解除タイミング指定
             _eventBinder.BindCtrl(
@@ -238,29 +250,19 @@ namespace PochiPochiEditorPlus._Forms
                 scale: Constants.DefaultScale,
                 validItemCount: totalTiles);
 
-            /*
-             
             // 画像の設定
-            _tileLayerHolder.SetImageLayer(
-                LayerNames.Tile,
+            _tileLayerHolder.Tile.SetImageData(
                 _combinedTilesetImageData,
                 palData,
                 width,
                 height);
-            _tileLayerHolder.SetLayerVisible(LayerNames.Tile, true);
-
-            // グリッドの設定
-            _tileLayerHolder.SetGridVisible(true);
 
             // 選択範囲の設定
             var maxLength = Constants.TilePerBlockSide;
-            _tileLayerHolder.SelectorLayer.MaxSelectSize = new Size(maxLength, maxLength);
-            _tileLayerHolder.SetSelectorVisible(true);
+            _tileLayerHolder.Select.MaxSelectSize = new Size(maxLength, maxLength);
 
             // スクロールバーの設定
             _tileLayerScroller.UpdateScrollRange();
-
-            */
         }
 
         private void SetBlockData()
@@ -305,60 +307,44 @@ namespace PochiPochiEditorPlus._Forms
                 scale: Constants.DefaultScale,
                 validItemCount: _blockDataList.Count);
 
-            /*
-             * 
             // 画像を破棄
-            var oldLower = _blockLayerHolder.GetLayer<MapBlockLayer>(LayerNames.BlockLower);
-            oldLower?.DisposeImages();
-            var oldUpper = _blockLayerHolder.GetLayer<MapBlockLayer>(LayerNames.BlockUpper);
-            oldUpper?.DisposeImages();
-
-            var lowerBlockLayer = new MapBlockLayer(_blockLayerHolder.Data, blockSize);
-            var upperBlockLayer = new MapBlockLayer(_blockLayerHolder.Data, blockSize);
+            _blockLayerHolder.BlockLower.Allocate();
+            _blockLayerHolder.BlockUpper.Allocate();
 
             // 定数を事前に計算
-            var tileLayer = _tileLayerHolder.GetLayer<SingleImageLayer>(LayerNames.Tile);
             int tilesPerRow = Constants.TilesetImageWidth / Constants.TileSize;
+            int columns = _blockLayerHolder.Data.Columns;
 
             for (int i = 0; i < _blockDataList.Count; i++)
             {
                 var blockData = _blockDataList[i];
 
                 // 1ブロック分の画像を用意
-                Bitmap lowerBmp = new Bitmap(blockSize, blockSize);
-                Bitmap upperBmp = new Bitmap(blockSize, blockSize);
-
-                using (Graphics gLower = Graphics.FromImage(lowerBmp))
-                using (Graphics gUpper = Graphics.FromImage(upperBmp))
+                using (Bitmap lowerBmp = new Bitmap(blockSize, blockSize))
+                using (Bitmap upperBmp = new Bitmap(blockSize, blockSize))
                 {
-                    DrawBlockLayer(gLower, blockData.Lower, 0, 0, tileLayer, tilesPerRow, isLower: true);
-                    DrawBlockLayer(gUpper, blockData.Upper, 0, 0, tileLayer, tilesPerRow, isLower: false);
-                }
+                    using (Graphics gLower = Graphics.FromImage(lowerBmp))
+                    using (Graphics gUpper = Graphics.FromImage(upperBmp))
+                    {
+                        DrawBlockLayer(gLower, blockData.Lower, 0, 0, _tileLayerHolder.Tile, tilesPerRow, isLower: true);
+                        DrawBlockLayer(gUpper, blockData.Upper, 0, 0, _tileLayerHolder.Tile, tilesPerRow, isLower: false);
+                    }
 
-                // リストに追加
-                lowerBlockLayer.BlockImages.Add(lowerBmp);
-                upperBlockLayer.BlockImages.Add(upperBmp);
+                    // マス座標を計算
+                    int gridX = i % columns;
+                    int gridY = i / columns;
+
+                    // 画像をセットする
+                    _blockLayerHolder.BlockLower.SetBlockImage(gridX, gridY, lowerBmp);
+                    _blockLayerHolder.BlockUpper.SetBlockImage(gridX, gridY, upperBmp);
+                }
             }
 
-            */
-
-            /*
-            // 生成したカスタムレイヤーを登録
-            _blockLayerHolder.AddCustomLayer(LayerNames.BlockLower, lowerBlockLayer);
-            _blockLayerHolder.AddCustomLayer(LayerNames.BlockUpper, upperBlockLayer);
-
-            // 画像レイヤーを表示する
-            _blockLayerHolder.SetLayerVisible(LayerNames.BlockLower, true);
-            _blockLayerHolder.SetLayerVisible(LayerNames.BlockUpper, true);
-
-            // グリッドと選択範囲の設定
-            _blockLayerHolder.SetGridVisible(true);
-            _blockLayerHolder.SelectorLayer.MaxSelectSize = new Size(1, 1);
-            _blockLayerHolder.SetSelectorVisible(true);
+            // 選択範囲の設定
+            _blockLayerHolder.Select.MaxSelectSize = new Size(1, 1);
 
             // スクロールバーの設定
             _blockLayerScroller.UpdateScrollRange();
-            */
         }
 
         private void DrawBlockLayer(

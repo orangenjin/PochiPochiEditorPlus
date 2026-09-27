@@ -42,7 +42,7 @@ namespace PochiPochiEditorPlus._Managers._LayerManager
             RequestInvalidate.Invoke();
         }
 
-        public void ClearSelect()
+        private void ClearSelect()
         {
             SelectedGrids = Rectangle.Empty;
         }

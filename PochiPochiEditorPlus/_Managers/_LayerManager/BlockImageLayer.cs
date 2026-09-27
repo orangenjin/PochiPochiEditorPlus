@@ -12,11 +12,9 @@ namespace PochiPochiEditorPlus._Managers._LayerManager
         /// </summary>
         public void Allocate()
         {
-            int total = Data.ValidItemCount;
-
             // 配列の画像を破棄
             ClearImages();
-            _blockImages = new Bitmap[total];
+            _blockImages = new Bitmap[Data.ValidItemCount];
         }
 
         /// <summary>
@@ -64,7 +62,7 @@ namespace PochiPochiEditorPlus._Managers._LayerManager
         /// <summary>
         /// 配列の画像を破棄して、参照を切る。
         /// </summary>
-        public void ClearImages()
+        private void ClearImages()
         {
             if (_blockImages != null)
             {
