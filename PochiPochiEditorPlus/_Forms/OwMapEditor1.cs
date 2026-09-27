@@ -483,6 +483,8 @@ namespace PochiPochiEditorPlus._Forms
             cmbBlockAttrType.SelectedIndex = entry.TypeAttr.GetData<int>();
             cmbBlockAttrUnk.SelectedIndex = entry.UnkAttr.GetData<int>();
 
+            // cmbBlockAttrLayer.SelectedValue = entry.LayerAndWildEncAttr.GetData<byte>();
+
         }
 
         private byte[] GetProperPaletteData(int palIndex)

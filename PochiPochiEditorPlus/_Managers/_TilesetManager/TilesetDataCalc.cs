@@ -43,15 +43,6 @@ namespace PochiPochiEditorPlus._Managers._TilesetManager
         }
 
         /// <summary>
-        /// タイルデータを取得するメソッドを簡素化するため。
-        /// </summary>
-        public static BlockTileData GetBlockLayerData(dynamic value)
-        {
-            return value.GetData<BlockTileData>(
-                converter: (Func<FieldValueHolder, BlockTileData>)BytesToBlockLayerData);
-        }
-
-        /// <summary>
         /// ブロックデータをバイト配列に変換する。
         /// </summary>
         public static byte[] BlockLayerDataToBytes(
@@ -74,6 +65,16 @@ namespace PochiPochiEditorPlus._Managers._TilesetManager
                 byteValue,
                 result.Length);
             return result;
+        }
+
+
+        /// <summary>
+        /// タイルデータを取得するメソッドを簡素化するため。
+        /// </summary>
+        public static BlockTileData GetBlockLayerData(dynamic value)
+        {
+            return value.GetData<BlockTileData>(
+                converter: (Func<FieldValueHolder, BlockTileData>)BytesToBlockLayerData);
         }
 
         /// <summary>
