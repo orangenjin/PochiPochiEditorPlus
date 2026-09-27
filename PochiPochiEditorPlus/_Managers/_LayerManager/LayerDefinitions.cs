@@ -81,7 +81,7 @@ namespace PochiPochiEditorPlus._Managers._LayerManager
             Visible = visible;
         }
 
-        public abstract void Draw(Graphics gfx);
+        public virtual void Draw(Graphics gfx);
         public virtual void OnMouseDown(MouseEventArgs e) { }
         public virtual void OnMouseMove(MouseEventArgs e) { }
         public virtual void OnMouseUp(MouseEventArgs e) { }

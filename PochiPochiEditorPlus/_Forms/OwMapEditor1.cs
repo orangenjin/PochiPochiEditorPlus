@@ -40,6 +40,7 @@ namespace PochiPochiEditorPlus._Forms
             Tile,
             BlockLower,
             BlockUpper,
+            BlockFlat,
             Data,
             Grid,
             Select,
@@ -75,6 +76,8 @@ namespace PochiPochiEditorPlus._Forms
                 vsrBlockView,
                 _blockLayerHolder.Data,
                 _eventBinder);
+            // データ画像パネル
+            _dataLayerHolder = new LayerHolder<LayerNames>(pnlBlockDataImage, _eventBinder);
 
             InitializeControls();
             InitializeLayers();
@@ -122,6 +125,9 @@ namespace PochiPochiEditorPlus._Forms
             _blockLayerHolder.AddLayer<BlockImageLayer>(LayerNames.BlockUpper);
             _blockLayerHolder.AddLayer<GridLayer>(LayerNames.Grid);
             _blockLayerHolder.AddLayer<SelectLayer>(LayerNames.Select);
+
+            // データレイヤー
+            _dataLayerHolder.AddLayer<SelectLayer>(LayerNames.BlockFlat);
         }
 
         private void InitializeEventHandlers()

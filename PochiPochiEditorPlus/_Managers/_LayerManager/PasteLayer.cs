@@ -5,45 +5,40 @@ namespace PochiPochiEditorPlus._Managers._LayerManager
 {
     public sealed class PasteLayer : LayerBase
     {
-        private ClipboardData _clipBoardData = null;
-        private BlockImageLayer _targetImageLayer = null;
-
-        public PasteLayer(
-            ClipboardData clipBoardData,
-            BlockImageLayer targetImageLayer)
-        {
-            _clipBoardData = clipBoardData;
-            _targetImageLayer = targetImageLayer;
-        }
-
-        public override void Draw(Graphics gfx)
-        {
-            // ペーストのプレビュー等を描画する
-        }
+        public ClipboardData Clipboard { get; set; }
+        public BlockImageLayer TargetImageLayer { get; set; }
 
         public override void OnMouseDown(MouseEventArgs e)
         {
             // 左クリックでペースト
             if (e.Button != MouseButtons.Left) return;
-            if (_clipBoardData.Images == null) return;
+            if (Clipboard.Images == null || TargetImageLayer == null) return;
 
             // マウス座標からクリック地点のマス座標を取得
             var startGridPoint = Data.GetGridPoint(e.Location);
             bool isPasted = false;
 
-            for (int y = 0; y < _clipBoardData.Height; y++)
+            for (int y = 0; y < Clipboard.Height; y++)
             {
-                for (int x = 0; x < _clipBoardData.Width; x++)
+                for (int x = 0; x < Clipboard.Width; x++)
                 {
                     int targetX = startGridPoint.X + x;
                     int targetY = startGridPoint.Y + y;
 
-                    // 有効な範囲内かどうかを判定
+                    // 有効なマス範囲内かどうかを判定
                     if (Data.IsValidGrid(targetX, targetY))
                     {
-                        var imgToPaste = _clipBoardData.Images[x, y];
-                        _targetImageLayer.SetBlockImage(targetX, targetY, imgToPaste);
-                        isPasted = true;
+                        var imgToPaste = Clipboard.Images[x, y];
+
+                        // 画像が存在する場合のみ反映
+                        if (imgToPaste != null)
+                        {
+                            TargetImageLayer.SetBlockImage(
+                                targetX,
+                                targetY, 
+                                (Bitmap)imgToPaste.Clone());
+                            isPasted = true;
+                        }
                     }
                 }
             }
