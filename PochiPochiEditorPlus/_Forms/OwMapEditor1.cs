@@ -134,7 +134,7 @@ namespace PochiPochiEditorPlus._Forms
                 () => CtrlHelper.AttachBorder(grpTileSelector, picBoardTile, pnlTileView),
                 () => CtrlHelper.DetachBorder(grpTileSelector));
             _eventBinder.BindCustom(
-                () => CtrlHelper.AttachBorder(grpBlockDataAndAttr, picBlockDataImage),
+                () => CtrlHelper.AttachBorder(grpBlockDataAndAttr, pnlBlockDataImage, pnlTripleLayerImage),
                 () => CtrlHelper.DetachBorder(grpBlockDataAndAttr));
 
             // パレット切り替え

@@ -45,7 +45,6 @@ namespace PochiPochiEditorPlus._Forms
             this.cmbBlockAttrAction = new System.Windows.Forms.ComboBox();
             this.lblBlockAttrAction = new System.Windows.Forms.Label();
             this.lblBlockDataImage = new System.Windows.Forms.Label();
-            this.picBlockDataImage = new System.Windows.Forms.PictureBox();
             this.grpTileSelector = new System.Windows.Forms.GroupBox();
             this.lblSelectTile = new System.Windows.Forms.Label();
             this.cmbTilePalette = new System.Windows.Forms.ComboBox();
@@ -58,14 +57,16 @@ namespace PochiPochiEditorPlus._Forms
             this.vsrBlockView = new System.Windows.Forms.VScrollBar();
             this.lblBlockIndex = new System.Windows.Forms.Label();
             this.pnlBlockView = new System.Windows.Forms.Panel();
-            this.txtBlockIndex = new PochiPochiEditorPlus._Utilities._CustomCtrls.HexTextBox();
             this.nudBlockIndex = new System.Windows.Forms.NumericUpDown();
             this.tbpColl = new System.Windows.Forms.TabPage();
             this.tbpEvent = new System.Windows.Forms.TabPage();
+            this.pnlBlockDataImage = new System.Windows.Forms.Panel();
+            this.pnlTripleLayerImage = new System.Windows.Forms.Panel();
+            this.txtBlockIndex = new PochiPochiEditorPlus._Utilities._CustomCtrls.HexTextBox();
+            this.lblTripleLayerImage = new System.Windows.Forms.Label();
             this.tbcMain.SuspendLayout();
             this.tbpBlock.SuspendLayout();
             this.grpBlockDataAndAttr.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.picBlockDataImage)).BeginInit();
             this.grpTileSelector.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picBoardTile)).BeginInit();
             this.grpBlockSelector.SuspendLayout();
@@ -99,6 +100,9 @@ namespace PochiPochiEditorPlus._Forms
             // 
             // grpBlockDataAndAttr
             // 
+            this.grpBlockDataAndAttr.Controls.Add(this.lblTripleLayerImage);
+            this.grpBlockDataAndAttr.Controls.Add(this.pnlTripleLayerImage);
+            this.grpBlockDataAndAttr.Controls.Add(this.pnlBlockDataImage);
             this.grpBlockDataAndAttr.Controls.Add(this.chkBlockAttrWildEncWater);
             this.grpBlockDataAndAttr.Controls.Add(this.chkBlockAttrWildEncGrass);
             this.grpBlockDataAndAttr.Controls.Add(this.lblBlockAttrWildEnc);
@@ -111,7 +115,6 @@ namespace PochiPochiEditorPlus._Forms
             this.grpBlockDataAndAttr.Controls.Add(this.cmbBlockAttrAction);
             this.grpBlockDataAndAttr.Controls.Add(this.lblBlockAttrAction);
             this.grpBlockDataAndAttr.Controls.Add(this.lblBlockDataImage);
-            this.grpBlockDataAndAttr.Controls.Add(this.picBlockDataImage);
             this.grpBlockDataAndAttr.Location = new System.Drawing.Point(356, 16);
             this.grpBlockDataAndAttr.Margin = new System.Windows.Forms.Padding(0);
             this.grpBlockDataAndAttr.Name = "grpBlockDataAndAttr";
@@ -243,15 +246,6 @@ namespace PochiPochiEditorPlus._Forms
             this.lblBlockDataImage.TabIndex = 11;
             this.lblBlockDataImage.Text = "下位 / 上位";
             // 
-            // picBlockDataImage
-            // 
-            this.picBlockDataImage.Location = new System.Drawing.Point(20, 50);
-            this.picBlockDataImage.Margin = new System.Windows.Forms.Padding(0);
-            this.picBlockDataImage.Name = "picBlockDataImage";
-            this.picBlockDataImage.Size = new System.Drawing.Size(128, 64);
-            this.picBlockDataImage.TabIndex = 10;
-            this.picBlockDataImage.TabStop = false;
-            // 
             // grpTileSelector
             // 
             this.grpTileSelector.Controls.Add(this.lblSelectTile);
@@ -377,16 +371,6 @@ namespace PochiPochiEditorPlus._Forms
             this.pnlBlockView.Size = new System.Drawing.Size(256, 352);
             this.pnlBlockView.TabIndex = 3;
             // 
-            // txtBlockIndex
-            // 
-            this.txtBlockIndex.Digits = 4;
-            this.txtBlockIndex.Location = new System.Drawing.Point(204, 28);
-            this.txtBlockIndex.Margin = new System.Windows.Forms.Padding(0);
-            this.txtBlockIndex.Name = "txtBlockIndex";
-            this.txtBlockIndex.ReadOnly = true;
-            this.txtBlockIndex.Size = new System.Drawing.Size(72, 23);
-            this.txtBlockIndex.TabIndex = 2;
-            // 
             // nudBlockIndex
             // 
             this.nudBlockIndex.Location = new System.Drawing.Point(122, 28);
@@ -420,6 +404,42 @@ namespace PochiPochiEditorPlus._Forms
             this.tbpEvent.Text = "イベント";
             this.tbpEvent.UseVisualStyleBackColor = true;
             // 
+            // pnlBlockDataImage
+            // 
+            this.pnlBlockDataImage.Location = new System.Drawing.Point(20, 50);
+            this.pnlBlockDataImage.Margin = new System.Windows.Forms.Padding(0);
+            this.pnlBlockDataImage.Name = "pnlBlockDataImage";
+            this.pnlBlockDataImage.Size = new System.Drawing.Size(128, 64);
+            this.pnlBlockDataImage.TabIndex = 23;
+            // 
+            // pnlTripleLayerImage
+            // 
+            this.pnlTripleLayerImage.Location = new System.Drawing.Point(168, 50);
+            this.pnlTripleLayerImage.Margin = new System.Windows.Forms.Padding(0);
+            this.pnlTripleLayerImage.Name = "pnlTripleLayerImage";
+            this.pnlTripleLayerImage.Size = new System.Drawing.Size(64, 64);
+            this.pnlTripleLayerImage.TabIndex = 24;
+            // 
+            // txtBlockIndex
+            // 
+            this.txtBlockIndex.Digits = 4;
+            this.txtBlockIndex.Location = new System.Drawing.Point(204, 28);
+            this.txtBlockIndex.Margin = new System.Windows.Forms.Padding(0);
+            this.txtBlockIndex.Name = "txtBlockIndex";
+            this.txtBlockIndex.ReadOnly = true;
+            this.txtBlockIndex.Size = new System.Drawing.Size(72, 23);
+            this.txtBlockIndex.TabIndex = 2;
+            // 
+            // lblTripleLayerImage
+            // 
+            this.lblTripleLayerImage.AutoSize = true;
+            this.lblTripleLayerImage.Location = new System.Drawing.Point(168, 28);
+            this.lblTripleLayerImage.Margin = new System.Windows.Forms.Padding(0);
+            this.lblTripleLayerImage.Name = "lblTripleLayerImage";
+            this.lblTripleLayerImage.Size = new System.Drawing.Size(54, 15);
+            this.lblTripleLayerImage.TabIndex = 25;
+            this.lblTripleLayerImage.Text = "※トリプル";
+            // 
             // OwMapEditor1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -436,7 +456,6 @@ namespace PochiPochiEditorPlus._Forms
             this.tbpBlock.ResumeLayout(false);
             this.grpBlockDataAndAttr.ResumeLayout(false);
             this.grpBlockDataAndAttr.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.picBlockDataImage)).EndInit();
             this.grpTileSelector.ResumeLayout(false);
             this.grpTileSelector.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picBoardTile)).EndInit();
@@ -468,7 +487,6 @@ namespace PochiPochiEditorPlus._Forms
         private System.Windows.Forms.ComboBox cmbTilePalette;
         private System.Windows.Forms.GroupBox grpBlockDataAndAttr;
         private System.Windows.Forms.Label lblBlockDataImage;
-        private System.Windows.Forms.PictureBox picBlockDataImage;
         private System.Windows.Forms.Label lblSelectTile;
         private System.Windows.Forms.Label lblBlockAttrAction;
         private System.Windows.Forms.ComboBox cmbBlockAttrAction;
@@ -481,5 +499,8 @@ namespace PochiPochiEditorPlus._Forms
         private System.Windows.Forms.Label lblBlockAttrWildEnc;
         private System.Windows.Forms.CheckBox chkBlockAttrWildEncWater;
         private System.Windows.Forms.CheckBox chkBlockAttrWildEncGrass;
+        private System.Windows.Forms.Panel pnlBlockDataImage;
+        private System.Windows.Forms.Panel pnlTripleLayerImage;
+        private System.Windows.Forms.Label lblTripleLayerImage;
     }
 }
