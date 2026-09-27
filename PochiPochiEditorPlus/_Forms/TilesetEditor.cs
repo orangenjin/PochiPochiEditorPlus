@@ -187,10 +187,10 @@ namespace PochiPochiEditorPlus._Forms
                     // パレットを更新
                     byte[] palData = _tilesetManager.PaletteData[palIndex];
                     imageLayer.ApplyPalette(palData);
-                    pnlViewImage.Invalidate();
+                    _layerHolder.Panel.Invalidate();
                 });
             // タイルインデックス数値
-            // dunamicなのでキャストする
+            // dunamic型にイベント登録できないのでキャスト
             var selectLayer = (SelectLayer)_layerHolder.Select;
             _eventBinder.BindCtrl(
                 h => nudViewTileIndex.ValueChanged += h,
@@ -198,8 +198,7 @@ namespace PochiPochiEditorPlus._Forms
                 (_, __) =>
                 {
                     _selectedTileIndex = (int)nudViewTileIndex.Value;
-                    txtViewTileIndex.Text =
-                        _selectedTileIndex.ParseIntToString(txtViewTileIndex.Digits);
+                    txtViewTileIndex.Text = _selectedTileIndex.ParseIntToString(txtViewTileIndex.Digits);
 
                     var selectedIndexList = selectLayer.GetSelectedIndexList();
                     if (selectedIndexList.Count > 0 && selectedIndexList[0] == _selectedTileIndex) return;
@@ -276,8 +275,7 @@ namespace PochiPochiEditorPlus._Forms
                 nudViewTileIndex.Minimum = 0;
                 _selectedTileIndex = Math.Min(_selectedTileIndex, totalTiles - 1);
                 nudViewTileIndex.Value = _selectedTileIndex;
-                txtViewTileIndex.Text =
-                    _selectedTileIndex.ParseIntToString(txtViewTileIndex.Digits);
+                txtViewTileIndex.Text = _selectedTileIndex.ParseIntToString(txtViewTileIndex.Digits);
             }
 
             // レイヤー初期設定

@@ -38,6 +38,8 @@ namespace PochiPochiEditorPlus._Managers._LayerManager
             SelectedGrids = new Rectangle(gridX, gridY, 1, 1);
             _startGridPoint = new Point(gridX, gridY);
             _currentGridPoint = new Point(gridX, gridY);
+
+            RequestInvalidate.Invoke();
         }
 
         public void ClearSelect()
@@ -219,6 +221,7 @@ namespace PochiPochiEditorPlus._Managers._LayerManager
             int maxY = Math.Max(_startGridPoint.Y, _currentGridPoint.Y);
 
             SelectedGrids = new Rectangle(minX, minY, maxX - minX + 1, maxY - minY + 1);
+            RequestInvalidate.Invoke();
         }
     }
 }

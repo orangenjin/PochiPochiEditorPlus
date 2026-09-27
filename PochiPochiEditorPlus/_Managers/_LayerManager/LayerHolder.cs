@@ -54,6 +54,7 @@ namespace PochiPochiEditorPlus._Managers._LayerManager
         {
             var layer = new TLayer();
             layer.Data = Data;
+            layer.RequestInvalidate = () => Panel.Invalidate();
             Register(key.ToString(), layer);
         }
 

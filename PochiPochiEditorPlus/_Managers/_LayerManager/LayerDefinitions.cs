@@ -73,6 +73,7 @@ namespace PochiPochiEditorPlus._Managers._LayerManager
         public bool Visible { get; set; }
         // 共通のレイヤーデータを内部的に保持
         public LayerData Data { get; set; }
+        public Action RequestInvalidate { get; set; }
 
         protected LayerBase(bool visible = true)
         {
