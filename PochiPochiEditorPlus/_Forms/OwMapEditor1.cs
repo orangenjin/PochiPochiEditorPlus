@@ -163,23 +163,13 @@ namespace PochiPochiEditorPlus._Forms
                     _tileLayerHolder.Panel.Invalidate();
                 });
 
-            // タイルインデックス数値
-            // dunamic型にイベント登録できないのでキャスト
-            var selectLayer = (SelectLayer)_blockLayerHolder.Select;
+            // ブロックインデックス数値
             _eventBinder.BindCtrl(
                 h => nudBlockIndex.ValueChanged += h,
                 h => nudBlockIndex.ValueChanged -= h,
-                (_, __) =>
-                {
-                    // nudの数値とtxtの表示
-                    _selectedBlockIndex = (int)nudBlockIndex.Value;
-                    txtBlockIndex.Text = _selectedBlockIndex.ParseIntToString(txtBlockIndex.Digits);
-
-                    // 選択範囲の更新
-                    var selectedIndexList = selectLayer.GetSelectedIndexList();
-                    if (selectedIndexList.Count > 0 && selectedIndexList[0] == _selectedBlockIndex) return;
-                    selectLayer.SelectSingleItem(_selectedBlockIndex);
-                });
+                (_, __) => BlockIndexChanged());
+            // dunamic型にイベント登録できないのでキャスト
+            var selectLayer = (SelectLayer)_blockLayerHolder.Select;
             _eventBinder.BindCustom(
                 () => selectLayer.SelectChanged += UpdateSelectedBlockIndex,
                 () => selectLayer.SelectChanged -= UpdateSelectedBlockIndex);
@@ -356,6 +346,9 @@ namespace PochiPochiEditorPlus._Forms
 
             // スクロールバーの設定
             _blockLayerScroller.UpdateScrollRange();
+
+            // 初期選択
+            BlockIndexChanged();
         }
 
         private void DrawBlockLayer(
@@ -472,12 +465,16 @@ namespace PochiPochiEditorPlus._Forms
             _blockLayerHolder.Panel.Invalidate();
         }
 
-        private byte[] GetProperPaletteData(int palIndex)
+        private void BlockIndexChanged()
         {
-            if (palIndex < 0) return Array.Empty<byte>();
-            return palIndex >= (int)TilesetHeaderHolder.PaletteKind.Palette7to12
-                ? _tileset2Manager.PaletteData[palIndex]
-                : _tileset1Manager.PaletteData[palIndex];
+            // nudの数値とtxtの表示
+            _selectedBlockIndex = (int)nudBlockIndex.Value;
+            txtBlockIndex.Text = _selectedBlockIndex.ParseIntToString(txtBlockIndex.Digits);
+
+            // 選択範囲の更新
+            var selectedIndexList = _blockLayerHolder.Select.GetSelectedIndexList();
+            if (selectedIndexList.Count > 0 && selectedIndexList[0] == _selectedBlockIndex) return;
+            _blockLayerHolder.Select.SelectSingleItem(_selectedBlockIndex);
         }
 
         private void UpdateSelectedBlockIndex()
@@ -492,6 +489,14 @@ namespace PochiPochiEditorPlus._Forms
         private void UpdateBlockDataImages()
         {
 
+        }
+
+        private byte[] GetProperPaletteData(int palIndex)
+        {
+            if (palIndex < 0) return Array.Empty<byte>();
+            return palIndex >= (int)TilesetHeaderHolder.PaletteKind.Palette7to12
+                ? _tileset2Manager.PaletteData[palIndex]
+                : _tileset1Manager.PaletteData[palIndex];
         }
 
         private void LoadCollTabPage()
