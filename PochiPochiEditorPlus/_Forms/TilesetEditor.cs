@@ -190,20 +190,12 @@ namespace PochiPochiEditorPlus._Forms
                     _layerHolder.Panel.Invalidate();
                 });
             // タイルインデックス数値
-            // dunamic型にイベント登録できないのでキャスト
-            var selectLayer = (SelectLayer)_layerHolder.Select;
             _eventBinder.BindCtrl(
                 h => nudViewTileIndex.ValueChanged += h,
                 h => nudViewTileIndex.ValueChanged -= h,
-                (_, __) =>
-                {
-                    _selectedTileIndex = (int)nudViewTileIndex.Value;
-                    txtViewTileIndex.Text = _selectedTileIndex.ParseIntToString(txtViewTileIndex.Digits);
-
-                    var selectedIndexList = selectLayer.GetSelectedIndexList();
-                    if (selectedIndexList.Count > 0 && selectedIndexList[0] == _selectedTileIndex) return;
-                    selectLayer.SelectSingleItem(_selectedTileIndex);
-                });
+                (_, __) => TileIndexChanged());
+            // dunamic型にイベント登録できないのでキャスト
+            var selectLayer = (SelectLayer)_layerHolder.Select;
             _eventBinder.BindCustom(
                 () => selectLayer.SelectChanged += UpdateSelectedTileIndex,
                 () => selectLayer.SelectChanged -= UpdateSelectedTileIndex);
@@ -245,6 +237,7 @@ namespace PochiPochiEditorPlus._Forms
                 Convert.ToBoolean(_tilesetManager.HeaderEntry.PaletteType.GetData<int>())
                     ? (int)TilesetHeaderHolder.PaletteKind.Palette7to12
                     : (int)TilesetHeaderHolder.PaletteKind.Palette0to6;
+
             UpdateViewImage();
         }
 
@@ -274,8 +267,6 @@ namespace PochiPochiEditorPlus._Forms
                 nudViewTileIndex.Maximum = totalTiles - 1;
                 nudViewTileIndex.Minimum = 0;
                 _selectedTileIndex = Math.Min(_selectedTileIndex, totalTiles - 1);
-                nudViewTileIndex.Value = _selectedTileIndex;
-                txtViewTileIndex.Text = _selectedTileIndex.ParseIntToString(txtViewTileIndex.Digits);
             }
 
             // レイヤー初期設定
@@ -297,6 +288,9 @@ namespace PochiPochiEditorPlus._Forms
 
             // スクロールバーの設定
             _layerScroller.UpdateScrollRange();
+
+            // 初期選択
+            TileIndexChanged();
         }
 
         private void UpdateTabPageState(bool state)
@@ -328,6 +322,16 @@ namespace PochiPochiEditorPlus._Forms
             lblTilesetNo.Enabled = state;
             nudTilesetNo.ReadOnly = !state;
             nudTilesetNo.Increment = Convert.ToInt32(state);
+        }
+
+        private void TileIndexChanged()
+        {
+            _selectedTileIndex = (int)nudViewTileIndex.Value;
+            txtViewTileIndex.Text = _selectedTileIndex.ParseIntToString(txtViewTileIndex.Digits);
+
+            var selectedIndexList = _layerHolder.Select.GetSelectedIndexList();
+            if (selectedIndexList.Count > 0 && selectedIndexList[0] == _selectedTileIndex) return;
+            _layerHolder.Select.SelectSingleItem(_selectedTileIndex);
         }
 
         private bool ValidateHeader(int tilesetNo)

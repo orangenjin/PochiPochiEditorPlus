@@ -485,6 +485,13 @@ namespace PochiPochiEditorPlus._Forms
             var indexList = _blockLayerHolder.Select.GetSelectedIndexList();
             if (indexList.Count == 0) return;
             nudBlockIndex.Value = (decimal)indexList[0];
+
+            UpdateBlockDataImages();
+        }
+
+        private void UpdateBlockDataImages()
+        {
+
         }
 
         private void LoadCollTabPage()
