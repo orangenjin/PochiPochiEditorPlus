@@ -88,19 +88,11 @@ namespace PochiPochiEditorPlus._Forms
 
         private void InitializeControls()
         {
-            // タイル画像パネルのダブルバッファリングを有効化
-            typeof(Control).GetProperty(
-                nameof(DoubleBuffered),
-                System.Reflection.BindingFlags.Instance
-                | System.Reflection.BindingFlags.NonPublic)
-                    ?.SetValue(pnlTileView, true, null);
-
-            // ブロック画像パネルのダブルバッファリングを有効化
-            typeof(Control).GetProperty(
-                nameof(DoubleBuffered),
-                System.Reflection.BindingFlags.Instance
-                | System.Reflection.BindingFlags.NonPublic)
-                    ?.SetValue(pnlBlockView, true, null);
+            // ダブルバッファリングを有効化
+            CtrlHelper.EnableDoubleBuffering(
+                pnlTileView,
+                pnlBlockView, 
+                pnlBlockDataImage);
 
             // 各コンボボックスにアイテムを追加
             CtrlHelper.LoadComboBoxFromFile(

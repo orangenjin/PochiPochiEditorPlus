@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Windows.Forms;
 using PochiPochiEditorPlus._Utilities;
 
@@ -388,6 +389,21 @@ namespace PochiPochiEditorPlus._Helpers
                 target.cmb.DisplayMember = nameof(KeyValuePair<byte, string>.Value);
                 target.cmb.ValueMember = nameof(KeyValuePair<byte, string>.Key);
                 target.cmb.DataSource = entries;
+            }
+        }
+
+        /// <summary>
+        /// コントロールのダブルバッファを有効化する。
+        /// </summary>
+        public static void EnableDoubleBuffering(params Control[] controls)
+        {
+            var prop = typeof(Control).GetProperty(
+                "DoubleBuffered",
+                BindingFlags.Instance | BindingFlags.NonPublic);
+
+            foreach (var ctrl in controls)
+            {
+                prop.SetValue(ctrl, true, null);
             }
         }
     }
