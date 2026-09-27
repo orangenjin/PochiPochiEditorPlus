@@ -25,6 +25,7 @@ namespace PochiPochiEditorPlus._Forms
         private dynamic _tileset1Manager = null;
         private dynamic _tileset2Manager = null;
         private List<BlockData> _blockDataList = null;
+        private dynamic _blockAttrManager = null;
         // パネル描画用
         private dynamic _tileLayerHolder = null;
         private LayerScroller _tileLayerScroller = null;
@@ -408,15 +409,21 @@ namespace PochiPochiEditorPlus._Forms
             if (indexList.Count == 0) return;
             nudBlockIndex.Value = (decimal)indexList[0];
 
+            // データ画像の更新
             UpdateBlockDataImages();
+
+            // 属性の更新
+            LoadBlockAttrs();
         }
 
         private void UpdateBlockDataImages()
         {
             if (_blockDataList == null || _blockDataList.Count == 0) return;
 
-            // レイヤーの初期設定
+            // 選択中のブロック
             var blockData = _blockDataList[_selectedBlockIndex];
+
+            // レイヤーの初期設定
             int tileSize = Constants.TileSize;
             int scale = pnlBlockDataImage.Height / (tileSize * 2);
             int validItemCount = Constants.TilePerBlockSide * Constants.TilePerBlockSide * 2;
@@ -461,6 +468,21 @@ namespace PochiPochiEditorPlus._Forms
                     }
                 }
             }
+        }
+
+        private void LoadBlockAttrs()
+        {
+            // インデックスの閾値
+            int threshold = _tileset1Manager.BlockAttrEntries.Count;
+            var entry = _selectedBlockIndex <= threshold
+                ? _tileset1Manager.BlockAttrEntries[_selectedBlockIndex]
+                : _tileset2Manager.BlockAttrEntries[_selectedBlockIndex - threshold];
+
+            // 各属性を反映
+            cmbBlockAttrAction.SelectedIndex = entry.ActionAttr.GetData<int>();
+            cmbBlockAttrType.SelectedIndex = entry.TypeAttr.GetData<int>();
+            cmbBlockAttrUnk.SelectedIndex = entry.UnkAttr.GetData<int>();
+
         }
 
         private byte[] GetProperPaletteData(int palIndex)
