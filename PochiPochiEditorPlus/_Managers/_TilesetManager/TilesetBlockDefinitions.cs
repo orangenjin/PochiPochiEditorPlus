@@ -62,12 +62,12 @@
 
     public sealed class LayerAndWildEncAttr
     {
-        public int Layer { get; set; }
+        public byte Layer { get; set; }
         public bool WildEncGrass { get; set; }
         public bool WildEncWater { get; set; }
 
         public LayerAndWildEncAttr(
-            int layer,
+            byte layer,
             bool wildEncGrass,
             bool wildEncWater)
         {

@@ -153,7 +153,7 @@ namespace PochiPochiEditorPlus._Managers._TilesetManager
         }
 
         /// <summary>
-        /// バイト配列を属性データに変換する。
+        /// バイト配列をレイヤーと野生設定の属性データに変換する。
         /// </summary>
         public static LayerAndWildEncAttr BytesToLayerAndWildEncAttr(FieldValueHolder fieldValue)
         {
@@ -165,7 +165,7 @@ namespace PochiPochiEditorPlus._Managers._TilesetManager
             // ビット演算で各データを抽出
             bool wildEncGrass = (byteValue & WildEncGrassMask) != 0;
             bool wildEncWater = (byteValue & WildEncWaterMask) != 0;
-            int layer = byteValue & LayerAndWildEncLayerMask;
+            byte layer = (byte)(byteValue & LayerAndWildEncLayerMask);
 
             // インスタンスの生成
             return new LayerAndWildEncAttr(
@@ -175,7 +175,7 @@ namespace PochiPochiEditorPlus._Managers._TilesetManager
         }
 
         /// <summary>
-        /// 属性データをバイト配列に変換する。
+        /// レイヤーと野生設定の属性データをバイト配列に変換する。
         /// </summary>
         public static byte[] LayerAndWildEncAttrToBytes(
             LayerAndWildEncAttr dataValue,
@@ -195,6 +195,15 @@ namespace PochiPochiEditorPlus._Managers._TilesetManager
                 byteValue,
                 result.Length);
             return result;
+        }
+
+        /// <summary>
+        /// レイヤーと野生設定の属性データを取得するメソッドを簡素化するため。
+        /// </summary>
+        public static LayerAndWildEncAttr GetLayerAndWildEncAttr(dynamic value)
+        {
+            return value.GetData<LayerAndWildEncAttr>(
+                converter: (Func<FieldValueHolder, LayerAndWildEncAttr>)BytesToLayerAndWildEncAttr);
         }
     }
 }

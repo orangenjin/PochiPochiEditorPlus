@@ -25,7 +25,6 @@ namespace PochiPochiEditorPlus._Forms
         private dynamic _tileset1Manager = null;
         private dynamic _tileset2Manager = null;
         private List<BlockData> _blockDataList = null;
-        private List<LayerAndWildEncAttr> _layerAndWildEncAttrList = null;
         // パネル描画用
         private dynamic _tileLayerHolder = null;
         private LayerScroller _tileLayerScroller = null;
@@ -482,9 +481,10 @@ namespace PochiPochiEditorPlus._Forms
             cmbBlockAttrAction.SelectedIndex = entry.ActionAttr.GetData<int>();
             cmbBlockAttrType.SelectedIndex = entry.TypeAttr.GetData<int>();
             cmbBlockAttrUnk.SelectedIndex = entry.UnkAttr.GetData<int>();
-
-            // cmbBlockAttrLayer.SelectedValue = entry.LayerAndWildEncAttr.GetData<byte>();
-
+            var layerAndWildEncAttr = TilesetDataCalc.GetLayerAndWildEncAttr(entry.LayerAndWildEncAttr);
+            cmbBlockAttrLayer.SelectedValue = layerAndWildEncAttr.Layer;
+            chkBlockAttrWildEncGrass.Checked = layerAndWildEncAttr.WildEncGrass;
+            chkBlockAttrWildEncWater.Checked = layerAndWildEncAttr.WildEncWater;
         }
 
         private byte[] GetProperPaletteData(int palIndex)
