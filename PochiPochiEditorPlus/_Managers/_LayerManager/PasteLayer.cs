@@ -8,6 +8,8 @@ namespace PochiPochiEditorPlus._Managers._LayerManager
         public ClipboardData Clipboard { get; set; }
         public BlockImageLayer TargetImageLayer { get; set; }
 
+        public override void Draw(Graphics gfx) { }
+
         public override void OnMouseDown(MouseEventArgs e)
         {
             // 左クリックでペースト

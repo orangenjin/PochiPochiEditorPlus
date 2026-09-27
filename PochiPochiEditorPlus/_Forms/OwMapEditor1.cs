@@ -128,6 +128,9 @@ namespace PochiPochiEditorPlus._Forms
 
             // データレイヤー
             _dataLayerHolder.AddLayer<SelectLayer>(LayerNames.BlockFlat);
+            _dataLayerHolder.AddLayer<GridLayer>(LayerNames.Grid);
+            _dataLayerHolder.AddLayer<SelectLayer>(LayerNames.Select);
+            _dataLayerHolder.AddLayer<PasteLayer>(LayerNames.Paste);
         }
 
         private void InitializeEventHandlers()
