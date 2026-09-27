@@ -1,24 +1,19 @@
-﻿using System;
-using System.Windows.Forms;
+﻿using System.Windows.Forms;
 using System.Drawing;
 
 namespace PochiPochiEditorPlus._Managers._LayerManager
 {
     public sealed class PasteLayer : LayerBase
     {
-        private ClipboardData _clipboard;
-        private BlockImageLayer _targetImageLayer;
-        private Action _requestInvalidate;
+        private ClipboardData _clipBoardData = null;
+        private BlockImageLayer _targetImageLayer = null;
 
         public PasteLayer(
-            LayerData layerData,
-            ClipboardData clipboard,
-            BlockImageLayer targetImageLayer,
-            Action requestInvalidate)
+            ClipboardData clipBoardData,
+            BlockImageLayer targetImageLayer)
         {
-            _clipboard = clipboard;
+            _clipBoardData = clipBoardData;
             _targetImageLayer = targetImageLayer;
-            _requestInvalidate = requestInvalidate;
         }
 
         public override void Draw(Graphics gfx)
@@ -30,15 +25,15 @@ namespace PochiPochiEditorPlus._Managers._LayerManager
         {
             // 左クリックでペースト
             if (e.Button != MouseButtons.Left) return;
-            if (_clipboard.CopiedImages == null) return;
+            if (_clipBoardData.Images == null) return;
 
             // マウス座標からクリック地点のマス座標を取得
             var startGridPoint = Data.GetGridPoint(e.Location);
             bool isPasted = false;
 
-            for (int y = 0; y < _clipboard.Height; y++)
+            for (int y = 0; y < _clipBoardData.Height; y++)
             {
-                for (int x = 0; x < _clipboard.Width; x++)
+                for (int x = 0; x < _clipBoardData.Width; x++)
                 {
                     int targetX = startGridPoint.X + x;
                     int targetY = startGridPoint.Y + y;
@@ -46,7 +41,7 @@ namespace PochiPochiEditorPlus._Managers._LayerManager
                     // 有効な範囲内かどうかを判定
                     if (Data.IsValidGrid(targetX, targetY))
                     {
-                        var imgToPaste = _clipboard.CopiedImages[x, y];
+                        var imgToPaste = _clipBoardData.Images[x, y];
                         _targetImageLayer.SetBlockImage(targetX, targetY, imgToPaste);
                         isPasted = true;
                     }
@@ -56,7 +51,7 @@ namespace PochiPochiEditorPlus._Managers._LayerManager
             // 再描画
             if (isPasted)
             {
-                _requestInvalidate?.Invoke();
+                RequestInvalidate.Invoke();
             }
         }
     }

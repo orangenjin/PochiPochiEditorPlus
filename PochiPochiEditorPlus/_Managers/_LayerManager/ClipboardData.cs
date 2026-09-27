@@ -6,10 +6,10 @@ namespace PochiPochiEditorPlus._Managers._LayerManager
     /// <summary>
     /// コピーしたブロック画像を保持し、パネル間で共有する。
     /// </summary>
-    public sealed class ClipboardData : IDisposable
+    public sealed class ClipboardData
     {
         // 範囲選択に対応するための2次元配列
-        public Bitmap[,] CopiedImages { get; private set; }
+        public Bitmap[,] Images { get; private set; }
         public int Width { get; private set; }
         public int Height { get; private set; }
 
@@ -22,11 +22,12 @@ namespace PochiPochiEditorPlus._Managers._LayerManager
             if (bounds.Width <= 0 || bounds.Height <= 0) return;
 
             // コピーを破棄
-            Dispose();
+            ClearImages();
 
+            // 格納先を確保
             Width = bounds.Width;
             Height = bounds.Height;
-            CopiedImages = new Bitmap[Width, Height];
+            Images = new Bitmap[Width, Height];
 
             for (int y = 0; y < Height; y++)
             {
@@ -38,21 +39,21 @@ namespace PochiPochiEditorPlus._Managers._LayerManager
                     var img = blockImageLayer.GetBlockImage(gridX, gridY);
                     if (img != null)
                     {
-                        CopiedImages[x, y] = (Bitmap)img.Clone();
+                        Images[x, y] = (Bitmap)img.Clone();
                     }
                 }
             }
         }
 
-        public void Dispose()
+        private void ClearImages()
         {
-            if (CopiedImages != null)
+            if (Images != null)
             {
-                foreach (var img in CopiedImages)
+                foreach (var img in Images)
                 {
                     img?.Dispose();
                 }
-                CopiedImages = null;
+                Images = null;
             }
         }
     }

@@ -35,10 +35,10 @@ namespace PochiPochiEditorPlus._Managers._LayerManager
             }
         }
 
-        private Panel _panel;
-        private HScrollBar _hsb;
-        private VScrollBar _vsb;
-        private LayerData _layerData;
+        private Panel _panel = null;
+        private HScrollBar _hsb = null;
+        private VScrollBar _vsb = null;
+        private LayerData _layerData;= null;
 
         public LayerScroller(
             Panel panel,
