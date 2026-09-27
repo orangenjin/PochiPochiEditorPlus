@@ -9,32 +9,31 @@ namespace PochiPochiEditorPlus._Managers._LayerManager
 {
     public sealed class LayerHolder<TEnum> where TEnum : Enum
     {
+        // 対象のパネルコントロール
+        public Panel Panel { get; }
         // レイヤーの基礎情報を各レイヤーに注入する
         public LayerData Data { get; }
         // 各レイヤーを格納する
         public Dictionary<TEnum, LayerBase> Layers { get; }
 
-        // 対象のパネルコントロール
-        private Panel _panel;
-
         public LayerHolder(Panel panel, EventBinder eventBinder)
         {
             Data = new LayerData();
             Layers = new Dictionary<TEnum, LayerBase>();
-            _panel = panel;
+            Panel = panel;
 
             eventBinder.BindCustom(
                 () => {
-                    _panel.Paint += Panel_Paint;
-                    _panel.MouseDown += Panel_MouseDown;
-                    _panel.MouseMove += Panel_MouseMove;
-                    _panel.MouseUp += Panel_MouseUp;
+                    Panel.Paint += Panel_Paint;
+                    Panel.MouseDown += Panel_MouseDown;
+                    Panel.MouseMove += Panel_MouseMove;
+                    Panel.MouseUp += Panel_MouseUp;
                 },
                 () => {
-                    _panel.Paint -= Panel_Paint;
-                    _panel.MouseDown -= Panel_MouseDown;
-                    _panel.MouseMove -= Panel_MouseMove;
-                    _panel.MouseUp -= Panel_MouseUp;
+                    Panel.Paint -= Panel_Paint;
+                    Panel.MouseDown -= Panel_MouseDown;
+                    Panel.MouseMove -= Panel_MouseMove;
+                    Panel.MouseUp -= Panel_MouseUp;
                 });
         }
 
@@ -49,7 +48,7 @@ namespace PochiPochiEditorPlus._Managers._LayerManager
             Data.GridSize = gridSize;
             Data.Scale = scale;
             Data.ValidItemCount = validItemCount;
-            Data.CalcLayout(_panel.ClientSize.Width);
+            Data.CalcLayout(Panel.ClientSize.Width);
         }
 
         /// <summary>
@@ -75,6 +74,17 @@ namespace PochiPochiEditorPlus._Managers._LayerManager
                 return typedLayer;
             }
             return null;
+        }
+
+        /// <summary>
+        /// すべてのレイヤーを非表示にする。
+        /// </summary>
+        public void HideAllLayers()
+        {
+            foreach (var layer in Layers.Values)
+            {
+                layer.Visible = false;
+            }
         }
 
         private void Panel_Paint(object sender, PaintEventArgs e)

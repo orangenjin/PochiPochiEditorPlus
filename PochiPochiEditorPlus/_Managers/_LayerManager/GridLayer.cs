@@ -15,8 +15,6 @@ namespace PochiPochiEditorPlus._Managers._LayerManager
 
             // 拡大後のグリッドサイズを使用
             int size = _layerData.ScaledGridSize;
-            // グリッドの太さを調整
-            int thickness = 1 * _layerData.Scale;
 
             using (var brush = new SolidBrush(Color.FromArgb(80, Color.Gray)))
             {
@@ -29,29 +27,29 @@ namespace PochiPochiEditorPlus._Managers._LayerManager
 
                     // 四辺に対して描画
                     gfx.FillRectangle(
-                        brush, 
-                        drawX,
-                        drawY,
+                        brush,
+                        drawX, 
+                        drawY, 
                         size, 
-                        thickness);
+                        1);
                     gfx.FillRectangle(
                         brush, 
                         drawX, 
-                        drawY + size - thickness, 
+                        drawY + size - 1,
                         size, 
-                        thickness);
-                    gfx.FillRectangle(
-                        brush, 
-                        drawX, 
-                        drawY + thickness, 
-                        thickness, 
-                        size - (thickness * 2));
+                        1);
                     gfx.FillRectangle(
                         brush,
-                        drawX + size - thickness,
-                        drawY + thickness, 
-                        thickness, 
-                        size - (thickness * 2));
+                        drawX,
+                        drawY + 1,
+                        1, 
+                        size - 2);
+                    gfx.FillRectangle(
+                        brush,
+                        drawX + size - 1,
+                        drawY + 1,
+                        1,
+                        size - 2);
                 }
             }
         }

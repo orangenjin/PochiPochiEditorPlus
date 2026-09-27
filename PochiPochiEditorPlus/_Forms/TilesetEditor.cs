@@ -25,11 +25,17 @@ namespace PochiPochiEditorPlus._Forms
         private dynamic _tilesetManager = null;
         // パネル描画用
         private LayerHolder<LayerNames> _layerHolder = null;
-        private enum LayerNames { Tileset }
         private LayerScroller _layerScroller = null;
         // UI制御用
         private int _currentTilesetNo = 0;
         private int _selectedTileIndex = 0;
+
+        private enum LayerNames
+        {
+            Tile,
+            Grid,
+            Select
+        }
 
         public TilesetEditor(SharedData sharedData, CommandManager commandManager)
         {
@@ -47,6 +53,7 @@ namespace PochiPochiEditorPlus._Forms
                 _eventBinder);
 
             InitializeControls();
+            InitializeLayers();
             InitializeEventHandlers();
         }
 
@@ -67,6 +74,16 @@ namespace PochiPochiEditorPlus._Forms
 
             // 一時的にタブコントロールを無効化
             UpdateTabPageState(false);
+        }
+
+        private void InitializeLayers()
+        {
+            // レイヤーの登録
+            _layerHolder.AddLayer(LayerNames.Tile, new SingleImageLayer(_layerHolder.Data));
+            _layerHolder.AddLayer(LayerNames.Grid, new GridLayer(_layerHolder.Data));
+            _layerHolder.AddLayer(
+                LayerNames.Select,
+                new SelectLayer(_layerHolder.Data, () => _layerHolder.Panel.Invalidate()));
         }
 
         private void InitializeEventHandlers()
@@ -166,12 +183,12 @@ namespace PochiPochiEditorPlus._Forms
                     if (palIndex < 0) return;
 
                     // 画像レイヤーを取得
-                    var layer = _layerHolder.GetLayer<SingleImageLayer>(LayerNames.Tileset);
-                    if (layer == null) return;
+                    var imageLayer = _layerHolder.GetLayer<SingleImageLayer>(LayerNames.Tile);
+                    if (imageLayer == null) return;
 
                     // パレットを更新
                     byte[] palData = _tilesetManager.PaletteData[palIndex];
-                    layer.ApplyPalette(palData);
+                    imageLayer.ApplyPalette(palData);
                     pnlViewImage.Invalidate();
                 });
             // タイルインデックス数値
@@ -184,13 +201,14 @@ namespace PochiPochiEditorPlus._Forms
                     txtViewTileIndex.Text =
                         _selectedTileIndex.ParseIntToString(txtViewTileIndex.Digits);
 
-                    var selectedIndexList = _layerHolder.SelectorLayer.GetSelectedIndexList();
+                    var selectLayer = _layerHolder.GetLayer<SelectLayer>(LayerNames.Select);
+                    var selectedIndexList = selectLayer.GetSelectedIndexList();
                     if (selectedIndexList.Count > 0 && selectedIndexList[0] == _selectedTileIndex) return;
-                    _layerHolder.SelectorLayer.SelectSingleItem(_selectedTileIndex);
+                    selectLayer.SelectSingleItem(_selectedTileIndex);
                 });
             _eventBinder.BindCustom(
-                () => _layerHolder.SelectorLayer.SelectChanged += UpdateSelectedTileIndex,
-                () => _layerHolder.SelectorLayer.SelectChanged -= UpdateSelectedTileIndex);
+                () => _layerHolder.GetLayer<SelectLayer>(LayerNames.Select).SelectChanged += UpdateSelectedTileIndex,
+                () => _layerHolder.GetLayer<SelectLayer>(LayerNames.Select).SelectChanged -= UpdateSelectedTileIndex);
 
             // 解除タイミング指定
             _eventBinder.BindCtrl(
@@ -270,24 +288,23 @@ namespace PochiPochiEditorPlus._Forms
                 validItemCount: totalTiles);
 
             // 画像の設定
-            _layerHolder.SetImageLayer(
-                LayerNames.Tileset,
+            var imageLayer = _layerHolder.GetLayer<SingleImageLayer>(LayerNames.Tile);
+            imageLayer.SetImageData(
                 _tilesetManager.ImageData,
                 palData,
                 width,
                 height);
-            _layerHolder.SetLayerVisible(LayerNames.Tileset, true);
-
-            // グリッドの設定
-            _layerHolder.SetGridVisible(true);
 
             // 選択範囲の設定
+            var selectLayer = _layerHolder.GetLayer<SelectLayer>(LayerNames.Select);
             var maxLength = Constants.TilesetImageWidth / Constants.TileSize;
-            _layerHolder.SelectorLayer.MaxSelectSize = new Size(maxLength, maxLength);
-            _layerHolder.SetSelectorVisible(true);
+            selectLayer.MaxSelectSize = new Size(maxLength, maxLength);
 
             // スクロールバーの設定
             _layerScroller.UpdateScrollRange();
+
+            // 再描画
+            _layerHolder.Panel.Invalidate();
         }
 
         private void UpdateTabPageState(bool state)
@@ -299,10 +316,8 @@ namespace PochiPochiEditorPlus._Forms
             // タイル画像パネル
             if (!state)
             {
-                _layerHolder.SetLayerVisible(LayerNames.Tileset, false);
-                _layerHolder.SetGridVisible(false);
-                _layerHolder.SelectorLayer.ClearSelect();
-                _layerHolder.SetSelectorVisible(false);
+                _layerHolder.HideAllLayers();
+                _layerHolder.Panel.Invalidate();
             }
 
             // タブページ
@@ -351,7 +366,8 @@ namespace PochiPochiEditorPlus._Forms
 
         private void UpdateSelectedTileIndex()
         {
-            var indexList = _layerHolder.SelectorLayer.GetSelectedIndexList();
+            var selectLayer = _layerHolder.GetLayer<SelectLayer>(LayerNames.Select);
+            var indexList = selectLayer.GetSelectedIndexList();
             if (indexList.Count == 0) return;
             nudViewTileIndex.Value = (decimal)indexList[0];
         }

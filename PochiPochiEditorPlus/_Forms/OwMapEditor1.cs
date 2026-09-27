@@ -138,13 +138,16 @@ namespace PochiPochiEditorPlus._Forms
                         _selectedBlockIndex.ParseIntToString(txtBlockIndex.Digits);
 
                     // 選択範囲の更新
-                    var selectedIndexList = _blockLayerHolder.SelectorLayer.GetSelectedIndexList();
-                    if (selectedIndexList.Count > 0 && selectedIndexList[0] == _selectedBlockIndex) return;
-                    _blockLayerHolder.SelectorLayer.SelectSingleItem(_selectedBlockIndex);
+                    // var selectedIndexList = _blockLayerHolder.SelectorLayer.GetSelectedIndexList();
+                    // if (selectedIndexList.Count > 0 && selectedIndexList[0] == _selectedBlockIndex) return;
+                    // _blockLayerHolder.SelectorLayer.SelectSingleItem(_selectedBlockIndex);
                 });
+
+            /*
             _eventBinder.BindCustom(
                 () => _blockLayerHolder.SelectorLayer.SelectChanged += UpdateSelectedBlockIndex,
                 () => _blockLayerHolder.SelectorLayer.SelectChanged -= UpdateSelectedBlockIndex);
+            */
 
             // 解除タイミング指定
             _eventBinder.BindCtrl(
@@ -223,6 +226,8 @@ namespace PochiPochiEditorPlus._Forms
                 scale: Constants.DefaultScale,
                 validItemCount: totalTiles);
 
+            /*
+             
             // 画像の設定
             _tileLayerHolder.SetImageLayer(
                 LayerNames.Tile,
@@ -242,6 +247,8 @@ namespace PochiPochiEditorPlus._Forms
 
             // スクロールバーの設定
             _tileLayerScroller.UpdateScrollRange();
+
+            */
         }
 
         private void SetBlockData()
@@ -319,6 +326,7 @@ namespace PochiPochiEditorPlus._Forms
                 upperBlockLayer.BlockImages.Add(upperBmp);
             }
 
+            /*
             // 生成したカスタムレイヤーを登録
             _blockLayerHolder.AddCustomLayer(LayerNames.BlockLower, lowerBlockLayer);
             _blockLayerHolder.AddCustomLayer(LayerNames.BlockUpper, upperBlockLayer);
@@ -334,6 +342,7 @@ namespace PochiPochiEditorPlus._Forms
 
             // スクロールバーの設定
             _blockLayerScroller.UpdateScrollRange();
+            */
         }
 
         private void DrawBlockLayer(
@@ -442,6 +451,7 @@ namespace PochiPochiEditorPlus._Forms
                 tbpBlock,
                 enabled: state,
                 includeSelf: true);
+            /*
             // タイル画像パネル
             if (!state)
             {
@@ -459,6 +469,7 @@ namespace PochiPochiEditorPlus._Forms
                 _blockLayerHolder.SelectorLayer.ClearSelect();
                 _blockLayerHolder.SetSelectorVisible(state);
             }
+            */
         }
 
         private byte[] GetProperPaletteData(int palIndex)
@@ -471,9 +482,9 @@ namespace PochiPochiEditorPlus._Forms
 
         private void UpdateSelectedBlockIndex()
         {
-            var indexList = _blockLayerHolder.SelectorLayer.GetSelectedIndexList();
-            if (indexList.Count == 0) return;
-            nudBlockIndex.Value = (decimal)indexList[0];
+            // var indexList = _blockLayerHolder.SelectorLayer.GetSelectedIndexList();
+            // if (indexList.Count == 0) return;
+            // nudBlockIndex.Value = (decimal)indexList[0];
         }
 
         private void LoadCollTabPage()

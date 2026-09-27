@@ -117,7 +117,6 @@ namespace PochiPochiEditorPlus._Managers._LayerManager
             int drawY = SelectedGrids.Y * _layerData.ScaledGridSize;
             int drawWidth = SelectedGrids.Width * _layerData.ScaledGridSize;
             int drawHeight = SelectedGrids.Height * _layerData.ScaledGridSize;
-            int thickness = 1 * _layerData.Scale;
 
             using (var brush = new SolidBrush(Color.Red))
             {
@@ -127,25 +126,25 @@ namespace PochiPochiEditorPlus._Managers._LayerManager
                     drawX, 
                     drawY, 
                     drawWidth,
-                    thickness);
+                    1);
                 gfx.FillRectangle(
-                    brush,
+                    brush, 
                     drawX, 
-                    drawY + drawHeight - thickness, 
+                    drawY + drawHeight - 1, 
                     drawWidth,
-                    thickness);
+                    1);
                 gfx.FillRectangle(
                     brush, 
-                    drawX, 
-                    drawY + thickness,
-                    thickness, 
-                    drawHeight - (thickness * 2));
+                    drawX,
+                    drawY + 1,
+                    1,
+                    drawHeight - 2);
                 gfx.FillRectangle(
                     brush, 
-                    drawX + drawWidth - thickness,
-                    drawY + thickness,
-                    thickness,
-                    drawHeight - (thickness * 2));
+                    drawX + drawWidth - 1, 
+                    drawY + 1, 
+                    1, 
+                    drawHeight - 2);
             }
         }
 
