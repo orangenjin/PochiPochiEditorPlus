@@ -30,7 +30,7 @@ namespace PochiPochiEditorPlus._Forms
         private LayerScroller _tileLayerScroller = null;
         private dynamic _blockLayerHolder = null;
         private LayerScroller _blockLayerScroller = null;
-        private LayerHolder<LayerNames> _dataLayerHolder = null;
+        private dynamic _dataLayerHolder = null;
         // UI制御用
         private int _selectedBlockIndex = 0;
         private byte[] _combinedTilesetImageData = null;
@@ -127,7 +127,7 @@ namespace PochiPochiEditorPlus._Forms
             _blockLayerHolder.AddLayer<SelectLayer>(LayerNames.Select);
 
             // データレイヤー
-            _dataLayerHolder.AddLayer<SelectLayer>(LayerNames.BlockFlat);
+            _dataLayerHolder.AddLayer<BlockImageLayer>(LayerNames.BlockFlat);
             _dataLayerHolder.AddLayer<GridLayer>(LayerNames.Grid);
             _dataLayerHolder.AddLayer<SelectLayer>(LayerNames.Select);
             _dataLayerHolder.AddLayer<PasteLayer>(LayerNames.Paste);
@@ -159,7 +159,7 @@ namespace PochiPochiEditorPlus._Forms
                     // パレットを更新
                     int palIndex = cmbTilePalette.SelectedIndex;
                     var palData = GetProperPaletteData(palIndex);
-                    layer.ApplyPalette(palData);
+                    layer.ChangePalette(palData);
                     _tileLayerHolder.Panel.Invalidate();
                 });
 
@@ -327,8 +327,8 @@ namespace PochiPochiEditorPlus._Forms
                     using (Graphics gLower = Graphics.FromImage(lowerBmp))
                     using (Graphics gUpper = Graphics.FromImage(upperBmp))
                     {
-                        DrawBlockLayer(gLower, blockData.Lower, 0, 0, _tileLayerHolder.Tile, tilesPerRow, isLower: true);
-                        DrawBlockLayer(gUpper, blockData.Upper, 0, 0, _tileLayerHolder.Tile, tilesPerRow, isLower: false);
+                        DrawBlockLayer(gLower, blockData.Lower, 0, 0, tilesPerRow, isLower: true);
+                        DrawBlockLayer(gUpper, blockData.Upper, 0, 0, tilesPerRow, isLower: false);
                     }
 
                     // マス座標を計算
@@ -349,6 +349,7 @@ namespace PochiPochiEditorPlus._Forms
 
             // 初期選択
             BlockIndexChanged();
+            UpdateSelectedBlockIndex();
         }
 
         private void DrawBlockLayer(
@@ -356,113 +357,45 @@ namespace PochiPochiEditorPlus._Forms
             BlockLayer layer,
             int drawX,
             int drawY,
-            SingleImageLayer tileLayer,
             int tilesPerRow,
             bool isLower)
         {
-            // 4つのタイルを配置
-            DrawTile(
-                gfx, 
-                layer.TopLeft, 
-                drawX,
-                drawY, 
-                tileLayer, 
-                tilesPerRow, 
-                isLower);
-            DrawTile(
-                gfx, 
-                layer.TopRight, 
-                drawX + Constants.TileSize,
-                drawY, 
-                tileLayer, 
-                tilesPerRow, 
-                isLower);
-            DrawTile(
-                gfx, 
-                layer.BottomLeft, 
-                drawX, 
-                drawY + Constants.TileSize, 
-                tileLayer,
-                tilesPerRow,
-                isLower);
-            DrawTile(
-                gfx, 
-                layer.BottomRight, 
-                drawX + Constants.TileSize, 
-                drawY + Constants.TileSize,
-                tileLayer,
-                tilesPerRow, 
-                isLower);
-        }
+            int tileSize = Constants.TileSize;
 
-        private void DrawTile(
-            Graphics gfx,
-            BlockTileData tileData,
-            int x,
-            int y,
-            SingleImageLayer tileLayer,
-            int tilesPerRow,
-            bool isLower)
-        {
-            // タイルを描画するマス座標(タイルの画像レイヤー)を計算
-            int tileGridX = tileData.TileIndex % tilesPerRow;
-            int tileGridY = tileData.TileIndex / tilesPerRow;
-
-            // タイルの画像レイヤーから画像データを取得
-            byte[] tileBytes = tileLayer.ExtractImageDataAtGrid(tileGridX, tileGridY);
-            if (tileBytes == null || tileBytes.Length == 0) return;
-
-            // パレットデータを取得
-            byte[] palData = GetProperPaletteData(tileData.PaletteIndex);
-
-            // 上位レイヤーは背景色を透過する
-            using (Bitmap tileBmp = ImageHelper.CreateBitmap(
-                tileBytes, palData, Constants.TileSize, Constants.TileSize, showBackColor: isLower))
+            foreach (var (tile, offsetX, offsetY) in TilesetDataCalc.GetTilesWithOffset(layer))
             {
-                if (tileBmp == null) return;
+                DrawTile(tile, drawX + (offsetX * tileSize), drawY + (offsetY * tileSize));
+            }
 
-                // タイルの反転情報を適用
-                RotateFlipType flipType = RotateFlipType.RotateNoneFlipNone;
-                if (tileData.ReverseX && tileData.ReverseY)
+            void DrawTile(BlockTileData tileData, int x, int y)
+            {
+                using (Bitmap tileBmp = GetTileBitmap(tileData, tilesPerRow, isLower))
                 {
-                    flipType = RotateFlipType.RotateNoneFlipXY;
+                    if (tileBmp != null)
+                    {
+                        gfx.DrawImage(tileBmp, x, y);
+                    }
                 }
-                else if (tileData.ReverseX)
-                {
-                    flipType = RotateFlipType.RotateNoneFlipX;
-                }
-                else if (tileData.ReverseY)
-                {
-                    flipType = RotateFlipType.RotateNoneFlipY;
-                }
-
-                // 反転が必要なら反転させる
-                if (flipType != RotateFlipType.RotateNoneFlipNone)
-                {
-                    tileBmp.RotateFlip(flipType);
-                }
-
-                // キャンバスに描画
-                gfx.DrawImage(tileBmp, x, y);
             }
         }
 
-        private void ChangeBlockTabState(bool state)
+        private Bitmap GetTileBitmap(BlockTileData tileData, int tilesPerRow, bool isLower)
         {
-            // ブロックタブページ
-            CtrlHelper.SetControlsEnabled(
-                tbpBlock,
-                enabled: state,
-                includeSelf: true);
-            CtrlHelper.ResetControls(
-                tbpBlock,
-                includeSelf: false);
-            // タイル画像のレイヤー表示切り替え
-            _tileLayerHolder.SetAllLayersVisibility(state);
-            _tileLayerHolder.Panel.Invalidate();
-            // ブロック画像のレイヤー表示切り替え
-            _blockLayerHolder.SetAllLayersVisibility(state);
-            _blockLayerHolder.Panel.Invalidate();
+            var tileLayer = _tileLayerHolder.Tile;
+            if (tileLayer == null) return null;
+
+            int tileGridX = tileData.TileIndex % tilesPerRow;
+            int tileGridY = tileData.TileIndex / tilesPerRow;
+
+            byte[] tileBytes = tileLayer.ExtractImageDataAtGrid(tileGridX, tileGridY);
+            byte[] palData = GetProperPaletteData(tileData.PaletteIndex);
+
+            return TilesetDataCalc.CreateTileImage(
+                tileData,
+                tileBytes,
+                palData,
+                Constants.TileSize,
+                isLower);
         }
 
         private void BlockIndexChanged()
@@ -488,7 +421,54 @@ namespace PochiPochiEditorPlus._Forms
 
         private void UpdateBlockDataImages()
         {
+            if (_blockDataList == null || _blockDataList.Count == 0) return;
 
+            // レイヤーの初期設定
+            var blockData = _blockDataList[_selectedBlockIndex];
+            int tileSize = Constants.TileSize;
+            int scale = pnlBlockDataImage.Height / (tileSize * 2);
+            int validItemCount = Constants.TilePerBlockSide * Constants.TilePerBlockSide * 2;
+            _dataLayerHolder.Initialize(
+                gridSize: tileSize,
+                scale: scale,
+                validItemCount: validItemCount);
+
+            // 画像を破棄して配列を確保
+            _dataLayerHolder.BlockFlat.Allocate();
+            int tilesPerRow = Constants.TilesetImageWidth / Constants.TileSize;
+
+            // 下位レイヤー
+            foreach (var (tile, offsetX, offsetY) in TilesetDataCalc.GetTilesWithOffset(blockData.Lower))
+            {
+                SetTileImageToDataLayer(tile, offsetX, offsetY, isLower: true);
+            }
+
+            // 上位レイヤー
+            foreach (var (tile, offsetX, offsetY) in TilesetDataCalc.GetTilesWithOffset(blockData.Upper))
+            {
+                SetTileImageToDataLayer(tile, 2 + offsetX, offsetY, isLower: false);
+            }
+
+            // 選択範囲の設定
+            _dataLayerHolder.Select.MaxSelectSize = new Size(1, 1);
+
+            // 再描画要求
+            _dataLayerHolder.Panel.Invalidate();
+
+            void SetTileImageToDataLayer(
+                BlockTileData tileData,
+                int gridX,
+                int gridY,
+                bool isLower)
+            {
+                using (Bitmap tileBmp = GetTileBitmap(tileData, tilesPerRow, isLower))
+                {
+                    if (tileBmp != null)
+                    {
+                        _dataLayerHolder.BlockFlat.SetBlockImage(gridX, gridY, tileBmp);
+                    }
+                }
+            }
         }
 
         private byte[] GetProperPaletteData(int palIndex)
@@ -497,6 +477,27 @@ namespace PochiPochiEditorPlus._Forms
             return palIndex >= (int)TilesetHeaderHolder.PaletteKind.Palette7to12
                 ? _tileset2Manager.PaletteData[palIndex]
                 : _tileset1Manager.PaletteData[palIndex];
+        }
+
+        private void ChangeBlockTabState(bool state)
+        {
+            // ブロックタブページ
+            CtrlHelper.SetControlsEnabled(
+                tbpBlock,
+                enabled: state,
+                includeSelf: true);
+            CtrlHelper.ResetControls(
+                tbpBlock,
+                includeSelf: false);
+            // タイル画像のレイヤー表示切り替え
+            _tileLayerHolder.SetAllLayersVisibility(state);
+            _tileLayerHolder.Panel.Invalidate();
+            // ブロック画像のレイヤー表示切り替え
+            _blockLayerHolder.SetAllLayersVisibility(state);
+            _blockLayerHolder.Panel.Invalidate();
+            // データ画像のレイヤー表示切り替え
+            _dataLayerHolder.SetAllLayersVisibility(state);
+            _dataLayerHolder.Panel.Invalidate();
         }
 
         private void LoadCollTabPage()

@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Drawing;
 using PochiPochiEditorPlus._Helpers;
 using PochiPochiEditorPlus._Managers._FieldManager;
 
@@ -96,6 +98,55 @@ namespace PochiPochiEditorPlus._Managers._TilesetManager
             );
 
             return new BlockData(index, lowerLayer, upperLayer);
+        }
+
+        /// <summary>
+        /// ブロックの画像とパレットと反転設定からタイル画像を生成する。
+        /// </summary>
+        public static Bitmap CreateTileImage(
+            BlockTileData tileData,
+            byte[] tileBytes,
+            byte[] palData,
+            int tileSize,
+            bool showBackColor)
+        {
+            if (tileBytes == null || tileBytes.Length == 0 || palData == null) return null;
+
+            Bitmap tileBmp = ImageHelper.CreateBitmap(
+                tileBytes, palData, tileSize, tileSize, showBackColor: showBackColor);
+
+            RotateFlipType flipType = RotateFlipType.RotateNoneFlipNone;
+            if (tileData.ReverseX && tileData.ReverseY)
+            {
+                flipType = RotateFlipType.RotateNoneFlipXY;
+            }
+            else if (tileData.ReverseX)
+            {
+                flipType = RotateFlipType.RotateNoneFlipX;
+            }
+            else if (tileData.ReverseY)
+            {
+                flipType = RotateFlipType.RotateNoneFlipY;
+            }
+
+            if (flipType != RotateFlipType.RotateNoneFlipNone)
+            {
+                tileBmp.RotateFlip(flipType);
+            }
+
+            return tileBmp;
+        }
+
+        /// <summary>
+        /// 各タイルとマス座標を順次返す。
+        /// </summary>
+        public static IEnumerable<(BlockTileData Tile, int OffsetX, int OffsetY)> GetTilesWithOffset(BlockLayer layer)
+        {
+            if (layer == null) yield break;
+            yield return (layer.TopLeft, 0, 0);
+            yield return (layer.TopRight, 1, 0);
+            yield return (layer.BottomLeft, 0, 1);
+            yield return (layer.BottomRight, 1, 1);
         }
     }
 }

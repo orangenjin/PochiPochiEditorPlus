@@ -186,7 +186,7 @@ namespace PochiPochiEditorPlus._Forms
 
                     // パレットを更新
                     byte[] palData = _tilesetManager.PaletteData[palIndex];
-                    imageLayer.ApplyPalette(palData);
+                    imageLayer.ChangePalette(palData);
                     _layerHolder.Panel.Invalidate();
                 });
             // タイルインデックス数値

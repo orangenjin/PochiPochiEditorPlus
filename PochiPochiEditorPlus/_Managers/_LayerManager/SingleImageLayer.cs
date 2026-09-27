@@ -55,7 +55,7 @@ namespace PochiPochiEditorPlus._Managers._LayerManager
         /// <summary>
         /// パレットデータのみを変更する。
         /// </summary>
-        public void ApplyPalette(byte[] paletteData, bool showBackColor = true)
+        public void ChangePalette(byte[] paletteData, bool showBackColor = true)
         {
             if (_cachedBitmap == null) return;
             PaletteData = paletteData;
