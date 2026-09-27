@@ -297,6 +297,9 @@ namespace PochiPochiEditorPlus._Forms
 
             // スクロールバーの設定
             _layerScroller.UpdateScrollRange();
+
+            // 再描画
+            _layerHolder.Panel.Invalidate();
         }
 
         private void UpdateTabPageState(bool state)
@@ -305,12 +308,9 @@ namespace PochiPochiEditorPlus._Forms
             CtrlHelper.SetControlsEnabled(grpView, state);
             CtrlHelper.ResetControls(grpView);
 
-            // タイル画像パネル
-            if (!state)
-            {
-                _layerHolder.HideAllLayers();
-                _layerHolder.Panel.Invalidate();
-            }
+            // レイヤーの表示切り替え
+            _layerHolder.SetAllLayersVisibility(state);
+            _layerHolder.Panel.Invalidate();
 
             // タブページ
             CtrlHelper.SetControlsEnabled(

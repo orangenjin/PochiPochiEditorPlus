@@ -106,6 +106,8 @@ namespace PochiPochiEditorPlus._Forms
                 (cmbBlockAttrType, "txt/tileset/TilesetBlockAttrType.txt"),
                 (cmbBlockAttrUnk, "txt/tileset/TilesetBlockAttrUnk.txt"),
                 (cmbBlockAttrLayer, "txt/tileset/TilesetBlockAttrLayer.txt"));
+
+            ChangeBlockTabState(false);
         }
 
         private void InitializeLayers()
@@ -149,7 +151,7 @@ namespace PochiPochiEditorPlus._Forms
                     int palIndex = cmbTilePalette.SelectedIndex;
                     var palData = GetProperPaletteData(palIndex);
                     layer.ApplyPalette(palData);
-                    pnlTileView.Invalidate();
+                    _tileLayerHolder.Panel.Invalidate();
                 });
 
             // タイルインデックス数値
@@ -263,6 +265,9 @@ namespace PochiPochiEditorPlus._Forms
 
             // スクロールバーの設定
             _tileLayerScroller.UpdateScrollRange();
+
+            // 再描画
+            _tileLayerHolder.Panel.Invalidate();
         }
 
         private void SetBlockData()
@@ -345,6 +350,9 @@ namespace PochiPochiEditorPlus._Forms
 
             // スクロールバーの設定
             _blockLayerScroller.UpdateScrollRange();
+
+            // 再描画
+            _blockLayerHolder.Panel.Invalidate();
         }
 
         private void DrawBlockLayer(
@@ -446,32 +454,20 @@ namespace PochiPochiEditorPlus._Forms
         private void ChangeBlockTabState(bool state)
         {
             // ブロックタブページ
-            CtrlHelper.ResetControls(
-                tbpBlock,
-                includeSelf: false);
             CtrlHelper.SetControlsEnabled(
                 tbpBlock,
                 enabled: state,
                 includeSelf: true);
-            /*
-            // タイル画像パネル
-            if (!state)
-            {
-                _tileLayerHolder.SetLayerVisible(LayerNames.Tile, state);
-                _tileLayerHolder.SetGridVisible(state);
-                _tileLayerHolder.SelectorLayer.ClearSelect();
-                _tileLayerHolder.SetSelectorVisible(state);
-            }
-            // ブロック画像パネル
-            if (!state)
-            {
-                _blockLayerHolder.SetLayerVisible(LayerNames.BlockLower, state);
-                _blockLayerHolder.SetLayerVisible(LayerNames.BlockUpper, state);
-                _blockLayerHolder.SetGridVisible(state);
-                _blockLayerHolder.SelectorLayer.ClearSelect();
-                _blockLayerHolder.SetSelectorVisible(state);
-            }
-            */
+            CtrlHelper.ResetControls(
+                tbpBlock,
+                includeSelf: false);
+            // タイル画像のレイヤー表示切り替え
+            _tileLayerHolder.SetAllLayersVisibility(state);
+            _tileLayerHolder.Panel.Invalidate();
+
+            // ブロック画像のレイヤー表示切り替え
+            _blockLayerHolder.SetAllLayersVisibility(state);
+            _blockLayerHolder.Panel.Invalidate();
         }
 
         private byte[] GetProperPaletteData(int palIndex)
@@ -484,9 +480,9 @@ namespace PochiPochiEditorPlus._Forms
 
         private void UpdateSelectedBlockIndex()
         {
-            // var indexList = _blockLayerHolder.SelectorLayer.GetSelectedIndexList();
-            // if (indexList.Count == 0) return;
-            // nudBlockIndex.Value = (decimal)indexList[0];
+            var indexList = _blockLayerHolder.Select.GetSelectedIndexList();
+            if (indexList.Count == 0) return;
+            nudBlockIndex.Value = (decimal)indexList[0];
         }
 
         private void LoadCollTabPage()
@@ -507,54 +503,6 @@ namespace PochiPochiEditorPlus._Forms
             LoadBlockTabPage();
             LoadCollTabPage();
             LoadEventTabPage();
-        }
-    }
-
-    // マップのブロックを管理するためのカスタムレイヤー
-    public sealed class MapBlockLayer : LayerBase
-    {
-        public List<Bitmap> BlockImages { get; set; } 
-        public int BlockSize { get; set; }
-
-        public MapBlockLayer(LayerData layerData, int blockSize)
-        {
-
-            BlockImages = new List<Bitmap>();
-            BlockSize = blockSize;
-        }
-
-        public override void Draw(Graphics gfx)
-        {
-            if (BlockImages == null || BlockImages.Count == 0) return;
-
-            int cols = Data.Columns;
-            int scaledBlockSize = BlockSize * Data.Scale;
-
-            for (int i = 0; i < BlockImages.Count; i++)
-            {
-                var bmp = BlockImages[i];
-                if (bmp == null) continue;
-
-                int gridX = i % cols;
-                int gridY = i / cols;
-                int drawX = gridX * scaledBlockSize;
-                int drawY = gridY * scaledBlockSize;
-
-                gfx.DrawImage(bmp,
-                    new Rectangle(drawX, drawY, scaledBlockSize, scaledBlockSize),
-                    new Rectangle(0, 0, BlockSize, BlockSize),
-                    GraphicsUnit.Pixel);
-            }
-        }
-
-        // メモリリークを防ぐため
-        public void DisposeImages()
-        {
-            foreach (var img in BlockImages)
-            {
-                img?.Dispose();
-            }
-            BlockImages.Clear();
         }
     }
 }

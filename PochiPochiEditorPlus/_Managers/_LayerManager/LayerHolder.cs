@@ -59,13 +59,13 @@ namespace PochiPochiEditorPlus._Managers._LayerManager
         }
 
         /// <summary>
-        /// すべてのレイヤーを非表示にする。
+        /// すべてのレイヤーの表示/非表示を変更する。
         /// </summary>
-        public void HideAllLayers()
+        public void SetAllLayersVisibility(bool visible)
         {
             foreach (var layer in _values.Values)
             {
-                layer.Visible = false;
+                layer.Visible = visible;
             }
         }
 
