@@ -27,6 +27,9 @@ namespace PochiPochiEditorPlus._Forms
         private dynamic _mapNameEntry = null;
         private dynamic _mapHeaderEntry = null;
         private dynamic _mapFooterEntry = null;
+        // パネル描画用
+        private dynamic _mapLayerHolder = null;
+        private LayerScroller _mapLayerScroller = null;
         // UI制御用
         private MapTreeNode _currentMapNode = null;
         private ClipboardData _clipboardData = null;
@@ -50,6 +53,13 @@ namespace PochiPochiEditorPlus._Forms
             }
         }
 
+        private enum LayerNames
+        {
+            Map,
+            Grid,
+            Paste
+        }
+
         public OwMapEditor0(
             SharedData sharedData,
             CommandManager commandManager,
@@ -61,6 +71,15 @@ namespace PochiPochiEditorPlus._Forms
             _groupData = groupData;
             _eventBinder = new EventBinder();
 
+            // マップ画像パネル
+            _mapLayerHolder = new LayerHolder<LayerNames>(pnlMapDraw, _eventBinder);
+            _mapLayerScroller = new LayerScroller(
+                pnlMapDraw,
+                hsbMapDraw,
+                vsbMapDraw,
+                _mapLayerHolder.Data,
+                _eventBinder);
+
             // 定義情報を事前に計算
             _mapFooterDef = FieldMetaDataReader.Create("MapFooterEntry");
 
@@ -69,6 +88,7 @@ namespace PochiPochiEditorPlus._Forms
 
             InitializeMapNameEntry(); // 先に処理
             InitializeControls();
+            InitializeLayers();
             InitializeMapHeaderEntry();
 
             UpdateMapNameComboBox();
@@ -137,6 +157,14 @@ namespace PochiPochiEditorPlus._Forms
                 (cmbMapBike, "txt/map/MapBike.txt"),
                 (cmbMapSpBg, "txt/map/MapSpBg.txt"),
                 (cmbMapNameType, "txt/map/MapNameType.txt"));
+        }
+
+        private void InitializeLayers()
+        {
+            // マップレイヤー
+            _mapLayerHolder.AddLayer<SingleImageLayer>(LayerNames.Map);
+            _mapLayerHolder.AddLayer<GridLayer>(LayerNames.Grid);
+            _mapLayerHolder.AddLayer<SelectLayer>(LayerNames.Paste);
         }
 
         private void InitializeMapHeaderEntry()
@@ -382,7 +410,7 @@ namespace PochiPochiEditorPlus._Forms
         {
             // 枠描画
             _eventBinder.BindCustom(
-                () => CtrlHelper.AttachBorder(grpMapView, pnlMapDraw),
+                () => CtrlHelper.AttachBorder(grpMapView, pnlMapDraw, pnlBorderDraw),
                 () => CtrlHelper.DetachBorder(grpMapView));
 
             // マップ選択のラジオボタン

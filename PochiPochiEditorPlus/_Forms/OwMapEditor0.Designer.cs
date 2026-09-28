@@ -69,6 +69,23 @@ namespace PochiPochiEditorPlus._Forms
             this.txtMapFooterOffset = new PochiPochiEditorPlus._Utilities._CustomCtrls.HexTextBox();
             this.lblMapFooterOffset = new System.Windows.Forms.Label();
             this.grpMapView = new System.Windows.Forms.GroupBox();
+            this.lblMapDrawBlockIndex = new System.Windows.Forms.Label();
+            this.txtMapDrawBlockIndex = new PochiPochiEditorPlus._Utilities._CustomCtrls.HexTextBox();
+            this.nudMapDrawBlockIndex = new System.Windows.Forms.NumericUpDown();
+            this.lblMapDrawPosY = new System.Windows.Forms.Label();
+            this.txtMapDrawPosY = new PochiPochiEditorPlus._Utilities._CustomCtrls.HexTextBox();
+            this.nudMapDrawPosY = new System.Windows.Forms.NumericUpDown();
+            this.lblMapDrawPosX = new System.Windows.Forms.Label();
+            this.txtMapDrawPosX = new PochiPochiEditorPlus._Utilities._CustomCtrls.HexTextBox();
+            this.nudMapDrawPosX = new System.Windows.Forms.NumericUpDown();
+            this.btnMapDirDown = new System.Windows.Forms.Button();
+            this.btnMapDirUp = new System.Windows.Forms.Button();
+            this.hsbMapDraw = new System.Windows.Forms.HScrollBar();
+            this.vsbMapDraw = new System.Windows.Forms.VScrollBar();
+            this.btnMapDirRight = new System.Windows.Forms.Button();
+            this.btnMapDirLeft = new System.Windows.Forms.Button();
+            this.btnMapDirDive = new System.Windows.Forms.Button();
+            this.btnMapDirSurface = new System.Windows.Forms.Button();
             this.pnlMapDraw = new System.Windows.Forms.Panel();
             this.menuMain = new System.Windows.Forms.MenuStrip();
             this.tsmiSaveSettings = new System.Windows.Forms.ToolStripMenuItem();
@@ -82,33 +99,17 @@ namespace PochiPochiEditorPlus._Forms
             this.tsmiDrawSettings = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiDrawSettingsGrid = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiDrawSettingsScale = new System.Windows.Forms.ToolStripMenuItem();
-            this.btnMapDirSurface = new System.Windows.Forms.Button();
-            this.btnMapDirLeft = new System.Windows.Forms.Button();
-            this.btnMapDirDive = new System.Windows.Forms.Button();
-            this.btnMapDirRight = new System.Windows.Forms.Button();
-            this.vsbMapDraw = new System.Windows.Forms.VScrollBar();
-            this.hsbMapDraw = new System.Windows.Forms.HScrollBar();
-            this.btnMapDirUp = new System.Windows.Forms.Button();
-            this.btnMapDirDown = new System.Windows.Forms.Button();
-            this.nudMapDrawPosX = new System.Windows.Forms.NumericUpDown();
-            this.txtMapDrawPosX = new PochiPochiEditorPlus._Utilities._CustomCtrls.HexTextBox();
-            this.lblMapDrawPosX = new System.Windows.Forms.Label();
-            this.lblMapDrawPosY = new System.Windows.Forms.Label();
-            this.txtMapDrawPosY = new PochiPochiEditorPlus._Utilities._CustomCtrls.HexTextBox();
-            this.nudMapDrawPosY = new System.Windows.Forms.NumericUpDown();
-            this.lblMapDrawBlockIndex = new System.Windows.Forms.Label();
-            this.txtMapDrawBlockIndex = new PochiPochiEditorPlus._Utilities._CustomCtrls.HexTextBox();
-            this.nudMapDrawBlockIndex = new System.Windows.Forms.NumericUpDown();
+            this.pnlBorderDraw = new System.Windows.Forms.Panel();
             this.grpMapSelector.SuspendLayout();
             this.grpMapHeader.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudBgmIndex)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudMapRelLayer)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudMapTerrainIndex)).BeginInit();
             this.grpMapView.SuspendLayout();
-            this.menuMain.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudMapDrawPosX)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudMapDrawPosY)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudMapDrawBlockIndex)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudMapDrawPosY)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudMapDrawPosX)).BeginInit();
+            this.menuMain.SuspendLayout();
             this.SuspendLayout();
             // 
             // grpMapSelector
@@ -539,6 +540,7 @@ namespace PochiPochiEditorPlus._Forms
             // 
             // grpMapView
             // 
+            this.grpMapView.Controls.Add(this.pnlBorderDraw);
             this.grpMapView.Controls.Add(this.lblMapDrawBlockIndex);
             this.grpMapView.Controls.Add(this.txtMapDrawBlockIndex);
             this.grpMapView.Controls.Add(this.nudMapDrawBlockIndex);
@@ -566,12 +568,200 @@ namespace PochiPochiEditorPlus._Forms
             this.grpMapView.TabStop = false;
             this.grpMapView.Text = "マップを編集";
             // 
+            // lblMapDrawBlockIndex
+            // 
+            this.lblMapDrawBlockIndex.AutoSize = true;
+            this.lblMapDrawBlockIndex.Location = new System.Drawing.Point(50, 698);
+            this.lblMapDrawBlockIndex.Margin = new System.Windows.Forms.Padding(0);
+            this.lblMapDrawBlockIndex.Name = "lblMapDrawBlockIndex";
+            this.lblMapDrawBlockIndex.Size = new System.Drawing.Size(59, 15);
+            this.lblMapDrawBlockIndex.TabIndex = 16;
+            this.lblMapDrawBlockIndex.Text = "ブロックID :";
+            // 
+            // txtMapDrawBlockIndex
+            // 
+            this.txtMapDrawBlockIndex.Location = new System.Drawing.Point(218, 694);
+            this.txtMapDrawBlockIndex.Margin = new System.Windows.Forms.Padding(0);
+            this.txtMapDrawBlockIndex.Name = "txtMapDrawBlockIndex";
+            this.txtMapDrawBlockIndex.ReadOnly = true;
+            this.txtMapDrawBlockIndex.Size = new System.Drawing.Size(88, 23);
+            this.txtMapDrawBlockIndex.TabIndex = 15;
+            // 
+            // nudMapDrawBlockIndex
+            // 
+            this.nudMapDrawBlockIndex.Increment = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.nudMapDrawBlockIndex.Location = new System.Drawing.Point(120, 694);
+            this.nudMapDrawBlockIndex.Margin = new System.Windows.Forms.Padding(0);
+            this.nudMapDrawBlockIndex.Maximum = new decimal(new int[] {
+            1023,
+            0,
+            0,
+            0});
+            this.nudMapDrawBlockIndex.Name = "nudMapDrawBlockIndex";
+            this.nudMapDrawBlockIndex.ReadOnly = true;
+            this.nudMapDrawBlockIndex.Size = new System.Drawing.Size(88, 23);
+            this.nudMapDrawBlockIndex.TabIndex = 14;
+            // 
+            // lblMapDrawPosY
+            // 
+            this.lblMapDrawPosY.AutoSize = true;
+            this.lblMapDrawPosY.Location = new System.Drawing.Point(50, 668);
+            this.lblMapDrawPosY.Margin = new System.Windows.Forms.Padding(0);
+            this.lblMapDrawPosY.Name = "lblMapDrawPosY";
+            this.lblMapDrawPosY.Size = new System.Drawing.Size(44, 15);
+            this.lblMapDrawPosY.TabIndex = 13;
+            this.lblMapDrawPosY.Text = "Y座標 :";
+            // 
+            // txtMapDrawPosY
+            // 
+            this.txtMapDrawPosY.Location = new System.Drawing.Point(218, 664);
+            this.txtMapDrawPosY.Margin = new System.Windows.Forms.Padding(0);
+            this.txtMapDrawPosY.Name = "txtMapDrawPosY";
+            this.txtMapDrawPosY.ReadOnly = true;
+            this.txtMapDrawPosY.Size = new System.Drawing.Size(88, 23);
+            this.txtMapDrawPosY.TabIndex = 12;
+            // 
+            // nudMapDrawPosY
+            // 
+            this.nudMapDrawPosY.Increment = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.nudMapDrawPosY.Location = new System.Drawing.Point(120, 664);
+            this.nudMapDrawPosY.Margin = new System.Windows.Forms.Padding(0);
+            this.nudMapDrawPosY.Maximum = new decimal(new int[] {
+            255,
+            0,
+            0,
+            0});
+            this.nudMapDrawPosY.Name = "nudMapDrawPosY";
+            this.nudMapDrawPosY.ReadOnly = true;
+            this.nudMapDrawPosY.Size = new System.Drawing.Size(88, 23);
+            this.nudMapDrawPosY.TabIndex = 11;
+            // 
+            // lblMapDrawPosX
+            // 
+            this.lblMapDrawPosX.AutoSize = true;
+            this.lblMapDrawPosX.Location = new System.Drawing.Point(50, 638);
+            this.lblMapDrawPosX.Margin = new System.Windows.Forms.Padding(0);
+            this.lblMapDrawPosX.Name = "lblMapDrawPosX";
+            this.lblMapDrawPosX.Size = new System.Drawing.Size(44, 15);
+            this.lblMapDrawPosX.TabIndex = 10;
+            this.lblMapDrawPosX.Text = "X座標 :";
+            // 
+            // txtMapDrawPosX
+            // 
+            this.txtMapDrawPosX.Location = new System.Drawing.Point(218, 634);
+            this.txtMapDrawPosX.Margin = new System.Windows.Forms.Padding(0);
+            this.txtMapDrawPosX.Name = "txtMapDrawPosX";
+            this.txtMapDrawPosX.ReadOnly = true;
+            this.txtMapDrawPosX.Size = new System.Drawing.Size(88, 23);
+            this.txtMapDrawPosX.TabIndex = 9;
+            // 
+            // nudMapDrawPosX
+            // 
+            this.nudMapDrawPosX.Increment = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.nudMapDrawPosX.Location = new System.Drawing.Point(120, 634);
+            this.nudMapDrawPosX.Margin = new System.Windows.Forms.Padding(0);
+            this.nudMapDrawPosX.Maximum = new decimal(new int[] {
+            255,
+            0,
+            0,
+            0});
+            this.nudMapDrawPosX.Name = "nudMapDrawPosX";
+            this.nudMapDrawPosX.ReadOnly = true;
+            this.nudMapDrawPosX.Size = new System.Drawing.Size(88, 23);
+            this.nudMapDrawPosX.TabIndex = 8;
+            // 
+            // btnMapDirDown
+            // 
+            this.btnMapDirDown.Location = new System.Drawing.Point(346, 606);
+            this.btnMapDirDown.Margin = new System.Windows.Forms.Padding(0);
+            this.btnMapDirDown.Name = "btnMapDirDown";
+            this.btnMapDirDown.Size = new System.Drawing.Size(80, 23);
+            this.btnMapDirDown.TabIndex = 7;
+            this.btnMapDirDown.Text = "下";
+            this.btnMapDirDown.UseVisualStyleBackColor = true;
+            // 
+            // btnMapDirUp
+            // 
+            this.btnMapDirUp.Location = new System.Drawing.Point(346, 28);
+            this.btnMapDirUp.Margin = new System.Windows.Forms.Padding(0);
+            this.btnMapDirUp.Name = "btnMapDirUp";
+            this.btnMapDirUp.Size = new System.Drawing.Size(80, 23);
+            this.btnMapDirUp.TabIndex = 6;
+            this.btnMapDirUp.Text = "上";
+            this.btnMapDirUp.UseVisualStyleBackColor = true;
+            // 
+            // hsbMapDraw
+            // 
+            this.hsbMapDraw.Location = new System.Drawing.Point(50, 580);
+            this.hsbMapDraw.Name = "hsbMapDraw";
+            this.hsbMapDraw.Size = new System.Drawing.Size(672, 16);
+            this.hsbMapDraw.TabIndex = 5;
+            // 
+            // vsbMapDraw
+            // 
+            this.vsbMapDraw.Location = new System.Drawing.Point(728, 62);
+            this.vsbMapDraw.Name = "vsbMapDraw";
+            this.vsbMapDraw.Size = new System.Drawing.Size(16, 512);
+            this.vsbMapDraw.TabIndex = 4;
+            // 
+            // btnMapDirRight
+            // 
+            this.btnMapDirRight.Location = new System.Drawing.Point(757, 262);
+            this.btnMapDirRight.Margin = new System.Windows.Forms.Padding(0);
+            this.btnMapDirRight.Name = "btnMapDirRight";
+            this.btnMapDirRight.Size = new System.Drawing.Size(25, 80);
+            this.btnMapDirRight.TabIndex = 3;
+            this.btnMapDirRight.Text = "右";
+            this.btnMapDirRight.UseVisualStyleBackColor = true;
+            // 
+            // btnMapDirLeft
+            // 
+            this.btnMapDirLeft.Location = new System.Drawing.Point(13, 262);
+            this.btnMapDirLeft.Margin = new System.Windows.Forms.Padding(0);
+            this.btnMapDirLeft.Name = "btnMapDirLeft";
+            this.btnMapDirLeft.Size = new System.Drawing.Size(25, 80);
+            this.btnMapDirLeft.TabIndex = 2;
+            this.btnMapDirLeft.Text = "左";
+            this.btnMapDirLeft.UseVisualStyleBackColor = true;
+            // 
+            // btnMapDirDive
+            // 
+            this.btnMapDirDive.Location = new System.Drawing.Point(140, 28);
+            this.btnMapDirDive.Margin = new System.Windows.Forms.Padding(0);
+            this.btnMapDirDive.Name = "btnMapDirDive";
+            this.btnMapDirDive.Size = new System.Drawing.Size(80, 23);
+            this.btnMapDirDive.TabIndex = 1;
+            this.btnMapDirDive.Text = "潜水";
+            this.btnMapDirDive.UseVisualStyleBackColor = true;
+            // 
+            // btnMapDirSurface
+            // 
+            this.btnMapDirSurface.Location = new System.Drawing.Point(50, 28);
+            this.btnMapDirSurface.Margin = new System.Windows.Forms.Padding(0);
+            this.btnMapDirSurface.Name = "btnMapDirSurface";
+            this.btnMapDirSurface.Size = new System.Drawing.Size(80, 23);
+            this.btnMapDirSurface.TabIndex = 1;
+            this.btnMapDirSurface.Text = "浮上";
+            this.btnMapDirSurface.UseVisualStyleBackColor = true;
+            // 
             // pnlMapDraw
             // 
             this.pnlMapDraw.Location = new System.Drawing.Point(50, 62);
             this.pnlMapDraw.Margin = new System.Windows.Forms.Padding(0);
             this.pnlMapDraw.Name = "pnlMapDraw";
-            this.pnlMapDraw.Size = new System.Drawing.Size(672, 544);
+            this.pnlMapDraw.Size = new System.Drawing.Size(672, 512);
             this.pnlMapDraw.TabIndex = 0;
             // 
             // menuMain
@@ -676,193 +866,13 @@ namespace PochiPochiEditorPlus._Forms
             this.tsmiDrawSettingsScale.Size = new System.Drawing.Size(131, 20);
             this.tsmiDrawSettingsScale.Text = "拡大表示";
             // 
-            // btnMapDirSurface
+            // pnlBorderDraw
             // 
-            this.btnMapDirSurface.Location = new System.Drawing.Point(50, 28);
-            this.btnMapDirSurface.Margin = new System.Windows.Forms.Padding(0);
-            this.btnMapDirSurface.Name = "btnMapDirSurface";
-            this.btnMapDirSurface.Size = new System.Drawing.Size(80, 23);
-            this.btnMapDirSurface.TabIndex = 1;
-            this.btnMapDirSurface.Text = "浮上";
-            this.btnMapDirSurface.UseVisualStyleBackColor = true;
-            // 
-            // btnMapDirLeft
-            // 
-            this.btnMapDirLeft.Location = new System.Drawing.Point(13, 294);
-            this.btnMapDirLeft.Margin = new System.Windows.Forms.Padding(0);
-            this.btnMapDirLeft.Name = "btnMapDirLeft";
-            this.btnMapDirLeft.Size = new System.Drawing.Size(25, 80);
-            this.btnMapDirLeft.TabIndex = 2;
-            this.btnMapDirLeft.Text = "左";
-            this.btnMapDirLeft.UseVisualStyleBackColor = true;
-            // 
-            // btnMapDirDive
-            // 
-            this.btnMapDirDive.Location = new System.Drawing.Point(140, 28);
-            this.btnMapDirDive.Margin = new System.Windows.Forms.Padding(0);
-            this.btnMapDirDive.Name = "btnMapDirDive";
-            this.btnMapDirDive.Size = new System.Drawing.Size(80, 23);
-            this.btnMapDirDive.TabIndex = 1;
-            this.btnMapDirDive.Text = "潜水";
-            this.btnMapDirDive.UseVisualStyleBackColor = true;
-            // 
-            // btnMapDirRight
-            // 
-            this.btnMapDirRight.Location = new System.Drawing.Point(757, 294);
-            this.btnMapDirRight.Margin = new System.Windows.Forms.Padding(0);
-            this.btnMapDirRight.Name = "btnMapDirRight";
-            this.btnMapDirRight.Size = new System.Drawing.Size(25, 80);
-            this.btnMapDirRight.TabIndex = 3;
-            this.btnMapDirRight.Text = "右";
-            this.btnMapDirRight.UseVisualStyleBackColor = true;
-            // 
-            // vsbMapDraw
-            // 
-            this.vsbMapDraw.Location = new System.Drawing.Point(728, 62);
-            this.vsbMapDraw.Name = "vsbMapDraw";
-            this.vsbMapDraw.Size = new System.Drawing.Size(16, 544);
-            this.vsbMapDraw.TabIndex = 4;
-            // 
-            // hsbMapDraw
-            // 
-            this.hsbMapDraw.Location = new System.Drawing.Point(50, 612);
-            this.hsbMapDraw.Name = "hsbMapDraw";
-            this.hsbMapDraw.Size = new System.Drawing.Size(672, 16);
-            this.hsbMapDraw.TabIndex = 5;
-            // 
-            // btnMapDirUp
-            // 
-            this.btnMapDirUp.Location = new System.Drawing.Point(346, 28);
-            this.btnMapDirUp.Margin = new System.Windows.Forms.Padding(0);
-            this.btnMapDirUp.Name = "btnMapDirUp";
-            this.btnMapDirUp.Size = new System.Drawing.Size(80, 23);
-            this.btnMapDirUp.TabIndex = 6;
-            this.btnMapDirUp.Text = "上";
-            this.btnMapDirUp.UseVisualStyleBackColor = true;
-            // 
-            // btnMapDirDown
-            // 
-            this.btnMapDirDown.Location = new System.Drawing.Point(346, 638);
-            this.btnMapDirDown.Margin = new System.Windows.Forms.Padding(0);
-            this.btnMapDirDown.Name = "btnMapDirDown";
-            this.btnMapDirDown.Size = new System.Drawing.Size(80, 23);
-            this.btnMapDirDown.TabIndex = 7;
-            this.btnMapDirDown.Text = "下";
-            this.btnMapDirDown.UseVisualStyleBackColor = true;
-            // 
-            // nudMapDrawPosX
-            // 
-            this.nudMapDrawPosX.Increment = new decimal(new int[] {
-            0,
-            0,
-            0,
-            0});
-            this.nudMapDrawPosX.Location = new System.Drawing.Point(104, 664);
-            this.nudMapDrawPosX.Margin = new System.Windows.Forms.Padding(0);
-            this.nudMapDrawPosX.Maximum = new decimal(new int[] {
-            255,
-            0,
-            0,
-            0});
-            this.nudMapDrawPosX.Name = "nudMapDrawPosX";
-            this.nudMapDrawPosX.ReadOnly = true;
-            this.nudMapDrawPosX.Size = new System.Drawing.Size(72, 23);
-            this.nudMapDrawPosX.TabIndex = 8;
-            // 
-            // txtMapDrawPosX
-            // 
-            this.txtMapDrawPosX.Location = new System.Drawing.Point(186, 664);
-            this.txtMapDrawPosX.Margin = new System.Windows.Forms.Padding(0);
-            this.txtMapDrawPosX.Name = "txtMapDrawPosX";
-            this.txtMapDrawPosX.ReadOnly = true;
-            this.txtMapDrawPosX.Size = new System.Drawing.Size(72, 23);
-            this.txtMapDrawPosX.TabIndex = 9;
-            // 
-            // lblMapDrawPosX
-            // 
-            this.lblMapDrawPosX.AutoSize = true;
-            this.lblMapDrawPosX.Location = new System.Drawing.Point(50, 668);
-            this.lblMapDrawPosX.Margin = new System.Windows.Forms.Padding(0);
-            this.lblMapDrawPosX.Name = "lblMapDrawPosX";
-            this.lblMapDrawPosX.Size = new System.Drawing.Size(44, 15);
-            this.lblMapDrawPosX.TabIndex = 10;
-            this.lblMapDrawPosX.Text = "X座標 :";
-            // 
-            // lblMapDrawPosY
-            // 
-            this.lblMapDrawPosY.AutoSize = true;
-            this.lblMapDrawPosY.Location = new System.Drawing.Point(50, 698);
-            this.lblMapDrawPosY.Margin = new System.Windows.Forms.Padding(0);
-            this.lblMapDrawPosY.Name = "lblMapDrawPosY";
-            this.lblMapDrawPosY.Size = new System.Drawing.Size(44, 15);
-            this.lblMapDrawPosY.TabIndex = 13;
-            this.lblMapDrawPosY.Text = "Y座標 :";
-            // 
-            // txtMapDrawPosY
-            // 
-            this.txtMapDrawPosY.Location = new System.Drawing.Point(186, 694);
-            this.txtMapDrawPosY.Margin = new System.Windows.Forms.Padding(0);
-            this.txtMapDrawPosY.Name = "txtMapDrawPosY";
-            this.txtMapDrawPosY.ReadOnly = true;
-            this.txtMapDrawPosY.Size = new System.Drawing.Size(72, 23);
-            this.txtMapDrawPosY.TabIndex = 12;
-            // 
-            // nudMapDrawPosY
-            // 
-            this.nudMapDrawPosY.Increment = new decimal(new int[] {
-            0,
-            0,
-            0,
-            0});
-            this.nudMapDrawPosY.Location = new System.Drawing.Point(104, 694);
-            this.nudMapDrawPosY.Margin = new System.Windows.Forms.Padding(0);
-            this.nudMapDrawPosY.Maximum = new decimal(new int[] {
-            255,
-            0,
-            0,
-            0});
-            this.nudMapDrawPosY.Name = "nudMapDrawPosY";
-            this.nudMapDrawPosY.ReadOnly = true;
-            this.nudMapDrawPosY.Size = new System.Drawing.Size(72, 23);
-            this.nudMapDrawPosY.TabIndex = 11;
-            // 
-            // lblMapDrawBlockIndex
-            // 
-            this.lblMapDrawBlockIndex.AutoSize = true;
-            this.lblMapDrawBlockIndex.Location = new System.Drawing.Point(466, 668);
-            this.lblMapDrawBlockIndex.Margin = new System.Windows.Forms.Padding(0);
-            this.lblMapDrawBlockIndex.Name = "lblMapDrawBlockIndex";
-            this.lblMapDrawBlockIndex.Size = new System.Drawing.Size(59, 15);
-            this.lblMapDrawBlockIndex.TabIndex = 16;
-            this.lblMapDrawBlockIndex.Text = "ブロックID :";
-            // 
-            // txtMapDrawBlockIndex
-            // 
-            this.txtMapDrawBlockIndex.Location = new System.Drawing.Point(634, 664);
-            this.txtMapDrawBlockIndex.Margin = new System.Windows.Forms.Padding(0);
-            this.txtMapDrawBlockIndex.Name = "txtMapDrawBlockIndex";
-            this.txtMapDrawBlockIndex.ReadOnly = true;
-            this.txtMapDrawBlockIndex.Size = new System.Drawing.Size(88, 23);
-            this.txtMapDrawBlockIndex.TabIndex = 15;
-            // 
-            // nudMapDrawBlockIndex
-            // 
-            this.nudMapDrawBlockIndex.Increment = new decimal(new int[] {
-            0,
-            0,
-            0,
-            0});
-            this.nudMapDrawBlockIndex.Location = new System.Drawing.Point(536, 664);
-            this.nudMapDrawBlockIndex.Margin = new System.Windows.Forms.Padding(0);
-            this.nudMapDrawBlockIndex.Maximum = new decimal(new int[] {
-            1023,
-            0,
-            0,
-            0});
-            this.nudMapDrawBlockIndex.Name = "nudMapDrawBlockIndex";
-            this.nudMapDrawBlockIndex.ReadOnly = true;
-            this.nudMapDrawBlockIndex.Size = new System.Drawing.Size(88, 23);
-            this.nudMapDrawBlockIndex.TabIndex = 14;
+            this.pnlBorderDraw.Location = new System.Drawing.Point(594, 622);
+            this.pnlBorderDraw.Margin = new System.Windows.Forms.Padding(0);
+            this.pnlBorderDraw.Name = "pnlBorderDraw";
+            this.pnlBorderDraw.Size = new System.Drawing.Size(128, 96);
+            this.pnlBorderDraw.TabIndex = 17;
             // 
             // OwMapEditor0
             // 
@@ -889,11 +899,11 @@ namespace PochiPochiEditorPlus._Forms
             ((System.ComponentModel.ISupportInitialize)(this.nudMapTerrainIndex)).EndInit();
             this.grpMapView.ResumeLayout(false);
             this.grpMapView.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudMapDrawBlockIndex)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudMapDrawPosY)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudMapDrawPosX)).EndInit();
             this.menuMain.ResumeLayout(false);
             this.menuMain.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudMapDrawPosX)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudMapDrawPosY)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudMapDrawBlockIndex)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -970,5 +980,6 @@ namespace PochiPochiEditorPlus._Forms
         private System.Windows.Forms.Label lblMapDrawBlockIndex;
         private _Utilities._CustomCtrls.HexTextBox txtMapDrawBlockIndex;
         private System.Windows.Forms.NumericUpDown nudMapDrawBlockIndex;
+        private System.Windows.Forms.Panel pnlBorderDraw;
     }
 }
