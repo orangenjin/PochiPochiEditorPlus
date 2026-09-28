@@ -8,7 +8,7 @@ namespace PochiPochiEditorPlus._Managers
 {
     public sealed class ConfigManager : DynamicAccessor<object>
     {
-        // 設定名からパスを取得
+        // 設定名をキーとして、パスを保持
         public Dictionary<string, string> Configs { get; }
 
         /// <summary>
@@ -16,12 +16,10 @@ namespace PochiPochiEditorPlus._Managers
         /// </summary>
         public ConfigManager(string folderPath)
         {
-            if (!Directory.Exists(folderPath)) return;
-
-            var searchPattern = $"*.{Constants.IniExt}";
+            var searchExt = $"*.{ExtConstants.IniExt}";
             Configs = new Dictionary<string, string>();
 
-            foreach (string filePath in Directory.EnumerateFiles(folderPath, searchPattern))
+            foreach (string filePath in Directory.EnumerateFiles(folderPath, searchExt))
             {
                 string name = Path.GetFileNameWithoutExtension(filePath);
                 Configs[name] = filePath;
@@ -29,9 +27,9 @@ namespace PochiPochiEditorPlus._Managers
         }
 
         /// <summary>
-        /// 選択された設定名の内容を解析し、格納する。
+        /// 選択された設定名の内容を解析し、_values辞書に登録する。
         /// </summary>
-        public void LoadConfig(string configName, byte[] data)
+        public void LoadConfig(string configName, byte[] source)
         {
             // 初期化
             ClearDict();
@@ -43,22 +41,22 @@ namespace PochiPochiEditorPlus._Managers
             foreach (string line in File.ReadLines(filePath, Encoding.UTF8))
             {
                 // 空行とコメントをスキップして、分割
-                if (!TryParseLine(line, out string key, out string rawString)) continue;
+                if (!TryParseLine(line, out string key, out string rawValue)) continue;
 
-                // boolかどうか
-                if (bool.TryParse(rawString, out bool boolValue))
+                // bool値かどうか
+                if (bool.TryParse(rawValue, out bool boolValue))
                 {
                     Register(key, boolValue);
                     continue;
                 }
 
                 // ポインタかどうか
-                if (rawString.StartsWith("*"))
+                if (rawValue.StartsWith("*"))
                 {
-                    if (TryParseNumber(rawString.Substring(1), out int ptrOffset))
+                    if (TryParseNumber(rawValue.Substring(1), out int pointerOffset))
                     {
                         // ポインタとして読み取る
-                        if (IoHelper.TryReadPtr(data, ptrOffset, out int resultOffset))
+                        if (IoHelper.TryReadPointer(source, pointerOffset, out int resultOffset))
                         {
                             Register(key, resultOffset);
                             continue;
@@ -67,10 +65,12 @@ namespace PochiPochiEditorPlus._Managers
                 }
 
                 // 数字かどうか
-                if (TryParseNumber(rawString, out int numValue))
+                if (TryParseNumber(rawValue, out int numValue))
                 {
                     Register(key, numValue);
                 }
+
+                // 該当しない場合は何も登録しない
             }
         }
 
@@ -82,30 +82,30 @@ namespace PochiPochiEditorPlus._Managers
             key = string.Empty;
             rawValue = string.Empty;
 
-            // 除外行チェック
+            // 除外行を判定
             if (string.IsNullOrWhiteSpace(line) || line.StartsWith(";")) return false;
 
             // イコールで分割
             string[] parts = line.Split('=');
 
-            key = parts[(int)Constants.PartName.Key].Trim();
-            rawValue = parts[(int)Constants.PartName.Value].Trim();
+            key = parts[(int)PartName.Key].Trim();
+            rawValue = parts[(int)PartName.Value].Trim();
             return true;
         }
 
         /// <summary>
-        /// 10進数か16進数（0x付き）を判定し、intに変換する。
+        /// 10進数か16進数(0x付き)を判定し、intに変換する。
         /// </summary>
-        private bool TryParseNumber(string rawString, out int parsedValue)
+        private bool TryParseNumber(string rawValue, out int parsedValue)
         {
-            if (rawString.StartsWith(Constants.HexPrefix)) // 0x
+            if (rawValue.StartsWith(PrefixConstants.HexPrefix)) // 0x
             {
-                string hexPart = rawString.Substring(Constants.HexPrefix.Length);
+                string hexPart = rawValue.Substring(PrefixConstants.HexPrefix.Length);
                 parsedValue = ConvHelper.ParseStringToInt(hexPart);
                 return true;
             }
 
-            return int.TryParse(rawString, out parsedValue); // 10進数
+            return int.TryParse(rawValue, out parsedValue); // 10進数
         }
     }
 }

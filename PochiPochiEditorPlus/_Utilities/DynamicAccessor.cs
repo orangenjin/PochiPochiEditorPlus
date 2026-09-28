@@ -8,15 +8,20 @@ namespace PochiPochiEditorPlus._Utilities
     /// </summary>
     public abstract class DynamicAccessor<T> : DynamicObject
     {
-        protected Dictionary<string, T> _values = new Dictionary<string, T>();
+        protected Dictionary<string, T> _values = null;
+
+        protected DynamicAccessor()
+        {
+            // コンストラクタで初期化する
+            _values = new Dictionary<string, T>();
+        }
 
         /// <summary>
-        /// 値を登録する。
-        /// 辞書のAddの仕様を利用して、上書きを拒否する。
+        /// 重複キーを許して、値を登録する。
         /// </summary>
         public virtual void Register(string key, T value)
         {
-            _values.Add(key, value);
+            _values[key] = value;
         }
 
         /// <summary>

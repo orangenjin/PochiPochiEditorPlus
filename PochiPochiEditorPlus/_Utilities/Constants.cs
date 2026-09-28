@@ -104,6 +104,21 @@
         public const byte StrTerminatorByte = 0xFF;
     }
 
+    public static class PrefixConstants
+    {
+        public const string HexPrefix = "0x";
+        public const string ButtonPrefix = "btn";
+        public const string MenuItemPrefix = "tsmi";
+    }
+
+    public static class ExtConstants
+    {
+        public const string GbaExt = "gba";
+        public const string BmpExt = "bmp";
+        public const string DefExt = "def";
+        public const string IniExt = "ini";
+    }
+
     public enum DataSize
     {
         Byte = sizeof(byte),

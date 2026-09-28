@@ -99,13 +99,13 @@ namespace PochiPochiEditorPlus._Managers
                 byte currentByte = buffer[currentIndex];
 
                 // 終端
-                if (currentByte == Constants.StrTerminatorByte)
+                if (currentByte == BinaryConstants.StrTerminatorByte)
                 {
                     break;
                 }
 
                 // 改行
-                if (currentByte == Constants.StrNewlineByte)
+                if (currentByte == BinaryConstants.StrNewlineByte)
                 {
                     result.Append(Environment.NewLine);
                     i++;
@@ -164,7 +164,7 @@ namespace PochiPochiEditorPlus._Managers
             string text,
             bool appendTerminator = true,
             int targetLength = -1,
-            byte paddingByte = Constants.PaddingByte)
+            byte paddingByte = BinaryConstants.PaddingByte)
         {
             text = text ?? string.Empty; // 空文字を入れる
             List<byte> result = new List<byte>(); // 戻り値
@@ -175,7 +175,7 @@ namespace PochiPochiEditorPlus._Managers
                 // 改行
                 if (text[i] == '\r' && text[i + 1] == '\n')
                 {
-                    result.Add(Constants.StrNewlineByte);
+                    result.Add(BinaryConstants.StrNewlineByte);
                     i += 2;
                     continue;
                 }
@@ -223,7 +223,7 @@ namespace PochiPochiEditorPlus._Managers
             // 終端を追加するかどうか
             if (appendTerminator)
             {
-                result.Add(Constants.StrTerminatorByte);
+                result.Add(BinaryConstants.StrTerminatorByte);
             }
 
             // 埋める必要があるかどうか

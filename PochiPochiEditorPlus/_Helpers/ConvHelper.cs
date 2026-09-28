@@ -13,7 +13,7 @@ namespace PochiPochiEditorPlus._Helpers
             // null, 空白である場合
             if (string.IsNullOrWhiteSpace(str))
             {
-                return Constants.InvalidValue;
+                return BinaryConstants.InvalidValue;
             }
 
             // 字詰め
@@ -22,7 +22,7 @@ namespace PochiPochiEditorPlus._Helpers
             // 変換テスト
             return int.TryParse(trimStr, NumberStyles.HexNumber, null, out int value)
                     ? value
-                    : Constants.InvalidValue; // 変換失敗時
+                    : BinaryConstants.InvalidValue; // 変換失敗時
         }
 
         /// <summary>
@@ -30,9 +30,9 @@ namespace PochiPochiEditorPlus._Helpers
         /// </summary>
         public static string ParseIntToString(
             this int val,
-            int digits = Constants.OffsetDigits)
+            int digits = BinaryConstants.OffsetDigits)
         {
-            return val != Constants.InvalidValue
+            return val != BinaryConstants.InvalidValue
                 ? val.ToString($"X{digits}")
                 : string.Empty;
         }
