@@ -268,8 +268,8 @@ namespace PochiPochiEditorPlus._Forms
             // レイヤー初期設定
             _layerHolder.Initialize(
                 gridSize: Constants.TileSize,
-                scale: Constants.DefaultScale,
-                validItemCount: totalTiles);
+                validItemCount: totalTiles,
+                scale: Constants.DefaultScale);
 
             // 画像の設定
             _layerHolder.Tile.SetImageData(

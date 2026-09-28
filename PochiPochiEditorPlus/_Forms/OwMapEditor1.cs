@@ -35,7 +35,7 @@ namespace PochiPochiEditorPlus._Forms
         private int _selectedBlockIndex = 0;
         private byte[] _combinedTilesetImageData = null;
 
-        private enum LayerNames 
+        public enum MapEditorLayerNames1
         { 
             Tile,
             BlockLower,
@@ -64,7 +64,7 @@ namespace PochiPochiEditorPlus._Forms
             RegisterFormGroupData(_groupData);
 
             // タイル画像パネル
-            _tileLayerHolder = new LayerHolder<LayerNames>(pnlTileView, _eventBinder);
+            _tileLayerHolder = new LayerHolder<MapEditorLayerNames1>(pnlTileView, _eventBinder);
             _tileLayerScroller = new LayerScroller(
                 pnlTileView,
                 null,
@@ -72,7 +72,7 @@ namespace PochiPochiEditorPlus._Forms
                 _tileLayerHolder.Data,
                 _eventBinder);
             // ブロック画像パネル
-            _blockLayerHolder = new LayerHolder<LayerNames>(pnlBlockView, _eventBinder);
+            _blockLayerHolder = new LayerHolder<MapEditorLayerNames1>(pnlBlockView, _eventBinder);
             _blockLayerScroller = new LayerScroller(
                 pnlBlockView,
                 null,
@@ -80,7 +80,7 @@ namespace PochiPochiEditorPlus._Forms
                 _blockLayerHolder.Data,
                 _eventBinder);
             // データ画像パネル
-            _dataLayerHolder = new LayerHolder<LayerNames>(pnlBlockDataImage, _eventBinder);
+            _dataLayerHolder = new LayerHolder<MapEditorLayerNames1>(pnlBlockDataImage, _eventBinder);
 
             InitializeControls();
             InitializeLayers();
@@ -116,21 +116,21 @@ namespace PochiPochiEditorPlus._Forms
         private void InitializeLayers()
         {
             // タイルレイヤー
-            _tileLayerHolder.AddLayer<SingleImageLayer>(LayerNames.Tile);
-            _tileLayerHolder.AddLayer<GridLayer>(LayerNames.Grid);
-            _tileLayerHolder.AddLayer<SelectLayer>(LayerNames.Select);
+            _tileLayerHolder.AddLayer<SingleImageLayer>(MapEditorLayerNames1.Tile);
+            _tileLayerHolder.AddLayer<GridLayer>(MapEditorLayerNames1.Grid);
+            _tileLayerHolder.AddLayer<SelectLayer>(MapEditorLayerNames1.Select);
 
             // ブロックレイヤー
-            _blockLayerHolder.AddLayer<BlockImageLayer>(LayerNames.BlockLower);
-            _blockLayerHolder.AddLayer<BlockImageLayer>(LayerNames.BlockUpper);
-            _blockLayerHolder.AddLayer<GridLayer>(LayerNames.Grid);
-            _blockLayerHolder.AddLayer<SelectLayer>(LayerNames.Select);
+            _blockLayerHolder.AddLayer<BlockImageLayer>(MapEditorLayerNames1.BlockLower);
+            _blockLayerHolder.AddLayer<BlockImageLayer>(MapEditorLayerNames1.BlockUpper);
+            _blockLayerHolder.AddLayer<GridLayer>(MapEditorLayerNames1.Grid);
+            _blockLayerHolder.AddLayer<SelectLayer>(MapEditorLayerNames1.Select);
 
             // データレイヤー
-            _dataLayerHolder.AddLayer<BlockImageLayer>(LayerNames.BlockFlat);
-            _dataLayerHolder.AddLayer<GridLayer>(LayerNames.Grid);
-            _dataLayerHolder.AddLayer<SelectLayer>(LayerNames.Select);
-            _dataLayerHolder.AddLayer<PasteLayer>(LayerNames.Paste);
+            _dataLayerHolder.AddLayer<BlockImageLayer>(MapEditorLayerNames1.BlockFlat);
+            _dataLayerHolder.AddLayer<GridLayer>(MapEditorLayerNames1.Grid);
+            _dataLayerHolder.AddLayer<SelectLayer>(MapEditorLayerNames1.Select);
+            _dataLayerHolder.AddLayer<PasteLayer>(MapEditorLayerNames1.Paste);
         }
 
         private void InitializeEventHandlers()
@@ -248,8 +248,8 @@ namespace PochiPochiEditorPlus._Forms
             // レイヤー初期設定
             _tileLayerHolder.Initialize(
                 gridSize: Constants.TileSize,
-                scale: Constants.DefaultScale,
-                validItemCount: totalTiles);
+                validItemCount: totalTiles,
+                scale: Constants.DefaultScale);
 
             // 画像の設定
             _tileLayerHolder.Tile.SetImageData(
@@ -275,13 +275,13 @@ namespace PochiPochiEditorPlus._Forms
             // タイルセット1のブロックを追加
             for (int i = 0; i < _tileset1Manager.BlockDataEntries.Count; i++)
             {
-                blockData = TilesetDataCalc.GetBlockData(currentIndex, _tileset1Manager.BlockDataEntries[i]);
+                blockData = TilesetBlockCalc.GetBlockData(currentIndex, _tileset1Manager.BlockDataEntries[i]);
                 _blockDataList.Add(blockData);
             }
             // 続きからタイルセット2のブロックを追加
             for (int i = 0; i < _tileset2Manager.BlockDataEntries.Count; i++)
             {
-                blockData = TilesetDataCalc.GetBlockData(currentIndex, _tileset2Manager.BlockDataEntries[i]);
+                blockData = TilesetBlockCalc.GetBlockData(currentIndex, _tileset2Manager.BlockDataEntries[i]);
                 _blockDataList.Add(blockData);
             }
         }
@@ -305,8 +305,8 @@ namespace PochiPochiEditorPlus._Forms
             // レイヤーの初期設定
             _blockLayerHolder.Initialize(
                 gridSize: blockSize,
-                scale: Constants.DefaultScale,
-                validItemCount: _blockDataList.Count);
+                validItemCount: _blockDataList.Count,
+                scale: Constants.DefaultScale);
 
             // 画像を破棄
             _blockLayerHolder.BlockLower.Allocate();
@@ -362,7 +362,7 @@ namespace PochiPochiEditorPlus._Forms
         {
             int tileSize = Constants.TileSize;
 
-            foreach (var (tile, offsetX, offsetY) in TilesetDataCalc.GetTilesWithOffset(layer))
+            foreach (var (tile, offsetX, offsetY) in TilesetBlockCalc.GetTilesWithOffset(layer))
             {
                 DrawTile(tile, drawX + (offsetX * tileSize), drawY + (offsetY * tileSize));
             }
@@ -390,7 +390,7 @@ namespace PochiPochiEditorPlus._Forms
             byte[] tileBytes = tileLayer.ExtractImageDataAtGrid(tileGridX, tileGridY);
             byte[] palData = GetProperPaletteData(tileData.PaletteIndex);
 
-            return TilesetDataCalc.CreateTileImage(
+            return TilesetBlockCalc.CreateTileImage(
                 tileData,
                 tileBytes,
                 palData,
@@ -436,21 +436,21 @@ namespace PochiPochiEditorPlus._Forms
             int validItemCount = Constants.TilePerBlockSide * Constants.TilePerBlockSide * 2;
             _dataLayerHolder.Initialize(
                 gridSize: tileSize,
-                scale: scale,
-                validItemCount: validItemCount);
+                validItemCount: validItemCount,
+                scale: scale);
 
             // 画像を破棄して配列を確保
             _dataLayerHolder.BlockFlat.Allocate();
             int tilesPerRow = Constants.TilesetImageWidth / Constants.TileSize;
 
             // 下位レイヤー
-            foreach (var (tile, offsetX, offsetY) in TilesetDataCalc.GetTilesWithOffset(blockData.Lower))
+            foreach (var (tile, offsetX, offsetY) in TilesetBlockCalc.GetTilesWithOffset(blockData.Lower))
             {
                 SetTileImageToDataLayer(tile, offsetX, offsetY, isLower: true);
             }
 
             // 上位レイヤー
-            foreach (var (tile, offsetX, offsetY) in TilesetDataCalc.GetTilesWithOffset(blockData.Upper))
+            foreach (var (tile, offsetX, offsetY) in TilesetBlockCalc.GetTilesWithOffset(blockData.Upper))
             {
                 SetTileImageToDataLayer(tile, 2 + offsetX, offsetY, isLower: false);
             }
@@ -489,7 +489,7 @@ namespace PochiPochiEditorPlus._Forms
             cmbBlockAttrAction.SelectedValue = entry.ActionAttr.GetData<byte>();
             cmbBlockAttrType.SelectedValue = entry.TypeAttr.GetData<byte>();
             cmbBlockAttrUnk.SelectedValue = entry.UnkAttr.GetData<byte>();
-            var layerAndWildEncAttr = TilesetDataCalc.GetLayerAndWildEncAttr(entry.LayerAndWildEncAttr);
+            var layerAndWildEncAttr = TilesetBlockCalc.GetLayerAndWildEncAttr(entry.LayerAndWildEncAttr);
             cmbBlockAttrLayer.SelectedValue = layerAndWildEncAttr.Layer;
             chkBlockAttrWildEncGrass.Checked = layerAndWildEncAttr.WildEncGrass;
             chkBlockAttrWildEncWater.Checked = layerAndWildEncAttr.WildEncWater;

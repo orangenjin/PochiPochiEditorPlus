@@ -38,12 +38,12 @@ namespace PochiPochiEditorPlus._Managers._LayerManager
         /// </summary>
         public void Initialize(
             int gridSize,
-            int scale,
-            int validItemCount)
+            int validItemCount,
+            int scale = 1)
         {
             Data.GridSize = gridSize;
-            Data.Scale = scale;
             Data.ValidItemCount = validItemCount;
+            Data.Scale = scale;
             Data.CalcLayout(Panel.ClientSize.Width);
         }
 

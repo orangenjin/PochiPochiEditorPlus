@@ -6,8 +6,8 @@ MapHeight: Byte
 MapFooterUnk4: Byte
 MapFooterUnk5: Byte
 MapFooterUnk6: Byte
-MapDataOffset: Pointer
-BorderDataOffset: Pointer
+BorderGridDataOffset: Pointer
+MapGridDataOffset: Pointer
 Tileset1HeaderOffset: Pointer
 Tileset2HeaderOffset: Pointer
 BorderWidth: Byte

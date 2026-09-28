@@ -8,6 +8,7 @@ using PochiPochiEditorPlus._Helpers._MatchHelper;
 using PochiPochiEditorPlus._Managers._FieldManager;
 using PochiPochiEditorPlus._Managers._FormGroupManager;
 using PochiPochiEditorPlus._Managers._LayerManager;
+using PochiPochiEditorPlus._Managers._MapManager;
 using PochiPochiEditorPlus._Managers._UndoManager;
 using PochiPochiEditorPlus._Utilities;
 
@@ -27,6 +28,7 @@ namespace PochiPochiEditorPlus._Forms
         private dynamic _mapNameEntry = null;
         private dynamic _mapHeaderEntry = null;
         private dynamic _mapFooterEntry = null;
+        private dynamic _mapGridDataEntry = null;
         // パネル描画用
         private dynamic _mapLayerHolder = null;
         private LayerScroller _mapLayerScroller = null;
@@ -53,9 +55,10 @@ namespace PochiPochiEditorPlus._Forms
             }
         }
 
-        private enum LayerNames
+        public enum MapEditorLayerNames0
         {
-            Map,
+            MapLower,
+            MapUpper,
             Grid,
             Paste
         }
@@ -72,7 +75,7 @@ namespace PochiPochiEditorPlus._Forms
             _eventBinder = new EventBinder();
 
             // マップ画像パネル
-            _mapLayerHolder = new LayerHolder<LayerNames>(pnlMapDraw, _eventBinder);
+            _mapLayerHolder = new LayerHolder<MapEditorLayerNames0>(pnlMapDraw, _eventBinder);
             _mapLayerScroller = new LayerScroller(
                 pnlMapDraw,
                 hsbMapDraw,
@@ -149,6 +152,11 @@ namespace PochiPochiEditorPlus._Forms
 
         private void InitializeControls()
         {
+            // ダブルバッファリングを有効化
+            CtrlHelper.EnableDoubleBuffering(
+                pnlMapDraw,
+                pnlBorderDraw);
+
             // 各コンボボックスにアイテムを追加
             CtrlHelper.LoadComboBoxFromFile(
                 (cmbMapType, "txt/map/MapType.txt"),
@@ -162,9 +170,10 @@ namespace PochiPochiEditorPlus._Forms
         private void InitializeLayers()
         {
             // マップレイヤー
-            _mapLayerHolder.AddLayer<SingleImageLayer>(LayerNames.Map);
-            _mapLayerHolder.AddLayer<GridLayer>(LayerNames.Grid);
-            _mapLayerHolder.AddLayer<SelectLayer>(LayerNames.Paste);
+            _mapLayerHolder.AddLayer<BlockImageLayer>(MapEditorLayerNames0.MapLower);
+            _mapLayerHolder.AddLayer<BlockImageLayer>(MapEditorLayerNames0.MapUpper);
+            _mapLayerHolder.AddLayer<GridLayer>(MapEditorLayerNames0.Grid);
+            _mapLayerHolder.AddLayer<PasteLayer>(MapEditorLayerNames0.Paste);
         }
 
         private void InitializeMapHeaderEntry()
@@ -461,8 +470,9 @@ namespace PochiPochiEditorPlus._Forms
 
             // 他のフォームの再描画
             _groupData.RequestRefresh(this);
-            // マップを描画
-            DrawEntireMap();
+
+
+            ReadMapGridData();
         }
 
         private void LoadDataToUI()
@@ -573,6 +583,7 @@ namespace PochiPochiEditorPlus._Forms
                     offset,
                     0,
                     entryFields);
+
             }
             else
             {
@@ -580,9 +591,80 @@ namespace PochiPochiEditorPlus._Forms
             }
         }
 
+        private void ReadMapGridData()
+        {
+            if (_mapFooterEntry == null) return;
+
+            // オフセットの確認
+            int tableOffset = _mapFooterEntry.MapGridDataOffset.GetData<int>();
+            if (tableOffset == Constants.InvalidValue) return;
+
+            int entryCount = _mapFooterEntry.MapWidth.GetData<int>() * _mapFooterEntry.MapHeight.GetData<int>();
+            _mapGridDataEntry = new EntryManager("MapGridDataEntry", tableOffset, entryCount, _sharedData);
+
+            DrawEntireMap();
+        }
+
         private void DrawEntireMap()
         {
+            if (_mapGridDataEntry == null) return;
 
+            // ブロック画像レイヤーを取得
+            var sourceBlockLayerHolder = _groupData._blockLayerHolder;
+            if (sourceBlockLayerHolder == null) return;
+
+            var lowerLayer = sourceBlockLayerHolder.BlockLower as BlockImageLayer;
+            var upperLayer = sourceBlockLayerHolder.BlockUpper as BlockImageLayer;
+            if (lowerLayer == null || upperLayer == null) return;
+
+            // マップのサイズ設定
+            int blockSize = sourceBlockLayerHolder.Data.GridSize;
+            int mapWidth = _mapFooterEntry.MapWidth.GetData<int>();
+            int mapHeight = _mapFooterEntry.MapHeight.GetData<int>();
+            int totalGrids = mapWidth * mapHeight;
+
+            // レイヤーの初期設定
+            _mapLayerHolder.Initialize(
+                gridSize: blockSize,
+                validItemCount: totalGrids);
+
+            // マップの幅と高さを再設定する。
+            _mapLayerHolder.Data.Columns = mapWidth;
+            _mapLayerHolder.Data.Rows = mapHeight;
+
+            // 配列の画像領域を再確保
+            _mapLayerHolder.MapLower.Allocate();
+            _mapLayerHolder.MapUpper.Allocate();
+
+            int sourceColumns = sourceBlockLayerHolder.Data.Columns;
+
+            for (int i = 0; i < totalGrids; i++)
+            {
+                // ブロックのインデックスを取得
+                var field = _mapGridDataEntry.Entries[i].MapGridData;
+                var mapGridData = MapDrawCalc.GetBlockTileData(field);
+                int blockIndex = mapGridData.BlockIndex;
+
+                // 参照元のマス座標を計算
+                int sourceGridX = blockIndex % sourceColumns;
+                int sourceGridY = blockIndex / sourceColumns;
+
+                // 下位と上位の画像を取得
+                var lowerImg = lowerLayer.GetBlockImage(sourceGridX, sourceGridY);
+                var upperImg = upperLayer.GetBlockImage(sourceGridX, sourceGridY);
+
+                // 書き込み先のマス座標を計算
+                int destGridX = i % mapWidth;
+                int destGridY = i / mapWidth;
+
+                // 画像をセット
+                _mapLayerHolder.MapLower.SetBlockImage(destGridX, destGridY, lowerImg);
+                _mapLayerHolder.MapUpper.SetBlockImage(destGridX, destGridY, upperImg);
+            }
+
+            // スクロールバーの更新と再描画
+            _mapLayerScroller.UpdateScrollRange();
+            _mapLayerHolder.Panel.Invalidate();
         }
 
         /// <summary>

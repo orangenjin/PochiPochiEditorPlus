@@ -100,10 +100,11 @@
     <Compile Include="_Managers\_LayerManager\PasteLayer.cs" />
     <Compile Include="_Managers\_LayerManager\SingleImageLayer.cs" />
     <Compile Include="_Managers\_LayerManager\LayerDefinitions.cs" />
+    <Compile Include="_Managers\_MapManager\MapDrawCalc.cs" />
     <Compile Include="_Managers\_MapManager\MapDrawDefinitions.cs" />
     <Compile Include="_Managers\_UndoManager\RefDataManager.cs" />
     <Compile Include="_Managers\_TilesetManager\TilesetBlockDefinitions.cs" />
-    <Compile Include="_Managers\_TilesetManager\TilesetDataCalc.cs" />
+    <Compile Include="_Managers\_TilesetManager\TilesetBlockCalc.cs" />
     <Compile Include="_Managers\_TilesetManager\TilesetHeaderHolder.cs" />
     <Compile Include="_Managers\_UndoManager\CombineCommands.cs" />
     <Compile Include="_Managers\_UndoManager\FieldValueChangeCommand.cs" />
@@ -207,6 +208,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="def\map\MapFooterEntry.def">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="def\map\MapGridDataEntry.def">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="def\map\MapHeaderEntry.def">

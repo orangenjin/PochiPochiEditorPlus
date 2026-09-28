@@ -1,13 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace PochiPochiEditorPlus._Managers._MapManager
+﻿namespace PochiPochiEditorPlus._Managers._MapManager
 {
-    public sealed class MapData
+    public sealed class MapGridData
     {
-        public int Coll { get; set; }
+        public int CollIndex { get; set; }
+        public int BlockIndex { get; set; }
+
+        public MapGridData(int collIndex, int blockIndex)
+        {
+            CollIndex = collIndex;
+            BlockIndex = blockIndex;
+        }
     }
 }

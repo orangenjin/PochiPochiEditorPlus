@@ -7,7 +7,7 @@ using PochiPochiEditorPlus._Utilities;
 
 namespace PochiPochiEditorPlus._Managers._TilesetManager
 {
-    public static class TilesetDataCalc
+    public static class TilesetBlockCalc
     {
         // ビット位置
         private const int BlockDataPaletteShift = 12;
@@ -17,9 +17,9 @@ namespace PochiPochiEditorPlus._Managers._TilesetManager
         private const ushort BlockDataReverseXMask = 0x0400;     // Bit 10
         private const ushort BlockDataReverseYMask = 0x0800;     // Bit 11
         private const ushort BlockDataPaletteMask = 0xF000;      // Bit 12-15
-        private const byte WildEncGrassMask = 0x01;             // Bit 0
-        private const byte WildEncWaterMask = 0x02;             // Bit 1
-        private const byte LayerAndWildEncLayerMask = 0xFC;     // Bit 2-7
+        private const byte BlockAttrWildEncGrassMask = 0x01;             // Bit 0
+        private const byte BlockAttrWildEncWaterMask = 0x02;             // Bit 1
+        private const byte BlockAttrLayerAndWildEncMask = 0xFC;     // Bit 2-7
 
         /// <summary>
         /// バイト配列をブロックデータに変換する。
@@ -163,9 +163,9 @@ namespace PochiPochiEditorPlus._Managers._TilesetManager
                 fieldValue.Lengths.EntryLength);
 
             // ビット演算で各データを抽出
-            bool wildEncGrass = (byteValue & WildEncGrassMask) != 0;
-            bool wildEncWater = (byteValue & WildEncWaterMask) != 0;
-            byte layer = (byte)(byteValue & LayerAndWildEncLayerMask);
+            bool wildEncGrass = (byteValue & BlockAttrWildEncGrassMask) != 0;
+            bool wildEncWater = (byteValue & BlockAttrWildEncWaterMask) != 0;
+            byte layer = (byte)(byteValue & BlockAttrLayerAndWildEncMask);
 
             // インスタンスの生成
             return new LayerAndWildEncAttr(
@@ -183,9 +183,9 @@ namespace PochiPochiEditorPlus._Managers._TilesetManager
         {
             // byteに結合
             byte byteValue = (byte)(
-                (dataValue.Layer & LayerAndWildEncLayerMask) |
-                (dataValue.WildEncGrass ? WildEncGrassMask : 0) |
-                (dataValue.WildEncWater ? WildEncWaterMask : 0));
+                (dataValue.Layer & BlockAttrLayerAndWildEncMask) |
+                (dataValue.WildEncGrass ? BlockAttrWildEncGrassMask : 0) |
+                (dataValue.WildEncWater ? BlockAttrWildEncWaterMask : 0));
 
             // 戻り値
             byte[] result = new byte[fieldValue.Lengths.EntryLength];
