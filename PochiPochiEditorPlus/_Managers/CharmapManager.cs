@@ -22,34 +22,31 @@ namespace PochiPochiEditorPlus._Managers
             _byteTrieRoot = new ByteTrieNode();
             _stringTrieRoot = new StringTrieNode();
 
-            if (!File.Exists(filePath)) return;
-
             foreach (string line in File.ReadLines(filePath, Encoding.UTF8))
             {
                 // 空行とコメント行をスキップ
-                if (string.IsNullOrWhiteSpace(line)
-                    || line.StartsWith(";")) continue;
+                if (string.IsNullOrWhiteSpace(line) || line.StartsWith(";")) continue;
 
                 // イコールで分割
                 string[] parts = line.Split('=');
 
                 // 2バイト以上の場合を想定
-                string hexKey = parts[(int)Constants.PartName.Key].Replace(" ", string.Empty);
-                string value = parts[(int)Constants.PartName.Value]; // 文字部分
+                string hexKey = parts[(int)PartName.Key].Replace(" ", string.Empty);
+                string value = parts[(int)PartName.Value]; // 文字部分
 
                 // キーをstringからbyteへ
-                int byteLen = hexKey.Length / Constants.CharPerByte;
+                int byteLen = hexKey.Length / BinaryConstants.HexCharsPerByte;
                 byte[] bytes = new byte[byteLen];
                 for (int i = 0; i < byteLen; i++)
                 {
                     string targetStr = hexKey.Substring(
-                        i * Constants.CharPerByte,
-                        Constants.CharPerByte);
-                    bytes[i] = Convert.ToByte(targetStr, Constants.HexBase);
+                        i * BinaryConstants.HexCharsPerByte,
+                        BinaryConstants.HexCharsPerByte);
+                    bytes[i] = Convert.ToByte(targetStr, BinaryConstants.HexBase);
                 }
 
                 // バイト -> 文字
-                ByteTrieNode currentByteNode = _byteTrieRoot;
+                ByteTrieNode currentByteNode = _byteTrieRoot; // 先頭
                 foreach (byte b in bytes)
                 {
                     if (!currentByteNode.Children.TryGetValue(b, out ByteTrieNode next))
@@ -59,25 +56,22 @@ namespace PochiPochiEditorPlus._Managers
                     }
                     currentByteNode = next;
                 }
-                currentByteNode.Value = value;
+                currentByteNode.Value = value; // 取得したい対象
                 currentByteNode.IsTerminal = true;
 
                 // 文字 -> バイト
-                if (!string.IsNullOrEmpty(value))
+                StringTrieNode currentStrNode = _stringTrieRoot;
+                foreach (char c in value)
                 {
-                    StringTrieNode currentStrNode = _stringTrieRoot;
-                    foreach (char c in value)
+                    if (!currentStrNode.Children.TryGetValue(c, out StringTrieNode next))
                     {
-                        if (!currentStrNode.Children.TryGetValue(c, out StringTrieNode next))
-                        {
-                            next = new StringTrieNode();
-                            currentStrNode.Children[c] = next;
-                        }
-                        currentStrNode = next;
+                        next = new StringTrieNode();
+                        currentStrNode.Children[c] = next;
                     }
-                    currentStrNode.Value = bytes;
-                    currentStrNode.IsTerminal = true;
+                    currentStrNode = next;
                 }
+                currentStrNode.Value = bytes;
+                currentStrNode.IsTerminal = true;
             }
         }
 
@@ -85,24 +79,24 @@ namespace PochiPochiEditorPlus._Managers
         /// 通常は StrTerminatorByte = 0xFF 手前まで読み取る。
         /// </summary>
         public string BytesToString(
-            byte[] bytes,
+            byte[] buffer,
             int offset = 0,
             int? maxLength = null)
         {
-            if (bytes == null) return string.Empty; // 空文字を返す
-            StringBuilder result = new StringBuilder();
+            if (buffer == null) return string.Empty; // 空文字を返す
+            StringBuilder result = new StringBuilder(); // 戻り値
 
-            // 範囲を定める
-            int calcLength = bytes.Length - offset;
+            // 最大範囲を定める
+            int calcLength = buffer.Length - offset;
             int length = maxLength.HasValue
                 ? Math.Min(calcLength, maxLength.Value)
                 : calcLength;
 
-            int i = 0;
+            int i = 0; // bufferに対するオフセット
             while (i < length)
             {
-                int currentIdx = offset + i;
-                byte currentByte = bytes[currentIdx];
+                int currentIndex = offset + i;
+                byte currentByte = buffer[currentIndex];
 
                 // 終端
                 if (currentByte == Constants.StrTerminatorByte)
@@ -118,21 +112,27 @@ namespace PochiPochiEditorPlus._Managers
                     continue;
                 }
 
-                // 探索開始
+                // 一致検証開始
                 int matchLength = 0;
                 string matchedString = null;
-                ByteTrieNode currentNode = _byteTrieRoot;
+                ByteTrieNode currentNode = _byteTrieRoot; // 先頭
 
-                for (int j = 0; j < length - i; j++)
+                for (int j = 0; j < length - i; j++) // currentIndexに対するオフセット
                 {
-                    byte b = bytes[currentIdx + j];
+                    byte b = buffer[currentIndex + j];
+
                     if (currentNode.Children.TryGetValue(b, out ByteTrieNode next))
                     {
+                        // ノードを進める
                         currentNode = next;
+
+                        // 一旦文字を取り出す
                         if (currentNode.IsTerminal)
                         {
-                            matchLength = j + 1;
+                            matchLength = j + 1; // バイト配列の長さ
                             matchedString = currentNode.Value;
+
+                            // 最長一致を取得するためにbreakしない
                         }
                     }
                     else
@@ -148,13 +148,14 @@ namespace PochiPochiEditorPlus._Managers
                 }
                 else
                 {
-                    // 無視
+                    // 振り出しに戻る
                     i++;
                 }
             }
 
             return result.ToString();
         }
+
 
         /// <summary>
         /// targetLengthを指定すると、その長さまでpaddingByteを追加する。
@@ -165,10 +166,10 @@ namespace PochiPochiEditorPlus._Managers
             int targetLength = -1,
             byte paddingByte = Constants.PaddingByte)
         {
-            text = text ?? string.Empty;
-            List<byte> result = new List<byte>();
+            text = text ?? string.Empty; // 空文字を入れる
+            List<byte> result = new List<byte>(); // 戻り値
 
-            int i = 0;
+            int i = 0; // textに対するオフセット
             while (i < text.Length)
             {
                 // 改行
@@ -181,18 +182,24 @@ namespace PochiPochiEditorPlus._Managers
 
                 int matchLength = 0;
                 byte[] matchedBytes = null;
-                StringTrieNode currentNode = _stringTrieRoot;
+                StringTrieNode currentNode = _stringTrieRoot; // 先頭
 
-                for (int j = i; j < text.Length; j++)
+                for (int j = 0; j < text.Length - i; j++) // iに対するオフセット
                 {
-                    char c = text[j];
+                    char c = text[i + j];
+
                     if (currentNode.Children.TryGetValue(c, out StringTrieNode next))
                     {
+                        // ノードを進める
                         currentNode = next;
+
+                        // 一旦文字を取り出す
                         if (currentNode.IsTerminal)
                         {
-                            matchLength = j - i + 1;
+                            matchLength = j + 1; // テキストの長さ
                             matchedBytes = currentNode.Value;
+
+                            // 最長一致を取得するためにbreakしない
                         }
                     }
                     else
@@ -208,18 +215,18 @@ namespace PochiPochiEditorPlus._Managers
                 }
                 else
                 {
-                    // 無視
+                    // 振り出しに戻る
                     i++;
                 }
             }
 
-            // 終端必要?
+            // 終端を追加するかどうか
             if (appendTerminator)
             {
                 result.Add(Constants.StrTerminatorByte);
             }
 
-            // 埋め必要?
+            // 埋める必要があるかどうか
             if (targetLength > 0)
             {
                 while (result.Count < targetLength)
@@ -232,7 +239,7 @@ namespace PochiPochiEditorPlus._Managers
         }
 
         /// <summary>
-        /// 文字列の長さを任意の長さまで削る。
+        /// 文字列の長さを任意の長さ(バイト数)まで削る。
         /// </summary>
         public string TextLengthValidate(
             string text,
@@ -242,12 +249,12 @@ namespace PochiPochiEditorPlus._Managers
             // 空白ならそのまま返す
             if (string.IsNullOrEmpty(text)) return text;
 
-            // 規定長を取得
+            // 最大のバイト数を取得
             int maxBytes = needTerminator
                 ? byteLength - 1
                 : byteLength;
 
-            // 現在の長さを取得
+            // 現在の長さを取得(終端文字なし)
             byte[] currentBytes = StringToBytes(text, false);
 
             // 範囲内ならそのまま返す
@@ -267,7 +274,10 @@ namespace PochiPochiEditorPlus._Managers
 
                 // バイト数をチェック
                 byte[] bytes = StringToBytes(currentText, false);
-                if (bytes.Length <= maxBytes) break;
+                if (bytes.Length <= maxBytes)
+                {
+                    break;
+                }
             }
 
             return currentText;

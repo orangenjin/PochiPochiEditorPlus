@@ -4,6 +4,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Text;
 using System.Windows.Forms;
 using PochiPochiEditorPlus._Utilities;
 
@@ -18,7 +19,7 @@ namespace PochiPochiEditorPlus._Helpers
 
         // AttachBtnsToNudのコントロール対応を保持
         private static List<NudNavigator> _nudNavigators = new List<NudNavigator>();
-        private class NudNavigator
+        private sealed class NudNavigator
         {
             public NumericUpDown Nud { get; }
             public Button Prev { get; }
@@ -37,7 +38,7 @@ namespace PochiPochiEditorPlus._Helpers
 
         // AttachRbToCtrlの対応を保持
         private static List<RbLink> _rbLinks = new List<RbLink>();
-        private class RbLink
+        private sealed class RbLink
         {
             public RadioButton Rb { get; }
             public Control Ctrl { get; }
@@ -375,7 +376,7 @@ namespace PochiPochiEditorPlus._Helpers
                 var entries = new List<KeyValuePair<byte, string>>();
 
                 // ファイルを読み込む
-                foreach (string line in File.ReadLines(target.Path))
+                foreach (string line in File.ReadLines(target.Path, Encoding.UTF8))
                 {
                     // 空行とコメント行をスキップ
                     if (string.IsNullOrWhiteSpace(line) || line.StartsWith(";")) continue;

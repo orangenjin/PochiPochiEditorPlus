@@ -70,7 +70,7 @@
         public const string BinImportExportFilter = "BINファイル (*.bin)|*.bin";
 
         // その他
-        public enum PartName{ Key, Value }
+
     }
 
     public static class BinaryConstants
@@ -109,5 +109,11 @@
         Byte = sizeof(byte),
         UShort = sizeof(ushort),
         UInt = sizeof(uint),
+    }
+
+    public enum PartName
+    {
+        Key = 0,
+        Value = 1,
     }
 }
