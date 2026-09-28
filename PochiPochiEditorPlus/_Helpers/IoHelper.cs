@@ -198,7 +198,7 @@ namespace PochiPochiEditorPlus._Helpers
             Array.Copy(value, 0, buffer, offset, value.Length);
 
             int endOffset = offset + value.Length;
-            int alignment = sizeof(uint);
+            int alignment = (int)DataSize.UInt;
 
             // 穴埋めに必要な個数を求める
             int paddingCount = (alignment - (endOffset % alignment)) % alignment;
