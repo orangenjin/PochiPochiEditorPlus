@@ -486,9 +486,9 @@ namespace PochiPochiEditorPlus._Forms
                 : _tileset2Manager.BlockAttrEntries[_selectedBlockIndex - threshold];
 
             // 各属性を反映
-            cmbBlockAttrAction.SelectedIndex = entry.ActionAttr.GetData<int>();
-            cmbBlockAttrType.SelectedIndex = entry.TypeAttr.GetData<int>();
-            cmbBlockAttrUnk.SelectedIndex = entry.UnkAttr.GetData<int>();
+            cmbBlockAttrAction.SelectedValue = entry.ActionAttr.GetData<byte>();
+            cmbBlockAttrType.SelectedValue = entry.TypeAttr.GetData<byte>();
+            cmbBlockAttrUnk.SelectedValue = entry.UnkAttr.GetData<byte>();
             var layerAndWildEncAttr = TilesetDataCalc.GetLayerAndWildEncAttr(entry.LayerAndWildEncAttr);
             cmbBlockAttrLayer.SelectedValue = layerAndWildEncAttr.Layer;
             chkBlockAttrWildEncGrass.Checked = layerAndWildEncAttr.WildEncGrass;

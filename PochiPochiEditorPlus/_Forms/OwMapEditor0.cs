@@ -462,6 +462,7 @@ namespace PochiPochiEditorPlus._Forms
             // 他のフォームの再描画
             _groupData.RequestRefresh(this);
             // マップを描画
+            DrawEntireMap();
         }
 
         private void LoadDataToUI()
@@ -490,30 +491,30 @@ namespace PochiPochiEditorPlus._Forms
                 nudMapTerrainIndex.Value =
                     entry.MapTerrainIndex
                     .GetData<int>();
-                cmbMapType.SelectedIndex =
+                cmbMapType.SelectedValue =
                     entry.MapType
-                    .GetData<int>();
+                    .GetData<byte>();
                 nudMapRelLayer.Value =
                     entry.MapRelLayer
                     .GetData<int>();
-                cmbMapWthr.SelectedIndex =
+                cmbMapWthr.SelectedValue =
                     entry.MapWthr
-                    .GetData<int>();
-                cmbMapSight.SelectedIndex =
+                    .GetData<byte>();
+                cmbMapSight.SelectedValue =
                     entry.MapSight
-                    .GetData<int>();
-                cmbMapBike.SelectedIndex =
+                    .GetData<byte>();
+                cmbMapBike.SelectedValue =
                     entry.MapBike
-                    .GetData<int>();
-                cmbMapSpBg.SelectedIndex =
+                    .GetData<byte>();
+                cmbMapSpBg.SelectedValue =
                     entry.MapSpBg
-                    .GetData<int>();
+                    .GetData<byte>();
                 cmbMapNameIndex.SelectedValue =
                     entry.MapNameIndex
                     .GetData<int>();
-                cmbMapNameType.SelectedIndex =
+                cmbMapNameType.SelectedValue =
                     entry.MapNameType
-                    .GetData<int>();
+                    .GetData<byte>();
                 nudBgmIndex.Value =
                     entry.BgmIndex
                     .GetData<int>();
@@ -526,24 +527,26 @@ namespace PochiPochiEditorPlus._Forms
             }
         }
 
-        private void ChangeControlsState(bool value)
+        private void ChangeControlsState(bool state)
         {
             CtrlHelper.ResetControls(
                 grpMapHeader,
                 includeSelf: false);
             CtrlHelper.SetControlsEnabled(
                 grpMapHeader,
-                enabled: value,
+                enabled: state,
                 includeSelf: true);
             CtrlHelper.ResetControls(
                 grpMapView,
                 includeSelf: false);
             CtrlHelper.SetControlsEnabled(
                 grpMapView,
-                enabled: value,
+                enabled: state,
                 includeSelf: true);
 
-            // 他のクリアコントロールも追加
+            // タイル画像のレイヤー表示切り替え
+            _mapLayerHolder.SetAllLayersVisibility(state);
+            _mapLayerHolder.Panel.Invalidate();
         }
 
         private void ClearData()
@@ -575,6 +578,11 @@ namespace PochiPochiEditorPlus._Forms
             {
                 _mapFooterEntry = null;
             }
+        }
+
+        private void DrawEntireMap()
+        {
+
         }
 
         /// <summary>
