@@ -5,7 +5,7 @@
         // IO関連
         public const int HexBase = 16;
         public const int BitsPerByte = 8;
-        public const int CharPerByte = 2;
+        public const int CharPerByte = BitsPerByte / NibbleShift;
         public const int NibbleShift = 4;
         public const int NibbleMask = 0xF;
         public const int ByteMask = 0xFF;
@@ -71,5 +71,43 @@
 
         // その他
         public enum PartName{ Key, Value }
+    }
+
+    public static class BinaryConstants
+    {
+        // 基数
+        public const int HexBase = 16;
+        public const int BitsPerByte = 8;
+        public const int NibbleShift = 4;
+
+        // 1バイトに存在する16進数文字数
+        public const int HexCharsPerByte = BitsPerByte / NibbleShift;
+
+        // ビットマスク
+        public const int NibbleMask = 0x0F;
+        public const int ByteMask = 0xFF;
+
+        // アドレス範囲
+        public const uint BaseAddr = 0x08000000U;
+        public const uint EndAddr = 0x0FFFFFFFU;
+
+        // 桁数
+        public const int OffsetDigits = sizeof(uint) * HexCharsPerByte;
+
+        // null値
+        public const int InvalidValue = -1;
+
+        // 文字バイト
+        public const byte PaddingByte = 0x0;
+        public const byte FreeSpaceByte = 0xFF;
+        public const byte StrNewlineByte = 0xFE;
+        public const byte StrTerminatorByte = 0xFF;
+    }
+
+    public enum DataSize
+    {
+        Byte = sizeof(byte),
+        UShort = sizeof(ushort),
+        UInt = sizeof(uint),
     }
 }

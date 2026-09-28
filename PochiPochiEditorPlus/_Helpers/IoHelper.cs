@@ -10,44 +10,44 @@ namespace PochiPochiEditorPlus._Helpers
         /// 符号付きにも対応するために、long型を採用している。
         /// </summary>
         public static long ReadBytesAsLong(
-            byte[] data,
+            byte[] buffer,
             int offset,
-            int length,
+            DataSize size,
             bool isLittleEndian = true,
             bool isSigned = false)
         {
-            // 戻り値用
+            // 戻り値
             long result;
 
-            switch (length)
+            switch (size)
             {
                 // 1バイト
-                case Constants.ByteSize:
-                    result = data[offset];
+                case DataSize.Byte:
+                    result = (long)buffer[offset];
                     break;
 
                 // 2バイト
-                case Constants.UShortSize:
+                case DataSize.UShort:
                     result = isLittleEndian
-                        ? data[offset]
-                            | (data[offset + 1] << Constants.BitsPerByte)
-                        : (data[offset] << Constants.BitsPerByte)
-                            | data[offset + 1];
+                        ? (long)buffer[offset]
+                            | ((long)buffer[offset + 1] << BinaryConstants.BitsPerByte)
+                        : ((long)buffer[offset] << BinaryConstants.BitsPerByte)
+                            | (long)buffer[offset + 1];
                     break;
 
                 // 4バイト
-                case Constants.UIntSize:
+                case DataSize.UInt:
                     result = isLittleEndian
-                        ? (long)data[offset]
-                            | ((long)data[offset + 1] << (Constants.BitsPerByte * 1))
-                            | ((long)data[offset + 2] << (Constants.BitsPerByte * 2))
-                            | ((long)data[offset + 3] << (Constants.BitsPerByte * 3))
-                        : ((long)data[offset] << (Constants.BitsPerByte * 3))
-                            | ((long)data[offset + 1] << (Constants.BitsPerByte * 2))
-                            | ((long)data[offset + 2] << (Constants.BitsPerByte * 1))
-                            | (long)data[offset + 3];
+                        ? (long)buffer[offset]
+                            | ((long)buffer[offset + 1] << (BinaryConstants.BitsPerByte * 1))
+                            | ((long)buffer[offset + 2] << (BinaryConstants.BitsPerByte * 2))
+                            | ((long)buffer[offset + 3] << (BinaryConstants.BitsPerByte * 3))
+                        : ((long)buffer[offset] << (BinaryConstants.BitsPerByte * 3))
+                            | ((long)buffer[offset + 1] << (BinaryConstants.BitsPerByte * 2))
+                            | ((long)buffer[offset + 2] << (BinaryConstants.BitsPerByte * 1))
+                            | (long)buffer[offset + 3];
                     break;
-
+                
                 // その他
                 default:
                     throw new Exception();
@@ -56,12 +56,17 @@ namespace PochiPochiEditorPlus._Helpers
             // 符号付きの場合
             if (isSigned)
             {
-                int bits = length * Constants.BitsPerByte;
-                long signBit = 1L << (bits - 1);
+                // 実データ範囲
+                int bits = (int)size * BinaryConstants.BitsPerByte;
                 long valueMask = (1L << bits) - 1;
 
+                // 符号を表すビット位置
+                long signBit = 1L << (bits - 1);
+
+                // マイナス値であるならば
                 if ((result & signBit) != 0)
                 {
+                    // 符号を表すビット位置より上位すべてを1にする
                     result |= ~valueMask;
                 }
             }
@@ -70,72 +75,73 @@ namespace PochiPochiEditorPlus._Helpers
         }
 
         /// <summary>
-        /// 整数を1, 2, 4バイトのデータとして書き込む。
+        /// long型整数を1, 2, 4バイトのデータとして書き込む。
+        /// 内部表現をそのまま書き込むため、符号判定は必要ない。
         /// </summary>
         public static void WriteLongAsBytes(
             byte[] buffer,
             int offset,
             long value,
-            int length,
+            DataSize size,
             bool isLittleEndian = true)
         {
-            switch (length)
+            switch (size)
             {
                 // 1バイト
-                case Constants.ByteSize:
+                case DataSize.Byte:
                     buffer[offset] =
-                        (byte)(value & Constants.ByteMask);
+                        (byte)(value & BinaryConstants.ByteMask);
                     break;
 
                 // 2バイト
-                case Constants.UShortSize:
+                case DataSize.UShort:
                     if (isLittleEndian)
                     {
                         buffer[offset] =
-                            (byte)(value & Constants.ByteMask);
+                            (byte)(value & BinaryConstants.ByteMask);
                         buffer[offset + 1] =
-                            (byte)((value >> Constants.BitsPerByte)
-                                & Constants.ByteMask);
+                            (byte)((value >> BinaryConstants.BitsPerByte)
+                                & BinaryConstants.ByteMask);
                     }
                     else
                     {
                         buffer[offset] =
-                            (byte)((value >> Constants.BitsPerByte)
-                                & Constants.ByteMask);
+                            (byte)((value >> BinaryConstants.BitsPerByte)
+                                & BinaryConstants.ByteMask);
                         buffer[offset + 1] =
-                            (byte)(value & Constants.ByteMask);
+                            (byte)(value & BinaryConstants.ByteMask);
                     }
                     break;
 
                 // 4バイト
-                case Constants.UIntSize:
+                case DataSize.UInt:
                     if (isLittleEndian)
                     {
                         buffer[offset] =
-                            (byte)(value & Constants.ByteMask);
+                            (byte)(value & BinaryConstants.ByteMask);
                         buffer[offset + 1] =
-                            (byte)((value >> (Constants.BitsPerByte * 1))
-                                & Constants.ByteMask);
+                            (byte)((value >> (BinaryConstants.BitsPerByte * 1))
+                                & BinaryConstants.ByteMask);
                         buffer[offset + 2] =
-                            (byte)((value >> (Constants.BitsPerByte * 2))
-                                & Constants.ByteMask);
+                            (byte)((value >> (BinaryConstants.BitsPerByte * 2))
+                                & BinaryConstants.ByteMask);
                         buffer[offset + 3] =
-                            (byte)((value >> (Constants.BitsPerByte * 3))
-                                & Constants.ByteMask);
+                            (byte)((value >> (BinaryConstants.BitsPerByte * 3))
+                                & BinaryConstants.ByteMask);
                     }
                     else
                     {
                         buffer[offset] =
-                            (byte)((value >> (Constants.BitsPerByte * 3))
-                                & Constants.ByteMask);
+                            (byte)((value >> (BinaryConstants.BitsPerByte * 3))
+                                & BinaryConstants.ByteMask);
                         buffer[offset + 1] =
-                            (byte)((value >> (Constants.BitsPerByte * 2))
-                                & Constants.ByteMask);
+                            (byte)((value >> (BinaryConstants.BitsPerByte * 2))
+                                & BinaryConstants.ByteMask);
                         buffer[offset + 2] =
-                            (byte)((value >> (Constants.BitsPerByte * 1))
-                                & Constants.ByteMask);
+                            (byte)((value >> (BinaryConstants.BitsPerByte * 1))
+                                & BinaryConstants.ByteMask);
                         buffer[offset + 3] =
-                            (byte)(value & Constants.ByteMask);
+                            (byte)(value & BinaryConstants.ByteMask);
                     }
                     break;
 
@@ -146,36 +152,36 @@ namespace PochiPochiEditorPlus._Helpers
         }
 
         /// <summary>
-        /// データからポインタを読み取る。
-        /// [00 00 00 00]はnullポインタとして、trueとConstants.InvalidValueを返す。
-        /// ポインタとして読み取れない場合は、falseとConstants.InvalidValueを返す。
+        /// データからポインタ先のオフセット(int)を読み取る。
+        /// [00 00 00 00]はnullポインタとして、trueとInvalidValueを返す。
+        /// ポインタとして読み取れない場合は、falseとInvalidValueを返す。
         /// </summary>
-        public static bool TryReadPtr(
-            byte[] data,
-            int ptrOffset,
+        public static bool TryReadPointer(
+            byte[] source,
+            int pointerOffset,
             out int resultOffset)
         {
-            long rawAddr = ReadBytesAsLong(
-                data,
-                ptrOffset,
-                Constants.UIntSize);
+            uint rawAddr = (uint)ReadBytesAsLong(
+                source,
+                pointerOffset,
+                DataSize.UInt);
 
             // nullポインタ
-            if (rawAddr == 0)
+            if (rawAddr == 0U)
             {
-                resultOffset = Constants.InvalidValue;
+                resultOffset = BinaryConstants.InvalidValue;
                 return true;
             }
 
             // 有効なアドレス範囲外
-            if (rawAddr < Constants.BaseAddr
-                || rawAddr > Constants.EndAddr)
+            if (rawAddr < BinaryConstants.BaseAddr
+                || rawAddr > BinaryConstants.EndAddr)
             {
-                resultOffset = Constants.InvalidValue;
+                resultOffset = BinaryConstants.InvalidValue;
                 return false;
             }
 
-            resultOffset = (int)(rawAddr - Constants.BaseAddr);
+            resultOffset = (int)(rawAddr - BinaryConstants.BaseAddr);
             return true;
         }
 
@@ -186,14 +192,16 @@ namespace PochiPochiEditorPlus._Helpers
             byte[] buffer,
             int offset,
             byte[] value,
-            byte alignPaddingByte = Constants.PaddingByte)
+            byte alignPaddingByte = BinaryConstants.PaddingByte)
         {
+            // データを書き込み
             Array.Copy(value, 0, buffer, offset, value.Length);
 
             int endOffset = offset + value.Length;
-            int paddingCount =
-                (Constants.UIntSize - (endOffset % Constants.UIntSize))
-                % Constants.UIntSize;
+            int alignment = sizeof(uint);
+
+            // 穴埋めに必要な個数を求める
+            int paddingCount = (alignment - (endOffset % alignment)) % alignment;
 
             for (int i = 0; i < paddingCount; i++)
             {
