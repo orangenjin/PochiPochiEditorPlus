@@ -14,73 +14,81 @@ namespace PochiPochiEditorPlus._Helpers
     {
         private const int LZ77HeaderSize = 0x4;
         private const int LZ77HeaderIdentifier = 0x10;
-        private const int LZ77MaxDistance = 4096;
+        private const int LZ77UnitSize = 2;
+        private const int LZ77MinLength = 3;
         private const int LZ77MaxLength = 18;
-        private const int LZ77MinMatchLength = 3;
-        private const int LZ77MinSafeDistance = 2;
-        private const int LZ77CompressedUnitSize = 2;
+        private const int LZ77MinDistance = 2;
+        private const int LZ77MaxDistance = 4096;
+
+        public enum LZ77UnitField
+        {
+            Length = 4,
+            Distance = 12,
+        }
 
         /// <summary>
         /// LZ77圧縮されたデータを解凍する。
         /// </summary>
-        public static byte[] DecompressLZ77(byte[] data, int offset = 0)
+        public static byte[] DecompressLZ77(byte[] buffer, int offset = 0)
         {
             // ヘッダの読み込み
+            var header = (uint)IoHelper.ReadBytesAsLong(buffer, offset, (DataSize)LZ77HeaderSize);
             // 先頭1バイトは識別子(LZ77HeaderIdentifier)
-            int header = (int)IoHelper.ReadBytesAsLong(data, offset, LZ77HeaderSize);
-            // 残り3バイトは解凍後のサイズ
-            int decompressedSize = header >> Constants.BitsPerByte;
-            var result = new byte[decompressedSize];
+            // 後半残り3バイトは解凍後のサイズ
+            int decompressedSize = (int)header >> Constants.BitsPerByte;
 
-            int srcPos = offset + LZ77HeaderSize;
+            // 戻り値を確保
+            var result = new byte[decompressedSize];
+            // 戻り値の位置
             int dstPos = 0;
+
+            // 参照元の位置
+            int srcPos = offset + LZ77HeaderSize;
 
             while (dstPos < decompressedSize)
             {
                 // フラグバイトを読み込む
-                // 後続する8ブロックの圧縮状態を示す
-                byte flagByte = data[srcPos++];
+                // 後続する8個のデータの圧縮状態を示す
+                int flagByte = (int)buffer[srcPos++];
 
                 // 左端のビットから1ビットずつ確認
                 for (int i = 0; i < Constants.BitsPerByte; i++)
                 {
-                    if (dstPos >= decompressedSize) break;
-
-                    // 対象ビットが1であれば圧縮、0であれば非圧縮
-                    bool isCompressed =
-                        (flagByte & (1 << (Constants.BitsPerByte - 1 - i))) != 0;
+                    // 対象ビット(位置i)が1であれば圧縮、0であれば非圧縮
+                    bool isCompressed = (flagByte & (1 << (BinaryConstants.BitsPerByte - 1 - i))) != 0;
 
                     if (isCompressed)
                     {
-                        // 圧縮データを2バイト読み込む
-                        byte byte0 = data[srcPos];
-                        byte byte1 = data[srcPos + 1];
-                        srcPos += LZ77CompressedUnitSize;
+                        // 圧縮データを2バイト分読み込む(ビッグエンディアン)
+                        var value = (uint)IoHelper.ReadBytesAsLong(
+                            buffer,
+                            srcPos,
+                            (DataSize)LZ77UnitSize,
+                            isLittleEndian: false);
+                        srcPos += LZ77UnitSize;
 
-                        // 上位4ビットから長さ(3から18)を計算
-                        int length = 
-                            (byte0 >> Constants.NibbleShift) 
-                            + LZ77MinMatchLength;
+                        // ビットを分割して、解析する
+                        var fields = ConvHelper.BitExtract(value, LZ77UnitField.Length, LZ77UnitField.Distance);
 
-                        // 下位12ビットから相対距離を計算
-                        int distance =
-                            (((byte0 & Constants.NibbleMask) << Constants.BitsPerByte) 
-                            | byte1) + 1;
+                        // 上位4ビットから長さ(3から18の範囲)を計算
+                        int length = (int)fields[LZ77UnitField.Length] + LZ77MinLength;
 
-                        // 位置を特定
-                        int copySrc = dstPos - distance;
+                        // 下位12ビットから距離を計算
+                        int distance = (int)fields[LZ77UnitField.Distance] + 1;
+
+                        // コピー元の位置を特定
+                        int copyPos = dstPos - distance;
 
                         // 解凍したデータから1バイトずつコピー
                         for (int j = 0; j < length; j++)
                         {
-                            if (dstPos >= decompressedSize) break;
-                            result[dstPos++] = result[copySrc++];
+                            result[dstPos++] = result[copyPos++];
                         }
                     }
                     else
                     {
                         // 非圧縮データを1バイトコピー
-                        result[dstPos++] = data[srcPos++];
+                        result[dstPos++] = buffer[srcPos++];
                     }
                 }
             }

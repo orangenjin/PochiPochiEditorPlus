@@ -5,7 +5,7 @@ namespace PochiPochiEditorPlus._Utilities
 {
     public sealed class EventBinder
     {
-        // イベント解除用
+        // イベントを解除するため
         private List<Action> _detachActions = new List<Action>();
 
         /// <summary>
@@ -16,7 +16,7 @@ namespace PochiPochiEditorPlus._Utilities
             Action<EventHandler> remover,
             EventHandler handler = null)
         {
-            // 解除用の時、nullにする
+            // nullの場合、解除用のイベントを登録する
             if (handler == null)
             {
                 handler = (_, __) => Dispose();
