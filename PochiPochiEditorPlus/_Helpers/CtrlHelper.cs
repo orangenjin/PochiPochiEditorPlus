@@ -88,7 +88,7 @@ namespace PochiPochiEditorPlus._Helpers
                         nud.Value = Math.Max(nud.Minimum, 0);
                         break;
                     case ComboBox comboBox:
-                        comboBox.SelectedIndex = Constants.InvalidValue;
+                        comboBox.SelectedIndex = BinaryConstants.InvalidValue;
                         break;
                     case CheckBox checkBox:
                         checkBox.Checked = false;
