@@ -60,6 +60,9 @@ namespace PochiPochiEditorPlus._Forms
             _tileset1Manager = new TilesetHeaderHolder(_sharedData);
             _tileset2Manager = new TilesetHeaderHolder(_sharedData);
 
+            // グループデータを登録
+            RegisterFormGroupData(_groupData);
+
             // タイル画像パネル
             _tileLayerHolder = new LayerHolder<LayerNames>(pnlTileView, _eventBinder);
             _tileLayerScroller = new LayerScroller(
@@ -84,6 +87,11 @@ namespace PochiPochiEditorPlus._Forms
             InitializeEventHandlers();
 
             RefreshUI();
+        }
+
+        private void RegisterFormGroupData(FormGroupData groupData)
+        {
+            groupData.Register(this, () => _blockLayerHolder);
         }
 
         private void InitializeControls()

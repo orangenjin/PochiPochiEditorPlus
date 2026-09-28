@@ -83,8 +83,8 @@ namespace PochiPochiEditorPlus._Forms
 
         private void RegisterFormGroupData(FormGroupData groupData)
         {
-            groupData.Register(this, () => _mapFooterEntry);
             groupData.Register(this, () => _clipboardData);
+            groupData.Register(this, () => _mapFooterEntry);
         }
 
         private void InitializeMapNameEntry()
@@ -433,6 +433,7 @@ namespace PochiPochiEditorPlus._Forms
 
             // 他のフォームの再描画
             _groupData.RequestRefresh(this);
+            // マップを描画
         }
 
         private void LoadDataToUI()
@@ -502,9 +503,15 @@ namespace PochiPochiEditorPlus._Forms
             CtrlHelper.ResetControls(
                 grpMapHeader,
                 includeSelf: false);
-
             CtrlHelper.SetControlsEnabled(
                 grpMapHeader,
+                enabled: value,
+                includeSelf: true);
+            CtrlHelper.ResetControls(
+                grpMapView,
+                includeSelf: false);
+            CtrlHelper.SetControlsEnabled(
+                grpMapView,
                 enabled: value,
                 includeSelf: true);
 
