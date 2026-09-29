@@ -187,7 +187,7 @@ namespace PochiPochiEditorPlus._Forms
 
                         if (sfd.ShowDialog() == DialogResult.OK)
                         {
-                            // RefDataから生成
+                            // VarDataから生成
                             var imageData = ImageHelper.DecompressLZ77(
                                 _imageData.BinaryData);
                             var paletteData = ImageHelper.DecompressPalette(
@@ -265,7 +265,7 @@ namespace PochiPochiEditorPlus._Forms
                 var imageData = ImageHelper.DecompressLZ77(
                     _sharedData.RomData,
                     imageOffsetValue);
-                // RefDataとして保持する
+                // VarDataとして保持する
                 var imageDataLz77 = ImageHelper.CompressLZ77(imageData);
                 _imageData = new VariableDataManager(
                     SpriteData.Image,
@@ -278,7 +278,7 @@ namespace PochiPochiEditorPlus._Forms
                 var paletteData = ImageHelper.DecompressPalette(
                     _sharedData.RomData,
                     paletteOffsetValue);
-                // RefDataとして保持する
+                // VarDataとして保持する
                 var paletteDataLz77 = ImageHelper.CompressPalette(paletteData);
                 _paletteData = new VariableDataManager(
                     SpriteData.Palette,

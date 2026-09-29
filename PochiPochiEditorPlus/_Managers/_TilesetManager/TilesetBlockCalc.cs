@@ -9,17 +9,22 @@ namespace PochiPochiEditorPlus._Managers._TilesetManager
 {
     public static class TilesetBlockCalc
     {
-        // ビット位置
-        private const int BlockDataPaletteShift = 12;
+        // BlockTileDataのビットフィールド
+        public enum BlockTileBits
+        {
+            PaletteIndex = 4,
+            ReverseY = 1, 
+            ReverseX = 1,
+            TileIndex = 10,
+        }
 
-        // ビットマスク
-        private const ushort BlockDataTileIndexMask = 0x03FF;    // Bit 0-9
-        private const ushort BlockDataReverseXMask = 0x0400;     // Bit 10
-        private const ushort BlockDataReverseYMask = 0x0800;     // Bit 11
-        private const ushort BlockDataPaletteMask = 0xF000;      // Bit 12-15
-        private const byte BlockAttrWildEncGrassMask = 0x01;             // Bit 0
-        private const byte BlockAttrWildEncWaterMask = 0x02;             // Bit 1
-        private const byte BlockAttrLayerAndWildEncMask = 0xFC;     // Bit 2-7
+        // LayerAndWildEncAttrのビットフィールド
+        public enum LayerAndWildEncBits
+        {
+            Layer = 6, 
+            WildEncWater = 1,
+            WildEncGrass = 1,
+        }
 
         /// <summary>
         /// バイト配列をブロックデータに変換する。
@@ -31,18 +36,15 @@ namespace PochiPochiEditorPlus._Managers._TilesetManager
                 0,
                 (DataSize)fieldValue.Lengths.EntryLength);
 
-            // ビット演算で各データを抽出
-            int tileIndex = ushortValue & BlockDataTileIndexMask;
-            bool reverseX = (ushortValue & BlockDataReverseXMask) != 0;
-            bool reverseY = (ushortValue & BlockDataReverseYMask) != 0;
-            int paletteIndex = (ushortValue & BlockDataPaletteMask) >> BlockDataPaletteShift;
+            // マッピングされたビットフィールドの辞書を取得
+            var bits = ConvHelper.BitExtract<BlockTileBits>(ushortValue); ;
 
             // インスタンスの生成
             return new BlockTileData(
-                tileIndex,
-                paletteIndex,
-                reverseX,
-                reverseY);
+                tileIndex: (int)bits[BlockTileBits.TileIndex],
+                paletteIndex: (int)bits[BlockTileBits.PaletteIndex],
+                reverseX: bits[BlockTileBits.ReverseX] != 0,
+                reverseY: bits[BlockTileBits.ReverseY] != 0);
         }
 
         /// <summary>
@@ -52,23 +54,27 @@ namespace PochiPochiEditorPlus._Managers._TilesetManager
             BlockTileData dataValue,
             FieldValueHolder fieldValue)
         {
-            // ushortに結合
-            ushort ushortValue = (ushort)(
-                (dataValue.TileIndex & BlockDataTileIndexMask) |
-                (dataValue.ReverseX ? BlockDataReverseXMask : 0) |
-                (dataValue.ReverseY ? BlockDataReverseYMask : 0) |
-                ((dataValue.PaletteIndex & Constants.NibbleMask) << BlockDataPaletteShift));
+            // 値を辞書に格納する
+            var bits = new Dictionary<BlockTileBits, uint>
+                {
+                    { BlockTileBits.PaletteIndex, (uint)dataValue.PaletteIndex },
+                    { BlockTileBits.ReverseY, (uint)(dataValue.ReverseY ? 1 : 0) },
+                    { BlockTileBits.ReverseX, (uint)(dataValue.ReverseX ? 1 : 0) },
+                    { BlockTileBits.TileIndex, (uint)dataValue.TileIndex }
+                };
 
-            // 戻り値用に整形
+            // uintに統合する
+            uint combined = ConvHelper.BitCombine(bits);
+
+            // 戻り値に書き込む
             byte[] result = new byte[fieldValue.Lengths.EntryLength];
             IoHelper.WriteLongAsBytes(
                 result,
                 0,
-                ushortValue,
+                (long)combined,
                 (DataSize)result.Length);
             return result;
         }
-
 
         /// <summary>
         /// タイルデータを取得するメソッドを簡素化するため。
@@ -108,15 +114,13 @@ namespace PochiPochiEditorPlus._Managers._TilesetManager
         /// </summary>
         public static Bitmap CreateTileImage(
             BlockTileData tileData,
-            byte[] tileBytes,
+            byte[] imageData,
             byte[] palData,
             int tileSize,
             bool showBackColor)
         {
-            if (tileBytes == null || tileBytes.Length == 0 || palData == null) return null;
-
             Bitmap tileBmp = ImageHelper.CreateBitmap(
-                tileBytes, palData, tileSize, tileSize, showBackColor: showBackColor);
+                imageData, palData, tileSize, tileSize, showBackColor: showBackColor);
 
             RotateFlipType flipType = RotateFlipType.RotateNoneFlipNone;
             if (tileData.ReverseX && tileData.ReverseY)
@@ -141,7 +145,7 @@ namespace PochiPochiEditorPlus._Managers._TilesetManager
         }
 
         /// <summary>
-        /// 各タイルとマス座標を順次返す。
+        /// 各タイルとマス座標を遅延評価で順次返す。
         /// </summary>
         public static IEnumerable<(BlockTileData Tile, int OffsetX, int OffsetY)> GetTilesWithOffset(BlockLayer layer)
         {
@@ -162,16 +166,14 @@ namespace PochiPochiEditorPlus._Managers._TilesetManager
                 0,
                 (DataSize)fieldValue.Lengths.EntryLength);
 
-            // ビット演算で各データを抽出
-            bool wildEncGrass = (byteValue & BlockAttrWildEncGrassMask) != 0;
-            bool wildEncWater = (byteValue & BlockAttrWildEncWaterMask) != 0;
-            byte layer = (byte)(byteValue & BlockAttrLayerAndWildEncMask);
+            // マッピングされたビットフィールドの辞書を取得
+            var bits = ConvHelper.BitExtract<LayerAndWildEncBits>(byteValue); ;
 
             // インスタンスの生成
             return new LayerAndWildEncAttr(
-                layer,
-                wildEncGrass,
-                wildEncWater);
+                layer: (byte)bits[LayerAndWildEncBits.Layer],
+                wildEncGrass: bits[LayerAndWildEncBits.WildEncGrass] != 0,
+                wildEncWater: bits[LayerAndWildEncBits.WildEncWater] != 0);
         }
 
         /// <summary>
@@ -181,18 +183,23 @@ namespace PochiPochiEditorPlus._Managers._TilesetManager
             LayerAndWildEncAttr dataValue,
             FieldValueHolder fieldValue)
         {
-            // byteに結合
-            byte byteValue = (byte)(
-                (dataValue.Layer & BlockAttrLayerAndWildEncMask) |
-                (dataValue.WildEncGrass ? BlockAttrWildEncGrassMask : 0) |
-                (dataValue.WildEncWater ? BlockAttrWildEncWaterMask : 0));
+            // 値を辞書に格納する
+            var bits = new Dictionary<LayerAndWildEncBits, uint>
+            {
+                { LayerAndWildEncBits.Layer, dataValue.Layer },
+                { LayerAndWildEncBits.WildEncWater, (uint)(dataValue.WildEncWater ? 1 : 0) },
+                { LayerAndWildEncBits.WildEncGrass, (uint)(dataValue.WildEncGrass ? 1 : 0) }
+            };
 
-            // 戻り値
+            // uintに統合する
+            uint combined = ConvHelper.BitCombine(bits);
+
+            // 戻り値に書き込む
             byte[] result = new byte[fieldValue.Lengths.EntryLength];
             IoHelper.WriteLongAsBytes(
                 result,
                 0,
-                byteValue,
+                (long)combined,
                 (DataSize)result.Length);
             return result;
         }

@@ -40,16 +40,14 @@ namespace PochiPochiEditorPlus._Helpers
         }
 
         /// <summary>
-        /// Enumの数値をビット長として扱い、指定された順番で左側からビットを分割する。
+        /// Enumの数値をビット長として扱い、Enumの上からの順番で上位からビットを分割する。
         /// Enumは全範囲を規定している必要がある。
         /// </summary>
-        public static Dictionary<TEnum, uint> BitExtract<TEnum>(uint value, params TEnum[] sequence)
+        public static Dictionary<TEnum, uint> BitExtract<TEnum>(uint value, params TEnum[] sequence) 
+            where TEnum : Enum
         {
-            // ビット長に変換し、全体のビット長を求める
-            var fields = CreateBitFields(sequence, out int totalBits);
-
-            var result = new Dictionary<TEnum, uint>();
-            int currentPos = totalBits;
+            var result = new Dictionary<TEnum, uint>(sequence.Length);
+            int currentPos = GetTotalBits(sequence);
 
             foreach (var key in sequence)
             {
@@ -73,21 +71,17 @@ namespace PochiPochiEditorPlus._Helpers
         }
 
         /// <summary>
-        /// 辞書の値とEnumの順番を元に、Enumの数値をビット長として扱い、uint値に結合する。
+        /// 辞書の値とEnumの順番を元に、Enumの数値をビット長として扱い、上位からuint値に結合する。
         /// </summary>
-        public static uint BitCombine<TEnum>(Dictionary<TEnum, uint> values, params TEnum[] sequence)
+        public static uint BitCombine<TEnum>(Dictionary<TEnum, uint> values, params TEnum[] sequence) 
+            where TEnum : Enum
         {
-            // ビット長に変換し、全体のビット長を求める
-            var fields = CreateBitFields(sequence, out int totalBits);
-
             uint result = 0;
-            int currentPos = totalBits;
+            int currentPos = GetTotalBits(sequence);
 
-            foreach (var field in fields)
+            foreach (var key in sequence)
             {
-                int length = field.Length;
-
-                // 上位から格納するため減算
+                int length = Convert.ToInt32(key);
                 currentPos -= length;
 
                 // ビット長のマスクを作成
@@ -96,29 +90,24 @@ namespace PochiPochiEditorPlus._Helpers
                     : (1U << length) - 1;
 
                 // 値をマスクし、シフトして結合
-                result |= (values[field.Key] & mask) << currentPos;
+                result |= (values[key] & mask) << currentPos;
             }
 
             return result;
         }
 
-        private static (TEnum Key, int Length)[] CreateBitFields<TEnum>(TEnum[] sequence, out int totalBits)
+        /// <summary>
+        /// sequence内の全ビット長の合計を取得する。
+        /// </summary>
+        private static int GetTotalBits<TEnum>(TEnum[] sequence) 
+            where TEnum : Enum
         {
-            var fields = new (TEnum Key, int Length)[sequence.Length];
-
-            // Enumの数値を合計して、全体のビット長を求める
-            totalBits = 0;
-
-            for (int i = 0; i < sequence.Length; i++)
+            int totalBits = 0;
+            foreach (var key in sequence)
             {
-                // Enumの数値をビット長として扱う
-                int length = Convert.ToInt32(sequence[i]);
-
-                fields[i] = (sequence[i], length);
-                totalBits += length;
+                totalBits += Convert.ToInt32(key);
             }
-
-            return fields;
+            return totalBits;
         }
     }
 }
