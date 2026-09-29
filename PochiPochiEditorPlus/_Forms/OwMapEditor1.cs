@@ -237,19 +237,19 @@ namespace PochiPochiEditorPlus._Forms
             var palData = GetProperPaletteData(palIndex);
 
             // 幅と高さの計算
-            int width = Constants.TilesetImageWidth;
-            int bytesPerTileRow = (width * Constants.TileSize) / Constants.PixelsPerByte;
+            int width = TilesetConstants.TilesetImageWidth;
+            int bytesPerTileRow = (width * ImageConstants.TileSize) / ImageConstants.PixelsPerByte;
             int tileRows = (_combinedTilesetImageData.Length + bytesPerTileRow - 1) / bytesPerTileRow;
-            int height = tileRows * Constants.TileSize;
+            int height = tileRows * ImageConstants.TileSize;
 
             // 有効なタイル数を計算
             int totalTiles = _tileset1Manager.GetTotalTileCount() + _tileset2Manager.GetTotalTileCount();
 
             // レイヤー初期設定
             _tileLayerHolder.Initialize(
-                gridSize: Constants.TileSize,
+                gridSize: ImageConstants.TileSize,
                 validItemCount: totalTiles,
-                scale: Constants.DefaultScale);
+                scale: ImageConstants.DefaultScale);
 
             // 画像の設定
             _tileLayerHolder.Tile.SetImageData(
@@ -259,7 +259,7 @@ namespace PochiPochiEditorPlus._Forms
                 height);
 
             // 選択範囲の設定
-            var maxLength = Constants.TilePerBlockSide;
+            var maxLength = TilesetConstants.TilePerBlockSide;
             _tileLayerHolder.Select.MaxSelectSize = new Size(maxLength, maxLength);
 
             // スクロールバーの設定
@@ -289,7 +289,7 @@ namespace PochiPochiEditorPlus._Forms
         private void UpdateBlockView()
         {
             if (_blockDataList == null || _blockDataList.Count == 0) return;
-            int blockSize = Constants.TileSize * Constants.TilePerBlockSide;
+            int blockSize = ImageConstants.TileSize * TilesetConstants.TilePerBlockSide;
 
             // ブロック数に基づいてnudの上限を設定
             if (_blockDataList.Count > 0)
@@ -306,14 +306,14 @@ namespace PochiPochiEditorPlus._Forms
             _blockLayerHolder.Initialize(
                 gridSize: blockSize,
                 validItemCount: _blockDataList.Count,
-                scale: Constants.DefaultScale);
+                scale: ImageConstants.DefaultScale);
 
             // 画像を破棄
             _blockLayerHolder.BlockLower.Allocate();
             _blockLayerHolder.BlockUpper.Allocate();
 
             // 定数を事前に計算
-            int tilesPerRow = Constants.TilesetImageWidth / Constants.TileSize;
+            int tilesPerRow = TilesetConstants.TilesetImageWidth / ImageConstants.TileSize;
             int columns = _blockLayerHolder.Data.Columns;
 
             for (int i = 0; i < _blockDataList.Count; i++)
@@ -360,7 +360,7 @@ namespace PochiPochiEditorPlus._Forms
             int tilesPerRow,
             bool isLower)
         {
-            int tileSize = Constants.TileSize;
+            int tileSize = ImageConstants.TileSize;
 
             foreach (var (tile, offsetX, offsetY) in TilesetBlockCalc.GetTilesWithOffset(layer))
             {
@@ -394,7 +394,7 @@ namespace PochiPochiEditorPlus._Forms
                 tileData,
                 tileBytes,
                 palData,
-                Constants.TileSize,
+                ImageConstants.TileSize,
                 isLower);
         }
 
@@ -431,9 +431,9 @@ namespace PochiPochiEditorPlus._Forms
             var blockData = _blockDataList[_selectedBlockIndex];
 
             // レイヤーの初期設定
-            int tileSize = Constants.TileSize;
+            int tileSize = ImageConstants.TileSize;
             int scale = pnlBlockDataImage.Height / (tileSize * 2);
-            int validItemCount = Constants.TilePerBlockSide * Constants.TilePerBlockSide * 2;
+            int validItemCount = TilesetConstants.TilePerBlockSide * TilesetConstants.TilePerBlockSide * 2;
             _dataLayerHolder.Initialize(
                 gridSize: tileSize,
                 validItemCount: validItemCount,
@@ -441,7 +441,7 @@ namespace PochiPochiEditorPlus._Forms
 
             // 画像を破棄して配列を確保
             _dataLayerHolder.BlockFlat.Allocate();
-            int tilesPerRow = Constants.TilesetImageWidth / Constants.TileSize;
+            int tilesPerRow = TilesetConstants.TilesetImageWidth / ImageConstants.TileSize;
 
             // 下位レイヤー
             foreach (var (tile, offsetX, offsetY) in TilesetBlockCalc.GetTilesWithOffset(blockData.Lower))

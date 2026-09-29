@@ -68,11 +68,11 @@
         public const int BlueMask = 0x7C00;
 
         // 画像
-        public const int TileSize = 8;
         public const int Bpp4 = 4;
         public const int PixelsPerByte = BinaryConstants.BitsPerByte / Bpp4;
-        public const int BytesPerTile = TileSize * TileSize / PixelsPerByte;
+        public const int TileSize = 8;
         public const int SpriteSize = 64;
+        public const int BytesPerTile = TileSize * TileSize / PixelsPerByte;
         public const int DefaultScale = 2;
     }
 

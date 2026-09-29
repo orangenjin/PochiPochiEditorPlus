@@ -57,9 +57,9 @@ namespace PochiPochiEditorPlus._Forms
             var pattern = new List<TokenData>()
             {
                 TokenData.Pointer(),
-                TokenData.Exact(Constants.UShortSize, exactValues: new long[]{ 0x800, 0x1000 }),
+                TokenData.Exact((int)DataSize.UShort, exactValues: new long[]{ 0x800, 0x1000 }),
                 TokenData.Wildcard(1),
-                TokenData.Exact(Constants.ByteSize, exactValues: 0x0)
+                TokenData.Exact((int)DataSize.Byte, exactValues: 0x0)
             };
             _entryCount = PatternMatcher.TryCountByPattern(
                 pattern,
@@ -182,7 +182,7 @@ namespace PochiPochiEditorPlus._Forms
 
                     using (var sfd = new SaveFileDialog())
                     {
-                        sfd.Filter = Constants.SpriteExportFilter;
+                        sfd.Filter = FilterConstants.SpriteExportFilter;
                         sfd.FileName = $"trainer_sprite_{_currentSpriteIndex:D4}";
 
                         if (sfd.ShowDialog() == DialogResult.OK)
@@ -195,8 +195,8 @@ namespace PochiPochiEditorPlus._Forms
                             var sprite = ImageHelper.CreateBitmap(
                                 imageData,
                                 paletteData,
-                                Constants.SpriteSize,
-                                Constants.SpriteSize,
+                                ImageConstants.SpriteSize,
+                                ImageConstants.SpriteSize,
                                 showBackColor: true);
 
                             ImageHelper.ExportIndexedImage(
@@ -244,11 +244,11 @@ namespace PochiPochiEditorPlus._Forms
             // アニメーションデータアドレス
             var targetOffset =
                 _animPointerEntry.Entries[index].SpriteAnimPointerOffset.GetData<int>();
-            txtSpriteAnimDataOffset.Text = IoHelper.TryReadPtr(
+            txtSpriteAnimDataOffset.Text = IoHelper.TryReadPointer(
                 _sharedData.RomData,
                 targetOffset,
                 out int resultOffset)
-                && resultOffset != Constants.InvalidValue
+                && resultOffset != BinaryConstants.InvalidValue
                     ? resultOffset.ParseIntToString()
                     : string.Empty;
 
@@ -290,8 +290,8 @@ namespace PochiPochiEditorPlus._Forms
                 var sprite = ImageHelper.CreateBitmap(
                     imageData,
                     paletteData,
-                    Constants.SpriteSize,
-                    Constants.SpriteSize,
+                    ImageConstants.SpriteSize,
+                    ImageConstants.SpriteSize,
                     showBackColor: true);
                 // 2倍に拡大
                 var scaled = ImageHelper.ScaleBitmap(sprite);
@@ -313,7 +313,7 @@ namespace PochiPochiEditorPlus._Forms
 
             var inputResult = new QuickInputBuilder()
                 .WithOffset(0x0)
-                .WithFile(Constants.SpriteImportFilter)
+                .WithFile(FilterConstants.SpriteImportFilter)
                 .ShowDialog();
             if (inputResult == null) return;
 
@@ -326,8 +326,8 @@ namespace PochiPochiEditorPlus._Forms
                 // バイト配列を抽出
                 if (!ImageHelper.ExtractImageAndPalette(
                     bmp,
-                    Constants.SpriteSize,
-                    Constants.SpriteSize,
+                    ImageConstants.SpriteSize,
+                    ImageConstants.SpriteSize,
                     out byte[] imageData,
                     out byte[] paletteData)) return;
 
