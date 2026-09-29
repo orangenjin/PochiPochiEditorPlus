@@ -7,14 +7,14 @@ namespace PochiPochiEditorPlus._Utilities._CustomCtrls
 {
     public sealed class HexTextBox : TextBox
     {
-        private int _digits = Constants.OffsetDigits;
+        private int _digits = BinaryConstants.OffsetDigits;
 
         /// <summary>
         /// 整形後の16進数の桁数を設定する。
         /// </summary>
         [Browsable(true)]
         [Category("表示")]
-        [DefaultValue(Constants.OffsetDigits)]
+        [DefaultValue(BinaryConstants.OffsetDigits)]
         [Description("フォーカス離脱時に整形する桁数を指定します。")]
         public int Digits
         {
@@ -52,10 +52,10 @@ namespace PochiPochiEditorPlus._Utilities._CustomCtrls
             base.OnLeave(e);
 
             // 一度数値に変換
-            int val = Text.ParseStringToInt();
+            int value = Text.ParseStringToInt();
 
             // 再度変換して、文字列を代入
-            Text = val.ParseIntToString(Digits);
+            Text = value.ParseIntToString(Digits);
         }
     }
 }
