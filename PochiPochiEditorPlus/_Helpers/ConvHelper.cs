@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
 using PochiPochiEditorPlus._Utilities;
 
 namespace PochiPochiEditorPlus._Helpers
@@ -105,13 +104,19 @@ namespace PochiPochiEditorPlus._Helpers
 
         private static (TEnum Key, int Length)[] CreateBitFields<TEnum>(TEnum[] sequence, out int totalBits)
         {
-            // Enumの数値をビット長として扱う
-            var fields = sequence
-                .Select(key => (Key: key, Length: Convert.ToInt32(key)))
-                .ToArray();
+            var fields = new (TEnum Key, int Length)[sequence.Length];
 
             // Enumの数値を合計して、全体のビット長を求める
-            totalBits = fields.Sum(x => x.Length);
+            totalBits = 0;
+
+            for (int i = 0; i < sequence.Length; i++)
+            {
+                // Enumの数値をビット長として扱う
+                int length = Convert.ToInt32(sequence[i]);
+
+                fields[i] = (sequence[i], length);
+                totalBits += length;
+            }
 
             return fields;
         }
