@@ -12,13 +12,13 @@ namespace PochiPochiEditorPlus._Helpers
 {
     public static class ImageHelper
     {
-        private const int LZ77HeaderSize = 0x4;
-        private const int LZ77HeaderIdentifier = 0x10;
+        private const int LZ77HeaderSize = 4;
+        private const byte LZ77HeaderIdentifier = 0x10;
         private const int LZ77UnitSize = 2;
-        private const int LZ77MinLength = 3;
-        private const int LZ77MaxLength = 18;
+        private const int LZ77MinLength = LZ77UnitSize + 1;
+        private const int LZ77MaxLength = LZ77MinLength + ((1 << (int)LZ77UnitField.Length) - 1);
         private const int LZ77MinDistance = 2;
-        private const int LZ77MaxDistance = 4096;
+        private const int LZ77MaxDistance = 1 << (int)LZ77UnitField.Distance;
 
         public enum LZ77UnitField
         {
@@ -35,7 +35,7 @@ namespace PochiPochiEditorPlus._Helpers
             var header = (uint)IoHelper.ReadBytesAsLong(buffer, offset, (DataSize)LZ77HeaderSize);
             // 先頭1バイトは識別子(LZ77HeaderIdentifier)
             // 後半残り3バイトは解凍後のサイズ
-            int decompressedSize = (int)header >> Constants.BitsPerByte;
+            int decompressedSize = (int)header >> BinaryConstants.BitsPerByte;
 
             // 戻り値を確保
             var result = new byte[decompressedSize];
@@ -52,7 +52,7 @@ namespace PochiPochiEditorPlus._Helpers
                 int flagByte = (int)buffer[srcPos++];
 
                 // 左端のビットから1ビットずつ確認
-                for (int i = 0; i < Constants.BitsPerByte; i++)
+                for (int i = 0; i < BinaryConstants.BitsPerByte; i++)
                 {
                     // 対象ビット(位置i)が1であれば圧縮、0であれば非圧縮
                     bool isCompressed = (flagByte & (1 << (BinaryConstants.BitsPerByte - 1 - i))) != 0;
@@ -99,69 +99,82 @@ namespace PochiPochiEditorPlus._Helpers
         /// <summary>
         /// データをLZ77に圧縮する。
         /// </summary>
-        public static byte[] CompressLZ77(byte[] data)
+        public static byte[] CompressLZ77(byte[] buffer)
         {
             // 圧縮データ格納用
-            int length = data.Length;
-            var result = new List<byte>(length);
+            var result = new List<byte>(buffer.Length);
 
             // ヘッダの書き込み
             // 先頭に識別子(LZ77HeaderIdentifier)
             // 続く3バイトに非圧縮時のサイズ
-            result.Add((byte)LZ77HeaderIdentifier);
+            result.Add(LZ77HeaderIdentifier);
             for (int i = 0; i < LZ77HeaderSize - 1; i++)
             {
-                result.Add((byte)((length >> (i * Constants.BitsPerByte)) & Constants.ByteMask));
+                result.Add((byte)((buffer.Length >> (i * BinaryConstants.BitsPerByte)) & BinaryConstants.ByteMask));
             }
 
-            int pos = 0;
-            while (pos < length)
+            int currentPos = 0;
+            while (currentPos < buffer.Length)
             {
                 // フラグバイトの位置と値を仮置き
                 int flagPos = result.Count;
-                byte flag = 0;
-                result.Add(Constants.PaddingByte);
+                byte flagValue = 0;
+                result.Add(flagValue);
 
-                // 8ブロック分の圧縮処理
-                for (int i = 0; i < Constants.BitsPerByte; i++)
+                // 8個のデータの圧縮処理
+                for (int i = 0; i < BinaryConstants.BitsPerByte; i++)
                 {
-                    if (pos >= length) break;
-
                     // データから最大の距離と長さを探索する
-                    var (bestDistance, bestLength) = FindLongestMatch(data, pos);
+                    var (distance, length) = FindLongestMatch(buffer, currentPos);
 
-                    if (bestLength >= LZ77MinMatchLength)
+                    if (length >= LZ77MinLength)
                     {
                         // 長さが最小(3バイト)を満たす場合、圧縮フラグを立てる
-                        flag |= (byte)(1 << (Constants.BitsPerByte - 1 - i));
+                        flagValue |= (byte)(1 << (BinaryConstants.BitsPerByte - 1 - i));
 
-                        int distanceValue = bestDistance - 1;
-                        int lengthValue = bestLength - LZ77MinMatchLength;
+                        int distanceValue = distance - 1;
+                        int lengthValue = length - LZ77MinLength;
 
-                        // [長さ4bit][距離の上位4bit]
-                        result.Add((byte)(
-                                ((lengthValue & Constants.NibbleMask) << Constants.NibbleShift)
-                                | ((distanceValue >> Constants.BitsPerByte) & Constants.NibbleMask)));
-                        // [距離の下位8bit]
-                        result.Add((byte)(distanceValue & Constants.ByteMask));
+                        // 圧縮用の値を辞書に設定
+                        var unitValues = new Dictionary<LZ77UnitField, uint>
+                        {
+                            { LZ77UnitField.Length, (uint)lengthValue },
+                            { LZ77UnitField.Distance, (uint)distanceValue }
+                        };
 
-                        pos += bestLength;
+                        // uintに値を結合
+                        uint combinedValue = ConvHelper.BitCombine(
+                            unitValues,
+                            LZ77UnitField.Length,
+                            LZ77UnitField.Distance);
+
+                        // ビッグエンディアンで書き込み
+                        var tempBuffer = new byte[LZ77UnitSize];
+                        IoHelper.WriteLongAsBytes(
+                            tempBuffer,
+                            0,
+                            combinedValue,
+                            (DataSize)LZ77UnitSize,
+                            isLittleEndian: false);
+                        result.AddRange(tempBuffer);
+
+                        currentPos += length;
                     }
                     else
                     {
                         // 圧縮できない場合はそのまま書き込む
-                        result.Add(data[pos++]);
+                        result.Add(buffer[currentPos++]);
                     }
                 }
 
                 // 仮置きしたフラグバイトを上書き
-                result[flagPos] = flag;
+                result[flagPos] = flagValue;
             }
 
             // データサイズが4の倍数バイトになるように調整
-            while (result.Count % Constants.UIntSize != 0)
+            while (result.Count % (int)DataSize.UInt != 0)
             {
-                result.Add(Constants.PaddingByte);
+                result.Add(BinaryConstants.PaddingByte);
             }
 
             return result.ToArray();
@@ -170,70 +183,71 @@ namespace PochiPochiEditorPlus._Helpers
         /// <summary>
         /// バッファから最大の距離と長さを探索する。
         /// </summary>
-        private static (int distance, int length) FindLongestMatch(byte[] data, int pos)
+        private static (int Distance, int Length) FindLongestMatch(byte[] buffer, int currentPos)
         {
-            // 最大検索範囲(LZ77MaxDistance)と最大長(LZ77MaxLength)を調整
-            int maxDistance = Math.Min(pos, LZ77MaxDistance);
-            int maxLength = Math.Min(data.Length - pos, LZ77MaxLength);
+            // 最大範囲(LZ77MaxDistance)と最大長(LZ77MaxLength)を調整
+            int maxDistance = Math.Min(currentPos, LZ77MaxDistance);
+            int maxLength = Math.Min(buffer.Length - currentPos, LZ77MaxLength);
 
             // 近すぎる場合を除外
-            if (maxDistance < LZ77MinSafeDistance || maxLength < LZ77MinMatchLength) return (0, 0);
+            if (maxDistance < LZ77MinDistance || maxLength < LZ77MinLength) return (0, 0);
 
-            int bestLength = 0;
-            int bestDistance = 0;
+            int resultDistance = 0;
+            int resultLength = 0;
 
             // 最小距離から最大距離までを解析
-            for (int distance = LZ77MinSafeDistance; distance <= maxDistance; distance++)
+            for (int tempDistance = LZ77MinDistance; tempDistance <= maxDistance; tempDistance++)
             {
                 // 現在位置とデータが一致する長さを計測
-                int length = 0;
-                while (length < maxLength && data[pos - distance + length] == data[pos + length])
+                int tempLength = 0;
+                while (tempLength < maxLength 
+                    && buffer[currentPos - tempDistance + tempLength] == buffer[currentPos + tempLength])
                 {
-                    length++;
+                    tempLength++;
                 }
 
                 // より長い一致が見つかったら更新
-                if (length > bestLength)
+                if (tempLength > resultLength)
                 {
-                    bestDistance = distance;
-                    bestLength = length;
+                    resultDistance = tempDistance;
+                    resultLength = tempLength;
 
                     // 最大長(LZ77MaxLength)になったら終了
-                    if (bestLength == LZ77MaxLength) break;
+                    if (resultLength == LZ77MaxLength) break;
                 }
             }
 
-            return (bestDistance, bestLength);
+            return (resultDistance, resultLength);
         }
 
         /// <summary>
         /// データからパレットデータ（圧縮と非圧縮）を読み込む。
         /// </summary>
         public static byte[] DecompressPalette(
-            byte[] data,
+            byte[] buffer,
             int offset = 0,
             bool isCompressed = true)
         {
             if (isCompressed)
             {
-                return DecompressLZ77(data, offset);
+                return DecompressLZ77(buffer, offset);
             }
 
-            var paletteData = new byte[Constants.PalColorCount * Constants.BytesPerColor];
-            Array.Copy(data, offset, paletteData, 0, paletteData.Length);
+            var paletteData = new byte[ImageConstants.PalColorCount * ImageConstants.BytesPerColor];
+            Array.Copy(buffer, offset, paletteData, 0, paletteData.Length);
             return paletteData;
         }
 
         /// <summary>
-        /// パレットデータを書き込み用に変換する。（圧縮指定可能）
+        /// パレットデータを書き込み用に変換する。(圧縮指定可能)
         /// </summary>
         public static byte[] CompressPalette(
-            byte[] data,
+            byte[] buffer,
             bool isCompressed = true)
         {
             return isCompressed
-                ? CompressLZ77(data)
-                : data;
+                ? CompressLZ77(buffer)
+                : buffer;
         }
 
         /// <summary>
@@ -262,26 +276,24 @@ namespace PochiPochiEditorPlus._Helpers
             // タイル変換処理
             // 8x8で保存されている
             // (yTile, xTile)から(yPixel, xPixel)の順の4重ループ
-            for (int yTile = 0; yTile < height; yTile += Constants.TileSize)
+            for (int yTile = 0; yTile < height; yTile += ImageConstants.TileSize)
             {
-                for (int xTile = 0; xTile < width; xTile += Constants.TileSize)
+                for (int xTile = 0; xTile < width; xTile += ImageConstants.TileSize)
                 {
-                    for (int yPixel = 0; yPixel < Constants.TileSize; yPixel++)
+                    for (int yPixel = 0; yPixel < ImageConstants.TileSize; yPixel++)
                     {
                         // 4bppの場合、1バイトで2ピクセル分
-                        for (int xPixel = 0; xPixel < Constants.TileSize; xPixel += Constants.PixelsPerByte)
+                        for (int xPixel = 0; xPixel < ImageConstants.TileSize; xPixel += ImageConstants.PixelsPerByte)
                         {
-                            if (dataIndex >= imageData.Length) break;
-
                             byte temp = imageData[dataIndex++];
 
                             // 1バイトのデータからパレットインデックスを取得
-                            int leftIndex = temp & Constants.NibbleMask;
-                            int rightIndex = (temp >> Constants.NibbleShift) & Constants.NibbleMask;
+                            int leftIndex = temp & BinaryConstants.NibbleMask;
+                            int rightIndex = (temp >> BinaryConstants.NibbleShift) & BinaryConstants.NibbleMask;
 
                             // Bitmapの書き込み位置を計算
-                            int byteIndex = (yTile + yPixel) * bmpData.Stride + ((xTile + xPixel) / Constants.PixelsPerByte);
-                            pixels[byteIndex] = (byte)((leftIndex << Constants.NibbleShift) | rightIndex);
+                            int byteIndex = (yTile + yPixel) * bmpData.Stride + ((xTile + xPixel) / ImageConstants.PixelsPerByte);
+                            pixels[byteIndex] = (byte)((leftIndex << BinaryConstants.NibbleShift) | rightIndex);
                         }
                     }
                 }
@@ -302,22 +314,21 @@ namespace PochiPochiEditorPlus._Helpers
             bool showBackColor = true)
         {
             ColorPalette bmpPalette = bmp.Palette;
-            int paletteCount = Math.Min(paletteData.Length / Constants.BytesPerColor, Constants.PalColorCount);
+            int paletteCount = Math.Min(paletteData.Length / ImageConstants.BytesPerColor, ImageConstants.PalColorCount);
 
             // パレット変換処理
             // GBA15ビット(RGB各5ビット)からARGB
             for (int i = 0; i < paletteCount; i++)
             {
-                int byteIndex = i * Constants.BytesPerColor;
-                if (byteIndex + 1 >= paletteData.Length) break;
+                int byteIndex = i * ImageConstants.BytesPerColor;
 
                 // 2バイトから1つの色データ(15bit)を合成
-                int temp = (paletteData[byteIndex + 1] << Constants.BitsPerByte) | paletteData[byteIndex];
+                int temp = (paletteData[byteIndex + 1] << BinaryConstants.BitsPerByte) | paletteData[byteIndex];
 
                 // 5ビット(0-31)を8ビット(0-255)にするため8倍する
-                int r = ((temp & Constants.RedMask) >> Constants.RedShift) * Constants.ColorChannelMulti;
-                int g = ((temp & Constants.GreenMask) >> Constants.GreenShift) * Constants.ColorChannelMulti;
-                int b = ((temp & Constants.BlueMask) >> Constants.BlueShift) * Constants.ColorChannelMulti;
+                int r = ((temp & ImageConstants.RedMask) >> ImageConstants.RedShift) * ImageConstants.ColorChannelMulti;
+                int g = ((temp & ImageConstants.GreenMask) >> ImageConstants.GreenShift) * ImageConstants.ColorChannelMulti;
+                int b = ((temp & ImageConstants.BlueMask) >> ImageConstants.BlueShift) * ImageConstants.ColorChannelMulti;
 
                 // インデックス0は背景色
                 // showBackColorがfalseならアルファを0にする
@@ -327,7 +338,7 @@ namespace PochiPochiEditorPlus._Helpers
             }
 
             // 余ったパレットは適当に黒で埋める
-            for (int i = paletteCount; i < Constants.PalColorCount; i++)
+            for (int i = paletteCount; i < ImageConstants.PalColorCount; i++)
             {
                 bmpPalette.Entries[i] = Color.Black;
             }
@@ -371,31 +382,31 @@ namespace PochiPochiEditorPlus._Helpers
 
             // パレット変換(ARGBからRGB15ビット)
             ColorPalette pal = bmp.Palette;
-            paletteData = new byte[Constants.PalColorCount * Constants.BytesPerColor];
+            paletteData = new byte[ImageConstants.PalColorCount * ImageConstants.BytesPerColor];
 
-            for (int i = 0; i < Constants.PalColorCount; i++)
+            for (int i = 0; i < ImageConstants.PalColorCount; i++)
             {
                 Color c = (i < pal.Entries.Length)
                     ? pal.Entries[i]
                     : Color.FromArgb(255, 0, 0, 0);
 
                 // 8ビット(0-255)を5ビット(0-31)に変換
-                int r = c.R / Constants.ColorChannelMulti;
-                int g = c.G / Constants.ColorChannelMulti;
-                int b = c.B / Constants.ColorChannelMulti;
+                int r = c.R / ImageConstants.ColorChannelMulti;
+                int g = c.G / ImageConstants.ColorChannelMulti;
+                int b = c.B / ImageConstants.ColorChannelMulti;
 
                 // B, G, R の順でビットシフトする
                 ushort gbaColor = (ushort)(
-                    (b << Constants.BlueShift) |
-                    (g << Constants.GreenShift) |
-                    (r << Constants.RedShift));
+                    (b << ImageConstants.BlueShift) |
+                    (g << ImageConstants.GreenShift) |
+                    (r << ImageConstants.RedShift));
 
                 // バイト配列に上書き
                 IoHelper.WriteLongAsBytes(
                     paletteData,
-                    i * Constants.BytesPerColor,
+                    i * ImageConstants.BytesPerColor,
                     gbaColor,
-                    Constants.BytesPerColor);
+                    (DataSize)ImageConstants.BytesPerColor);
             }
 
             // タイル変換(8x8)
@@ -411,24 +422,24 @@ namespace PochiPochiEditorPlus._Helpers
             var dataList = new List<byte>();
 
             // タイル単位で解析して抽出する
-            for (int yTile = 0; yTile < expectedHeight; yTile += Constants.TileSize)
+            for (int yTile = 0; yTile < expectedHeight; yTile += ImageConstants.TileSize)
             {
-                for (int xTile = 0; xTile < expectedWidth; xTile += Constants.TileSize)
+                for (int xTile = 0; xTile < expectedWidth; xTile += ImageConstants.TileSize)
                 {
-                    for (int yPixel = 0; yPixel < Constants.TileSize; yPixel++)
+                    for (int yPixel = 0; yPixel < ImageConstants.TileSize; yPixel++)
                     {
-                        for (int xPixel = 0; xPixel < Constants.TileSize; xPixel += Constants.PixelsPerByte)
+                        for (int xPixel = 0; xPixel < ImageConstants.TileSize; xPixel += ImageConstants.PixelsPerByte)
                         {
                             // Bitmap上の位置
-                            int byteIndex = (yTile + yPixel) * bmpData.Stride + ((xTile + xPixel) / Constants.PixelsPerByte);
+                            int byteIndex = (yTile + yPixel) * bmpData.Stride + ((xTile + xPixel) / ImageConstants.PixelsPerByte);
                             byte pixelByte = pixels[byteIndex];
 
                             // パレットインデックスを分離
-                            int p1 = (pixelByte >> Constants.Bpp4) & Constants.NibbleMask;
-                            int p2 = pixelByte & Constants.NibbleMask;
+                            int p1 = (pixelByte >> ImageConstants.Bpp4) & BinaryConstants.NibbleMask;
+                            int p2 = pixelByte & BinaryConstants.NibbleMask;
 
                             // 左ピクセルが下位4ビットに相当ので、マージする
-                            dataList.Add((byte)((p2 << Constants.NibbleShift) | p1));
+                            dataList.Add((byte)((p2 << BinaryConstants.NibbleShift) | p1));
                         }
                     }
                 }
@@ -443,8 +454,6 @@ namespace PochiPochiEditorPlus._Helpers
         /// </summary>
         public static void ExportIndexedImage(Bitmap bmp, string filePath)
         {
-            if (bmp == null) return;
-
             using (var exportBmp = (Bitmap)bmp.Clone())
             {
                 // すべてのパレットカラーのアルファ値を255(不透明)に戻す
@@ -457,7 +466,7 @@ namespace PochiPochiEditorPlus._Helpers
                 exportBmp.Palette = pal;
 
                 // .bmp
-                var ext = Path.ChangeExtension(null, Constants.BmpExt);
+                var ext = Path.ChangeExtension(null, ExtConstants.BmpExt);
                 var format = Path.GetExtension(filePath).ToLower() == ext
                     ? ImageFormat.Bmp
                     : ImageFormat.Png;
@@ -473,10 +482,8 @@ namespace PochiPochiEditorPlus._Helpers
             Bitmap bmp,
             int xOffset = 0,
             int yOffset = 0,
-            int scaleFactor = Constants.DefaultScale)
+            int scaleFactor = ImageConstants.DefaultScale)
         {
-            if (bmp == null) return null;
-
             int newWidth = bmp.Width * scaleFactor;
             int newHeight = bmp.Height * scaleFactor;
 

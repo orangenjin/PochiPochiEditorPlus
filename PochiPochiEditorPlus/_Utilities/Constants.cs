@@ -119,6 +119,28 @@
         public const string IniExt = "ini";
     }
 
+    public static class ImageConstants
+    {
+        // パレット
+        public const int PalColorCount = 16;
+        public const int BytesPerColor = 2;
+        public const int ColorChannelMulti = 8;
+        public const int RedShift = 0;
+        public const int GreenShift = 5;
+        public const int BlueShift = 10;
+        public const int RedMask = 0x1F;
+        public const int GreenMask = 0x3E0;
+        public const int BlueMask = 0x7C00;
+
+        // 画像
+        public const int TileSize = 8;
+        public const int Bpp4 = 4;
+        public const int PixelsPerByte = BinaryConstants.BitsPerByte / Bpp4;
+        public const int BytesPerTile = TileSize * TileSize / PixelsPerByte;
+        public const int SpriteSize = 64;
+        public const int DefaultScale = 2;
+    }
+
     public enum DataSize
     {
         Byte = sizeof(byte),

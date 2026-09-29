@@ -46,12 +46,8 @@ namespace PochiPochiEditorPlus._Helpers
         /// </summary>
         public static Dictionary<TEnum, uint> BitExtract<TEnum>(uint value, params TEnum[] sequence)
         {
-            // Enumの数値を扱るようにInt型にする
-            var fields = sequence
-                .Select(key => (Key: key, Length: Convert.ToInt32(key)))
-                .ToArray();
-            // Enumの数値を合計して、全体のビット長を求める
-            int totalBits = fields.Sum(x => x.Length);
+            // ビット長に変換し、全体のビット長を求める
+            var fields = CreateBitFields(sequence, out int totalBits);
 
             var result = new Dictionary<TEnum, uint>();
             int currentPos = totalBits;
@@ -75,6 +71,49 @@ namespace PochiPochiEditorPlus._Helpers
             }
 
             return result;
+        }
+
+        /// <summary>
+        /// 辞書の値とEnumの順番を元に、Enumの数値をビット長として扱い、uint値に結合する。
+        /// </summary>
+        public static uint BitCombine<TEnum>(Dictionary<TEnum, uint> values, params TEnum[] sequence)
+        {
+            // ビット長に変換し、全体のビット長を求める
+            var fields = CreateBitFields(sequence, out int totalBits);
+
+            uint result = 0;
+            int currentPos = totalBits;
+
+            foreach (var field in fields)
+            {
+                int length = field.Length;
+
+                // 上位から格納するため減算
+                currentPos -= length;
+
+                // ビット長のマスクを作成
+                uint mask = length == BinaryConstants.BitsPerByte * (int)DataSize.Byte
+                    ? uint.MaxValue
+                    : (1U << length) - 1;
+
+                // 値をマスクし、シフトして結合
+                result |= (values[field.Key] & mask) << currentPos;
+            }
+
+            return result;
+        }
+
+        private static (TEnum Key, int Length)[] CreateBitFields<TEnum>(TEnum[] sequence, out int totalBits)
+        {
+            // Enumの数値をビット長として扱う
+            var fields = sequence
+                .Select(key => (Key: key, Length: Convert.ToInt32(key)))
+                .ToArray();
+
+            // Enumの数値を合計して、全体のビット長を求める
+            totalBits = fields.Sum(x => x.Length);
+
+            return fields;
         }
     }
 }
