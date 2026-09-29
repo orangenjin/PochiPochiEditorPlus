@@ -54,6 +54,8 @@ namespace PochiPochiEditorPlus._Helpers
                 // 左端のビットから1ビットずつ確認
                 for (int i = 0; i < BinaryConstants.BitsPerByte; i++)
                 {
+                    if (dstPos >= decompressedSize) break;
+
                     // 対象ビット(位置i)が1であれば圧縮、0であれば非圧縮
                     bool isCompressed = (flagByte & (1 << (BinaryConstants.BitsPerByte - 1 - i))) != 0;
 
@@ -82,6 +84,7 @@ namespace PochiPochiEditorPlus._Helpers
                         // 解凍したデータから1バイトずつコピー
                         for (int j = 0; j < length; j++)
                         {
+                            if (dstPos >= decompressedSize) break;
                             result[dstPos++] = result[copyPos++];
                         }
                     }
@@ -124,6 +127,8 @@ namespace PochiPochiEditorPlus._Helpers
                 // 8個のデータの圧縮処理
                 for (int i = 0; i < BinaryConstants.BitsPerByte; i++)
                 {
+                    if (currentPos >= buffer.Length) break;
+
                     // データから最大の距離と長さを探索する
                     var (distance, length) = FindLongestMatch(buffer, currentPos);
 
@@ -285,6 +290,7 @@ namespace PochiPochiEditorPlus._Helpers
                         // 4bppの場合、1バイトで2ピクセル分
                         for (int xPixel = 0; xPixel < ImageConstants.TileSize; xPixel += ImageConstants.PixelsPerByte)
                         {
+                            if (dataIndex >= imageData.Length) break;
                             byte temp = imageData[dataIndex++];
 
                             // 1バイトのデータからパレットインデックスを取得
@@ -321,6 +327,7 @@ namespace PochiPochiEditorPlus._Helpers
             for (int i = 0; i < paletteCount; i++)
             {
                 int byteIndex = i * ImageConstants.BytesPerColor;
+                if (byteIndex + 1 >= paletteData.Length) break;
 
                 // 2バイトから1つの色データ(15bit)を合成
                 int temp = (paletteData[byteIndex + 1] << BinaryConstants.BitsPerByte) | paletteData[byteIndex];
