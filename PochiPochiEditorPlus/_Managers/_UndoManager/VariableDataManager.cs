@@ -8,7 +8,7 @@ namespace PochiPochiEditorPlus._Managers._UndoManager
     /// <summary>
     /// フィールド値でない可変長データを扱う。
     /// </summary>
-    public sealed class RefDataManager
+    public sealed class VariableDataManager
     {
         public Enum Name { get; }
         public int Offset { get; set; }
@@ -17,7 +17,7 @@ namespace PochiPochiEditorPlus._Managers._UndoManager
         // 共有データ用
         private SharedData _sharedData = null;
 
-        public RefDataManager(
+        public VariableDataManager(
             Enum enumKey,
             int offset,
             byte[] binaryData,
@@ -88,7 +88,7 @@ namespace PochiPochiEditorPlus._Managers._UndoManager
             WriteData(newOffset, newBinaryData);
             SetData(newOffset, newBinaryData);
 
-            return new RefDataChangeCommand(
+            return new VariableDataChangeCommand(
                 this,
                 oldOffset,
                 oldBinaryData,

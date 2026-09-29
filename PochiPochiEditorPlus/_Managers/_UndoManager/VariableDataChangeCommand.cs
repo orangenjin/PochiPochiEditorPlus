@@ -1,24 +1,24 @@
 ﻿namespace PochiPochiEditorPlus._Managers._UndoManager
 {
-    public sealed class RefDataChangeCommand : ICommand
+    public sealed class VariableDataChangeCommand : ICommand
     {
-        private RefDataManager _refData = null;
+        public string Desc { get; }
 
-        // RefDataの変更前
+        private VariableDataManager _varData = null;
+
+        // VariableDataの変更前
         private int _oldOffset = 0;
         private byte[] _oldData = null;
 
-        // RefDataの変更後
+        // VariableDataの変更後
         private int _newOffset = 0;
         private byte[] _newData = null;
 
         // newOffsetに元々存在していたデータ
         private byte[] _oldTargetData = null;
 
-        public string Desc { get; }
-
-        public RefDataChangeCommand(
-            RefDataManager refData,
+        public VariableDataChangeCommand(
+            VariableDataManager varData,
             int oldOffset,
             byte[] oldData,
             int newOffset,
@@ -26,7 +26,7 @@
             byte[] oldTargetData,
             string desc)
         {
-            _refData = refData;
+            _varData = varData;
 
             _oldOffset = oldOffset;
             _oldData = (byte[])oldData.Clone(); // 参照を切るためにCloneする
@@ -42,19 +42,19 @@
         public void Undo()
         {
             // 新しい書き込み先を元に戻す
-            _refData.WriteData(_newOffset, _oldTargetData);
+            _varData.WriteData(_newOffset, _oldTargetData);
 
-            // RefDataを元に戻す
-            _refData.SetData(_oldOffset, _oldData);
+            // VariableDataを元に戻す
+            _varData.SetData(_oldOffset, _oldData);
         }
 
         public void Redo()
         {
             // 新しいデータを書き戻す
-            _refData.WriteData(_newOffset, _newData);
+            _varData.WriteData(_newOffset, _newData);
 
-            // RefDataを新しい状態にする
-            _refData.SetData(_newOffset, _newData);
+            // VariableDataを新しい状態にする
+            _varData.SetData(_newOffset, _newData);
         }
     }
 }

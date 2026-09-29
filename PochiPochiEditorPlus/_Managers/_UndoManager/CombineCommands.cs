@@ -4,9 +4,9 @@ namespace PochiPochiEditorPlus._Managers._UndoManager
 {
     public sealed class CombineCommands : ICommand
     {
-        private List<ICommand> _commands = null;
-
         public string Desc { get; }
+
+        private List<ICommand> _commands = null;
 
         /// <summary>
         /// 複数のコマンドを単一コマンドとして扱うため。

@@ -29,7 +29,7 @@ namespace PochiPochiEditorPlus._Managers._TilesetManager
             var ushortValue = (ushort)IoHelper.ReadBytesAsLong(
                 fieldValue.BinaryData,
                 0,
-                fieldValue.Lengths.EntryLength);
+                (DataSize)fieldValue.Lengths.EntryLength);
 
             // ビット演算で各データを抽出
             int tileIndex = ushortValue & BlockDataTileIndexMask;
@@ -65,7 +65,7 @@ namespace PochiPochiEditorPlus._Managers._TilesetManager
                 result,
                 0,
                 ushortValue,
-                result.Length);
+                (DataSize)result.Length);
             return result;
         }
 
@@ -160,7 +160,7 @@ namespace PochiPochiEditorPlus._Managers._TilesetManager
             var byteValue = (byte)IoHelper.ReadBytesAsLong(
                 fieldValue.BinaryData,
                 0,
-                fieldValue.Lengths.EntryLength);
+                (DataSize)fieldValue.Lengths.EntryLength);
 
             // ビット演算で各データを抽出
             bool wildEncGrass = (byteValue & BlockAttrWildEncGrassMask) != 0;
@@ -193,7 +193,7 @@ namespace PochiPochiEditorPlus._Managers._TilesetManager
                 result,
                 0,
                 byteValue,
-                result.Length);
+                (DataSize)result.Length);
             return result;
         }
 

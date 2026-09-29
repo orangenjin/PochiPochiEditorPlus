@@ -36,6 +36,6 @@ namespace PochiPochiEditorPlus._Managers._FormGroupManager
         Tileset,
 
         TrainerClass,
-        TrainerSprite
+        TrainerSprite,
     }
 }

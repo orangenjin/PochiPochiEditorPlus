@@ -27,8 +27,8 @@ namespace PochiPochiEditorPlus._Forms
         private dynamic _yPosEntry = null;
         private dynamic _animPointerEntry = null;
         // 可変長データ管理用
-        private RefDataManager _imageData = null;
-        private RefDataManager _paletteData = null;
+        private VariableDataManager _imageData = null;
+        private VariableDataManager _paletteData = null;
         // UI制御用
         private int _currentSpriteIndex = 0;
         private int _entryCount = 0;
@@ -267,7 +267,7 @@ namespace PochiPochiEditorPlus._Forms
                     imageOffsetValue);
                 // RefDataとして保持する
                 var imageDataLz77 = ImageHelper.CompressLZ77(imageData);
-                _imageData = new RefDataManager(
+                _imageData = new VariableDataManager(
                     SpriteData.Image,
                     imageOffsetValue,
                     imageDataLz77,
@@ -280,7 +280,7 @@ namespace PochiPochiEditorPlus._Forms
                     paletteOffsetValue);
                 // RefDataとして保持する
                 var paletteDataLz77 = ImageHelper.CompressPalette(paletteData);
-                _paletteData = new RefDataManager(
+                _paletteData = new VariableDataManager(
                     SpriteData.Palette,
                     paletteOffsetValue,
                     paletteDataLz77,

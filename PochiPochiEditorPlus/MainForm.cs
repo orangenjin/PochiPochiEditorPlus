@@ -29,10 +29,14 @@ namespace PochiPochiEditorPlus
         private Dictionary<ToolStripMenuItem, Form> _openToolForms = null;
         // パス用
         private string _romPath = string.Empty;
-        private string _iniFolder = Path.Combine(Application.StartupPath, Constants.IniExt);
+        private string _iniFolder = Path.Combine(Application.StartupPath, ExtConstants.IniExt);
         private string _tblPath = Path.Combine(Application.StartupPath, "charmap.tbl");
         // 保存形式識別用
-        private enum SaveMode{ SaveOver, SaveAs }
+        private enum SaveMode
+        { 
+            SaveOver, 
+            SaveAs,
+        }
 
         public MainForm()
         {
@@ -75,7 +79,7 @@ namespace PochiPochiEditorPlus
                         // フィルターを作成
                         ofd.Filter = string.Join(
                             "|",
-                            configKeys.Select(key => $"{key}|*.{Constants.GbaExt}"));
+                            configKeys.Select(key => $"{key}|*.{ExtConstants.GbaExt}"));
 
                         // キャンセルを確認
                         if (ofd.ShowDialog() != DialogResult.OK) return;
@@ -221,7 +225,7 @@ namespace PochiPochiEditorPlus
             if (!(sender is Button button)) return;
 
             // "btn" を外す
-            string groupName = button.Name.Substring(Constants.ButtonPrefix.Length);
+            string groupName = button.Name.Substring(PrefixConstants.ButtonPrefix.Length);
 
             // グループ名を取得
             if (!Enum.TryParse(groupName, out FormGroup group)) return;
@@ -250,7 +254,7 @@ namespace PochiPochiEditorPlus
             {
                 using (SaveFileDialog saveFileDialog = new SaveFileDialog())
                 {
-                    saveFileDialog.Filter = Constants.RomFileFilter;
+                    saveFileDialog.Filter = FilterConstants.RomFileFilter;
                     saveFileDialog.FileName = Path.GetFileName(_romPath);
 
                     if (saveFileDialog.ShowDialog() == DialogResult.OK)
@@ -357,7 +361,7 @@ namespace PochiPochiEditorPlus
             }
 
             // "tsmi" を外す
-            string toolName = item.Name.Substring(Constants.MenuItemPrefix.Length);
+            string toolName = item.Name.Substring(PrefixConstants.MenuItemPrefix.Length);
             // フォームを生成
             Type formType = Assembly
                 .GetExecutingAssembly()

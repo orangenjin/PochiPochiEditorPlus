@@ -119,6 +119,14 @@
         public const string IniExt = "ini";
     }
 
+    public static class FilterConstants
+    {
+        public const string RomFileFilter = "ROMファイル|*.gba";
+        public const string SpriteImportFilter = "画像ファイル (*.png;*.bmp)|*.png;*.bmp";
+        public const string SpriteExportFilter = "PNG画像 (*.png)|*.png|BMP画像 (*.bmp)|*.bmp";
+        public const string BinImportExportFilter = "BINファイル (*.bin)|*.bin";
+    }
+
     public static class ImageConstants
     {
         // パレット

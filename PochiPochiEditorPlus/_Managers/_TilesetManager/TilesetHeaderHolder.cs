@@ -28,7 +28,7 @@ namespace PochiPochiEditorPlus._Managers._TilesetManager
         public enum PaletteKind
         {
             Palette0to6 = 0,
-            Palette7to12 = 7
+            Palette7to12 = 7,
         }
 
         public TilesetHeaderHolder(SharedData sharedData)
