@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
+using System.Reflection;
 using PochiPochiEditorPlus._Utilities;
 
 namespace PochiPochiEditorPlus._Helpers
@@ -94,6 +96,17 @@ namespace PochiPochiEditorPlus._Helpers
             }
 
             return result;
+        }
+
+        /// <summary>
+        /// 重複した数値の存在を考慮して、Enumの宣言順を取得する。
+        /// </summary>
+        private static TEnum[] GetEnumSequence<TEnum>() where TEnum : Enum
+        {
+            return typeof(TEnum)
+                .GetFields(BindingFlags.Public | BindingFlags.Static)
+                .Select(f => (TEnum)f.GetValue(null))
+                .ToArray();
         }
 
         /// <summary>

@@ -37,7 +37,12 @@ namespace PochiPochiEditorPlus._Managers._TilesetManager
                 (DataSize)fieldValue.Lengths.EntryLength);
 
             // マッピングされたビットフィールドの辞書を取得
-            var bits = ConvHelper.BitExtract<BlockTileBits>(ushortValue); ;
+            var bits = ConvHelper.BitExtract(
+                ushortValue,
+                BlockTileBits.PaletteIndex,
+                BlockTileBits.ReverseY,
+                BlockTileBits.ReverseX,
+                BlockTileBits.TileIndex);
 
             // インスタンスの生成
             return new BlockTileData(
@@ -64,7 +69,12 @@ namespace PochiPochiEditorPlus._Managers._TilesetManager
                 };
 
             // uintに統合する
-            uint combined = ConvHelper.BitCombine(bits);
+            uint combined = ConvHelper.BitCombine(
+                bits,
+                BlockTileBits.PaletteIndex,
+                BlockTileBits.ReverseY,
+                BlockTileBits.ReverseX,
+                BlockTileBits.TileIndex);
 
             // 戻り値に書き込む
             byte[] result = new byte[fieldValue.Lengths.EntryLength];
@@ -119,6 +129,8 @@ namespace PochiPochiEditorPlus._Managers._TilesetManager
             int tileSize,
             bool showBackColor)
         {
+            if (imageData == null || imageData.Length == 0 || palData == null) return null;
+
             Bitmap tileBmp = ImageHelper.CreateBitmap(
                 imageData, palData, tileSize, tileSize, showBackColor: showBackColor);
 
@@ -167,11 +179,16 @@ namespace PochiPochiEditorPlus._Managers._TilesetManager
                 (DataSize)fieldValue.Lengths.EntryLength);
 
             // マッピングされたビットフィールドの辞書を取得
-            var bits = ConvHelper.BitExtract<LayerAndWildEncBits>(byteValue); ;
+            var bits = ConvHelper.BitExtract(
+                byteValue,
+                LayerAndWildEncBits.Layer,
+                LayerAndWildEncBits.WildEncWater,
+                LayerAndWildEncBits.WildEncGrass);
 
             // インスタンスの生成
             return new LayerAndWildEncAttr(
-                layer: (byte)bits[LayerAndWildEncBits.Layer],
+                // 2ビット左シフトする(下位2ビットを0にする)
+                layer: (byte)(bits[LayerAndWildEncBits.Layer] << 2),
                 wildEncGrass: bits[LayerAndWildEncBits.WildEncGrass] != 0,
                 wildEncWater: bits[LayerAndWildEncBits.WildEncWater] != 0);
         }
@@ -186,13 +203,18 @@ namespace PochiPochiEditorPlus._Managers._TilesetManager
             // 値を辞書に格納する
             var bits = new Dictionary<LayerAndWildEncBits, uint>
             {
-                { LayerAndWildEncBits.Layer, dataValue.Layer },
+                // 2ビット右シフトする
+                { LayerAndWildEncBits.Layer, (uint)(dataValue.Layer >> 2) },
                 { LayerAndWildEncBits.WildEncWater, (uint)(dataValue.WildEncWater ? 1 : 0) },
                 { LayerAndWildEncBits.WildEncGrass, (uint)(dataValue.WildEncGrass ? 1 : 0) }
             };
 
             // uintに統合する
-            uint combined = ConvHelper.BitCombine(bits);
+            uint combined = ConvHelper.BitCombine(
+                bits,
+                LayerAndWildEncBits.Layer,
+                LayerAndWildEncBits.WildEncWater,
+                LayerAndWildEncBits.WildEncGrass);
 
             // 戻り値に書き込む
             byte[] result = new byte[fieldValue.Lengths.EntryLength];

@@ -42,7 +42,9 @@ namespace PochiPochiEditorPlus._Managers._LayerManager
             int index = gridY * Data.Columns + gridX;
 
             _blockImages[index]?.Dispose();
-            _blockImages[index] = image;
+            _blockImages[index] = image != null
+                ? (Bitmap)image.Clone()
+                : null;
         }
 
         public Bitmap GetBlockImage(int gridX, int gridY)

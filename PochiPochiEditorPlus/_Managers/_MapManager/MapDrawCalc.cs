@@ -26,7 +26,10 @@ namespace PochiPochiEditorPlus._Managers._MapManager
                 (DataSize)fieldValue.Lengths.EntryLength);
 
             // マッピングされたビットフィールドの辞書を取得
-            var bits = ConvHelper.BitExtract<MapGridBits>(ushortValue);
+            var bits = ConvHelper.BitExtract(
+                ushortValue,
+                MapGridBits.CollIndex,
+                MapGridBits.BlockIndex);
 
             // インスタンスを生成
             return new MapGridData(
@@ -49,7 +52,10 @@ namespace PochiPochiEditorPlus._Managers._MapManager
             };
 
             // uintに統合する
-            uint combined = ConvHelper.BitCombine(bits);
+            uint combined = ConvHelper.BitCombine(
+                bits,
+                MapGridBits.CollIndex,
+                MapGridBits.BlockIndex);
 
             // 戻り値に書き込む
             byte[] result = new byte[fieldValue.Lengths.EntryLength];
