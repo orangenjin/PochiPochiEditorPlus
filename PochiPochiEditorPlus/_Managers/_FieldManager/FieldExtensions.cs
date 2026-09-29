@@ -14,20 +14,20 @@ namespace PochiPochiEditorPlus._Managers._FieldManager
             {
                 case FieldKind.Byte:
                 case FieldKind.SByte:
-                    return Constants.ByteSize;
+                    return (int)DataSize.Byte;
 
                 case FieldKind.UInt16:
                 case FieldKind.Int16:
-                    return Constants.UShortSize;
+                    return (int)DataSize.UShort;
 
                 case FieldKind.UInt32:
                 case FieldKind.Int32:
                 case FieldKind.Pointer:
-                    return Constants.UIntSize;
+                    return (int)DataSize.UInt;
 
                 // stringは動的長さ
                 default:
-                    return Constants.InvalidValue;
+                    return BinaryConstants.InvalidValue;
             }
         }
 
@@ -75,13 +75,13 @@ namespace PochiPochiEditorPlus._Managers._FieldManager
     public enum StringAttrArgs
     {
         EntryLengthArg,
-        AllowedLengthArg
+        AllowedLengthArg,
     }
 
     public enum NibbleAttrArgs
     {
         HighValueArg,
-        LowValueArg
+        LowValueArg,
     }
 
     public enum BitAttrArgs
@@ -93,6 +93,6 @@ namespace PochiPochiEditorPlus._Managers._FieldManager
         Bit4Arg,
         Bit5Arg,
         Bit6Arg,
-        Bit7Arg
+        Bit7Arg,
     }
 }

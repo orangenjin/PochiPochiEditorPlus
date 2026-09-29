@@ -32,13 +32,13 @@ namespace PochiPochiEditorPlus._Managers._FieldManager
             long rawValue;
             switch (entryLength)
             {
-                case Constants.ByteSize:
-                case Constants.UShortSize:
-                case Constants.UIntSize:
+                case (int)DataSize.Byte:
+                case (int)DataSize.UShort:
+                case (int)DataSize.UInt:
                     rawValue = IoHelper.ReadBytesAsLong(
                         binaryData,
                         0,
-                        entryLength,
+                        (DataSize)entryLength,
                         isLittleEndian: true,
                         isSigned: isSigned);
                     break;
@@ -48,14 +48,14 @@ namespace PochiPochiEditorPlus._Managers._FieldManager
             }
 
             // 1バイトの特殊処理
-            if (entryLength == Constants.ByteSize)
+            if (entryLength == (int)DataSize.Byte)
             {
                 // ニブル
                 if (fieldValue.ArgCount == AttrKind.NibbleAttr.GetAttrCount())
                 {
                     int nibbleValue = argIndex == (int)NibbleAttrArgs.HighValueArg
-                        ? (int)((rawValue >> Constants.NibbleShift) & Constants.NibbleMask)
-                        : (int)(rawValue & Constants.NibbleMask);
+                        ? (int)((rawValue >> BinaryConstants.NibbleShift) & BinaryConstants.NibbleMask)
+                        : (int)(rawValue & BinaryConstants.NibbleMask);
 
                     return (T)Convert.ChangeType(nibbleValue, typeof(T));
                 }
@@ -67,11 +67,11 @@ namespace PochiPochiEditorPlus._Managers._FieldManager
                 }
             }
             // 4バイトの特殊処理
-            else if (entryLength == Constants.UIntSize && isPointer)
+            else if (entryLength == (int)DataSize.UInt && isPointer)
             {
                 return rawValue == 0
-                    ? (T)Convert.ChangeType(Constants.InvalidValue, typeof(T))
-                    : (T)Convert.ChangeType(rawValue - Constants.BaseAddr, typeof(T));
+                    ? (T)Convert.ChangeType(BinaryConstants.InvalidValue, typeof(T))
+                    : (T)Convert.ChangeType(rawValue - BinaryConstants.BaseAddr, typeof(T));
             }
 
             return (T)Convert.ChangeType(rawValue, typeof(T));
@@ -111,7 +111,7 @@ namespace PochiPochiEditorPlus._Managers._FieldManager
             }
 
             // 1バイトの特殊処理
-            if (entryLength == Constants.ByteSize)
+            if (entryLength == (int)DataSize.Byte)
             {
                 int nibbleSize = AttrKind.NibbleAttr.GetAttrCount();
                 int bitSize = AttrKind.BitAttr.GetAttrCount();
@@ -125,14 +125,14 @@ namespace PochiPochiEditorPlus._Managers._FieldManager
                     if (argIndex == (int)NibbleAttrArgs.HighValueArg)
                     {
                         // 下位ニブルを残し、上位ニブルに値をセット
-                        rawByte = (byte)((rawByte & ~(Constants.NibbleMask << Constants.NibbleShift))
-                                       | ((nibbleValue & Constants.NibbleMask) << Constants.NibbleShift));
+                        rawByte = (byte)((rawByte & ~(BinaryConstants.NibbleMask << BinaryConstants.NibbleShift))
+                                       | ((nibbleValue & BinaryConstants.NibbleMask) << BinaryConstants.NibbleShift));
                     }
                     else
                     {
                         // 上位ニブルを残し、下位ニブルに値をセット
-                        rawByte = (byte)((rawByte & (Constants.NibbleMask << Constants.NibbleShift))
-                                       | (nibbleValue & Constants.NibbleMask));
+                        rawByte = (byte)((rawByte & (BinaryConstants.NibbleMask << BinaryConstants.NibbleShift))
+                                       | (nibbleValue & BinaryConstants.NibbleMask));
                     }
 
                     result[0] = rawByte;
@@ -159,19 +159,19 @@ namespace PochiPochiEditorPlus._Managers._FieldManager
 
             long rawValue;
             // 4バイト特有の処理
-            if (entryLength == Constants.UIntSize && isPointer)
+            if (entryLength == (int)DataSize.UInt && isPointer)
             {
                 long tempValue = Convert.ToInt64(value);
-                rawValue = tempValue == Constants.InvalidValue
+                rawValue = tempValue == BinaryConstants.InvalidValue
                     ? 0
-                    : tempValue + Constants.BaseAddr;
+                    : tempValue + BinaryConstants.BaseAddr;
             }
             else
             {
                 rawValue = Convert.ToInt64(value);
             }
 
-            IoHelper.WriteLongAsBytes(result, 0, rawValue, entryLength);
+            IoHelper.WriteLongAsBytes(result, 0, rawValue, (DataSize)entryLength);
             return result;
         }
 

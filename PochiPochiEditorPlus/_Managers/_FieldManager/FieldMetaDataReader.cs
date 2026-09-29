@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Windows.Forms;
 using PochiPochiEditorPlus._Utilities;
 
@@ -28,12 +29,12 @@ namespace PochiPochiEditorPlus._Managers._FieldManager
 
             // defフォルダ階層下から指定したファイルを探す
             var foundFiles = Directory.GetFiles(
-                Path.Combine(Application.StartupPath, Constants.DefExt),
-                Path.ChangeExtension(fileName, Constants.DefExt),
+                Path.Combine(Application.StartupPath, ExtConstants.DefExt),
+                Path.ChangeExtension(fileName, ExtConstants.DefExt),
                 SearchOption.AllDirectories);
 
             // 最初にヒットしたもの
-            var allLines = File.ReadAllLines(foundFiles[0]);
+            var allLines = File.ReadAllLines(foundFiles[0], Encoding.UTF8);
 
             foreach (var line in allLines)
             {
@@ -82,7 +83,7 @@ namespace PochiPochiEditorPlus._Managers._FieldManager
                     var openParenIndex = attrText.IndexOf('(');
 
                     // 属性名のみの場合
-                    if (openParenIndex == Constants.InvalidValue)
+                    if (openParenIndex == BinaryConstants.InvalidValue)
                     {
                         // 属性名を取得
                         attrKind = (AttrKind)Enum.Parse(typeof(AttrKind), attrText);
