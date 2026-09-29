@@ -39,7 +39,7 @@ namespace PochiPochiEditorPlus._Managers._LayerManager
                     var img = blockImageLayer.GetBlockImage(gridX, gridY);
                     if (img != null)
                     {
-                        Images[x, y] = (Bitmap)img.Clone();
+                        Images[x, y] = img; // Cloneせずに参照を維持
                     }
                 }
             }

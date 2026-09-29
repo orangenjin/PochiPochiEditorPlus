@@ -15,7 +15,9 @@ namespace PochiPochiEditorPlus._Managers._LayerManager
         // 選択範囲が確定した際に通知するイベント
         public Action SelectChanged { get; set; }
 
+        // 現在のマウス位置のマス座標
         private Point _currentGridPoint = Point.Empty;
+        // 選択範囲用の変数
         private bool _isDragging = false;
         private Point _startGridPoint = Point.Empty;
 
@@ -27,7 +29,7 @@ namespace PochiPochiEditorPlus._Managers._LayerManager
             // インデックスが有効な範囲内か判定
             if (index < 0 || index >= Data.ValidItemCount)
             {
-                ClearSelect();
+                SelectedGrids = Rectangle.Empty;
                 return;
             }
 
@@ -40,11 +42,6 @@ namespace PochiPochiEditorPlus._Managers._LayerManager
             _currentGridPoint = new Point(gridX, gridY);
 
             RequestInvalidate.Invoke();
-        }
-
-        private void ClearSelect()
-        {
-            SelectedGrids = Rectangle.Empty;
         }
 
         /// <summary>

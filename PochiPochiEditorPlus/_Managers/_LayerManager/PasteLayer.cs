@@ -38,7 +38,7 @@ namespace PochiPochiEditorPlus._Managers._LayerManager
                             TargetImageLayer.SetBlockImage(
                                 targetX,
                                 targetY, 
-                                (Bitmap)imgToPaste.Clone());
+                                imgToPaste); // Cloneせずに参照を維持
                             isPasted = true;
                         }
                     }

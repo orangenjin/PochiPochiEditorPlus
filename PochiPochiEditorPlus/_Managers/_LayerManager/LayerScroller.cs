@@ -80,6 +80,35 @@ namespace PochiPochiEditorPlus._Managers._LayerManager
                 () => _panel.MouseWheel -= Panel_MouseWheel);
         }
 
+        private void ScrollBar_ValueChanged(object sender, EventArgs e)
+        {
+            _panel.Invalidate();
+        }
+
+        private void Panel_MouseWheel(object sender, MouseEventArgs e)
+        {
+            // シフトキーで水平スクロール
+            if (Control.ModifierKeys == Keys.Shift)
+            {
+                if (_hsb != null && _hsb.Enabled)
+                {
+                    // 上下の仕様が逆なので、符号を反転させる
+                    ScrollX += e.Delta > 0
+                        ? -_hsb.SmallChange
+                        : _hsb.SmallChange;
+                }
+            }
+            else
+            {
+                if (_vsb != null && _vsb.Enabled)
+                {
+                    ScrollY += e.Delta > 0
+                        ? -_vsb.SmallChange
+                        : _vsb.SmallChange;
+                }
+            }
+        }
+
         /// <summary>
         /// スクロールバーの範囲を更新する。
         /// </summary>
@@ -132,7 +161,7 @@ namespace PochiPochiEditorPlus._Managers._LayerManager
             {
                 _vsb.Enabled = true;
                 _vsb.Minimum = 0;
-                _vsb.SmallChange = 1; 
+                _vsb.SmallChange = 1;
                 _vsb.LargeChange = Math.Max(1, visibleRows);
 
                 int maxScroll = totalRows - visibleRows;
@@ -142,35 +171,6 @@ namespace PochiPochiEditorPlus._Managers._LayerManager
             {
                 _vsb.Enabled = false;
                 _vsb.Value = 0;
-            }
-        }
-
-        private void ScrollBar_ValueChanged(object sender, EventArgs e)
-        {
-            _panel.Invalidate();
-        }
-
-        private void Panel_MouseWheel(object sender, MouseEventArgs e)
-        {
-            // シフトキーで水平スクロール
-            if (Control.ModifierKeys == Keys.Shift)
-            {
-                if (_hsb != null && _hsb.Enabled)
-                {
-                    // 上下の仕様が逆なので、符号を反転させる
-                    ScrollX += e.Delta > 0
-                        ? -_hsb.SmallChange
-                        : _hsb.SmallChange;
-                }
-            }
-            else
-            {
-                if (_vsb != null && _vsb.Enabled)
-                {
-                    ScrollY += e.Delta > 0
-                        ? -_vsb.SmallChange
-                        : _vsb.SmallChange;
-                }
             }
         }
     }

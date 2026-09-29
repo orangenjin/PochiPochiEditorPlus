@@ -71,12 +71,11 @@ namespace PochiPochiEditorPlus._Managers._LayerManager
             if (!Data.IsValidGrid(gridX, gridY)) return null;
 
             // 1マスにおけるタイル数を計算
-            int tilesPerGridX = Data.GridSize / Constants.TileSize;
-            int tilesPerGridY = Data.GridSize / Constants.TileSize;
+            int tilesPerGridX = Data.GridSize / ImageConstants.TileSize;
+            int tilesPerGridY = Data.GridSize / ImageConstants.TileSize;
 
-            var extractedBytes =
-                new List<byte>(tilesPerGridX * tilesPerGridY * Constants.BytesPerTile);
-            int totalTilesX = ImageWidth / Constants.TileSize;
+            var extractedBytes = new List<byte>(tilesPerGridX * tilesPerGridY * ImageConstants.BytesPerTile);
+            int totalTilesX = ImageWidth / ImageConstants.TileSize;
 
             // グリッド内のY方向ループ
             for (int gridPosY = 0; gridPosY < tilesPerGridY; gridPosY++)
@@ -91,11 +90,11 @@ namespace PochiPochiEditorPlus._Managers._LayerManager
                     int tilePosX = (gridX * tilesPerGridX) + gridPosX;
 
                     int tileIndex = (tilePosY * totalTilesX) + tilePosX;
-                    int byteOffset = tileIndex * Constants.BytesPerTile;
+                    int byteOffset = tileIndex * ImageConstants.BytesPerTile;
 
                     // 1タイル分を抽出
-                    byte[] tileData = new byte[Constants.BytesPerTile];
-                    Array.Copy(ImageData, byteOffset, tileData, 0, Constants.BytesPerTile);
+                    byte[] tileData = new byte[ImageConstants.BytesPerTile];
+                    Array.Copy(ImageData, byteOffset, tileData, 0, ImageConstants.BytesPerTile);
                     extractedBytes.AddRange(tileData);
                 }
             }
