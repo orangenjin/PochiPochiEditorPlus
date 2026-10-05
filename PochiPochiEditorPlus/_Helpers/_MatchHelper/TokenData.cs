@@ -47,8 +47,8 @@
         /// <summary>
         /// トークンの設定値に合致するかどうかを判定する。
         /// </summary>
-        public bool IsMatch(byte[] buffer, int offset) 
-            => Def.IsValid(buffer, offset);
+        public bool IsMatch(byte[] data, int offset) 
+            => Def.IsValid(data, offset);
 
         /// <summary>
         /// トークンの長さを取得する。

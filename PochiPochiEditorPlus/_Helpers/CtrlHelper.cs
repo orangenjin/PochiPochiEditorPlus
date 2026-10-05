@@ -4,7 +4,6 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 using System.Windows.Forms;
 using PochiPochiEditorPlus._Utilities;
 
@@ -13,13 +12,12 @@ namespace PochiPochiEditorPlus._Helpers
     public static class CtrlHelper
     {
         // AttachBorderの対象コントロールを保持
-        // キーが親コントロールで、値が子コントロール(複数可)
         private static Dictionary<Control, List<Control>> _drawBorders = 
             new Dictionary<Control, List<Control>>();
 
         // AttachBtnsToNudのコントロール対応を保持
         private static List<NudNavigator> _nudNavigators = new List<NudNavigator>();
-        private sealed class NudNavigator
+        private class NudNavigator
         {
             public NumericUpDown Nud { get; }
             public Button Prev { get; }
@@ -38,7 +36,7 @@ namespace PochiPochiEditorPlus._Helpers
 
         // AttachRbToCtrlの対応を保持
         private static List<RbLink> _rbLinks = new List<RbLink>();
-        private sealed class RbLink
+        private class RbLink
         {
             public RadioButton Rb { get; }
             public Control Ctrl { get; }
@@ -89,7 +87,7 @@ namespace PochiPochiEditorPlus._Helpers
                         nud.Value = Math.Max(nud.Minimum, 0);
                         break;
                     case ComboBox comboBox:
-                        comboBox.SelectedIndex = BinaryConstants.InvalidValue;
+                        comboBox.SelectedIndex = Constants.InvalidValue;
                         break;
                     case CheckBox checkBox:
                         checkBox.Checked = false;
@@ -110,7 +108,6 @@ namespace PochiPochiEditorPlus._Helpers
             IEnumerable<string> excludeNames,
             IEnumerable<Type> excludeTypes)
         {
-            // 戻り値
             var results = new List<Control>();
 
             // 例外設定
@@ -120,11 +117,10 @@ namespace PochiPochiEditorPlus._Helpers
             // 自身を含むかどうか
             if (includeSelf && !IsExcluded(container))
             {
-                // 含むなら戻り値に追加
                 results.Add(container);
             }
 
-            // 再帰探索して戻る
+            // 探索して終了
             SearchCtrl(container);
             return results;
 
@@ -133,33 +129,34 @@ namespace PochiPochiEditorPlus._Helpers
                 (nameSet?.Contains(ctrl.Name) ?? false) ||
                 (typeSet?.Contains(ctrl.GetType()) ?? false);
 
-            // 再帰的に実行するためにメソッド化
+            // 再帰的に探すためにメソッド化
             void SearchCtrl(Control parent)
             {
-                // 呼び出し元がコンテナであるか判定
+                // コンテナであるか判定
                 if (!ShouldRecurse(parent)) return;
 
                 foreach (Control child in parent.Controls)
                 {
                     if (!IsExcluded(child))
                     {
-                        // 除外対象でないなら、戻り値に追加
                         results.Add(child);
                     }
 
                     SearchCtrl(child);
                 }
             }
+        }
 
-            // 変な挙動をしないように、再帰すべきコンテナを指定
-            bool ShouldRecurse(Control ctrl)
-            {
-                return ctrl is Form ||
-                       ctrl is Panel ||
-                       ctrl is GroupBox ||
-                       ctrl is TabControl ||
-                       ctrl is TabPage;
-            }
+        /// <summary>
+        /// 変な挙動をしないように、一応再帰すべきコンテナを指定する。
+        /// </summary>
+        public static bool ShouldRecurse(Control ctrl)
+        {
+            return ctrl is Form ||
+                   ctrl is Panel ||
+                   ctrl is GroupBox ||
+                   ctrl is TabControl ||
+                   ctrl is TabPage;
         }
 
         /// <summary>
@@ -168,12 +165,12 @@ namespace PochiPochiEditorPlus._Helpers
         public static void AttachBorder(Control parent, params Control[] targets)
         {
             // 対象コントロールを追加
-            var targetCtrls = new List<Control>();
+            var targetCtrl = new List<Control>();
             foreach (var target in targets)
             {
-                targetCtrls.Add(target);
+                targetCtrl.Add(target);
             }
-            _drawBorders[parent] = targetCtrls;
+            _drawBorders[parent] = targetCtrl;
 
             parent.Paint += BorderPaint;
             parent.Invalidate();
@@ -213,7 +210,7 @@ namespace PochiPochiEditorPlus._Helpers
         }
 
         /// <summary>
-        /// ニューメリックアップダウンの増減に対応するボタンを追加する。
+        /// nudの増減に対応するbtnを追加する。
         /// </summary>
         public static void AttachBtnsToNud(
             NumericUpDown nud,
@@ -244,7 +241,7 @@ namespace PochiPochiEditorPlus._Helpers
             btnNext.Click -= BtnIncrease;
             nud.ValueChanged -= UpdateBtnsToNud;
 
-            // リストから削除
+            // リストから削除しておく
             var navigator = _nudNavigators.First(x => x.Nud == nud);
             _nudNavigators.Remove(navigator);
         }
@@ -283,13 +280,12 @@ namespace PochiPochiEditorPlus._Helpers
 
             var navigator = _nudNavigators.First(x => x.Nud == nud);
 
-            // どこかに飛んでしまうフォーカスを制御
+            // どこかに飛んでしまうフォーカスを制御する
             bool canGoPrev = nud.Value > nud.Minimum;
             if (!canGoPrev && navigator.Prev.Focused)
             {
                 nud.Focus();
             }
-            // ボタンの状態を更新
             navigator.Prev.Enabled = canGoPrev;
 
             bool canGoNext = nud.Value < nud.Maximum;
@@ -353,9 +349,9 @@ namespace PochiPochiEditorPlus._Helpers
             int defaultIndex = 0,
             params string[] items)
         {
+            cmb.BeginUpdate();
             try
             {
-                cmb.BeginUpdate();
                 cmb.Items.Clear();
                 cmb.Items.AddRange(items);
                 cmb.SelectedIndex = defaultIndex;
@@ -367,16 +363,16 @@ namespace PochiPochiEditorPlus._Helpers
         }
 
         /// <summary>
-        /// 外部ファイルからcmbに格納する。各行の書式：[XX]ItemName(1バイト対応のみ)
+        /// 外部ファイルからcmbに格納する。各行の書式：[XX]ItemName（1バイト対応のみ）
         /// </summary>
-        public static void LoadComboBoxFromFile(params (ComboBox Cmb, string Path)[] targets)
+        public static void LoadComboBoxFromFile(params (ComboBox cmb, string path)[] targets)
         {
             foreach (var target in targets)
             {
                 var entries = new List<KeyValuePair<byte, string>>();
 
                 // ファイルを読み込む
-                foreach (string line in File.ReadLines(target.Path, Encoding.UTF8))
+                foreach (string line in File.ReadLines(target.path))
                 {
                     // 空行とコメント行をスキップ
                     if (string.IsNullOrWhiteSpace(line) || line.StartsWith(";")) continue;
@@ -390,9 +386,9 @@ namespace PochiPochiEditorPlus._Helpers
                 }
 
                 // データをバインド
-                target.Cmb.DisplayMember = nameof(KeyValuePair<byte, string>.Value);
-                target.Cmb.ValueMember = nameof(KeyValuePair<byte, string>.Key);
-                target.Cmb.DataSource = entries;
+                target.cmb.DisplayMember = nameof(KeyValuePair<byte, string>.Value);
+                target.cmb.ValueMember = nameof(KeyValuePair<byte, string>.Key);
+                target.cmb.DataSource = entries;
             }
         }
 
@@ -401,13 +397,13 @@ namespace PochiPochiEditorPlus._Helpers
         /// </summary>
         public static void EnableDoubleBuffering(params Control[] controls)
         {
-            var property = typeof(Control).GetProperty(
+            var prop = typeof(Control).GetProperty(
                 "DoubleBuffered",
                 BindingFlags.Instance | BindingFlags.NonPublic);
 
             foreach (var ctrl in controls)
             {
-                property.SetValue(ctrl, true, null);
+                prop.SetValue(ctrl, true, null);
             }
         }
     }

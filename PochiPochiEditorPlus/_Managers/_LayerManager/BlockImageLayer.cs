@@ -18,23 +18,7 @@ namespace PochiPochiEditorPlus._Managers._LayerManager
         }
 
         /// <summary>
-        /// 配列の画像を破棄して、参照を切る。
-        /// </summary>
-        private void ClearImages()
-        {
-            if (_blockImages != null)
-            {
-                foreach (var img in _blockImages)
-                {
-                    img?.Dispose();
-                }
-                _blockImages = null;
-            }
-        }
-
-        /// <summary>
         /// 任意のマス座標の画像を書き換える。
-        /// Cloneせずに、参照を同じにする。
         /// </summary>
         public void SetBlockImage(int gridX, int gridY, Bitmap image)
         {
@@ -42,7 +26,7 @@ namespace PochiPochiEditorPlus._Managers._LayerManager
             int index = gridY * Data.Columns + gridX;
 
             _blockImages[index]?.Dispose();
-            _blockImages[index] = image != null
+            _blockImages[index] = image != null 
                 ? (Bitmap)image.Clone()
                 : null;
         }
@@ -72,6 +56,21 @@ namespace PochiPochiEditorPlus._Managers._LayerManager
                     new Rectangle(gridX * size, gridY * size, size, size),
                     new Rectangle(0, 0, Data.GridSize, Data.GridSize),
                     GraphicsUnit.Pixel);
+            }
+        }
+
+        /// <summary>
+        /// 配列の画像を破棄して、参照を切る。
+        /// </summary>
+        private void ClearImages()
+        {
+            if (_blockImages != null)
+            {
+                foreach (var img in _blockImages)
+                {
+                    img?.Dispose();
+                }
+                _blockImages = null;
             }
         }
     }

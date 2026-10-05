@@ -105,8 +105,8 @@ namespace PochiPochiEditorPlus._Forms
             var pattern = new List<TokenData>() 
             {
                 TokenData.Wildcard(2),
-                TokenData.Exact((int)DataSize.Byte, exactValues: 0x0),
-                TokenData.Exact((int)DataSize.Byte, exactValues: 0x0)
+                TokenData.Exact(Constants.ByteSize, exactValues: 0x0),
+                TokenData.Exact(Constants.ByteSize, exactValues: 0x0)
             };
             entryCount = PatternMatcher.TryCountByPattern(
                 pattern,

@@ -9,22 +9,17 @@ namespace PochiPochiEditorPlus._Managers._TilesetManager
 {
     public static class TilesetBlockCalc
     {
-        // BlockTileDataのビットフィールド
-        public enum BlockTileBits
-        {
-            PaletteIndex = 4,
-            ReverseY = 1, 
-            ReverseX = 1,
-            TileIndex = 10,
-        }
+        // ビット位置
+        private const int BlockDataPaletteShift = 12;
 
-        // LayerAndWildEncAttrのビットフィールド
-        public enum LayerAndWildEncBits
-        {
-            Layer = 6, 
-            WildEncWater = 1,
-            WildEncGrass = 1,
-        }
+        // ビットマスク
+        private const ushort BlockDataTileIndexMask = 0x03FF;    // Bit 0-9
+        private const ushort BlockDataReverseXMask = 0x0400;     // Bit 10
+        private const ushort BlockDataReverseYMask = 0x0800;     // Bit 11
+        private const ushort BlockDataPaletteMask = 0xF000;      // Bit 12-15
+        private const byte BlockAttrWildEncGrassMask = 0x01;             // Bit 0
+        private const byte BlockAttrWildEncWaterMask = 0x02;             // Bit 1
+        private const byte BlockAttrLayerAndWildEncMask = 0xFC;     // Bit 2-7
 
         /// <summary>
         /// バイト配列をブロックデータに変換する。
@@ -34,22 +29,20 @@ namespace PochiPochiEditorPlus._Managers._TilesetManager
             var ushortValue = (ushort)IoHelper.ReadBytesAsLong(
                 fieldValue.BinaryData,
                 0,
-                (DataSize)fieldValue.Lengths.EntryLength);
+                fieldValue.Lengths.EntryLength);
 
-            // マッピングされたビットフィールドの辞書を取得
-            var bits = ConvHelper.BitExtract(
-                ushortValue,
-                BlockTileBits.PaletteIndex,
-                BlockTileBits.ReverseY,
-                BlockTileBits.ReverseX,
-                BlockTileBits.TileIndex);
+            // ビット演算で各データを抽出
+            int tileIndex = ushortValue & BlockDataTileIndexMask;
+            bool reverseX = (ushortValue & BlockDataReverseXMask) != 0;
+            bool reverseY = (ushortValue & BlockDataReverseYMask) != 0;
+            int paletteIndex = (ushortValue & BlockDataPaletteMask) >> BlockDataPaletteShift;
 
             // インスタンスの生成
             return new BlockTileData(
-                tileIndex: (int)bits[BlockTileBits.TileIndex],
-                paletteIndex: (int)bits[BlockTileBits.PaletteIndex],
-                reverseX: bits[BlockTileBits.ReverseX] != 0,
-                reverseY: bits[BlockTileBits.ReverseY] != 0);
+                tileIndex,
+                paletteIndex,
+                reverseX,
+                reverseY);
         }
 
         /// <summary>
@@ -59,32 +52,23 @@ namespace PochiPochiEditorPlus._Managers._TilesetManager
             BlockTileData dataValue,
             FieldValueHolder fieldValue)
         {
-            // 値を辞書に格納する
-            var bits = new Dictionary<BlockTileBits, uint>
-                {
-                    { BlockTileBits.PaletteIndex, (uint)dataValue.PaletteIndex },
-                    { BlockTileBits.ReverseY, (uint)(dataValue.ReverseY ? 1 : 0) },
-                    { BlockTileBits.ReverseX, (uint)(dataValue.ReverseX ? 1 : 0) },
-                    { BlockTileBits.TileIndex, (uint)dataValue.TileIndex }
-                };
+            // ushortに結合
+            ushort ushortValue = (ushort)(
+                (dataValue.TileIndex & BlockDataTileIndexMask) |
+                (dataValue.ReverseX ? BlockDataReverseXMask : 0) |
+                (dataValue.ReverseY ? BlockDataReverseYMask : 0) |
+                ((dataValue.PaletteIndex & Constants.NibbleMask) << BlockDataPaletteShift));
 
-            // uintに統合する
-            uint combined = ConvHelper.BitCombine(
-                bits,
-                BlockTileBits.PaletteIndex,
-                BlockTileBits.ReverseY,
-                BlockTileBits.ReverseX,
-                BlockTileBits.TileIndex);
-
-            // 戻り値に書き込む
+            // 戻り値用に整形
             byte[] result = new byte[fieldValue.Lengths.EntryLength];
             IoHelper.WriteLongAsBytes(
                 result,
                 0,
-                (long)combined,
-                (DataSize)result.Length);
+                ushortValue,
+                result.Length);
             return result;
         }
+
 
         /// <summary>
         /// タイルデータを取得するメソッドを簡素化するため。
@@ -124,15 +108,15 @@ namespace PochiPochiEditorPlus._Managers._TilesetManager
         /// </summary>
         public static Bitmap CreateTileImage(
             BlockTileData tileData,
-            byte[] imageData,
+            byte[] tileBytes,
             byte[] palData,
             int tileSize,
             bool showBackColor)
         {
-            if (imageData == null || imageData.Length == 0 || palData == null) return null;
+            if (tileBytes == null || tileBytes.Length == 0 || palData == null) return null;
 
             Bitmap tileBmp = ImageHelper.CreateBitmap(
-                imageData, palData, tileSize, tileSize, showBackColor: showBackColor);
+                tileBytes, palData, tileSize, tileSize, showBackColor: showBackColor);
 
             RotateFlipType flipType = RotateFlipType.RotateNoneFlipNone;
             if (tileData.ReverseX && tileData.ReverseY)
@@ -157,7 +141,7 @@ namespace PochiPochiEditorPlus._Managers._TilesetManager
         }
 
         /// <summary>
-        /// 各タイルとマス座標を遅延評価で順次返す。
+        /// 各タイルとマス座標を順次返す。
         /// </summary>
         public static IEnumerable<(BlockTileData Tile, int OffsetX, int OffsetY)> GetTilesWithOffset(BlockLayer layer)
         {
@@ -176,21 +160,18 @@ namespace PochiPochiEditorPlus._Managers._TilesetManager
             var byteValue = (byte)IoHelper.ReadBytesAsLong(
                 fieldValue.BinaryData,
                 0,
-                (DataSize)fieldValue.Lengths.EntryLength);
+                fieldValue.Lengths.EntryLength);
 
-            // マッピングされたビットフィールドの辞書を取得
-            var bits = ConvHelper.BitExtract(
-                byteValue,
-                LayerAndWildEncBits.Layer,
-                LayerAndWildEncBits.WildEncWater,
-                LayerAndWildEncBits.WildEncGrass);
+            // ビット演算で各データを抽出
+            bool wildEncGrass = (byteValue & BlockAttrWildEncGrassMask) != 0;
+            bool wildEncWater = (byteValue & BlockAttrWildEncWaterMask) != 0;
+            byte layer = (byte)(byteValue & BlockAttrLayerAndWildEncMask);
 
             // インスタンスの生成
             return new LayerAndWildEncAttr(
-                // 2ビット左シフトする(下位2ビットを0にする)
-                layer: (byte)(bits[LayerAndWildEncBits.Layer] << 2),
-                wildEncGrass: bits[LayerAndWildEncBits.WildEncGrass] != 0,
-                wildEncWater: bits[LayerAndWildEncBits.WildEncWater] != 0);
+                layer,
+                wildEncGrass,
+                wildEncWater);
         }
 
         /// <summary>
@@ -200,29 +181,19 @@ namespace PochiPochiEditorPlus._Managers._TilesetManager
             LayerAndWildEncAttr dataValue,
             FieldValueHolder fieldValue)
         {
-            // 値を辞書に格納する
-            var bits = new Dictionary<LayerAndWildEncBits, uint>
-            {
-                // 2ビット右シフトする
-                { LayerAndWildEncBits.Layer, (uint)(dataValue.Layer >> 2) },
-                { LayerAndWildEncBits.WildEncWater, (uint)(dataValue.WildEncWater ? 1 : 0) },
-                { LayerAndWildEncBits.WildEncGrass, (uint)(dataValue.WildEncGrass ? 1 : 0) }
-            };
+            // byteに結合
+            byte byteValue = (byte)(
+                (dataValue.Layer & BlockAttrLayerAndWildEncMask) |
+                (dataValue.WildEncGrass ? BlockAttrWildEncGrassMask : 0) |
+                (dataValue.WildEncWater ? BlockAttrWildEncWaterMask : 0));
 
-            // uintに統合する
-            uint combined = ConvHelper.BitCombine(
-                bits,
-                LayerAndWildEncBits.Layer,
-                LayerAndWildEncBits.WildEncWater,
-                LayerAndWildEncBits.WildEncGrass);
-
-            // 戻り値に書き込む
+            // 戻り値
             byte[] result = new byte[fieldValue.Lengths.EntryLength];
             IoHelper.WriteLongAsBytes(
                 result,
                 0,
-                (long)combined,
-                (DataSize)result.Length);
+                byteValue,
+                result.Length);
             return result;
         }
 

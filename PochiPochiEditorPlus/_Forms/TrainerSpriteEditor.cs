@@ -27,8 +27,8 @@ namespace PochiPochiEditorPlus._Forms
         private dynamic _yPosEntry = null;
         private dynamic _animPointerEntry = null;
         // 可変長データ管理用
-        private VariableDataManager _imageData = null;
-        private VariableDataManager _paletteData = null;
+        private RefDataManager _imageData = null;
+        private RefDataManager _paletteData = null;
         // UI制御用
         private int _currentSpriteIndex = 0;
         private int _entryCount = 0;
@@ -57,9 +57,9 @@ namespace PochiPochiEditorPlus._Forms
             var pattern = new List<TokenData>()
             {
                 TokenData.Pointer(),
-                TokenData.Exact((int)DataSize.UShort, exactValues: new long[]{ 0x800, 0x1000 }),
+                TokenData.Exact(Constants.UShortSize, exactValues: new long[]{ 0x800, 0x1000 }),
                 TokenData.Wildcard(1),
-                TokenData.Exact((int)DataSize.Byte, exactValues: 0x0)
+                TokenData.Exact(Constants.ByteSize, exactValues: 0x0)
             };
             _entryCount = PatternMatcher.TryCountByPattern(
                 pattern,
@@ -182,12 +182,12 @@ namespace PochiPochiEditorPlus._Forms
 
                     using (var sfd = new SaveFileDialog())
                     {
-                        sfd.Filter = FilterConstants.SpriteExportFilter;
+                        sfd.Filter = Constants.SpriteExportFilter;
                         sfd.FileName = $"trainer_sprite_{_currentSpriteIndex:D4}";
 
                         if (sfd.ShowDialog() == DialogResult.OK)
                         {
-                            // VarDataから生成
+                            // RefDataから生成
                             var imageData = ImageHelper.DecompressLZ77(
                                 _imageData.BinaryData);
                             var paletteData = ImageHelper.DecompressPalette(
@@ -195,8 +195,8 @@ namespace PochiPochiEditorPlus._Forms
                             var sprite = ImageHelper.CreateBitmap(
                                 imageData,
                                 paletteData,
-                                ImageConstants.SpriteSize,
-                                ImageConstants.SpriteSize,
+                                Constants.SpriteSize,
+                                Constants.SpriteSize,
                                 showBackColor: true);
 
                             ImageHelper.ExportIndexedImage(
@@ -244,11 +244,11 @@ namespace PochiPochiEditorPlus._Forms
             // アニメーションデータアドレス
             var targetOffset =
                 _animPointerEntry.Entries[index].SpriteAnimPointerOffset.GetData<int>();
-            txtSpriteAnimDataOffset.Text = IoHelper.TryReadPointer(
+            txtSpriteAnimDataOffset.Text = IoHelper.TryReadPtr(
                 _sharedData.RomData,
                 targetOffset,
                 out int resultOffset)
-                && resultOffset != BinaryConstants.InvalidValue
+                && resultOffset != Constants.InvalidValue
                     ? resultOffset.ParseIntToString()
                     : string.Empty;
 
@@ -265,9 +265,9 @@ namespace PochiPochiEditorPlus._Forms
                 var imageData = ImageHelper.DecompressLZ77(
                     _sharedData.RomData,
                     imageOffsetValue);
-                // VarDataとして保持する
+                // RefDataとして保持する
                 var imageDataLz77 = ImageHelper.CompressLZ77(imageData);
-                _imageData = new VariableDataManager(
+                _imageData = new RefDataManager(
                     SpriteData.Image,
                     imageOffsetValue,
                     imageDataLz77,
@@ -278,9 +278,9 @@ namespace PochiPochiEditorPlus._Forms
                 var paletteData = ImageHelper.DecompressPalette(
                     _sharedData.RomData,
                     paletteOffsetValue);
-                // VarDataとして保持する
+                // RefDataとして保持する
                 var paletteDataLz77 = ImageHelper.CompressPalette(paletteData);
-                _paletteData = new VariableDataManager(
+                _paletteData = new RefDataManager(
                     SpriteData.Palette,
                     paletteOffsetValue,
                     paletteDataLz77,
@@ -290,8 +290,8 @@ namespace PochiPochiEditorPlus._Forms
                 var sprite = ImageHelper.CreateBitmap(
                     imageData,
                     paletteData,
-                    ImageConstants.SpriteSize,
-                    ImageConstants.SpriteSize,
+                    Constants.SpriteSize,
+                    Constants.SpriteSize,
                     showBackColor: true);
                 // 2倍に拡大
                 var scaled = ImageHelper.ScaleBitmap(sprite);
@@ -313,7 +313,7 @@ namespace PochiPochiEditorPlus._Forms
 
             var inputResult = new QuickInputBuilder()
                 .WithOffset(0x0)
-                .WithFile(FilterConstants.SpriteImportFilter)
+                .WithFile(Constants.SpriteImportFilter)
                 .ShowDialog();
             if (inputResult == null) return;
 
@@ -326,8 +326,8 @@ namespace PochiPochiEditorPlus._Forms
                 // バイト配列を抽出
                 if (!ImageHelper.ExtractImageAndPalette(
                     bmp,
-                    ImageConstants.SpriteSize,
-                    ImageConstants.SpriteSize,
+                    Constants.SpriteSize,
+                    Constants.SpriteSize,
                     out byte[] imageData,
                     out byte[] paletteData)) return;
 

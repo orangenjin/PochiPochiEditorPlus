@@ -128,15 +128,15 @@ namespace PochiPochiEditorPlus._Forms
             var mapNameAllowedLength = _sharedData.Config.MapNameAllowedLength;
             for (int i = 0; i < pointerCount; i++)
             {
-                IoHelper.TryReadPointer(
+                IoHelper.TryReadPtr(
                     _sharedData.RomData,
-                    tableOffset + i * (int)DataSize.UInt,
+                    tableOffset + i * Constants.UIntSize,
                     out int mapNameOffset);
 
                 // 終端文字が１つ以上あるか判定
                 var IsValid = PatternMatcher.TrySearch(
                     _sharedData.RomData,
-                    new byte[] { BinaryConstants.StrTerminatorByte },
+                    new byte[] { Constants.StrTerminatorByte },
                     mapNameOffset,
                     mapNameAllowedLength);
 
@@ -223,14 +223,14 @@ namespace PochiPochiEditorPlus._Forms
                 TokenData.Pointer(),
                 TokenData.Pointer(),
                 TokenData.Wildcard(4),
-                TokenData.Range((byte)_mapNameFirstIndex, byte.MaxValue, (int)DataSize.Byte),
-                TokenData.Range(byte.MinValue, (byte)cmbMapSight.Items.Count, (int)DataSize.Byte),
-                TokenData.Range(byte.MinValue, (byte)cmbMapWthr.Items.Count, (int)DataSize.Byte),
-                TokenData.Range(byte.MinValue, (byte)cmbMapType.Items.Count, (int)DataSize.Byte),
-                TokenData.Range(byte.MinValue, (byte)cmbMapBike.Items.Count, (int)DataSize.Byte),
-                TokenData.Range(byte.MinValue, (byte)cmbMapNameType.Items.Count, (int)DataSize.Byte),
+                TokenData.Range((byte)_mapNameFirstIndex, byte.MaxValue, Constants.ByteSize),
+                TokenData.Range(byte.MinValue, (byte)cmbMapSight.Items.Count, Constants.ByteSize),
+                TokenData.Range(byte.MinValue, (byte)cmbMapWthr.Items.Count, Constants.ByteSize),
+                TokenData.Range(byte.MinValue, (byte)cmbMapType.Items.Count, Constants.ByteSize),
+                TokenData.Range(byte.MinValue, (byte)cmbMapBike.Items.Count, Constants.ByteSize),
+                TokenData.Range(byte.MinValue, (byte)cmbMapNameType.Items.Count, Constants.ByteSize),
                 TokenData.Wildcard(1),
-                TokenData.Range(byte.MinValue, (byte)cmbMapSpBg.Items.Count, (int)DataSize.Byte),
+                TokenData.Range(byte.MinValue, (byte)cmbMapSpBg.Items.Count, Constants.ByteSize),
             };
 
             // マップエントリーテーブルを検証
@@ -260,10 +260,10 @@ namespace PochiPochiEditorPlus._Forms
                     }
 
                     // ポインタ先が正規のマップヘッダーかどうかを検証
-                    if (IoHelper.TryReadPointer(_sharedData.RomData, pointerOffset, out int entryOffset))
+                    if (IoHelper.TryReadPtr(_sharedData.RomData, pointerOffset, out int entryOffset))
                     {
                         // nullポインタならスキップ
-                        if (entryOffset == BinaryConstants.InvalidValue) continue;
+                        if (entryOffset == Constants.InvalidValue) continue;
 
                         var IsValid = PatternMatcher.TryMatch(
                             headerPattern,
@@ -479,7 +479,7 @@ namespace PochiPochiEditorPlus._Forms
         {
             var entry = _mapHeaderEntry[_currentMapNode.MapBankIndex][_currentMapNode.MapNumberIndex];
 
-            if (entry.Fields[0].Offset != BinaryConstants.InvalidValue)
+            if (entry.Fields[0].Offset != Constants.InvalidValue)
             {
                 // まずコントロールを有効化
                 ChangeControlsState(true);
@@ -567,7 +567,7 @@ namespace PochiPochiEditorPlus._Forms
 
         private void ReadMapFooter(int offset)
         {
-            if (offset != BinaryConstants.InvalidValue)
+            if (offset != Constants.InvalidValue)
             {
                 var entryFields = new List<FieldValueHolder>();
                 for (int i = 0; i < _mapFooterDef.Count; i++)
@@ -597,7 +597,7 @@ namespace PochiPochiEditorPlus._Forms
 
             // オフセットの確認
             int tableOffset = _mapFooterEntry.MapGridDataOffset.GetData<int>();
-            if (tableOffset == BinaryConstants.InvalidValue) return;
+            if (tableOffset == Constants.InvalidValue) return;
 
             int entryCount = _mapFooterEntry.MapWidth.GetData<int>() * _mapFooterEntry.MapHeight.GetData<int>();
             _mapGridDataEntry = new EntryManager("MapGridDataEntry", tableOffset, entryCount, _sharedData);

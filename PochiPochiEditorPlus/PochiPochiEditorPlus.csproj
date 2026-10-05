@@ -102,13 +102,13 @@
     <Compile Include="_Managers\_LayerManager\LayerDefinitions.cs" />
     <Compile Include="_Managers\_MapManager\MapDrawCalc.cs" />
     <Compile Include="_Managers\_MapManager\MapDrawDefinitions.cs" />
-    <Compile Include="_Managers\_UndoManager\VariableDataManager.cs" />
+    <Compile Include="_Managers\_UndoManager\RefDataManager.cs" />
     <Compile Include="_Managers\_TilesetManager\TilesetBlockDefinitions.cs" />
     <Compile Include="_Managers\_TilesetManager\TilesetBlockCalc.cs" />
     <Compile Include="_Managers\_TilesetManager\TilesetHeaderHolder.cs" />
     <Compile Include="_Managers\_UndoManager\CombineCommands.cs" />
     <Compile Include="_Managers\_UndoManager\FieldValueChangeCommand.cs" />
-    <Compile Include="_Managers\_UndoManager\VariableDataChangeCommand.cs" />
+    <Compile Include="_Managers\_UndoManager\RefDataChangeCommand.cs" />
     <Compile Include="_Managers\_FieldManager\FieldDefinitions.cs" />
     <Compile Include="_Managers\_FormGroupManager\FormGroupData.cs" />
     <Compile Include="_Managers\_FormGroupManager\FormGroupDefinitions.cs" />

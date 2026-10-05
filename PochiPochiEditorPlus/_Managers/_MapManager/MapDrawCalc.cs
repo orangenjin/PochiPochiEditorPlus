@@ -1,19 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
 using PochiPochiEditorPlus._Helpers;
 using PochiPochiEditorPlus._Managers._FieldManager;
-using PochiPochiEditorPlus._Utilities;
 
 namespace PochiPochiEditorPlus._Managers._MapManager
 {
     public static class MapDrawCalc
     {
-        // MapGridDataのビットフィールド
-        public enum MapGridBits
-        {
-            CollIndex = 6,
-            BlockIndex = 10,
-        }
+        // ビット位置
+        private const int MapGridCollIndexShift = 10;
+
+        // ビットマスク
+        private const ushort MapGridBlockIndexMask = 0x03FF;    // Bit 0-9
+        private const ushort MapGridCollIndexMask = 0xFC00;     // Bit 10-15
 
         /// <summary>
         /// バイト配列をマップマスデータに変換する。
@@ -23,50 +21,40 @@ namespace PochiPochiEditorPlus._Managers._MapManager
             var ushortValue = (ushort)IoHelper.ReadBytesAsLong(
                 fieldValue.BinaryData,
                 0,
-                (DataSize)fieldValue.Lengths.EntryLength);
+                fieldValue.Lengths.EntryLength);
 
-            // マッピングされたビットフィールドの辞書を取得
-            var bits = ConvHelper.BitExtract(
-                ushortValue,
-                MapGridBits.CollIndex,
-                MapGridBits.BlockIndex);
+            // ビット演算で各データを抽出
+            int blockIndex = ushortValue & MapGridBlockIndexMask;
+            int collIndex = (ushortValue & MapGridCollIndexMask) >> MapGridCollIndexShift;
 
             // インスタンスを生成
-            return new MapGridData(
-                collIndex: (int)bits[MapGridBits.CollIndex],
-                blockIndex: (int)bits[MapGridBits.BlockIndex]);
+            return new MapGridData(collIndex, blockIndex);
         }
 
         /// <summary>
-        /// マップマスデータをバイト配列に変換する。
+        /// バイト配列をマップマスデータに変換するをバイト配列に変換する。
         /// </summary>
         public static byte[] MapGridDataToBytes(
             MapGridData dataValue,
             FieldValueHolder fieldValue)
         {
-            // 値を辞書に格納する
-            var bits = new Dictionary<MapGridBits, uint>
-            {
-                { MapGridBits.CollIndex, (uint)dataValue.CollIndex },
-                { MapGridBits.BlockIndex, (uint)dataValue.BlockIndex }
-            };
+            // ushortに結合
+            ushort ushortValue = (ushort)(
+                (dataValue.BlockIndex & MapGridBlockIndexMask) |
+                ((dataValue.CollIndex << MapGridCollIndexShift) & MapGridCollIndexMask));
 
-            // uintに統合する
-            uint combined = ConvHelper.BitCombine(
-                bits,
-                MapGridBits.CollIndex,
-                MapGridBits.BlockIndex);
-
-            // 戻り値に書き込む
+            // 戻り値用に整形
             byte[] result = new byte[fieldValue.Lengths.EntryLength];
+
             IoHelper.WriteLongAsBytes(
                 result,
                 0,
-                (long)combined,
-                (DataSize)result.Length);
+                ushortValue,
+                result.Length);
 
             return result;
         }
+
 
         /// <summary>
         /// マップマスデータを取得するメソッドを簡素化するため。

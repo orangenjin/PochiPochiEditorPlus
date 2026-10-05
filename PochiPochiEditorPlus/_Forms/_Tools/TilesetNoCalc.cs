@@ -40,7 +40,7 @@ namespace PochiPochiEditorPlus._Forms._Tools
                     int offset = txtHeaderOffset.Text.ParseStringToInt();
 
                     // 空白、16進数出ない場合
-                    if (offset == BinaryConstants.InvalidValue)
+                    if (offset == Constants.InvalidValue)
                     {
                         SetFailure(0);
                         return;

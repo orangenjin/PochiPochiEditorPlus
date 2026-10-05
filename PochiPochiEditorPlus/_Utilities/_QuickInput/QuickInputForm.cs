@@ -6,7 +6,7 @@ namespace PochiPochiEditorPlus._Utilities._QuickInput
     public partial class QuickInputForm : Form
     {
         // 結果を格納する
-        public QuickInputResult Result { get; }
+        public QuickInputResult Result { get; set; }
 
         private QuickInputConfig _config = null;
         private EventBinder _eventBinder = null;
@@ -107,7 +107,7 @@ namespace PochiPochiEditorPlus._Utilities._QuickInput
 
             if (_config.HasCombo)
             {
-                if (cmbResultIndex.SelectedIndex == BinaryConstants.InvalidValue)
+                if (cmbResultIndex.SelectedIndex == Constants.InvalidValue)
                 {
                     ShowWarning("インデックスを選択してください。");
                     return false;

@@ -9,7 +9,7 @@ namespace PochiPochiEditorPlus._Managers._FieldManager
     {
         FieldName,
         KindName,
-        AttrName,
+        AttrName
     }
 
     /// <summary>
@@ -28,7 +28,7 @@ namespace PochiPochiEditorPlus._Managers._FieldManager
         {
             Name = name;
             Field = kind;
-            Attrs = attrs; // nullを許容しない
+            Attrs = attrs; // nullを想定していない
         }
     }
 
@@ -45,7 +45,7 @@ namespace PochiPochiEditorPlus._Managers._FieldManager
         UInt32,
         Int32,
         Pointer,
-        String,
+        String
     }
 
     /// <summary>
@@ -74,6 +74,6 @@ namespace PochiPochiEditorPlus._Managers._FieldManager
 
         // byte想定
         NibbleAttr,
-        BitAttr,
+        BitAttr
     }
 }

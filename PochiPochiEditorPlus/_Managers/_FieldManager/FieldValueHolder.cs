@@ -17,11 +17,11 @@ namespace PochiPochiEditorPlus._Managers._FieldManager
             get
             {
                 var length = Lengths.EntryLength;
-                byte[] buffer = new byte[length];
+                byte[] data = new byte[length];
 
                 // RomDataから直接現在のデータを取得
-                Array.Copy(_sharedData.RomData, Offset, buffer, 0, length);
-                return buffer;
+                Array.Copy(_sharedData.RomData, Offset, data, 0, length);
+                return data;
             }
             set
             {
@@ -45,7 +45,7 @@ namespace PochiPochiEditorPlus._Managers._FieldManager
         {
             Normal,
             Signed,
-            Pointer,
+            Pointer
         }
 
         // 共有データを保持する
@@ -65,7 +65,7 @@ namespace PochiPochiEditorPlus._Managers._FieldManager
             // 長さを仮置きする
             Lengths = new FieldLength();
             Lengths.EntryLength = metaData.Field.GetFieldSize();
-            Lengths.AllowedLength = BinaryConstants.InvalidValue;
+            Lengths.AllowedLength = Constants.InvalidValue;
 
             // 属性の種類を確認
             foreach (var attr in metaData.Attrs)
@@ -118,7 +118,7 @@ namespace PochiPochiEditorPlus._Managers._FieldManager
         /// BinaryDataから型Tの値を取得する。
         /// </summary>
         public T GetData<T>(
-            int argIndex = 0, // FieldExtensionsのEnumを使用できる
+            int argIndex = 0,
             Func<FieldValueHolder, T> converter = null)
         {
             // 通常の型Tで対応できない特殊処理があれば渡す

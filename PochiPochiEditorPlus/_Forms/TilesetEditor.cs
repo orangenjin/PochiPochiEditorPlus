@@ -248,13 +248,13 @@ namespace PochiPochiEditorPlus._Forms
             byte[] palData = _tilesetManager.PaletteData[palIndex];
 
             // 横幅は128固定
-            var width = TilesetConstants.TilesetImageWidth;
+            var width = Constants.TilesetImageWidth;
             // 1行に対するバイト数
-            var bytesPerTileRow = (width * ImageConstants.TileSize) / ImageConstants.PixelsPerByte;
+            var bytesPerTileRow = (width * Constants.TileSize) / Constants.PixelsPerByte;
             // 必要なタイル行数を計算（端数は切り上げ）
             var tileRows = (_tilesetManager.ImageData.Length + bytesPerTileRow - 1) / bytesPerTileRow;
             // 必要な高さを求める
-            var height = tileRows * ImageConstants.TileSize;
+            var height = tileRows * Constants.TileSize;
 
             // 有効なタイル数に基づいてnudの上限を設定
             int totalTiles = _tilesetManager.GetTotalTileCount();
@@ -267,9 +267,9 @@ namespace PochiPochiEditorPlus._Forms
 
             // レイヤー初期設定
             _layerHolder.Initialize(
-                gridSize: ImageConstants.TileSize,
+                gridSize: Constants.TileSize,
                 validItemCount: totalTiles,
-                scale: ImageConstants.DefaultScale);
+                scale: Constants.DefaultScale);
 
             // 画像の設定
             _layerHolder.Tile.SetImageData(
@@ -279,7 +279,7 @@ namespace PochiPochiEditorPlus._Forms
                 height);
 
             // 選択範囲の設定
-            var maxLength = TilesetConstants.TilesetImageWidth / ImageConstants.TileSize;
+            var maxLength = Constants.TilesetImageWidth / Constants.TileSize;
             _layerHolder.Select.MaxSelectSize = new Size(maxLength, maxLength);
 
             // スクロールバーの設定
@@ -335,10 +335,10 @@ namespace PochiPochiEditorPlus._Forms
             // マッチングパターン
             var headerPattern = new List<TokenData>()
             {
-                TokenData.Range(byte.MinValue, (byte)cmbImageCompType.Items.Count, (int)DataSize.Byte),
-                TokenData.Range(byte.MinValue, (byte)cmbPaletteType.Items.Count, (int)DataSize.Byte),
-                TokenData.Exact((int)DataSize.Byte, exactValues: 0x0),
-                TokenData.Exact((int)DataSize.Byte, exactValues: 0x0),
+                TokenData.Range(byte.MinValue, (byte)cmbImageCompType.Items.Count, Constants.ByteSize),
+                TokenData.Range(byte.MinValue, (byte)cmbPaletteType.Items.Count, Constants.ByteSize),
+                TokenData.Exact(Constants.ByteSize, exactValues: 0x0),
+                TokenData.Exact(Constants.ByteSize, exactValues: 0x0),
                 TokenData.Pointer(),
                 TokenData.Pointer(),
                 TokenData.Pointer(),

@@ -28,7 +28,7 @@ namespace PochiPochiEditorPlus._Managers._TilesetManager
         public enum PaletteKind
         {
             Palette0to6 = 0,
-            Palette7to12 = 7,
+            Palette7to12 = 7
         }
 
         public TilesetHeaderHolder(SharedData sharedData)
@@ -85,9 +85,9 @@ namespace PochiPochiEditorPlus._Managers._TilesetManager
                 // 非圧縮の場合
                 var maxPixelCount = 
                     (HeaderEntry.PaletteType.GetData<int>() == (int)PaletteKind.Palette0to6)
-                        ? TilesetConstants.TilesetImageWidth * TilesetConstants.Tileset1ImageHeight
-                        : TilesetConstants.TilesetImageWidth * TilesetConstants.Tileset2ImageMaxHeight;
-                var maxByteLength = maxPixelCount / ImageConstants.PixelsPerByte;
+                        ? Constants.TilesetImageWidth * Constants.Tileset1ImageHeight
+                        : Constants.TilesetImageWidth * Constants.Tileset2ImageMaxHeight;
+                var maxByteLength = maxPixelCount / Constants.PixelsPerByte;
 
                 // バイト数を確定させる
                 int byteLength;
@@ -117,12 +117,12 @@ namespace PochiPochiEditorPlus._Managers._TilesetManager
         private List<byte[]> LoadPalettes(SharedData sharedData)
         {
             var paletteDataList = new List<byte[]>();
-            var paletteDataLength = ImageConstants.PalColorCount * ImageConstants.BytesPerColor;
+            var paletteDataLength = Constants.PalColorCount * Constants.BytesPerColor;
 
             try
             {
                 var basePaletteOffset = HeaderEntry.PaletteOffset.GetData<int>();
-                for (int i = 0; i < TilesetConstants.PaletteEntryCount; i++)
+                for (int i = 0; i < Constants.PaletteEntryCount; i++)
                 {
                     var currentPos = basePaletteOffset + i * paletteDataLength;
                     var paletteData = ImageHelper.DecompressPalette(
@@ -160,7 +160,7 @@ namespace PochiPochiEditorPlus._Managers._TilesetManager
             {
                 if (HeaderEntry.PaletteType.GetData<int>() == (int)PaletteKind.Palette0to6)
                 {
-                    return TilesetConstants.Tileset1BlockAmount;
+                    return Constants.Tileset1BlockAmount;
                 }
                 else
                 {
@@ -168,7 +168,7 @@ namespace PochiPochiEditorPlus._Managers._TilesetManager
                     var blockDataTableOffset = HeaderEntry.BlockDataTableOffset.GetData<int>();
                     var blockAttrTableOffset = HeaderEntry.BlockAttrTableOffset.GetData<int>();
                     var expectedCount = (blockAttrTableOffset - blockDataTableOffset) / _blockDataEntryLength;
-                    return Math.Min(expectedCount, TilesetConstants.Tileset2BlockMaxAmount);
+                    return Math.Min(expectedCount, Constants.Tileset2BlockMaxAmount);
                 }
             }
         }
@@ -187,7 +187,7 @@ namespace PochiPochiEditorPlus._Managers._TilesetManager
         /// </summary>
         public bool TryCalcTilesetNo(int offset, out int tilesetNo)
         {
-            tilesetNo = BinaryConstants.InvalidValue;
+            tilesetNo = Constants.InvalidValue;
 
             // 番号0のヘッダーオフセットより小さいの場合
             if (offset < _baseHeaderOffset)
@@ -226,7 +226,7 @@ namespace PochiPochiEditorPlus._Managers._TilesetManager
             if (ImageData == null) return 0;
 
             int bytesPerTile =
-                (ImageConstants.TileSize * ImageConstants.TileSize) / ImageConstants.PixelsPerByte;
+                (Constants.TileSize * Constants.TileSize) / Constants.PixelsPerByte;
             return ImageData.Length / bytesPerTile;
         }
     }

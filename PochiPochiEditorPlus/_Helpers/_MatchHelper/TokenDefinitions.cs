@@ -8,7 +8,7 @@ namespace PochiPochiEditorPlus._Helpers._MatchHelper
         Exact,
         Pointer,
         Range,
-        Wildcard,
+        Wildcard
     }
 
     /// <summary>
@@ -17,7 +17,7 @@ namespace PochiPochiEditorPlus._Helpers._MatchHelper
     public interface IToken
     {
         int Length { get; }
-        bool IsValid(byte[] buffer, int offset);
+        bool IsValid(byte[] data, int offset);
     }
 
     /// <summary>
@@ -41,12 +41,12 @@ namespace PochiPochiEditorPlus._Helpers._MatchHelper
             _exactValues = new HashSet<long>(exactValues);
         }
 
-        public bool IsValid(byte[] buffer, int offset)
+        public bool IsValid(byte[] data, int offset)
         {
             long value = IoHelper.ReadBytesAsLong(
-                buffer,
+                data,
                 offset,
-                (DataSize)Length,
+                Length,
                 isLittleEndian: true,
                 isSigned: IsSigned);
 
@@ -65,14 +65,14 @@ namespace PochiPochiEditorPlus._Helpers._MatchHelper
 
         public PointerToken()
         {
-            Length = (int)DataSize.UInt;
+            Length = Constants.UIntSize;
         }
 
-        public bool IsValid(byte[] buffer, int offset)
+        public bool IsValid(byte[] data, int offset)
         {
             // ポインタとして読み取る
-            var result = IoHelper.TryReadPointer(
-                buffer, 
+            var result = IoHelper.TryReadPtr(
+                data, 
                 offset, 
                 out int value);
 
@@ -85,7 +85,7 @@ namespace PochiPochiEditorPlus._Helpers._MatchHelper
         /// nullポインタかどうかを判定する。
         /// </summary>
         public bool IsNullPointer 
-            => Offset == BinaryConstants.InvalidValue;
+            => Offset == Constants.InvalidValue;
     }
 
     /// <summary>
@@ -110,13 +110,13 @@ namespace PochiPochiEditorPlus._Helpers._MatchHelper
             IsSigned = isSigned;
         }
 
-        public bool IsValid(byte[] buffer, int offset)
+        public bool IsValid(byte[] data, int offset)
         {
             // リトルエンディアンで読み取る
             long value = IoHelper.ReadBytesAsLong(
-                buffer,
+                data,
                 offset,
-                (DataSize)Length,
+                Length,
                 isLittleEndian: true,
                 isSigned: IsSigned);
 
@@ -138,6 +138,6 @@ namespace PochiPochiEditorPlus._Helpers._MatchHelper
         }
 
         // 常にtrueを返す
-        public bool IsValid(byte[] buffer, int offset) => true;
+        public bool IsValid(byte[] data, int offset) => true;
     }
 }
